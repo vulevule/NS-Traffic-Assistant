@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Time;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,7 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="timetables")
+@Table(name="timetableItem")
 public class TimetableItem implements Serializable {
 	/**
 	 * 
@@ -30,14 +31,14 @@ public class TimetableItem implements Serializable {
 	@Column(nullable = false)
 	private Time endTime;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(cascade={CascadeType.ALL})
 	@JoinTable(name = "timetableItem_line", joinColumns = {
 			@JoinColumn(name = "timetableItem_id") }, inverseJoinColumns = { @JoinColumn(name = "line_id") })
 	private Set<Line> lines;
 
 	
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy="timetables")
-	private Set<Timetable> timetables; 
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy="timetableItems")
+	private Set<Timetable> timetables;
 	
 	public TimetableItem() {
 	}

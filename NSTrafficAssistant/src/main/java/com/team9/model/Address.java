@@ -10,8 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "address")
 public class Address implements Serializable{
 
 	/**
@@ -43,7 +45,7 @@ public class Address implements Serializable{
 		this.city = city;
 		this.zip = zip;
 		this.users = users;
-		this.stations = stations;
+		//this.stations = stations;
 	}
 
 	public Address(Long id, String street, String city, Integer zip, Set<User> users, Set<Station> stations) {
@@ -53,7 +55,7 @@ public class Address implements Serializable{
 		this.city = city;
 		this.zip = zip;
 		this.users = users;
-		this.stations = stations;
+//		this.stations = stations;
 	}
 
 	public Long getId() {
@@ -95,7 +97,7 @@ public class Address implements Serializable{
 	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
-
+/*
 	public Set<Station> getStations() {
 		return stations;
 	}
@@ -104,7 +106,7 @@ public class Address implements Serializable{
 		this.stations = stations;
 	}
 	
-	
+	*/
 	
 	
 }

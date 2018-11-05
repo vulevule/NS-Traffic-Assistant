@@ -13,7 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="lines")
+@Table(name="line")
 public class Line implements Serializable{
 
 	/**
@@ -36,7 +36,7 @@ public class Line implements Serializable{
 	private Set<TimetableItem> timetableItems;
 	
 	
-	@ManyToMany(fetch=FetchType.LAZY, mappedBy="lines")
+	@ManyToMany(mappedBy="lines")
 	private Set<Station> stations;
 	
 	public Line() {}

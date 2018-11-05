@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -21,7 +22,7 @@ public class Passenger extends User{
 	private Boolean activate;
 	
 	//jedan putnik moze da ima vise karata, karta ima jednog korisnika
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "passenger")
+	@OneToMany(fetch = FetchType.LAZY)
 	private Set<Ticket> tickets;
 	
 	@Column

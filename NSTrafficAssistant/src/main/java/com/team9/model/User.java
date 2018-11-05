@@ -13,8 +13,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 
 @Entity
-@Inheritance(strategy= InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="type")
+//@Inheritance(strategy= InheritanceType.SINGLE_TABLE)
+//@DiscriminatorColumn(name="type")
 public class User implements Serializable{
 
 	/**

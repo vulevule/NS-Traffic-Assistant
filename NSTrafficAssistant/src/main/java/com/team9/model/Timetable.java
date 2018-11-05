@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "timetable")
 public class Timetable implements Serializable {
 	
 	/**
@@ -28,8 +33,8 @@ public class Timetable implements Serializable {
 	private Date issueDate;
 	
 	//red voznje sadrzi vise stavki, stavka pripada u vise redova voznje
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "timetable_line", joinColumns = {
+	@ManyToMany(cascade={CascadeType.ALL})
+	@JoinTable(name = "timetable_items", joinColumns = {
 			@JoinColumn(name = "timetable_id") }, inverseJoinColumns = { @JoinColumn(name = "timetableItem_id") })
 	private Set<TimetableItem> timetableItems;
 
