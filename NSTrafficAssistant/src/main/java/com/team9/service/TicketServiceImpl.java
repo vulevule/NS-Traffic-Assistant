@@ -1,9 +1,12 @@
 package com.team9.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import com.team9.model.Passenger;
 import com.team9.model.Ticket;
 import com.team9.repository.TicketRepository;
 
@@ -12,6 +15,9 @@ public class TicketServiceImpl implements TicketService {
 
 	@Autowired
 	private TicketRepository ticketRepository;
+	
+	@Autowired 
+	private UserService userService;
 
 	@Override
 	public boolean buyTicket(Ticket t) {
@@ -20,13 +26,14 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public Page<Ticket> allTicket(Long passenger_id) {
+	public Collection<Ticket> allTicket(String username) {
 		// return all tickets for one passenger
-		return ticketRepository.findByPassenger(passenger_id);
+		Passenger passenger = userService.getPassenger(username);
+		return ticketRepository.findByPassenger(passenger);
 	}
 
 	@Override
-	public Page<Ticket> reporst(int period) {
+	public Page<Ticket> reports(int period) {
 		// TODO Auto-generated method stub
 		return null;
 	}

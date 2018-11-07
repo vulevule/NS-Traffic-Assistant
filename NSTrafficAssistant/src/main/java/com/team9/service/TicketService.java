@@ -1,5 +1,7 @@
 package com.team9.service;
 
+import java.util.Collection;
+
 import org.springframework.data.domain.Page;
 
 import com.team9.model.Ticket;
@@ -8,8 +10,8 @@ public interface TicketService {
 
 	boolean buyTicket(Ticket t);
 	
-	Page<Ticket> allTicket(Long passenger_id);
+	Collection<Ticket> allTicket(String username);
 	
-	Page<Ticket> reporst(int period);
+	Page<Ticket> reports(int period);
 	
 }
