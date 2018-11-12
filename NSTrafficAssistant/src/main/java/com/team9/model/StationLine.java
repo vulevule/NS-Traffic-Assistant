@@ -47,6 +47,7 @@ public class StationLine implements Serializable{
 		this.station = station;
 	}
 
+	
 	public StationLine() {
 		// TODO Auto-generated constructor stub
 	}
