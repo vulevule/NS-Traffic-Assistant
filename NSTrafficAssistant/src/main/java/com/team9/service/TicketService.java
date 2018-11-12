@@ -1,3 +1,4 @@
+
 package com.team9.service;
 
 import java.util.Collection;
@@ -8,8 +9,8 @@ public interface TicketService {
 
 	boolean buyTicket(Ticket t);
 	
-	Collection<Ticket> allTicket(Long passenger_id);
+	Collection<Ticket> allTicket(String username);
 	
-	Collection<Ticket> reporst(int period);
+	Collection<Ticket> reports(int period);
 	
 }
