@@ -12,8 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 @Entity
 @Table(name = "station")
@@ -39,14 +39,13 @@ public class Station implements Serializable{
 	private Address address;
 	
 	//stanica moze da pripada vise linija, linija sadrzi vise stanica 
-	@ManyToMany(cascade={CascadeType.ALL})
-	@JoinTable(name="station_line", joinColumns = { @JoinColumn(name="station_id")}, inverseJoinColumns = {@JoinColumn(name="line_id")})
-	private Set<Line> lines;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="station")
+	private Set<StationLine> stationLines;
 	
 	public Station() {}
 	
 	public Station(Long id, String name, TrafficType type, double xCoordinate, double yCoordinate, Address address,
-			Set<Line> lines) {
+			Set<StationLine> stationLines) {
 		this();
 		this.id = id;
 		this.name = name;
@@ -54,27 +53,27 @@ public class Station implements Serializable{
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
 		this.address = address;
-		this.lines = lines;
+		this.stationLines = stationLines;
 	}
 
 	public Station(String name, TrafficType type, double xCoordinate, double yCoordinate, Address address,
-			Set<Line> lines) {
+			Set<StationLine> stationLines) {
 		super();
 		this.name = name;
 		this.type = type;
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
 		this.address = address;
-		this.lines = lines;
+		this.stationLines = stationLines;
 	}
 
-	public Set<Line> getLines() {
-		return lines;
+	public Set<StationLine> getLines() {
+		return stationLines;
 	}
 
 
-	public void setLines(Set<Line> lines) {
-		this.lines = lines;
+	public void setLines(Set<StationLine> stationLines) {
+		this.stationLines = stationLines;
 	}
 
 

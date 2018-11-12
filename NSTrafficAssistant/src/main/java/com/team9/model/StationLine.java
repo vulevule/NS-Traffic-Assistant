@@ -31,6 +31,9 @@ public class StationLine implements Serializable{
 	// Jedna stanica moze imati vise StationLine a jedan StationLine se odnosi samo na jednu stanicu
 	@ManyToOne(optional=false)
 	private Station station;
+	
+	@ManyToOne(optional=false)
+	private Line line;
 
 	public StationLine(int stationNum, int arrival, Station station) {
 		super();

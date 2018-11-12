@@ -32,7 +32,7 @@ public class Timetable implements Serializable {
 	@Column
 	private Date issueDate;
 	
-	//red voznje sadrzi vise stavki, stavka pripada u vise redova voznje
+	//red voznje sadrzi vise stavki, stavka pripada u jednom redu voznje
 	@ManyToMany(cascade={CascadeType.ALL})
 	@JoinTable(name = "workdayItems", joinColumns = {
 			@JoinColumn(name = "timetable_id") }, inverseJoinColumns = { @JoinColumn(name = "timetableItem_id") })
