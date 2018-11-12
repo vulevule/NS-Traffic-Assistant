@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -33,34 +34,21 @@ public class TimetableItem implements Serializable {
 	@JoinTable(name = "timetableItem_line", joinColumns = {
 			@JoinColumn(name = "timetableItem_id") }, inverseJoinColumns = { @JoinColumn(name = "line_id") })
 	private Set<Line> lines;
-
-	
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy="timetableItems")
-	private Set<Timetable> timetables;
 	
 	public TimetableItem() {
 	}
 
-	public TimetableItem(Time startTime, Set<Line> lines) {
-		this();
-		this.startTime = startTime;
-		this.lines = lines;
-	}
-
 	public TimetableItem(Long id, Time startTime, Set<Line> lines) {
-		this();
+		super();
 		this.id = id;
 		this.startTime = startTime;
-		
 		this.lines = lines;
 	}
 
-	public Time getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Time startTime) {
+	public TimetableItem(Time startTime, Set<Line> lines) {
+		super();
 		this.startTime = startTime;
+		this.lines = lines;
 	}
 
 	public Long getId() {
@@ -71,6 +59,14 @@ public class TimetableItem implements Serializable {
 		this.id = id;
 	}
 
+	public Time getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Time startTime) {
+		this.startTime = startTime;
+	}
+
 	public Set<Line> getLines() {
 		return lines;
 	}
@@ -79,4 +75,5 @@ public class TimetableItem implements Serializable {
 		this.lines = lines;
 	}
 
+	
 }
