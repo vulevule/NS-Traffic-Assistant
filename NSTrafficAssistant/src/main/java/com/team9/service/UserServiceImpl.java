@@ -18,5 +18,17 @@ public class UserServiceImpl implements UserService {
 		return userReporitory.findUserByUsername(username);
 	}
 
+	@Override
+	public Passenger savePassenger(Passenger pas) {
+		// TODO Auto-generated method stub
+		return userReporitory.save(pas);
+	}
+
+	@Override
+	public Passenger getPassenger(String username, String password) {
+		// TODO Auto-generated method stub
+		return userReporitory.findUserByUsernameAndPassword(username, password);
+	}
+
 	
 }
