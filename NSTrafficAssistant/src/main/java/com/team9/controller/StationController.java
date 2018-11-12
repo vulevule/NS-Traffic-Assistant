@@ -4,34 +4,36 @@ import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.team9.model.Ticket;
-import com.team9.service.TicketService;
+import com.team9.model.Station;
+import com.team9.model.TrafficType;
+import com.team9.service.StationService;
 
 @RestController
-public class TicketController {
-
+public class StationController {
+	
 	@Autowired
-	private TicketService ticketService;
+	private StationService stationService;
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 	
-	@RequestMapping(value="/ticket/myTicket/{passenger_id}",
+	@RequestMapping(
+			value="/station/getAllByType/{type}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Collection<Ticket> getMyTicket(@PathVariable Long passenger_id){
-		logger.info(">> get tickets by " + passenger_id);
+	public Collection<Station> getAllByType(@PathVariable TrafficType type){
+		logger.info(">> get stations by type " + type);
 		
-		Collection<Ticket> allTicket = ticketService.allTicket(passenger_id);
+		Collection<Station> allStations = stationService.getAllByType(type);
 		
-		logger.info("<< get tickets by " + passenger_id);
-		return allTicket;
+		logger.info("<< get stations by type " + type);
+		return allStations;
 		
 	}
+	
 	
 }

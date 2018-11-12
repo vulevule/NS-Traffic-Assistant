@@ -50,6 +50,15 @@ public class PriceList implements Serializable {
 		this.expirationDate = expirationDate;
 		this.items = items;
 	}
+	
+	
+
+	public PriceList(Date issueDate, Date expirationDate, Set<PriceItem> items) {
+		super();
+		this.issueDate = issueDate;
+		this.expirationDate = expirationDate;
+		this.items = items;
+	}
 
 	public Long getId() {
 		return id;

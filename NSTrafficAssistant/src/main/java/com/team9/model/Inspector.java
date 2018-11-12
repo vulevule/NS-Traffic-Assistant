@@ -31,10 +31,6 @@ public class Inspector extends User {
 	@JoinTable(name="inspector_ticket", joinColumns = { @JoinColumn(name="inspector_id")}, inverseJoinColumns = {@JoinColumn(name="ticket_id")})
 	private Set<Ticket> checkedTickets;
 
-
-	
-	
-
 	public Inspector() {
 		super();
 		// TODO Auto-generated constructor stub

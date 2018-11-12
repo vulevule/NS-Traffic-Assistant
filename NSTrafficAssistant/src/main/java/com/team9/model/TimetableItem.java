@@ -28,8 +28,6 @@ public class TimetableItem implements Serializable {
 	private Long id;
 	@Column(nullable = false)
 	private Time startTime;
-	@Column(nullable = false)
-	private Time endTime;
 
 	@ManyToMany(cascade={CascadeType.ALL})
 	@JoinTable(name = "timetableItem_line", joinColumns = {
@@ -43,18 +41,17 @@ public class TimetableItem implements Serializable {
 	public TimetableItem() {
 	}
 
-	public TimetableItem(Time startTime, Time endTime, Set<Line> lines) {
+	public TimetableItem(Time startTime, Set<Line> lines) {
 		this();
 		this.startTime = startTime;
-		this.endTime = endTime;
 		this.lines = lines;
 	}
 
-	public TimetableItem(Long id, Time startTime, Time endTime, Set<Line> lines) {
+	public TimetableItem(Long id, Time startTime, Set<Line> lines) {
 		this();
 		this.id = id;
 		this.startTime = startTime;
-		this.endTime = endTime;
+		
 		this.lines = lines;
 	}
 
@@ -64,14 +61,6 @@ public class TimetableItem implements Serializable {
 
 	public void setStartTime(Time startTime) {
 		this.startTime = startTime;
-	}
-
-	public Time getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Time endTime) {
-		this.endTime = endTime;
 	}
 
 	public Long getId() {

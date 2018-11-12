@@ -1,7 +1,8 @@
 package com.team9.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.team9.model.Ticket;
@@ -20,13 +21,13 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public Page<Ticket> allTicket(Long passenger_id) {
+	public Collection<Ticket> allTicket(Long passenger_id) {
 		// return all tickets for one passenger
 		return ticketRepository.findByPassenger(passenger_id);
 	}
 
 	@Override
-	public Page<Ticket> reporst(int period) {
+	public Collection<Ticket> reporst(int period) {
 		// TODO Auto-generated method stub
 		return null;
 	}

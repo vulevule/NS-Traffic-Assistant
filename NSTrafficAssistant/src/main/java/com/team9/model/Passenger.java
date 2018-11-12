@@ -28,6 +28,26 @@ public class Passenger extends User{
 	@Column
 	private UserTicketType userTicketType;
 
+	public Passenger() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Passenger(Long id, String name, String personalNo, String username, String password, String email, Role role,
+			Address address, Boolean activate, Set<Ticket> tickets, UserTicketType userTicketType) {
+		super(id, name, personalNo, username, password, email, role, address);
+		this.activate = activate;
+		this.tickets = tickets;
+		this.userTicketType = userTicketType;
+	}
+
+	public Passenger(String name, String personalNo, String username, String password, String email, Role role,
+			Address address, Boolean activate, Set<Ticket> tickets, UserTicketType userTicketType) {
+		super(name, personalNo, username, password, email, role, address);
+		this.activate = activate;
+		this.tickets = tickets;
+		this.userTicketType = userTicketType;
+	}
+
 	public Boolean getActivate() {
 		return activate;
 	}

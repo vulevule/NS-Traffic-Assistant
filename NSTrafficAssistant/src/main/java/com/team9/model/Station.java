@@ -31,9 +31,9 @@ public class Station implements Serializable{
 	@Column(nullable = false)
 	private TrafficType type;
 	@Column(nullable = false)
-	private Integer xCoordinate;
+	private double xCoordinate;
 	@Column(nullable = false)
-	private Integer yCoordinate;
+	private double yCoordinate;
 	
 	@ManyToOne(optional=false)
 	private Address address;
@@ -44,9 +44,8 @@ public class Station implements Serializable{
 	private Set<Line> lines;
 	
 	public Station() {}
-
 	
-	public Station(Long id, String name, TrafficType type, Integer xCoordinate, Integer yCoordinate, Address address,
+	public Station(Long id, String name, TrafficType type, double xCoordinate, double yCoordinate, Address address,
 			Set<Line> lines) {
 		this();
 		this.id = id;
@@ -56,6 +55,36 @@ public class Station implements Serializable{
 		this.yCoordinate = yCoordinate;
 		this.address = address;
 		this.lines = lines;
+	}
+
+	public Station(String name, TrafficType type, double xCoordinate, double yCoordinate, Address address,
+			Set<Line> lines) {
+		super();
+		this.name = name;
+		this.type = type;
+		this.xCoordinate = xCoordinate;
+		this.yCoordinate = yCoordinate;
+		this.address = address;
+		this.lines = lines;
+	}
+
+	public Set<Line> getLines() {
+		return lines;
+	}
+
+
+	public void setLines(Set<Line> lines) {
+		this.lines = lines;
+	}
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 
@@ -75,19 +104,19 @@ public class Station implements Serializable{
 		this.type = type;
 	}
 
-	public Integer getxCoordinate() {
+	public double getxCoordinate() {
 		return xCoordinate;
 	}
 
-	public void setxCoordinate(Integer xCoordinate) {
+	public void setxCoordinate(double xCoordinate) {
 		this.xCoordinate = xCoordinate;
 	}
 
-	public Integer getyCoordinate() {
+	public double getyCoordinate() {
 		return yCoordinate;
 	}
 
-	public void setyCoordinate(Integer yCoordinate) {
+	public void setyCoordinate(double yCoordinate) {
 		this.yCoordinate = yCoordinate;
 	}
 

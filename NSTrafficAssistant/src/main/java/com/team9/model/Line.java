@@ -37,13 +37,13 @@ public class Line implements Serializable{
 	
 	
 	@ManyToMany(mappedBy="lines")
-	private Set<Station> stations;
+	private Set<StationLine> stations;
 	
 	public Line() {}
 	
 	
 	public Line(String name, TrafficType type, TrafficZone zone, Set<TimetableItem> timetableItems,
-			Set<Station> stations) {
+			Set<StationLine> stations) {
 		this();
 		this.name = name;
 		this.type = type;
@@ -52,7 +52,7 @@ public class Line implements Serializable{
 		this.stations = stations;
 	}
 	public Line(Long id, String name, TrafficType type, TrafficZone zone, Set<TimetableItem> timetableItems,
-			Set<Station> stations) {
+			Set<StationLine> stations) {
 		this();
 		this.id = id;
 		this.name = name;

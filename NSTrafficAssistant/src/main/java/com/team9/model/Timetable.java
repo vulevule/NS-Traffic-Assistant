@@ -34,9 +34,19 @@ public class Timetable implements Serializable {
 	
 	//red voznje sadrzi vise stavki, stavka pripada u vise redova voznje
 	@ManyToMany(cascade={CascadeType.ALL})
-	@JoinTable(name = "timetable_items", joinColumns = {
+	@JoinTable(name = "workdayItems", joinColumns = {
 			@JoinColumn(name = "timetable_id") }, inverseJoinColumns = { @JoinColumn(name = "timetableItem_id") })
-	private Set<TimetableItem> timetableItems;
+	private Set<TimetableItem> workdayItems;
+	
+	@ManyToMany(cascade={CascadeType.ALL})
+	@JoinTable(name = "saturdayItems", joinColumns = {
+			@JoinColumn(name = "timetable_id") }, inverseJoinColumns = { @JoinColumn(name = "timetableItem_id") })
+	private Set<TimetableItem> saturdayItems;
+	
+	@ManyToMany(cascade={CascadeType.ALL})
+	@JoinTable(name = "sundayItems", joinColumns = {
+			@JoinColumn(name = "timetable_id") }, inverseJoinColumns = { @JoinColumn(name = "timetableItem_id") })
+	private Set<TimetableItem> sundayItems;
 
 	
 	public Long getId() {

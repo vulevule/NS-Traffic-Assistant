@@ -33,8 +33,6 @@ public class PriceItem implements Serializable {
 	private TrafficType trafficType;
 	@Column
 	private TimeTicketType timeType;
-	@Column
-	private double discount;
 
 	@ManyToMany(cascade={CascadeType.ALL})
 	@JoinTable(
@@ -44,17 +42,26 @@ public class PriceItem implements Serializable {
 	private Set<PriceList> priceLists = new HashSet<>();
 
 	public PriceItem() {
-	}
+	}	
 
 	public PriceItem(Long id, double price, UserTicketType userType, TrafficType trafficType, TimeTicketType timeType,
-			double discount, Set<PriceList> priceLists) {
-		this();
+			Set<PriceList> priceLists) {
+		super();
 		this.id = id;
 		this.price = price;
 		this.userType = userType;
 		this.trafficType = trafficType;
 		this.timeType = timeType;
-		this.discount = discount;
+		this.priceLists = priceLists;
+	}
+
+	public PriceItem(double price, UserTicketType userType, TrafficType trafficType, TimeTicketType timeType,
+			Set<PriceList> priceLists) {
+		super();
+		this.price = price;
+		this.userType = userType;
+		this.trafficType = trafficType;
+		this.timeType = timeType;
 		this.priceLists = priceLists;
 	}
 
@@ -96,14 +103,6 @@ public class PriceItem implements Serializable {
 
 	public void setTimeType(TimeTicketType timeType) {
 		this.timeType = timeType;
-	}
-
-	public double getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(double discount) {
-		this.discount = discount;
 	}
 
 	public Set<PriceList> getPriceLists() {
