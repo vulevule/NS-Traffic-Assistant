@@ -1,8 +1,11 @@
 package com.team9.service;
 
-import com.team9.model.Passenger;
+import com.team9.dto.UserDto;
+import com.team9.model.User;
 
 public interface UserService {
 	
-	Passenger getPassenger(String username);
+	User getUser(String username);
+	boolean saveUser(User u);
+	User UserDtoToUser(UserDto udto);
 }

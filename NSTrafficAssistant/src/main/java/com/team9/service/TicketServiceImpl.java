@@ -3,7 +3,6 @@ package com.team9.service;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.team9.model.Passenger;
@@ -28,7 +27,7 @@ public class TicketServiceImpl implements TicketService {
 	@Override
 	public Collection<Ticket> allTicket(String username) {
 		// return all tickets for one passenger
-		Passenger passenger = userService.getPassenger(username);
+		Passenger passenger = (Passenger)userService.getUser(username);
 		return ticketRepository.findByPassenger(passenger);
 	}
 

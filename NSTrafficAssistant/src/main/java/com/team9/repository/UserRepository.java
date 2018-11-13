@@ -1,12 +1,11 @@
 package com.team9.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.team9.model.Passenger;
 import com.team9.model.User;
 
-public interface UserRepository extends CrudRepository<User, Long>{
+public interface UserRepository extends JpaRepository<User, Long>{
 	
-	Passenger findUserByUsername(String username);
+	User findUserByUsername(String username);
 	
 }
