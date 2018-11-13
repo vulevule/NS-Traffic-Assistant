@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -35,8 +36,7 @@ public class Line implements Serializable{
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy="lines")
 	private Set<TimetableItem> timetableItems;
 	
-	
-	@ManyToMany(mappedBy="lines")
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="line")
 	private Set<StationLine> stations;
 	
 	public Line() {}
