@@ -9,6 +9,7 @@ import com.team9.model.Inspector;
 import com.team9.model.Passenger;
 import com.team9.model.Role;
 import com.team9.model.User;
+import com.team9.model.UserTicketType;
 import com.team9.repository.AddressRepository;
 import com.team9.repository.UserRepository;
 
@@ -32,12 +33,12 @@ public class UserServiceImpl implements UserService {
 			return false;
 		}
 		if(u.getRole() == Role.INSPECTOR) {
-			Inspector i = (Inspector)u;
+			Inspector i = new Inspector(u.getName(), u.getPersonalNo(), u.getUsername(), u.getPassword(), u.getEmail(), u.getRole(), u.getAddress());
 			userRepository.save(i);
 			return true;
 		}
 		else if(u.getRole() == Role.PASSANGER) {
-			Passenger p = (Passenger)u;
+			Passenger p = new Passenger(u.getName(), u.getPersonalNo(), u.getUsername(), u.getPassword(), u.getEmail(), u.getRole(), u.getAddress(), false, UserTicketType.REGULAR); 
 			userRepository.save(p);
 			return true;
 		}
@@ -64,6 +65,7 @@ public class UserServiceImpl implements UserService {
 			a.setStreet(udto.getAddress().getStreet());
 			a.setCity(udto.getAddress().getCity());
 			a.setZip(udto.getAddress().getZip());
+			addressRepository.save(a);
 		}
 		u.setAddress(a);
 		if(udto.getRole().toUpperCase().equals("ADMIN")) {
