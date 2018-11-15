@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.team9.dto.RegisterDto;
+import com.team9.dto.UpdateProfileDto;
 import com.team9.dto.UserDto;
 import com.team9.model.Address;
 import com.team9.model.Inspector;
@@ -59,6 +60,8 @@ public class UserServiceImpl implements UserService {
 		}
 		return false;
 	}
+	
+	
 
 	@Override
 	public User UserDtoToUser(UserDto udto) {
@@ -133,5 +136,36 @@ public User RegisterDtoToUser(RegisterDto reg) {
 	u.setPersonalNo(reg.getPersonalNo());
 	u.setRole(Role.PASSANGER);
 	return u;
+}
+
+@Override
+public User UpdateDtoToUser(UpdateProfileDto update) {
+	User user=userRepository.findUserByUsername(update.getUsername());
+	if(user==null) {return null;}
+	
+	if(user.getEmail()!=update.getEmail() || update.getEmail()!="") {
+		user.setEmail(update.getEmail());
+	}
+	
+	if(user.getName()!=update.getName() || update.getName()!="") {
+		user.setName(update.getName());
+	}
+	
+	if(user.getPassword()!=update.getPassword() || update.getPassword()!="") {
+		user.setPassword(update.getPassword());
+	}
+	
+	
+	Address a = addressRepository.findByStreetAndCityAndZip(update.getAddress().getStreet(), update.getAddress().getCity(), update.getAddress().getZip());
+	if(a == null) {
+		a = new Address();
+		a.setStreet(update.getAddress().getStreet());
+		a.setCity(update.getAddress().getCity());
+		a.setZip(update.getAddress().getZip());
+		addressRepository.save(a);
+	}
+	user.setAddress(a);
+	
+	return user;
 }
 }

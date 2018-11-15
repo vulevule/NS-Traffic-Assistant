@@ -10,10 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team9.dto.LoginDto;
 import com.team9.dto.RegisterDto;
+import com.team9.dto.UpdateProfileDto;
 import com.team9.dto.UserDto;
 import com.team9.model.Role;
 import com.team9.model.User;
 import com.team9.service.UserService;
+
+
+
+
 
 @RestController
 public class UserController {
@@ -85,5 +90,24 @@ public class UserController {
 	}
 	
 	
+	@RequestMapping(value="/user/profileUpdate",method=RequestMethod.PUT, consumes="application/json")
+	public ResponseEntity<User> updateStudent(@RequestBody UpdateProfileDto profileDTO){
+		
+		User user = userService.UpdateDtoToUser(profileDTO); 
+		if (user == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		
+		boolean updated=userService.saveUser(user);
+		
+		if(updated==true) {
+		return new ResponseEntity<User>(user, HttpStatus.OK);
+		
+		
+		}
+	
+	return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
+}
 }
