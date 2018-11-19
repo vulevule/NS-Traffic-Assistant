@@ -1,19 +1,18 @@
 package com.team9.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class PriceItem implements Serializable {
@@ -34,35 +33,39 @@ public class PriceItem implements Serializable {
 	@Column
 	private TimeTicketType timeType;
 
-	@ManyToMany(cascade={CascadeType.ALL})
-	@JoinTable(
-			name = "priceItem_priceList",
-			joinColumns = {@JoinColumn(name="priceItem_id")},
-			inverseJoinColumns = {@JoinColumn(name="priceList_id")})
-	private Set<PriceList> priceLists = new HashSet<>();
+	@Column
+	private TrafficZone zone;
+
+	//stavka pripada jednom cenovniku
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
+	@JoinColumn(name="pricelist_id", nullable=false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private PriceList pricelist;
 
 	public PriceItem() {
-	}	
+	}
 
 	public PriceItem(Long id, double price, UserTicketType userType, TrafficType trafficType, TimeTicketType timeType,
-			Set<PriceList> priceLists) {
-		super();
+			PriceList pricelist, TrafficZone zone) {
+		this();
 		this.id = id;
 		this.price = price;
 		this.userType = userType;
 		this.trafficType = trafficType;
 		this.timeType = timeType;
-		this.priceLists = priceLists;
+		this.pricelist = pricelist;
+		this.zone = zone;
 	}
 
 	public PriceItem(double price, UserTicketType userType, TrafficType trafficType, TimeTicketType timeType,
-			Set<PriceList> priceLists) {
-		super();
+			PriceList pricelist, TrafficZone zone) {
+		this();
 		this.price = price;
 		this.userType = userType;
 		this.trafficType = trafficType;
 		this.timeType = timeType;
-		this.priceLists = priceLists;
+		this.pricelist = pricelist;
+		this.zone = zone;
 	}
 
 	public Long getId() {
@@ -105,14 +108,22 @@ public class PriceItem implements Serializable {
 		this.timeType = timeType;
 	}
 
-	public Set<PriceList> getPriceLists() {
-		return priceLists;
+	
+
+	public PriceList getPricelist() {
+		return pricelist;
 	}
 
-	public void setPriceLists(Set<PriceList> priceLists) {
-		this.priceLists = priceLists;
+	public void setPricelist(PriceList pricelist) {
+		this.pricelist = pricelist;
 	}
-	
-	
+
+	public TrafficZone getZone() {
+		return zone;
+	}
+
+	public void setZone(TrafficZone zone) {
+		this.zone = zone;
+	}
 
 }

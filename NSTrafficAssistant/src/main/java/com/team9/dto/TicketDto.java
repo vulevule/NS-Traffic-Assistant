@@ -1,30 +1,62 @@
 package com.team9.dto;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-
-import com.team9.model.Inspector;
-import com.team9.model.Passenger;
 import com.team9.model.TimeTicketType;
+import com.team9.model.TrafficType;
 import com.team9.model.TrafficZone;
-import com.team9.model.UserTicketType;
 
-public class TicketDto implements Serializable{
-	
-	private String serialNo;
-	private String issueDate;
-	private String expirationDate;
-	private UserTicketType userType;
+public class TicketDto implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private TimeTicketType timeType;
 	private TrafficZone trafficZone;
-	private Boolean active;
-	private Double price;
-	private String  username_passenger;
-	private String username_inspector;
-	private Set<Inspector> checkInspectors;
+	private TrafficType trafficType;
+	private double price;
+
+	public TicketDto() {
+	}
+
+	public TicketDto(TimeTicketType timeType, TrafficZone trafficZone, TrafficType trafficType, double price) {
+		this();
+		this.timeType = timeType;
+		this.trafficZone = trafficZone;
+		this.trafficType = trafficType;
+		this.price = price;
+	}
+
+	public TimeTicketType getTimeType() {
+		return timeType;
+	}
+
+	public void setTimeType(TimeTicketType timeType) {
+		this.timeType = timeType;
+	}
+
+	public TrafficZone getTrafficZone() {
+		return trafficZone;
+	}
+
+	public void setTrafficZone(TrafficZone trafficZone) {
+		this.trafficZone = trafficZone;
+	}
+
+	public TrafficType getTrafficType() {
+		return trafficType;
+	}
+
+	public void setTrafficType(TrafficType trafficType) {
+		this.trafficType = trafficType;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
 }

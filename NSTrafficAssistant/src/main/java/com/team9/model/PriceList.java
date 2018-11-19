@@ -5,20 +5,16 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "priceList")
 public class PriceList implements Serializable {
 
 	/**
@@ -35,29 +31,40 @@ public class PriceList implements Serializable {
 	@Column
 	private Date expirationDate;
 
-	// jedan cenovnik sadrzi vise stavki, a jedna stavka pripada u vise
-	// cenovnika
-	@ManyToMany(mappedBy="priceLists")
-	private Set<PriceItem> items = new HashSet<>();
+	// jedan cenovnik sadrzi vise stavki, a jedna stavka pripada jednom cenovniku
+	@OneToMany(fetch = FetchType.LAZY)
+	private Set<PriceItem> items;
+	
+	@Column
+	private boolean activate;
 
 	public PriceList() {
 	}
 
-	public PriceList(Long id, Date issueDate, Date expirationDate, Set<PriceItem> items) {
-		super();
+	public PriceList(Long id, Date issueDate, Date expirationDate, Set<PriceItem> items, boolean activate) {
+		this();
 		this.id = id;
 		this.issueDate = issueDate;
 		this.expirationDate = expirationDate;
 		this.items = items;
+		this.activate = activate;
 	}
 	
 	
 
-	public PriceList(Date issueDate, Date expirationDate, Set<PriceItem> items) {
-		super();
+	public PriceList(Date issueDate, Date expirationDate, Set<PriceItem> items, boolean activate) {
+		this();
 		this.issueDate = issueDate;
 		this.expirationDate = expirationDate;
 		this.items = items;
+		this.activate = activate;
+	}
+	
+	public PriceList(Date issueDate, Date expirationDate, boolean activate) {
+		this();
+		this.issueDate = issueDate;
+		this.expirationDate = expirationDate;
+		this.activate = activate;
 	}
 
 	public Long getId() {
@@ -90,6 +97,14 @@ public class PriceList implements Serializable {
 
 	public void setItems(Set<PriceItem> items) {
 		this.items = items;
+	}
+
+	public boolean isActivate() {
+		return activate;
+	}
+
+	public void setActivate(boolean activate) {
+		this.activate = activate;
 	}
 
 	
