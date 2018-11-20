@@ -11,8 +11,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.Cascade;
-
 
 @Entity
 @DiscriminatorValue("Inspector")
@@ -33,14 +31,12 @@ public class Inspector extends User {
 
 	public Inspector() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 
 	public Inspector(Long id, String name, String personalNo, String username, String password, String email, Role role,
 			Address address, Set<Ticket> tickets, Set<Ticket> checkedTickets) {
 		super(id, name, personalNo, username, password, email, role, address);
-		// TODO Auto-generated constructor stub
 		this.checkedTickets = checkedTickets;
 		this.tickets = tickets;
 	}
@@ -49,7 +45,6 @@ public class Inspector extends User {
 	public Inspector(String name, String personalNo, String username, String password, String email, Role role,
 			Address address) {
 		super(name, personalNo, username, password, email, role, address);
-		// TODO Auto-generated constructor stub
 	}
 
 

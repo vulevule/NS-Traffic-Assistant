@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -29,8 +28,18 @@ public class Passenger extends User{
 	private UserTicketType userTicketType;
 
 	public Passenger() {
-		// TODO Auto-generated constructor stub
 	}
+	
+	
+
+	public Passenger(String name, String personalNo, String username, String password, String email, Role role,
+			Address address, Boolean activate, UserTicketType userTicketType) {
+		super(name, personalNo, username, password, email, role, address);
+		this.activate = activate;
+		this.userTicketType = userTicketType;
+	}
+
+
 
 	public Passenger(Long id, String name, String personalNo, String username, String password, String email, Role role,
 			Address address, Boolean activate, Set<Ticket> tickets, UserTicketType userTicketType) {

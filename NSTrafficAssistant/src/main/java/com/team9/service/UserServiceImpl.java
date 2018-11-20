@@ -1,15 +1,26 @@
 package com.team9.service;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.team9.dto.RegisterDto;
+import com.team9.dto.UpdateProfileDto;
 import com.team9.dto.UserDto;
 import com.team9.model.Address;
+import com.team9.model.Authority;
 import com.team9.model.Inspector;
 import com.team9.model.Passenger;
 import com.team9.model.Role;
 import com.team9.model.User;
+import com.team9.model.UserTicketType;
 import com.team9.repository.AddressRepository;
+import com.team9.repository.AuthorityRepository;
+import com.team9.repository.InspectorRepository;
 import com.team9.repository.UserRepository;
 
 @Service
@@ -20,6 +31,16 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private AddressRepository addressRepository;
+	
+	@Autowired
+	private AuthorityRepository authorityRepository;
+	
+	private JavaMailSender javaMailSender;
+
+	@Autowired
+	private Environment env;
+	
+	
 	
 	@Override
 	public User getUser(String username) {
@@ -32,21 +53,29 @@ public class UserServiceImpl implements UserService {
 			return false;
 		}
 		if(u.getRole() == Role.INSPECTOR) {
-			Inspector i = (Inspector)u;
-			userRepository.save(i);
+			Inspector i = new Inspector(u.getName(), u.getPersonalNo(), u.getUsername(), u.getPassword(), u.getEmail(), u.getRole(), u.getAddress());
+			User saveUser = userRepository.save(i);
+			Authority a = new Authority("INSPECTOR", saveUser);
+			authorityRepository.save(a);			
 			return true;
 		}
 		else if(u.getRole() == Role.PASSANGER) {
-			Passenger p = (Passenger)u;
-			userRepository.save(p);
+			Passenger p = new Passenger(u.getName(), u.getPersonalNo(), u.getUsername(), u.getPassword(), u.getEmail(), u.getRole(), u.getAddress(), false, UserTicketType.REGULAR); 
+			User saveUser = userRepository.save(p);
+			Authority a = new Authority("PASSENGER", saveUser);
+			authorityRepository.save(a);
 			return true;
 		}
 		else if(u.getRole() == Role.ADMIN) {
-			userRepository.save(u);
+			User saveUser = userRepository.save(u);
+			Authority a = new Authority("ADMIN", saveUser);
+			authorityRepository.save(a);
 			return true;
 		}
 		return false;
 	}
+	
+	
 
 	@Override
 	public User UserDtoToUser(UserDto udto) {
@@ -64,8 +93,10 @@ public class UserServiceImpl implements UserService {
 			a.setStreet(udto.getAddress().getStreet());
 			a.setCity(udto.getAddress().getCity());
 			a.setZip(udto.getAddress().getZip());
+			addressRepository.save(a);
 		}
 		u.setAddress(a);
+
 		if(udto.getRole().toUpperCase().equals("ADMIN")) {
 			u.setRole(Role.ADMIN);
 		}
@@ -84,5 +115,71 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findUserByUsernameAndPassword(username, password);
 	}
 
+public void sendNotificaitionSync(User user) throws MailException, InterruptedException {
+
+		
+		Thread.sleep(10000);
+		System.out.println("Sending email...");
+        
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(user.getEmail());
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Welcome to NSTrafficAssistant");
+		mail.setText("Hello " + user.getName() + ",\n\nThank you for using our application. Please wait for our admins to confirm your user ticket type and enjoy your ride. :)");
+		javaMailSender.send(mail);
+
+		System.out.println("Email sent!");
+	}
+
+@Override
+public User RegisterDtoToUser(RegisterDto reg) {
 	
+	User u=new User();
+	Address a = addressRepository.findByStreetAndCityAndZip(reg.getAddress().getStreet(), reg.getAddress().getCity(), reg.getAddress().getZip());
+	if(a == null) {
+		a = new Address();
+		a.setStreet(reg.getAddress().getStreet());
+		a.setCity(reg.getAddress().getCity());
+		a.setZip(reg.getAddress().getZip());
+	}
+	u.setAddress(a);
+	u.setEmail(reg.getEmail());
+	u.setUsername(reg.getUserName());
+	u.setPassword(reg.getPassword());
+	u.setName(reg.getName());
+	u.setPersonalNo(reg.getPersonalNo());
+	u.setRole(Role.PASSANGER);
+	return u;
+}
+
+@Override
+public User UpdateDtoToUser(UpdateProfileDto update) {
+	User user=userRepository.findUserByUsername(update.getUsername());
+	if(user==null) {return null;}
+	
+	if(user.getEmail()!=update.getEmail() || update.getEmail()!="") {
+		user.setEmail(update.getEmail());
+	}
+	
+	if(user.getName()!=update.getName() || update.getName()!="") {
+		user.setName(update.getName());
+	}
+	
+	if(user.getPassword()!=update.getPassword() || update.getPassword()!="") {
+		user.setPassword(update.getPassword());
+	}
+	
+	
+	Address a = addressRepository.findByStreetAndCityAndZip(update.getAddress().getStreet(), update.getAddress().getCity(), update.getAddress().getZip());
+	if(a == null) {
+		a = new Address();
+		a.setStreet(update.getAddress().getStreet());
+		a.setCity(update.getAddress().getCity());
+		a.setZip(update.getAddress().getZip());
+		addressRepository.save(a);
+	}
+	user.setAddress(a);
+	
+	return user;
+}
 }
