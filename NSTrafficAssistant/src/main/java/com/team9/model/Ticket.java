@@ -14,15 +14,17 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.team9.dto.TicketDto;
+
 @Entity
-@Table(name="ticket")
-public class Ticket implements Serializable{
+@Table(name = "ticket")
+public class Ticket implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -40,23 +42,26 @@ public class Ticket implements Serializable{
 	private TrafficZone trafficZone;
 	@Column(nullable = false)
 	private Boolean active;
+	@Column
+	private TrafficType trafficType;
 	@Column(nullable = false)
 	private Double price;
-	
-	@ManyToOne(optional=false)
+
+	@ManyToOne(optional = false)
 	private Passenger passenger;
-	
+
 	@ManyToOne
 	private Inspector inspector;
-	
-	@ManyToMany( mappedBy="tickets")
+
+	@ManyToMany(mappedBy = "tickets")
 	private Set<Inspector> checkInspectors;
-	
-	public Ticket(){}
-	
+
+	public Ticket() {
+	}
+
 	public Ticket(Long id, String serialNo, Date issueDate, Date expirationDate, UserTicketType userType,
-			TimeTicketType timeType, TrafficZone trafficZone, Boolean active, Double price, Passenger passenger,
-			Inspector inspector, Set<Inspector> checkInspectors) {
+			TimeTicketType timeType, TrafficZone trafficZone, Boolean active, TrafficType trafficType, Double price,
+			Passenger passenger, Inspector inspector, Set<Inspector> checkInspectors) {
 		this();
 		this.id = id;
 		this.serialNo = serialNo;
@@ -66,84 +71,117 @@ public class Ticket implements Serializable{
 		this.timeType = timeType;
 		this.trafficZone = trafficZone;
 		this.active = active;
+		this.trafficType = trafficType;
 		this.price = price;
 		this.passenger = passenger;
 		this.inspector = inspector;
 		this.checkInspectors = checkInspectors;
 	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getSerialNo() {
 		return serialNo;
 	}
+
 	public void setSerialNo(String serialNo) {
 		this.serialNo = serialNo;
 	}
+
 	public Date getIssueDate() {
 		return issueDate;
 	}
+
 	public void setIssueDate(Date issueDate) {
 		this.issueDate = issueDate;
 	}
+
 	public Date getExpirationDate() {
 		return expirationDate;
 	}
+
 	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
 	}
+
 	public UserTicketType getUserType() {
 		return userType;
 	}
+
 	public void setUserType(UserTicketType userType) {
 		this.userType = userType;
 	}
+
 	public TimeTicketType getTimeType() {
 		return timeType;
 	}
+
 	public void setTimeType(TimeTicketType timeType) {
 		this.timeType = timeType;
 	}
+
 	public TrafficZone getTrafficZone() {
 		return trafficZone;
 	}
+
 	public void setTrafficZone(TrafficZone trafficZone) {
 		this.trafficZone = trafficZone;
 	}
+
 	public Boolean getActive() {
 		return active;
 	}
+
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
+
 	public Double getPrice() {
 		return price;
 	}
+
 	public void setPrice(Double price) {
 		this.price = price;
 	}
+
 	public Passenger getPassenger() {
 		return passenger;
 	}
+
 	public void setPassenger(Passenger passenger) {
 		this.passenger = passenger;
 	}
+
 	public Inspector getInspector() {
 		return inspector;
 	}
+
 	public void setInspector(Inspector inspector) {
 		this.inspector = inspector;
 	}
+
 	public Set<Inspector> getCheckInspectors() {
 		return checkInspectors;
 	}
+
 	public void setCheckInspectors(Set<Inspector> checkInspectors) {
 		this.checkInspectors = checkInspectors;
 	}
 
+	public TrafficType getTrafficType() {
+		return trafficType;
+	}
+
+	public void setTrafficType(TrafficType trafficType) {
+		this.trafficType = trafficType;
+	}
+
 	
-	
+
 }
