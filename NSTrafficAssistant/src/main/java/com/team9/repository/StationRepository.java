@@ -3,12 +3,12 @@ package com.team9.repository;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.team9.model.Station;
 import com.team9.model.TrafficType;
 
-public interface StationRepository extends CrudRepository<Station, Long>{
+public interface StationRepository extends JpaRepository<Station, Long>{
 	
 	Collection<Station> findByName(String name);
 	
@@ -17,4 +17,6 @@ public interface StationRepository extends CrudRepository<Station, Long>{
 	Optional<Station> findById(Long id);
 	
 	Collection<Station> findByType(TrafficType type);
+	
+	boolean saveStation(Station s);
 }

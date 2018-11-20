@@ -31,6 +31,8 @@ public class Line implements Serializable{
 	private TrafficType type;
 	@Column(nullable = false)
 	private TrafficZone zone;
+	@Column(nullable = false)
+	private boolean inUse;
 	
 	//linija moze da pripada vise redova voznje, jedan red voznje moze da ima vise linija
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy="lines")
@@ -43,16 +45,17 @@ public class Line implements Serializable{
 	
 	
 	public Line(String name, TrafficType type, TrafficZone zone, Set<TimetableItem> timetableItems,
-			Set<StationLine> stations) {
+			Set<StationLine> stations, boolean inUse) {
 		this();
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
 		this.timetableItems = timetableItems;
 		this.stations = stations;
+		this.inUse = inUse;
 	}
 	public Line(Long id, String name, TrafficType type, TrafficZone zone, Set<TimetableItem> timetableItems,
-			Set<StationLine> stations) {
+			Set<StationLine> stations, boolean inUse) {
 		this();
 		this.id = id;
 		this.name = name;
@@ -60,7 +63,9 @@ public class Line implements Serializable{
 		this.zone = zone;
 		this.timetableItems = timetableItems;
 		this.stations = stations;
+		this.inUse = inUse;
 	}
+
 	public String getName() {
 		return name;
 	}
@@ -86,7 +91,20 @@ public class Line implements Serializable{
 		this.timetableItems = timetableItems;
 	}
 	
+	public Set<StationLine> getStations() {
+		return stations;
+	}
+
+	public void setStations(Set<StationLine> stations) {
+		this.stations = stations;
+	}
 	
-	
+	public boolean isInUse() {
+		return inUse;
+	}
+
+	public void setInUse(boolean inUse) {
+		this.inUse = inUse;
+	}
 
 }
