@@ -8,7 +8,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.team9.dto.RegisterDto;
+
 import com.team9.dto.UpdateProfileDto;
 import com.team9.dto.UserDto;
 import com.team9.model.Address;
@@ -102,6 +102,7 @@ public class UserServiceImpl implements UserService {
 		}
 		else if(udto.getRole().toUpperCase().equals("PASSANGER")) {
 			u.setRole(Role.PASSANGER);
+			
 		}
 		else if(udto.getRole().toUpperCase().equals("INSPECTOR")){
 			u.setRole(Role.INSPECTOR);
@@ -115,7 +116,7 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findUserByUsernameAndPassword(username, password);
 	}
 
-public void sendNotificaitionSync(User user) throws MailException, InterruptedException {
+public void sendNotificaitionSync(UserDto user) throws MailException, InterruptedException {
 
 		
 		Thread.sleep(10000);
@@ -131,26 +132,7 @@ public void sendNotificaitionSync(User user) throws MailException, InterruptedEx
 		System.out.println("Email sent!");
 	}
 
-@Override
-public User RegisterDtoToUser(RegisterDto reg) {
-	
-	User u=new User();
-	Address a = addressRepository.findByStreetAndCityAndZip(reg.getAddress().getStreet(), reg.getAddress().getCity(), reg.getAddress().getZip());
-	if(a == null) {
-		a = new Address();
-		a.setStreet(reg.getAddress().getStreet());
-		a.setCity(reg.getAddress().getCity());
-		a.setZip(reg.getAddress().getZip());
-	}
-	u.setAddress(a);
-	u.setEmail(reg.getEmail());
-	u.setUsername(reg.getUserName());
-	u.setPassword(reg.getPassword());
-	u.setName(reg.getName());
-	u.setPersonalNo(reg.getPersonalNo());
-	u.setRole(Role.PASSANGER);
-	return u;
-}
+
 
 @Override
 public User UpdateDtoToUser(UpdateProfileDto update) {

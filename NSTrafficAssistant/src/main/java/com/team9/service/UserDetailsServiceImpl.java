@@ -12,24 +12,31 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.team9.model.Authority;
 import com.team9.model.User;
+import com.team9.repository.AuthorityRepository;
 import com.team9.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private AuthorityRepository authorityRepository;
 
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
 		User u = userRepository.findUserByUsername(username);
+		
+		Authority authority=authorityRepository.findByUser(u);
+		
 		if (u == null) {
 			throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
 
 		} else {
-			GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(u.getAuthority().getName());
+			GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(authority.getName());
 			ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 			authorities.add(grantedAuthority);
 
