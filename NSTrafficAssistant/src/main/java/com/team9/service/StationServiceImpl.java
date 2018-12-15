@@ -29,20 +29,20 @@ public class StationServiceImpl implements StationService {
 	}
 
 	@Override
-	public boolean deleteStation(Station s) {
-		Optional<Station> find = stationRepository.findById(s.getId());
-		if (find.get() == null) {
+	public boolean deleteStation(Long id) {
+		Optional<Station> find = stationRepository.findById(id);
+		if (!find.isPresent()) {
 			return false;
 		}
 		
-		stationRepository.delete(s);
+		stationRepository.delete(find.get());
 		return true;
 	}
 
 	@Override
 	public Station updateStation(Station s) {
 		Optional<Station> find = stationRepository.findById(s.getId());
-		if (find.get() == null) {
+		if (!find.isPresent()) {
 			return null;
 		}
 		
@@ -77,6 +77,11 @@ public class StationServiceImpl implements StationService {
 		
 		return retVal;
 		
+	}
+
+	@Override
+	public Collection<Station> getAll() {
+		return (Collection<Station>) stationRepository.findAll();
 	}
 
 }

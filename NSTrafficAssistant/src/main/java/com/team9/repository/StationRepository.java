@@ -12,11 +12,11 @@ public interface StationRepository extends JpaRepository<Station, Long>{
 	
 	Collection<Station> findByName(String name);
 	
+	Collection<Station> findByNameContains(String name);
+	
 	Station findByNameAndType(String name, TrafficType type);
 	
 	Optional<Station> findById(Long id);
 	
 	Collection<Station> findByType(TrafficType type);
-	
-	boolean saveStation(Station s);
-}
+	}

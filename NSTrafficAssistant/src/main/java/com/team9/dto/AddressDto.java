@@ -5,6 +5,16 @@ public class AddressDto {
 	private String street;
 	private String city;
 	private Integer zip;
+	
+	public AddressDto() {}
+	
+	public AddressDto(String street, String city, Integer zip) {
+		super();
+		this.street = street;
+		this.city = city;
+		this.zip = zip;
+	}
+
 	public String getStreet() {
 		return street;
 	}

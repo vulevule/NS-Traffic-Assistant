@@ -9,9 +9,11 @@ import com.team9.model.TrafficType;
 public interface StationService {
 	Station createStation(Station s);
 	
-	boolean deleteStation(Station s);
+	boolean deleteStation(Long id);
 	
 	Station updateStation(Station s);
+	
+	Collection<Station> getAll();
 	
 	Collection<Station> getAllByType(TrafficType t);
 	
