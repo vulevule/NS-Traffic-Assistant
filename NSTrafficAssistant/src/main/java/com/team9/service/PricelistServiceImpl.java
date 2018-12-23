@@ -6,13 +6,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.team9.dto.PriceItemDto;
 import com.team9.dto.PricelistDto;
 import com.team9.dto.PricelistReaderDto;
-import com.team9.model.PriceItem;
+import com.team9.exceptions.NotFoundActivePricelistException;
+import com.team9.exceptions.PriceItemAlreadyExistsException;
+import com.team9.exceptions.PriceLessThanZeroException;
 import com.team9.model.PriceList;
 import com.team9.repository.PriceListRepository;
 
@@ -26,24 +30,45 @@ public class PricelistServiceImpl implements PriceListService {
 	private PricelistItemService pricelistItemService;
 	
 	@Override
-	public PricelistReaderDto getValidPricelist() {
-		// na osnovu trenutnog datuma nadjemo vazeci raspored 
-		return convertToReaderDto(pricelistRepo.findByActivateTrue());
+	public PriceList getPricelist() throws NotFoundActivePricelistException{
+		return pricelistRepo.findByActivateTrue().orElseThrow(() -> new NotFoundActivePricelistException());
+	}
+	
+	@Override
+	public PricelistReaderDto getValidPricelist() throws NotFoundActivePricelistException {
+		// vratimo raspored koji je aktivan, jer u jednom momentu moze da bude aktivan samo jedan raspored
+		return convertToReaderDto(getPricelist());
 	}
 
 	@Override
-	public PricelistReaderDto addPricelist(PricelistDto pricelist) throws ParseException {
-		//dodajemo raspored zajedno sa njegovim stavkama 
-		//1. prvo prebacimo sve u pricelist
-		PriceList pl =  convertDtoToPricelist(pricelist);		
-		//3. unesemo cenovnik u bazu, ne moze da postoji vec vazeci raspored, zato sto ce mo admina na frontu da ogranicimo da mora prvo da stavi prethodni da je ne vazeci, pa onda novi 
-		// da napravi
-		PriceList savepl = this.pricelistRepo.save(pl);
-		//4. sad mozemo da unesemo stavke cenovnika
-		if(savepl != null){
-			savepl = this.pricelistItemService.addPricelistItems(pricelist.getItems(), savepl);
+	@Transactional
+	public PricelistReaderDto addPricelist(PricelistDto pricelist) throws ParseException, PriceItemAlreadyExistsException, PriceLessThanZeroException {
+		//1.konvertujemo prosledjeni raspored
+		PriceList pl = convertDtoToPricelist(pricelist);
+		
+		//2. cenovnik koji nam je bio aktivan do sada setujemo na false
+		PriceList activePricelist;
+		try {
+			activePricelist = getPricelist();
+			activePricelist.setActivate(false);
+			activePricelist.setExpirationDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+			activePricelist = this.pricelistRepo.save(activePricelist);
+			
+		} catch (NotFoundActivePricelistException e) {
+			// TODO Auto-generated catch block
+			//nista se ne desava samo nastavimo dalje
+			
 		}
-		return convertToReaderDto(savepl);
+		
+		//3. resili smo sve u vezi do sada vazeceg cenovnika, sad sacuvamo novi raspored
+		PriceList newPricelist = this.pricelistRepo.save(pl);
+		//4. sad unesemo stavke cenovnika
+		if(newPricelist != null){
+			newPricelist = this.pricelistItemService.addPricelistItems(pricelist.getItems(), pl);
+		}
+		
+		return convertToReaderDto(newPricelist);
+		
 	}
 
 	private PricelistReaderDto convertToReaderDto(PriceList savepl) {
@@ -84,38 +109,7 @@ public class PricelistServiceImpl implements PriceListService {
 		return sqlDate;
 	}
 
-	@Override
-	public PricelistReaderDto changePricelist(PricelistDto pricelist) {
-		// 1. potrazimo da li postoji cenovnik sa poslatim id-em i da li je aktivan 
-		PriceList pl =  this.pricelistRepo.findByIdAndActivate(pricelist.getId(), true);
-		if(pl == null){
-			return null;
-		}
-		//2. izbrisemo ceo cenovnik 
-		//izbrisemo sve stavke ovog cenovnika, a onda i cenovnik
-		Set<PriceItem> items = this.pricelistItemService.getItemsByPricelist(pl);
-		this.pricelistItemService.deleteItems(items);
-		//3. ponovo upisemo sve podatke samo sa novim stavkama 
-		//unesli smo cenovnik i sad jos unesemo sve njegove stavke 
-		if(pl != null){
-			pl = this.pricelistItemService.addPricelistItems(pricelist.getItems(), pl);
-		}
-		return convertToReaderDto(pl);
-	}
 
-	@Override
-	public PricelistReaderDto changeActivatePricelist(PricelistDto pricelist) {
-		// TODO Auto-generated method stub
-		PriceList pl= this.pricelistRepo.findByIdAndActivate(pricelist.getId(), true);
-		if(pl == null){
-			return null;
-		}
-		java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-		pl.setExpirationDate(date);
-		pl.setActivate(false);
-		pl = this.pricelistRepo.save(pl);
-		return convertToReaderDto(pl);
-	}
 	
 
 }

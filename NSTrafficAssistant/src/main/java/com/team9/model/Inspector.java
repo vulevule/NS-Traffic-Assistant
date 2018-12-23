@@ -22,7 +22,7 @@ public class Inspector extends User {
 	private static final long serialVersionUID = 1L;
 
 	@OneToMany(fetch = FetchType.LAZY)
-	private Set<Ticket> tickets;
+	private Set<Passenger> passenger;
 	
 	
 	@ManyToMany(cascade = {CascadeType.ALL})
@@ -35,10 +35,10 @@ public class Inspector extends User {
 
 
 	public Inspector(Long id, String name, String personalNo, String username, String password, String email, Role role,
-			Address address, Set<Ticket> tickets, Set<Ticket> checkedTickets) {
+			Address address, Set<Passenger> passenger, Set<Ticket> checkedTickets) {
 		super(id, name, personalNo, username, password, email, role, address);
 		this.checkedTickets = checkedTickets;
-		this.tickets = tickets;
+		this.passenger = passenger;
 	}
 
 
@@ -48,13 +48,14 @@ public class Inspector extends User {
 	}
 
 
-	public Set<Ticket> getTickets() {
-		return tickets;
+	
+	public Set<Passenger> getPassenger() {
+		return passenger;
 	}
 
 
-	public void setTickets(Set<Ticket> tickets) {
-		this.tickets = tickets;
+	public void setPassenger(Set<Passenger> passenger) {
+		this.passenger = passenger;
 	}
 
 
