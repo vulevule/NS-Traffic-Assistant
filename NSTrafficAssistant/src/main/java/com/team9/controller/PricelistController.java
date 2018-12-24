@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team9.dto.PricelistDto;
 import com.team9.dto.PricelistReaderDto;
+import com.team9.exceptions.NotFoundActivePricelistException;
+import com.team9.exceptions.PriceItemAlreadyExistsException;
+import com.team9.exceptions.PriceLessThanZeroException;
 import com.team9.service.PriceListService;
 
 @RestController
@@ -33,51 +36,34 @@ public class PricelistController {
 		PricelistReaderDto pl = null;
 		try {
 			pl = this.pricelistService.addPricelist(pricelist);
+			logger.info("<< add pricelist");
+			return new ResponseEntity<PricelistReaderDto>(pl, HttpStatus.CREATED);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.info("<< parse exception");
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} catch (NotFoundActivePricelistException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.info("<< does not found active pricelist");
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (PriceItemAlreadyExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.info("<< double price item in pricelist");
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} catch (PriceLessThanZeroException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.info("<< price less than zero exception");
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		if (pl == null) {
-			return new ResponseEntity<PricelistReaderDto>(pl, HttpStatus.BAD_REQUEST);
-		}
+		
 
-		logger.info("<< add pricelist");
-		return new ResponseEntity<PricelistReaderDto>(pl, HttpStatus.CREATED);
+		
 	}
 
-	@PostMapping(value = "/changePricelist", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<PricelistReaderDto> changePricelist(@RequestBody PricelistDto pricelist) {
-		logger.info(">> change pricelist with id: " + pricelist.getId());
 
-		PricelistReaderDto pl = null;
-		pl = this.pricelistService.changePricelist(pricelist);
-
-		if (pl == null) {
-			logger.info("<< pricelist with ID: " + pricelist.getId() + " does not exist in db!! ");
-			return new ResponseEntity<PricelistReaderDto>(pl, HttpStatus.BAD_REQUEST);
-		}
-
-		logger.info("<< change pricelist with id: " + pricelist.getId());
-
-		return new ResponseEntity<PricelistReaderDto>(pl, HttpStatus.OK);
-
-	}
-
-	@PostMapping(value = "/changeActivate", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<PricelistReaderDto> changeActivatePricelist(@RequestBody PricelistDto pricelist) {
-		logger.info(">> change activate pricelist with id: " + pricelist.getId());
-
-		PricelistReaderDto pl = null;
-		pl = this.pricelistService.changeActivatePricelist(pricelist);
-
-		if (pl == null) {
-			logger.info("<< pricelist with ID: " + pricelist.getId() + " does not exist in db!! ");
-			return new ResponseEntity<PricelistReaderDto>(pl, HttpStatus.BAD_REQUEST);
-		}
-
-		logger.info("<< change activate pricelist with id: " + pricelist.getId());
-
-		return new ResponseEntity<PricelistReaderDto>(pl, HttpStatus.OK);
-	}
 
 }

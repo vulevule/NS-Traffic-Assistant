@@ -1,6 +1,7 @@
 package com.team9.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.team9.model.TimeTicketType;
 import com.team9.model.TrafficType;
@@ -15,8 +16,8 @@ public class TicketReaderDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String serialNo;
-	private String issueDate;
-	private String expirationDate;
+	private Date issueDate;
+	private Date expirationDate;
 	private UserTicketType userType;
 	private TimeTicketType timeType;
 	private TrafficZone trafficZone;
@@ -24,16 +25,13 @@ public class TicketReaderDto implements Serializable {
 	private TrafficType trafficType;
 	private Double price;
 	private String passenger_username;
-	private String inspector_username;
 
 	public TicketReaderDto() {
 	}
 
-	public TicketReaderDto(Long id, String serialNo, String issueDate,
-			String expirationDate, UserTicketType userType,
-			TimeTicketType timeType, TrafficZone trafficZone, 
-			Boolean active, TrafficType trafficType, Double price,
-			String passenger_username, String inspector_username) {
+	public TicketReaderDto(Long id, String serialNo, Date issueDate, Date expirationDate, UserTicketType userType,
+			TimeTicketType timeType, TrafficZone trafficZone, Boolean active, TrafficType trafficType, Double price,
+			String passenger_username) {
 		this();
 		this.id = id;
 		this.serialNo = serialNo;
@@ -46,7 +44,6 @@ public class TicketReaderDto implements Serializable {
 		this.trafficType = trafficType;
 		this.price = price;
 		this.passenger_username = passenger_username;
-		this.inspector_username = inspector_username;
 	}
 
 	public Long getId() {
@@ -65,20 +62,20 @@ public class TicketReaderDto implements Serializable {
 		this.serialNo = serialNo;
 	}
 
-	public String getIssueDate() {
-		return issueDate;
-	}
-
-	public void setIssueDate(String issueDate) {
+	public void setIssueDate(Date issueDate) {
 		this.issueDate = issueDate;
 	}
 
-	public String getExpirationDate() {
-		return expirationDate;
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 
-	public void setExpirationDate(String expirationDate) {
-		this.expirationDate = expirationDate;
+	public Date getIssueDate() {
+		return issueDate;
+	}
+
+	public Date getExpirationDate() {
+		return expirationDate;
 	}
 
 	public UserTicketType getUserType() {
@@ -135,14 +132,6 @@ public class TicketReaderDto implements Serializable {
 
 	public void setPassenger_username(String passenger_username) {
 		this.passenger_username = passenger_username;
-	}
-
-	public String getInspector_username() {
-		return inspector_username;
-	}
-
-	public void setInspector_username(String inspector_username) {
-		this.inspector_username = inspector_username;
 	}
 
 }

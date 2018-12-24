@@ -6,15 +6,13 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.team9.dto.TicketDto;
 
 @Entity
 @Table(name = "ticket")
@@ -47,21 +45,39 @@ public class Ticket implements Serializable {
 	@Column(nullable = false)
 	private Double price;
 
+	@Column(nullable = false)
+	private int numOfUsed;
+
 	@ManyToOne(optional = false)
+	@JoinColumn(name = "passenge_id", nullable = false)
 	private Passenger passenger;
 
-	@ManyToOne
-	private Inspector inspector;
-
-	@ManyToMany(mappedBy = "tickets")
+	@ManyToMany
 	private Set<Inspector> checkInspectors;
 
 	public Ticket() {
 	}
 
+	public Ticket(String serialNo, Date issueDate, Date expirationDate, UserTicketType userType,
+			TimeTicketType timeType, TrafficZone trafficZone, Boolean active, TrafficType trafficType, Double price,
+			int numOfUsed, Passenger passenger) {
+		this();
+		this.serialNo = serialNo;
+		this.issueDate = issueDate;
+		this.expirationDate = expirationDate;
+		this.userType = userType;
+		this.timeType = timeType;
+		this.trafficZone = trafficZone;
+		this.active = active;
+		this.trafficType = trafficType;
+		this.price = price;
+		this.numOfUsed = numOfUsed;
+		this.passenger = passenger;
+	}
+
 	public Ticket(Long id, String serialNo, Date issueDate, Date expirationDate, UserTicketType userType,
 			TimeTicketType timeType, TrafficZone trafficZone, Boolean active, TrafficType trafficType, Double price,
-			Passenger passenger, Inspector inspector, Set<Inspector> checkInspectors) {
+			int numOfUsed, Passenger passenger) {
 		this();
 		this.id = id;
 		this.serialNo = serialNo;
@@ -73,8 +89,26 @@ public class Ticket implements Serializable {
 		this.active = active;
 		this.trafficType = trafficType;
 		this.price = price;
+		this.numOfUsed = numOfUsed;
 		this.passenger = passenger;
-		this.inspector = inspector;
+	}
+
+	public Ticket(Long id, String serialNo, Date issueDate, Date expirationDate, UserTicketType userType,
+			TimeTicketType timeType, TrafficZone trafficZone, Boolean active, TrafficType trafficType, Double price,
+			int numOfUsed, Passenger passenger, Set<Inspector> checkInspectors) {
+		this();
+		this.id = id;
+		this.serialNo = serialNo;
+		this.issueDate = issueDate;
+		this.expirationDate = expirationDate;
+		this.userType = userType;
+		this.timeType = timeType;
+		this.trafficZone = trafficZone;
+		this.active = active;
+		this.trafficType = trafficType;
+		this.price = price;
+		this.numOfUsed = numOfUsed;
+		this.passenger = passenger;
 		this.checkInspectors = checkInspectors;
 	}
 
@@ -158,14 +192,6 @@ public class Ticket implements Serializable {
 		this.passenger = passenger;
 	}
 
-	public Inspector getInspector() {
-		return inspector;
-	}
-
-	public void setInspector(Inspector inspector) {
-		this.inspector = inspector;
-	}
-
 	public Set<Inspector> getCheckInspectors() {
 		return checkInspectors;
 	}
@@ -182,6 +208,12 @@ public class Ticket implements Serializable {
 		this.trafficType = trafficType;
 	}
 
-	
+	public int getNumOfUsed() {
+		return numOfUsed;
+	}
+
+	public void setNumOfUsed(int numOfUsed) {
+		this.numOfUsed = numOfUsed;
+	}
 
 }
