@@ -14,6 +14,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.team9.model.Role;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 
@@ -61,8 +64,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/user/login").
 					permitAll()
-					.antMatchers("/user/create").permitAll()
-				.anyRequest().authenticated();
+					.antMatchers("/user/create").permitAll().antMatchers("/pricelist/addPricelist").hasAuthority("ADMIN")
+				/*.anyRequest().authenticated()*/;
 				//if we use AngularJS on client side
 				//.and().csrf().csrfTokenRepository(csrfTokenRepository()); 
 		

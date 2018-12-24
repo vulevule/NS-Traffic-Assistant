@@ -6,6 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -39,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	
 	
@@ -84,7 +88,7 @@ public class UserServiceImpl implements UserService {
 		
 		u.setName(udto.getName());
 		u.setUsername(udto.getUsername());
-		u.setPassword(udto.getPassword());
+		u.setPassword(passwordEncoder.encode(udto.getPassword()));
 		u.setEmail(udto.getEmail());
 		u.setPersonalNo(udto.getPersonalNo());
 		Address a = addressRepository.findByStreetAndCityAndZip(udto.getAddress().getStreet(), udto.getAddress().getCity(), udto.getAddress().getZip());

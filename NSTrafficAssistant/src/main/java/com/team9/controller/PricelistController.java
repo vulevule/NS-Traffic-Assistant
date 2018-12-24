@@ -29,7 +29,7 @@ public class PricelistController {
 	@Autowired
 	private PriceListService pricelistService;
 
-	@PreAuthorize("hasRole('ADMIN')")
+//	@PreAuthorize("hasRole('Admin')")
 	@PostMapping(value = "/addPricelist", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<PricelistReaderDto> addPricelist(@RequestBody PricelistDto pricelist) {
 		logger.info(">> add pricelist: " + pricelist.getIssueDate());
