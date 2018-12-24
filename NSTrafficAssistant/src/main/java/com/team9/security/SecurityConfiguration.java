@@ -62,9 +62,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 			.authorizeRequests()
-				.antMatchers("/user/login").
-					permitAll()
-					.antMatchers("/user/create").permitAll().antMatchers("/pricelist/addPricelist").hasAuthority("ADMIN")
+				.antMatchers("/user/login").permitAll()
+				.antMatchers("/user/create").permitAll().antMatchers("/pricelist/addPricelist").hasAuthority("ADMIN")
 				/*.anyRequest().authenticated()*/;
 				//if we use AngularJS on client side
 				//.and().csrf().csrfTokenRepository(csrfTokenRepository()); 
