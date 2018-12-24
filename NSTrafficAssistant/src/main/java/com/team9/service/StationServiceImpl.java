@@ -65,7 +65,7 @@ public class StationServiceImpl implements StationService {
 	}
 
 	@Override
-	public Collection<Station> getAllByLine(Line l) {
+	public Collection<Station> getAllByLine(Long lineId) {
 		ArrayList<Station> retVal = new ArrayList<Station>();
 		ArrayList<Station> list = (ArrayList<Station>) stationRepository.findAll();
 		

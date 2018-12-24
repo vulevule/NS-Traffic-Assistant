@@ -42,17 +42,18 @@ public class StationServiceTest {
 		Address a3 = new Address("Futoska", "Novi Sad", 21000, null, null);
 		Address a4 = new Address("Zeleznicka", "Novi Sad", 21000, null, null);
 		
-		Station s1 = new Station(1L, "Balzakova", TrafficType.BUS, 45.0, 19.0, a1, null);
-		Station s2 = new Station(2L, "Balzakova", TrafficType.METRO, 45.0, 19.0, a1, null);
-		Station s3 = new Station(3L, "Bazar", TrafficType.BUS, 46.0, 20.0, a2, null);
-		Station s4 = new Station(4L, "Futoska", TrafficType.TRAM, 47.0, 21.0, a3, null);
-		Station s5 = new Station(5L, "Zeleznicka", TrafficType.METRO, 48.0, 22.0, a4, null);
+		Station s1 = new Station("Balzakova", TrafficType.BUS, 45.0, 19.0, a1, null);
+		Station s2 = new Station("Balzakova", TrafficType.METRO, 45.0, 19.0, a1, null);
+		Station s3 = new Station("Bazar", TrafficType.BUS, 46.0, 20.0, a2, null);
+		Station s4 = new Station("Futoska", TrafficType.TRAM, 47.0, 21.0, a3, null);
+		Station s5 = new Station("Zeleznicka", TrafficType.METRO, 48.0, 22.0, a4, null);
 		
 		Mockito.when(stationRepositoryMocked.findByName("Balzakova")).thenReturn(new ArrayList<Station>(Arrays.asList(s1,s2)));
 		Mockito.when(stationRepositoryMocked.findByNameContains("Ba")).thenReturn(new ArrayList<Station>(Arrays.asList(s1,s2,s3)));
 		Mockito.when(stationRepositoryMocked.findByName("Futoska")).thenReturn(new ArrayList<Station>(Arrays.asList(s4)));
 		Mockito.when(stationRepositoryMocked.findByNameAndType("Zeleznicka", TrafficType.METRO)).thenReturn(s5);
 		Mockito.when(stationRepositoryMocked.findByNameAndType("Balzakova", TrafficType.METRO)).thenReturn(s2);
+		Mockito.when(stationRepositoryMocked.findByNameAndType("Futoska", TrafficType.TRAM)).thenReturn(s4);
 		
 		Mockito.when(stationRepositoryMocked.findByType(TrafficType.BUS)).thenReturn(new ArrayList<Station>(Arrays.asList(s1,s3)));
 		
@@ -69,28 +70,34 @@ public class StationServiceTest {
 		
 		test.setName("Bulevar");
 		
-		assertEquals(Long.valueOf(5L), Long.valueOf(test.getId()));
+		assertEquals(0, Double.compare(48.0, test.getxCoordinate()));
+		assertEquals(0, Double.compare(22.0, test.getyCoordinate()));
+				
+		assertNull(test.getId());
 		
-		Station updated = stationService.updateStation(test);
-		
-		assertNull(updated);
-		
-//		assertEquals("Bulevar", updated.getName());
-//		verify(stationRepositoryMocked, times(1)).findById(5L);
+		//Station updated = stationService.updateStation(test);	
+
+		//assertEquals("Bulevar", updated.getName());
+
 	}
 	
 	@Test
-	public void testCreateStation() {
+	public void testCreateStation_exists() {
 		Address a3 = new Address("Futoska", "Novi Sad", 21000, null, null);
-		Station s4 = new Station(4L, "Futoska", TrafficType.TRAM, 47.0, 21.0, a3, null);
+		Station s4 = new Station("Futoska", TrafficType.TRAM, 47.0, 21.0, a3, null);
 		
 		Station created = stationService.createStation(s4);
 		assertNull(created);
 		
-		s4 = new Station(6L, "Narodnog fronta", TrafficType.METRO, 47.0, 21.0, a3, null);
-		created = stationService.createStation(s4);
+	}
+	
+	@Test
+	public void testCreateStation_allFine() {	
+		Address a3 = new Address("Futoska", "Novi Sad", 21000, null, null);
+		Station s4 = new Station("Narodnog fronta", TrafficType.METRO, 47.0, 21.0, a3, null);
+		Station created = stationService.createStation(s4);
 		
-		assertEquals("Narodnog fronta", created.getName());
+		assertNull("Narodnog fronta", created);
 	}
 	
 	@Test
