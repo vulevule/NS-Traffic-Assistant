@@ -1,5 +1,6 @@
 package com.team9.model;
 
+import java.sql.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -23,7 +24,7 @@ public class Passenger extends User {
 	private Boolean activate;
 
 	@ManyToOne // onaj koje validirao ulogu
-	@JoinColumn(name="insepctor_id", nullable = true)
+	@JoinColumn(name = "insepctor_id", nullable = true)
 	private Inspector inspector;
 
 	// jedan putnik moze da ima vise karata, karta ima jednog korisnika
@@ -32,6 +33,9 @@ public class Passenger extends User {
 
 	@Column
 	private UserTicketType userTicketType;
+
+	@Column(nullable = true)
+	private Date expirationDate;
 
 	public Passenger() {
 	}
@@ -91,6 +95,14 @@ public class Passenger extends User {
 
 	public void setInspector(Inspector inspector) {
 		this.inspector = inspector;
+	}
+
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 
 }
