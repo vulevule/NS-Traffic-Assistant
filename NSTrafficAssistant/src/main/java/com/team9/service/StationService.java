@@ -17,7 +17,7 @@ public interface StationService {
 	
 	Collection<Station> getAllByType(TrafficType t);
 	
-	Collection<Station> getAllByLine(Line l);
+	Collection<Station> getAllByLine(Long lineId);
 	
 	Collection<Station> getByName(String name);
 	

@@ -38,6 +38,16 @@ public class StationController {
 		return allStations;
 	}
 	
+	@GetMapping(value="/station/getAllByLine/{line}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Station>> getAllByLine(@PathVariable Long lineId){
+		logger.info(">> get stations by line " + lineId);
+		
+		ResponseEntity<List<Station>> allStations = new ResponseEntity<List<Station>>((List<Station>) stationService.getAllByType(type), HttpStatus.OK);
+		
+		logger.info("<< get stations by line " + lineId);
+		return allStations;
+	}
+	
 	@GetMapping(value="/station/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Collection<Station>> getAll(){
 		logger.info(">> get all stations");
@@ -62,8 +72,6 @@ public class StationController {
 		} else {
 			return new ResponseEntity<>(created, HttpStatus.CREATED);
 		}
-		
-		
 		
 	}
 	

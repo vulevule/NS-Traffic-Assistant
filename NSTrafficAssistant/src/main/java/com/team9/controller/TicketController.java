@@ -62,7 +62,7 @@ public class TicketController {
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
 		logger.info(">> get tickets by " + username);
 
-		logger.info(pageable.getPageSize());
+		
 		Collection<TicketReaderDto> allTicket = ticketService.allTicket(pageable , username);
 		
 		logger.info("<< get tickets by " + username);
