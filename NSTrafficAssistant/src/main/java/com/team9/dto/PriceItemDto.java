@@ -15,27 +15,35 @@ public class PriceItemDto implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private double price;
-	private UserTicketType userType;
+
+	private String trafficType;
+
+	private String timeType;
+
+	private String zone;
 	
-	private TrafficType trafficType;
+	private double studentDiscount;
+	private double handycapDiscount;
+	private double seniorDiscount;
 
-	private TimeTicketType timeType;
+	public PriceItemDto() {
+	}
 
-	private TrafficZone zone;
 	
-	public PriceItemDto(){}
-
-	public PriceItemDto(double price, UserTicketType userType, TrafficType trafficType, TimeTicketType timeType,
-			TrafficZone zone) {
+	public PriceItemDto(double price, String trafficType, String timeType, String zone, double studentDiscount,
+			double handycapDiscount, double seniorDiscount) {
 		this();
 		this.price = price;
-		this.userType = userType;
 		this.trafficType = trafficType;
 		this.timeType = timeType;
 		this.zone = zone;
+		this.studentDiscount = studentDiscount;
+		this.handycapDiscount = handycapDiscount;
+		this.seniorDiscount = seniorDiscount;
 	}
+
 
 	public double getPrice() {
 		return price;
@@ -45,38 +53,60 @@ public class PriceItemDto implements Serializable {
 		this.price = price;
 	}
 
-	public UserTicketType getUserType() {
-		return userType;
+	
+
+	public double getStudentDiscount() {
+		return studentDiscount;
 	}
 
-	public void setUserType(UserTicketType userType) {
-		this.userType = userType;
+
+	public void setStudentDiscount(double studentDiscount) {
+		this.studentDiscount = studentDiscount;
 	}
 
-	public TrafficType getTrafficType() {
+
+	public double getHandycapDiscount() {
+		return handycapDiscount;
+	}
+
+
+	public void setHandycapDiscount(double handycapDiscount) {
+		this.handycapDiscount = handycapDiscount;
+	}
+
+
+	public double getSeniorDiscount() {
+		return seniorDiscount;
+	}
+
+
+	public void setSeniorDiscount(double seniorDiscount) {
+		this.seniorDiscount = seniorDiscount;
+	}
+
+
+	public String getTrafficType() {
 		return trafficType;
 	}
 
-	public void setTrafficType(TrafficType trafficType) {
+	public void setTrafficType(String trafficType) {
 		this.trafficType = trafficType;
 	}
 
-	public TimeTicketType getTimeType() {
+	public String getTimeType() {
 		return timeType;
 	}
 
-	public void setTimeType(TimeTicketType timeType) {
+	public void setTimeType(String timeType) {
 		this.timeType = timeType;
 	}
 
-	public TrafficZone getZone() {
+	public String getZone() {
 		return zone;
 	}
 
-	public void setZone(TrafficZone zone) {
+	public void setZone(String zone) {
 		this.zone = zone;
 	}
-	
-	
 
 }

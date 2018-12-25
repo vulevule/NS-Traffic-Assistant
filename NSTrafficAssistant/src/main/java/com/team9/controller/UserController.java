@@ -22,111 +22,87 @@ import com.team9.model.User;
 import com.team9.security.TokenUtils;
 import com.team9.service.UserService;
 
-
-
-
-
-
-
 @RestController
 public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	AuthenticationManager authenticationManager;
-	
+
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	@Autowired
 	TokenUtils tokenUtils;
-	
-	@RequestMapping(
-			value = "/user/create", 
-			method=RequestMethod.POST, 
-			consumes="application/json")
-	public ResponseEntity<String> addUser(@RequestBody UserDto user){
-		try {
-		
-		if(userService.getUser(user.getUsername()) != null) {
-			return new ResponseEntity<String>(HttpStatus.CONFLICT);
-		}
-		userService.saveUser(userService.UserDtoToUser(user));
-		if(user.getRole().equalsIgnoreCase("PASSENGER")) {
-			
-			userService.sendNotificaitionSync(user);
-		}
-		
-		return new ResponseEntity<String>(HttpStatus.CREATED);}
-catch(Exception ex) {
-			
-			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
-			
-		}
-		
-		
-	}
-	
-	
-	@RequestMapping(
-			value="/user/login",
-			method=RequestMethod.POST,
-			consumes="application/json")
-	public ResponseEntity<String> login(@RequestBody LoginDto log){
-		
-		try {
-			
-			
-			UsernamePasswordAuthenticationToken token = 
-        			new UsernamePasswordAuthenticationToken(
-					log.getUsername(), log.getPassword());
-            Authentication authentication = authenticationManager.authenticate(token);            
-            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Reload user details so we can generate token
-            UserDetails details = userDetailsService.
-            		loadUserByUsername(log.getUsername());
-            return new ResponseEntity<String>(
-            		tokenUtils.generateToken(details), HttpStatus.OK);
-			
-			
-		
-		/*User user=userService.getUser(log.getUsername(), log.getPassword());
-		if (user==null) {
-			
-			return new ResponseEntity<User>(user, HttpStatus.NOT_FOUND);
+	@RequestMapping(value = "/user/create", method = RequestMethod.POST, consumes = "application/json")
+	public ResponseEntity<String> addUser(@RequestBody UserDto user) {
+		try {
+
+			if (userService.getUser(user.getUsername()) != null) {
+				return new ResponseEntity<String>(HttpStatus.CONFLICT);
+			}
+			userService.saveUser(userService.UserDtoToUser(user));
+			if (user.getRole().equalsIgnoreCase("PASSENGER")) {
+
+				userService.sendNotificaitionSync(user);
+			}
+
+			return new ResponseEntity<String>(HttpStatus.CREATED);
+		} catch (Exception ex) {
+
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+
 		}
-		return new ResponseEntity<User>(user, HttpStatus.OK);*/
-		
-		}catch(Exception ex) {
-			
-			return new ResponseEntity<String>("Invalid login",HttpStatus.BAD_REQUEST);
+
+	}
+
+	@RequestMapping(value = "/user/login", method = RequestMethod.POST, consumes = "application/json")
+	public ResponseEntity<String> login(@RequestBody LoginDto log) {
+
+		try {
+
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(log.getUsername(),
+					log.getPassword());
+			Authentication authentication = authenticationManager.authenticate(token);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			// Reload user details so we can generate token
+			UserDetails details = userDetailsService.loadUserByUsername(log.getUsername());
+			return new ResponseEntity<String>(tokenUtils.generateToken(details), HttpStatus.OK);
+
+			/*
+			 * User user=userService.getUser(log.getUsername(),
+			 * log.getPassword()); if (user==null) {
+			 * 
+			 * return new ResponseEntity<User>(user, HttpStatus.NOT_FOUND); }
+			 * return new ResponseEntity<User>(user, HttpStatus.OK);
+			 */
+
+		} catch (Exception ex) {
+
+			return new ResponseEntity<String>("Invalid login", HttpStatus.BAD_REQUEST);
 		}
-		}
-	
-	
-	
-	
-	@RequestMapping(value="/user/profileUpdate",method=RequestMethod.PUT, consumes="application/json")
-	public ResponseEntity<User> updateStudent(@RequestBody UpdateProfileDto profileDTO){
-		
-		User user = userService.UpdateDtoToUser(profileDTO); 
+	}
+
+	@RequestMapping(value = "/user/profileUpdate", method = RequestMethod.PUT, consumes = "application/json")
+	public ResponseEntity<User> updateStudent(@RequestBody UpdateProfileDto profileDTO) {
+
+		User user = userService.UpdateDtoToUser(profileDTO);
 		if (user == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		
-		
-		boolean updated=userService.saveUser(user);
-		
-		if(updated==true) {
-		return new ResponseEntity<User>(user, HttpStatus.OK);
-		
-		
-		}
-	
-	return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-}
+		boolean updated = userService.saveUser(user);
+
+		if (updated == true) {
+			return new ResponseEntity<User>(user, HttpStatus.OK);
+
+		}
+
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+	}
 }

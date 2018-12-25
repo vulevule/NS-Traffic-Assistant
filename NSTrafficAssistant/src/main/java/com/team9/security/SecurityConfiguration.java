@@ -64,7 +64,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/user/login").
 					permitAll()
-					.antMatchers("/user/create").permitAll().antMatchers("/pricelist/addPricelist").hasAuthority("ADMIN")
+					.antMatchers("/user/create").permitAll()
+					.antMatchers("/pricelist/addPricelist").hasAuthority("ADMIN")
+					.antMatchers("/ticket/buyTicket").hasAuthority(Role.PASSANGER.name())
+					.antMatchers("/ticket/myTicket").hasAuthority(Role.PASSANGER.name())
+		
 				/*.anyRequest().authenticated()*/;
 				//if we use AngularJS on client side
 				//.and().csrf().csrfTokenRepository(csrfTokenRepository()); 

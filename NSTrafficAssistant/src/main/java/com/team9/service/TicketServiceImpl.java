@@ -4,11 +4,15 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.team9.dto.ReportDto;
@@ -68,20 +72,13 @@ public class TicketServiceImpl implements TicketService {
 		
 		//proverimo da li su nam prosledjeni parametri ispravni 
 		//1. tip prevoza
-		if(t.getTrafficType() != TrafficType.BUS && t.getTrafficType() != TrafficType.METRO && t.getTrafficType() != TrafficType.TRAM){
-			throw new WrongTrafficTypeException();
-		}
-		buyTicket.setTrafficType(t.getTrafficType());
+		
+		buyTicket.setTrafficType(ConverterService.convertStringToTrafficType(t.getTrafficType()));
 		//2. zone 
-		if(t.getTrafficZone() != TrafficZone.FIRST && t.getTrafficZone() != TrafficZone.SECOND){
-			throw new WrongTrafficZoneException();
-		}
-		buyTicket.setTrafficZone(t.getTrafficZone());
+		
+		buyTicket.setTrafficZone(ConverterService.convertStringToZone(t.getTrafficZone()));
 		//3. time type
-		if(t.getTimeType() != TimeTicketType.ANNUAL && t.getTimeType() != TimeTicketType.DAILY && t.getTimeType() != TimeTicketType.MONTH && t.getTimeType() != TimeTicketType.SINGLE){
-			throw new WrongTicketTimeException();
-		}
-		buyTicket.setTimeType(t.getTimeType());
+		buyTicket.setTimeType(ConverterService.convertStringToTimeTicketType(t.getTimeType()));
 		//na osnovu korisnika znamo kog je tipa karta
 		UserTicketType ut = UserTicketType.REGULAR;
 		if(passenger.getActivate() == true){
@@ -91,14 +88,14 @@ public class TicketServiceImpl implements TicketService {
 		//treba da izracunamo trajanje karte, za pocetni datum stavimo danasnji datum
 		buyTicket.setIssueDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
 		//pozovemo funkciju koja ce da nam vrati izracunati period u odnosu na datum  kupovine karte i na izabrani period
-		buyTicket.setExpirationDate(calculateExpirationDate(t.getTimeType(), buyTicket.getIssueDate()));
+		buyTicket.setExpirationDate(calculateExpirationDate(buyTicket.getTimeType(), buyTicket.getIssueDate()));
 		buyTicket.setActive(true);
-		buyTicket.setNumOfUsed(0);
+		buyTicket.setUsed(false);
 		//jos izgenerisemo serijski broj za kartu
-		buyTicket.setSerialNo(generateSerialNumber(t.getTrafficType(), t.getTimeType(), t.getTrafficZone(), ut));
+		buyTicket.setSerialNo(generateSerialNumber(buyTicket.getTrafficType(), buyTicket.getTimeType(), buyTicket.getTrafficZone(), ut));
 		
 		//cena karte, vec imamo povucenu cenu sa fronta, ali cemo je uporediti  sa cenom u bazi za svaki slucaj 
-		double price = getTicketPrice(t.getTimeType(), t.getTrafficZone(), t.getTrafficType(), username);
+		double price = getTicketPrice(t, username);
 		/**
 		 * TREBA RAZMISLITI DA LI JE POTREBNO UPOREDJIVATI ILI JE DOVOLJNO SAMO UZETI CENU IZ BAZE
 		 */
@@ -131,32 +128,37 @@ public class TicketServiceImpl implements TicketService {
 		LocalDate date = issueDate.toLocalDate();
 		if(timeType == TimeTicketType.ANNUAL){
 			//povecamo samo godinu
-			date.plusYears(1);
+			date = date.plusYears(1);
 		}else if (timeType == TimeTicketType.DAILY){
 			//vazi tog istog dana do 24h
-			
-			
+			date = date.plusDays(1);			
 		}else if(timeType == TimeTicketType.MONTH){
 			//menjamo mesec 
-			date.plusMonths(1);
+			date = date.plusMonths(1);
 		}else if(timeType == TimeTicketType.SINGLE){
 			//vazi 15 dana, a moze samo jednom da se upotrebi 
-			date.plusDays(15);
+			date  = date.plusDays(15);
 		}
 		
 		return java.sql.Date.valueOf(date);
 	}
 
 	@Override
-	public Collection<Ticket> allTicket(String username) {
+	public Collection<TicketReaderDto> allTicket(Pageable pageable, String username) {
 		// return all tickets for one passenger
 		Passenger passenger = (Passenger) userService.getUser(username);
-		return ticketRepository.findByPassenger(passenger);
+		Page<Ticket> allTicket = ticketRepository.findByPassenger(passenger, pageable);
+		
+		List<TicketReaderDto> tickets = new ArrayList<TicketReaderDto>();
+		for(Ticket t : allTicket){
+			tickets.add(convertToTicketDto(t));
+		}
+		
+		return tickets;
 	}
 
 	@Override
-	public double getTicketPrice(TimeTicketType timeType, TrafficZone trafficZone, TrafficType trafficType,
-			String username) throws PriceItemNotFoundException, UserNotFoundException, NotFoundActivePricelistException {
+	public double getTicketPrice(TicketDto t,String username) throws PriceItemNotFoundException, UserNotFoundException, NotFoundActivePricelistException, WrongTrafficTypeException, WrongTicketTimeException, WrongTrafficZoneException {
 		// TODO Auto-generated method stub
 		PriceList pl = pricelistService.getPricelist();
 		double price = 0;
@@ -168,11 +170,32 @@ public class TicketServiceImpl implements TicketService {
 		}
 
 		// pronadjemo priceitem na osnovu svih zadatih parametara
-		PriceItem priceItem = this.priceItemService.getPriceItem(ut, trafficType, timeType, trafficZone, pl);
+		TrafficType type = ConverterService.convertStringToTrafficType(t.getTrafficType());
+		TimeTicketType time = ConverterService.convertStringToTimeTicketType(t.getTimeType());
+		TrafficZone zone = ConverterService.convertStringToZone(t.getTrafficZone());
+		PriceItem priceItem = this.priceItemService.getPriceItem(type, time, zone, pl);
+		//sad posto smo nasli treba da izracunamo cenu 
 
 		if (priceItem != null) {
-			price = priceItem.getPrice();
+			price = calculatePrice(priceItem, ut);
 		}
+		return price;
+	}
+
+	private double calculatePrice(PriceItem priceItem, UserTicketType ut) {
+		// na osnovu regularne cene i tipa korisnika racunamo cenu karte
+		double discount = 0 ;
+		if(ut == UserTicketType.HANDYCAP){
+			discount = priceItem.getHandycapDiscont();
+		}else if(ut == UserTicketType.SENIOR){
+			discount = priceItem.getSeniorDiscount();
+		}else if(ut == UserTicketType.STUDENT){
+			discount = priceItem.getStudentDiscount();
+		}
+		double regular_price = priceItem.getPrice();
+		
+		double price = regular_price - ((discount/100)*regular_price);
+		
 		return price;
 	}
 

@@ -26,8 +26,7 @@ public class PriceItem implements Serializable {
 	private Long id;
 	@Column
 	private double price;
-	@Column
-	private UserTicketType userType;
+
 	@Column
 	private TrafficType trafficType;
 	@Column
@@ -36,36 +35,47 @@ public class PriceItem implements Serializable {
 	@Column
 	private TrafficZone zone;
 
-	//stavka pripada jednom cenovniku
-	@ManyToOne(fetch=FetchType.LAZY, optional=false)
-	@JoinColumn(name="pricelist_id", nullable=false)
+	@Column
+	private double studentDiscount;
+	@Column
+	private double seniorDiscount;
+	@Column
+	private double handycapDiscont;
+
+	// stavka pripada jednom cenovniku
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "pricelist_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private PriceList pricelist;
 
 	public PriceItem() {
 	}
 
-	public PriceItem(Long id, double price, UserTicketType userType, TrafficType trafficType, TimeTicketType timeType,
-			PriceList pricelist, TrafficZone zone) {
+	public PriceItem(Long id, double price, TrafficType trafficType, TimeTicketType timeType, TrafficZone zone,
+			double studentDiscount, double seniorDiscount, double handycapDiscont, PriceList pricelist) {
 		this();
 		this.id = id;
 		this.price = price;
-		this.userType = userType;
 		this.trafficType = trafficType;
 		this.timeType = timeType;
-		this.pricelist = pricelist;
 		this.zone = zone;
+		this.studentDiscount = studentDiscount;
+		this.seniorDiscount = seniorDiscount;
+		this.handycapDiscont = handycapDiscont;
+		this.pricelist = pricelist;
 	}
 
-	public PriceItem(double price, UserTicketType userType, TrafficType trafficType, TimeTicketType timeType,
-			PriceList pricelist, TrafficZone zone) {
-		this();
+	public PriceItem(double price, TrafficType trafficType, TimeTicketType timeType, TrafficZone zone,
+			double studentDiscount, double seniorDiscount, double handycapDiscont, PriceList pricelist) {
+		super();
 		this.price = price;
-		this.userType = userType;
 		this.trafficType = trafficType;
 		this.timeType = timeType;
-		this.pricelist = pricelist;
 		this.zone = zone;
+		this.studentDiscount = studentDiscount;
+		this.seniorDiscount = seniorDiscount;
+		this.handycapDiscont = handycapDiscont;
+		this.pricelist = pricelist;
 	}
 
 	public Long getId() {
@@ -84,12 +94,28 @@ public class PriceItem implements Serializable {
 		this.price = price;
 	}
 
-	public UserTicketType getUserType() {
-		return userType;
+	public double getStudentDiscount() {
+		return studentDiscount;
 	}
 
-	public void setUserType(UserTicketType userType) {
-		this.userType = userType;
+	public void setStudentDiscount(double studentDiscount) {
+		this.studentDiscount = studentDiscount;
+	}
+
+	public double getSeniorDiscount() {
+		return seniorDiscount;
+	}
+
+	public void setSeniorDiscount(double seniorDiscount) {
+		this.seniorDiscount = seniorDiscount;
+	}
+
+	public double getHandycapDiscont() {
+		return handycapDiscont;
+	}
+
+	public void setHandycapDiscont(double handycapDiscont) {
+		this.handycapDiscont = handycapDiscont;
 	}
 
 	public TrafficType getTrafficType() {
@@ -107,8 +133,6 @@ public class PriceItem implements Serializable {
 	public void setTimeType(TimeTicketType timeType) {
 		this.timeType = timeType;
 	}
-
-	
 
 	public PriceList getPricelist() {
 		return pricelist;

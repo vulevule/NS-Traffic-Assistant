@@ -11,15 +11,15 @@ public class TicketDto implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private TimeTicketType timeType;
-	private TrafficZone trafficZone;
-	private TrafficType trafficType;
+	private String timeType;
+	private String trafficZone;
+	private String trafficType;
 	private double price;
 
 	public TicketDto() {
 	}
 
-	public TicketDto(TimeTicketType timeType, TrafficZone trafficZone, TrafficType trafficType, double price) {
+	public TicketDto(String timeType, String trafficZone, String trafficType, double price) {
 		this();
 		this.timeType = timeType;
 		this.trafficZone = trafficZone;
@@ -27,27 +27,27 @@ public class TicketDto implements Serializable {
 		this.price = price;
 	}
 
-	public TimeTicketType getTimeType() {
+	public String getTimeType() {
 		return timeType;
 	}
 
-	public void setTimeType(TimeTicketType timeType) {
+	public void setTimeType(String timeType) {
 		this.timeType = timeType;
 	}
 
-	public TrafficZone getTrafficZone() {
+	public String getTrafficZone() {
 		return trafficZone;
 	}
 
-	public void setTrafficZone(TrafficZone trafficZone) {
+	public void setTrafficZone(String trafficZone) {
 		this.trafficZone = trafficZone;
 	}
 
-	public TrafficType getTrafficType() {
+	public String getTrafficType() {
 		return trafficType;
 	}
 
-	public void setTrafficType(TrafficType trafficType) {
+	public void setTrafficType(String trafficType) {
 		this.trafficType = trafficType;
 	}
 

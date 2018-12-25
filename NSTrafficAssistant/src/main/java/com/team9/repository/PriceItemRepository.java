@@ -16,6 +16,6 @@ public interface PriceItemRepository extends JpaRepository<PriceItem, Long>{
 	
 	Set<PriceItem> findByPricelist(PriceList pl);
 	
-	Optional<PriceItem> findByUserTypeAndTrafficTypeAndTimeTypeAndZoneAndPricelist(UserTicketType ut, TrafficType tt, TimeTicketType time, TrafficZone zone, PriceList id);
+	Optional<PriceItem> findByTrafficTypeAndTimeTypeAndZoneAndPricelist(TrafficType tt, TimeTicketType time, TrafficZone zone, PriceList id);
 	
 }
