@@ -48,6 +48,16 @@ public class Address implements Serializable{
 		//this.stations = stations;
 	}
 
+	
+	
+	public Address(Long id, String street, String city, Integer zip) {
+		super();
+		this.id = id;
+		this.street = street;
+		this.city = city;
+		this.zip = zip;
+	}
+
 	public Address(Long id, String street, String city, Integer zip, Set<User> users, Set<Station> stations) {
 		this();
 		this.id = id;

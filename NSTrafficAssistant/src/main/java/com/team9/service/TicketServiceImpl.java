@@ -20,6 +20,8 @@ import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
 import com.team9.exceptions.PriceItemNotFoundException;
+import com.team9.exceptions.TicketAlreadyUsedException;
+import com.team9.exceptions.TicketNotFound;
 import com.team9.exceptions.UserNotFoundException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
@@ -65,7 +67,7 @@ public class TicketServiceImpl implements TicketService {
 	public TicketReaderDto buyTicket(TicketDto t, String username) throws WrongTrafficTypeException, UserNotFoundException, WrongTrafficZoneException, WrongTicketTimeException, PriceItemNotFoundException, NotFoundActivePricelistException {
 		// kupovina karte
 		// sa servera nam stignu potrebni podaci
-		// izvucemo trazenog korisnika na osnovu usrname-a
+		// izvucemo trazenog korisnika na osnovu username-a
 		Ticket buyTicket = new Ticket();
 		Passenger passenger = getPassengerByUsername(username);
 		buyTicket.setPassenger(passenger);
@@ -113,7 +115,8 @@ public class TicketServiceImpl implements TicketService {
 		return t;
 	}
 
-	private String generateSerialNumber(TrafficType trafficType, TimeTicketType timeType, TrafficZone trafficZone,
+	@Override
+	public String generateSerialNumber(TrafficType trafficType, TimeTicketType timeType, TrafficZone trafficZone,
 			UserTicketType ut) {
 		// prva slova od enuma i plus neki broj
 		String serialNum = "";
@@ -123,7 +126,8 @@ public class TicketServiceImpl implements TicketService {
 		return serialNum;
 	}
 
-	private Date calculateExpirationDate(TimeTicketType timeType, Date issueDate) {
+	@Override
+	public  Date calculateExpirationDate(TimeTicketType timeType, Date issueDate) {
 		//vraca nam izracunati period vazenja karte u odnosu na datum kupovine karte i izabrani period
 		LocalDate date = issueDate.toLocalDate();
 		if(timeType == TimeTicketType.ANNUAL){
@@ -186,7 +190,7 @@ public class TicketServiceImpl implements TicketService {
 		// na osnovu regularne cene i tipa korisnika racunamo cenu karte
 		double discount = 0 ;
 		if(ut == UserTicketType.HANDYCAP){
-			discount = priceItem.getHandycapDiscont();
+			discount = priceItem.getHandycapDiscount();
 		}else if(ut == UserTicketType.SENIOR){
 			discount = priceItem.getSeniorDiscount();
 		}else if(ut == UserTicketType.STUDENT){
@@ -227,6 +231,27 @@ public class TicketServiceImpl implements TicketService {
 		}
 
 		return sqlDate;
+	}
+
+	@Override
+	public boolean useTicket(String serialNo, String username) throws TicketNotFound, TicketAlreadyUsedException {
+		// 1. na osnovu serijskog broja pronadjemo kartu u bazi 
+		Ticket foundTicket = this.ticketRepository.findBySerialNo(serialNo).orElseThrow(()->new TicketNotFound());
+		Date today = new Date(new java.util.Date().getTime());
+		if(foundTicket.getIssueDate().before(today) && today.before(foundTicket.getExpirationDate())){
+			//proverimo da li je karta single, ako jeste i ako je vec koriscena bacamo gresku
+			if(foundTicket.getTimeType() == TimeTicketType.SINGLE){
+				if (foundTicket.isUsed() == true){
+					throw new TicketAlreadyUsedException();
+				}else{
+					foundTicket.setUsed(true); //ako nije koriscena setujemo na true
+				}
+			}
+			Ticket saveTicket = this.ticketRepository.save(foundTicket);//update karte
+			return true;//iskoriscena karta
+		}
+		
+		return false;
 	}
 
 }

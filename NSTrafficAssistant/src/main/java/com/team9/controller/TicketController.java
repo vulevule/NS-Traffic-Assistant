@@ -12,12 +12,14 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +28,8 @@ import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
 import com.team9.exceptions.PriceItemNotFoundException;
+import com.team9.exceptions.TicketAlreadyUsedException;
+import com.team9.exceptions.TicketNotFound;
 import com.team9.exceptions.UserNotFoundException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
@@ -146,5 +150,31 @@ public class TicketController {
 		}
 		
 	}
+	
+/*	@RequestMapping(value = "/useTicket/{serialNo}", method = RequestMethod.GET)
+	public ResponseEntity<HttpStatus> useTicket(@RequestParam("serialNo") String serialNo, HttpServletRequest request){
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		String authToken = httpRequest.getHeader("X-Auth-Token");
+		String username = this.tokenUtils.getUsernameFromToken(authToken);
+		logger.info(">> use ticket with serial number: " + serialNo +   "; user:  " + username);
+		try {
+			boolean use = this.ticketService.useTicket(serialNo, username);
+			if(use == true){
+				logger.info("<< successful use ticket");
+				return new ResponseEntity<>(HttpStatus.OK);
+			}
+		} catch (TicketNotFound e) {
+			// TODO Auto-generated catch block
+			logger.info(">> use ticket: ticket not found");
+			return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
+		
+		} catch (TicketAlreadyUsedException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			logger.info("use ticket: ticket already used exception");
+			return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+		}
+		return null;
+	}*/
 }
 

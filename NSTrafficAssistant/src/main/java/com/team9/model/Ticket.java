@@ -49,7 +49,7 @@ public class Ticket implements Serializable {
 	private boolean used;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "passenge_id", nullable = false)
+	@JoinColumn(name = "passenger_id", nullable = false)
 	private Passenger passenger;
 
 	@ManyToMany
