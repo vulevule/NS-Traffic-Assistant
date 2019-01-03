@@ -1,6 +1,7 @@
 package com.team9.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.team9.model.TimeTicketType;
@@ -25,6 +26,7 @@ public class TicketReaderDto implements Serializable {
 	private TrafficType trafficType;
 	private Double price;
 	private String passenger_username;
+	private ArrayList<String> inspectors;
 
 	public TicketReaderDto() {
 	}
@@ -44,6 +46,24 @@ public class TicketReaderDto implements Serializable {
 		this.trafficType = trafficType;
 		this.price = price;
 		this.passenger_username = passenger_username;
+	}
+
+	public TicketReaderDto(Long id, String serialNo, Date issueDate, Date expirationDate, UserTicketType userType,
+			TimeTicketType timeType, TrafficZone trafficZone, Boolean active, TrafficType trafficType, Double price,
+			String passenger_username, ArrayList<String> inspectors) {
+		super();
+		this.id = id;
+		this.serialNo = serialNo;
+		this.issueDate = issueDate;
+		this.expirationDate = expirationDate;
+		this.userType = userType;
+		this.timeType = timeType;
+		this.trafficZone = trafficZone;
+		this.active = active;
+		this.trafficType = trafficType;
+		this.price = price;
+		this.passenger_username = passenger_username;
+		this.inspectors = inspectors;
 	}
 
 	public Long getId() {
@@ -132,6 +152,14 @@ public class TicketReaderDto implements Serializable {
 
 	public void setPassenger_username(String passenger_username) {
 		this.passenger_username = passenger_username;
+	}
+
+	public ArrayList<String> getInspectors() {
+		return inspectors;
+	}
+
+	public void setInspectors(ArrayList<String> inspectors) {
+		this.inspectors = inspectors;
 	}
 
 }

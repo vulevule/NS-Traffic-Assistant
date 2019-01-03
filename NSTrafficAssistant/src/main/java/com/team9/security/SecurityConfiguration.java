@@ -3,7 +3,6 @@ package com.team9.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -11,13 +10,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.team9.model.Role;
-
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 
@@ -28,6 +26,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 	
 	@Autowired
 	public void configureAuthentication(
@@ -56,6 +57,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
+//		httpSecurity
+//		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+//		//za neautorizovane zahteve posalji 401 gresku
+//		.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
+//		.authorizeRequests()
+//		//svim korisnicima dopustiti da pristupe loginu i registraciji, i cenovniku
+//		.antMatchers("/user/login").permitAll()
+//		.antMatchers("/user/create").permitAll()
+//		.antMatchers("/pricelist/getPricelist").permitAll()
+//		//svaki zahtev mora biti autorizovan
+//		.anyRequest().authenticated().and()
 		httpSecurity
 			.csrf().disable()
 			.sessionManagement()
@@ -68,14 +80,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 					.antMatchers("/ticket/buyTicket").hasAuthority(Role.PASSANGER.name())
 					.antMatchers("/ticket/myTicket").hasAuthority(Role.PASSANGER.name())
 					.antMatchers("/pricelist/getPricelist").permitAll()
-					.antMatchers("/ticket/useTicket/{serialNo}").hasAuthority(Role.PASSANGER.name())
+					.antMatchers("/ticket/useTicket").hasAuthority(Role.PASSANGER.name())
+					.antMatchers("/ticket/checkTicket").hasAuthority(Role.INSPECTOR.name())
+					.antMatchers("/ticket/monthReport").hasAuthority(Role.ADMIN.name())
 				/*.anyRequest().authenticated()*/;
 				//if we use AngularJS on client side
 				//.and().csrf().csrfTokenRepository(csrfTokenRepository()); 
 		
-		// Custom JWT based authentication
+//		// Custom JWT based authentication
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(),
 				UsernamePasswordAuthenticationFilter.class);
+		httpSecurity.csrf().disable();
 	} 
 	
 }		

@@ -46,6 +46,8 @@ public class Inspector extends User {
 			Address address) {
 		super(name, personalNo, username, password, email, role, address);
 	}
+	
+	
 
 
 	

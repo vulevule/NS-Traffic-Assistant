@@ -7,8 +7,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,11 +23,14 @@ import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
 import com.team9.exceptions.PriceItemNotFoundException;
 import com.team9.exceptions.TicketAlreadyUsedException;
+import com.team9.exceptions.TicketIsNotUseException;
+import com.team9.exceptions.TicketIsNotValidException;
 import com.team9.exceptions.TicketNotFound;
 import com.team9.exceptions.UserNotFoundException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
 import com.team9.exceptions.WrongTrafficZoneException;
+import com.team9.model.Inspector;
 import com.team9.model.Passenger;
 import com.team9.model.PriceItem;
 import com.team9.model.PriceList;
@@ -110,8 +115,14 @@ public class TicketServiceImpl implements TicketService {
 
 	private TicketReaderDto convertToTicketDto(Ticket saveTicket) {
 		// konvertovanje ticket-a u dto objekat za slanje na front
-		 TicketReaderDto t = new TicketReaderDto(saveTicket.getId(), saveTicket.getSerialNo(), saveTicket.getIssueDate(), saveTicket.getExpirationDate(), saveTicket.getUserType(),saveTicket.getTimeType()
-				 , saveTicket.getTrafficZone(), saveTicket.getActive(), saveTicket.getTrafficType(),saveTicket.getPrice(), saveTicket.getPassenger().getUsername());
+		ArrayList<String> inspectors = new ArrayList<>();
+		if(saveTicket.getCheckInspectors() != null){
+			for(Inspector i : saveTicket.getCheckInspectors()){
+				inspectors.add(i.getUsername());
+			}
+		}
+		TicketReaderDto t = new TicketReaderDto(saveTicket.getId(), saveTicket.getSerialNo(), saveTicket.getIssueDate(), saveTicket.getExpirationDate(), saveTicket.getUserType(),saveTicket.getTimeType()
+				 , saveTicket.getTrafficZone(), saveTicket.getActive(), saveTicket.getTrafficType(),saveTicket.getPrice(), saveTicket.getPassenger().getUsername(), inspectors);
 		return t;
 	}
 
@@ -148,12 +159,13 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public Collection<TicketReaderDto> allTicket(Pageable pageable, String username) {
+	public Collection<TicketReaderDto> allTicket(String username, Pageable pageable) throws UserNotFoundException {
 		// return all tickets for one passenger
-		Passenger passenger = (Passenger) userService.getUser(username);
+		Passenger passenger = getPassengerByUsername(username);
 		Page<Ticket> allTicket = ticketRepository.findByPassenger(passenger, pageable);
 		
 		List<TicketReaderDto> tickets = new ArrayList<TicketReaderDto>();
+		
 		for(Ticket t : allTicket){
 			tickets.add(convertToTicketDto(t));
 		}
@@ -234,7 +246,7 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public boolean useTicket(String serialNo, String username) throws TicketNotFound, TicketAlreadyUsedException {
+	public boolean useTicket(String serialNo, String username) throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException {
 		// 1. na osnovu serijskog broja pronadjemo kartu u bazi 
 		Ticket foundTicket = this.ticketRepository.findBySerialNo(serialNo).orElseThrow(()->new TicketNotFound());
 		Date today = new Date(new java.util.Date().getTime());
@@ -249,9 +261,63 @@ public class TicketServiceImpl implements TicketService {
 			}
 			Ticket saveTicket = this.ticketRepository.save(foundTicket);//update karte
 			return true;//iskoriscena karta
+		}else{
+			throw new TicketIsNotValidException(); //kada je istekla karta
 		}
 		
-		return false;
+	}
+
+	@Override
+	public TicketReaderDto checkTicket(String serialNo, String username) throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException {
+		// kontrola karte od strane inspektora
+		//1. pronadjemo kartu na osnovu serijskog broja
+		Ticket foundTicket = this.ticketRepository.findBySerialNo(serialNo).orElseThrow(()-> new TicketNotFound());
+		Date today = new Date(new java.util.Date().getTime());
+		Inspector i = (Inspector) this.userService.getUser(username);//ovde treba proveriti da li postoji inspektor
+		if(i == null){
+			throw new UserNotFoundException();
+		}
+		//proverimo da li je karta jos uvek vazeca
+		if(foundTicket.getIssueDate().before(today) && today.before(foundTicket.getExpirationDate())){
+			//karta je vazeca proverimo da li je single 
+			if(foundTicket.getTimeType() == TimeTicketType.SINGLE){
+				if(foundTicket.isUsed() == false){
+					//karta nije upotrebljena
+					throw new TicketIsNotUseException();
+				}
+				
+			}
+			//ok , dodamo inspektora koji je proverio kartu
+			Set<Inspector> inspectors = foundTicket.getCheckInspectors();
+			inspectors.add(i);
+			//sacuvamo u bazi 
+			foundTicket.setCheckInspectors(inspectors);
+			Ticket updateTicket = this.ticketRepository.save(foundTicket);
+			return convertToTicketDto(updateTicket);
+		}else{
+			throw new TicketIsNotValidException();
+		}
+	
+	}
+
+	@Override
+	public Collection<TicketReaderDto> getMonthReport(int month, int year) throws IllegalArgumentException{
+		// TODO Auto-generated method stub
+		Collection<Ticket> allTicket = (Collection<Ticket>) this.ticketRepository.findAll();
+		
+		List<Ticket> report = new ArrayList<Ticket>();
+		List<TicketReaderDto> result = new ArrayList<TicketReaderDto>();
+		if((month > 12 || month < 1) || (year > 2019))
+		{
+			throw new IllegalArgumentException();
+		}
+		report = allTicket.stream().filter(t -> t.getIssueDate().toLocalDate().getMonthValue() == month && t.getIssueDate().toLocalDate().getYear() == year).collect(Collectors.toList());
+		
+		for(Ticket t : report){
+			result.add(convertToTicketDto(t));
+		}
+		
+		return result;
 	}
 
 }
