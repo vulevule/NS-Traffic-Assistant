@@ -46,10 +46,10 @@ public class Ticket implements Serializable {
 	private Double price;
 
 	@Column(nullable = false)
-	private int numOfUsed;
+	private boolean used;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "passenge_id", nullable = false)
+	@JoinColumn(name = "passenger_id", nullable = false)
 	private Passenger passenger;
 
 	@ManyToMany
@@ -60,7 +60,7 @@ public class Ticket implements Serializable {
 
 	public Ticket(String serialNo, Date issueDate, Date expirationDate, UserTicketType userType,
 			TimeTicketType timeType, TrafficZone trafficZone, Boolean active, TrafficType trafficType, Double price,
-			int numOfUsed, Passenger passenger) {
+			boolean numOfUsed, Passenger passenger) {
 		this();
 		this.serialNo = serialNo;
 		this.issueDate = issueDate;
@@ -71,13 +71,13 @@ public class Ticket implements Serializable {
 		this.active = active;
 		this.trafficType = trafficType;
 		this.price = price;
-		this.numOfUsed = numOfUsed;
+		this.used = used;
 		this.passenger = passenger;
 	}
 
 	public Ticket(Long id, String serialNo, Date issueDate, Date expirationDate, UserTicketType userType,
 			TimeTicketType timeType, TrafficZone trafficZone, Boolean active, TrafficType trafficType, Double price,
-			int numOfUsed, Passenger passenger) {
+			boolean used, Passenger passenger) {
 		this();
 		this.id = id;
 		this.serialNo = serialNo;
@@ -89,13 +89,13 @@ public class Ticket implements Serializable {
 		this.active = active;
 		this.trafficType = trafficType;
 		this.price = price;
-		this.numOfUsed = numOfUsed;
+		this.used = used;
 		this.passenger = passenger;
 	}
 
 	public Ticket(Long id, String serialNo, Date issueDate, Date expirationDate, UserTicketType userType,
 			TimeTicketType timeType, TrafficZone trafficZone, Boolean active, TrafficType trafficType, Double price,
-			int numOfUsed, Passenger passenger, Set<Inspector> checkInspectors) {
+			boolean used, Passenger passenger, Set<Inspector> checkInspectors) {
 		this();
 		this.id = id;
 		this.serialNo = serialNo;
@@ -107,7 +107,7 @@ public class Ticket implements Serializable {
 		this.active = active;
 		this.trafficType = trafficType;
 		this.price = price;
-		this.numOfUsed = numOfUsed;
+		this.used = used;
 		this.passenger = passenger;
 		this.checkInspectors = checkInspectors;
 	}
@@ -208,12 +208,12 @@ public class Ticket implements Serializable {
 		this.trafficType = trafficType;
 	}
 
-	public int getNumOfUsed() {
-		return numOfUsed;
+	public boolean isUsed() {
+		return used;
 	}
 
-	public void setNumOfUsed(int numOfUsed) {
-		this.numOfUsed = numOfUsed;
+	public void setUsed(boolean used) {
+		this.used = used;
 	}
 
 }

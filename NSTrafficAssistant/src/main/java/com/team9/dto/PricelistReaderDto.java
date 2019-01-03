@@ -1,6 +1,7 @@
 package com.team9.dto;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,9 +12,9 @@ public class PricelistReaderDto implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Long id;
-	private String issueDate;
+	private Date issueDate;
 
-	private String expirationDate;
+	private Date expirationDate;
 	private Boolean activate;
 
 	private Set<PriceItemDto> items = new HashSet<>();
@@ -21,7 +22,7 @@ public class PricelistReaderDto implements Serializable {
 	public PricelistReaderDto() {
 	}
 
-	public PricelistReaderDto(Long id, String issueDate, String expirationDate, Boolean activate,
+	public PricelistReaderDto(Long id, Date issueDate, Date expirationDate, Boolean activate,
 			Set<PriceItemDto> items) {
 		this();
 		this.id = id;
@@ -39,19 +40,19 @@ public class PricelistReaderDto implements Serializable {
 		this.id = id;
 	}
 
-	public String getIssueDate() {
+	public Date getIssueDate() {
 		return issueDate;
 	}
 
-	public void setIssueDate(String issueDate) {
+	public void setIssueDate(Date issueDate) {
 		this.issueDate = issueDate;
 	}
 
-	public String getExpirationDate() {
+	public Date getExpirationDate() {
 		return expirationDate;
 	}
 
-	public void setExpirationDate(String expirationDate) {
+	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
 	}
 

@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
 		else if(u.getRole() == Role.PASSENGER) {
 			Passenger p = new Passenger(u.getName(), u.getPersonalNo(), u.getUsername(), u.getPassword(), u.getEmail(), u.getRole(), u.getAddress(), false, UserTicketType.REGULAR); 
 			User saveUser = userRepository.save(p);
-			Authority a = new Authority("PASSENGER", saveUser);
+			Authority a = new Authority("PASSANGER", saveUser);
 			authorityRepository.save(a);
 			return true;
 		}

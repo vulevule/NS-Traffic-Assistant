@@ -13,26 +13,17 @@ public class PricelistDto implements Serializable {
 	
 	private Long id;
 
-	private String issueDate;
 
 	private Set<PriceItemDto> items = new HashSet<>();
 
 	public PricelistDto() {
 	}
 
-	public PricelistDto(String issueDate, Set<PriceItemDto> items) {
+	public PricelistDto(Set<PriceItemDto> items) {
 		this();
-		this.issueDate = issueDate;
 		this.items = items;
 	}
 
-	public String getIssueDate() {
-		return issueDate;
-	}
-
-	public void setIssueDate(String issueDate) {
-		this.issueDate = issueDate;
-	}
 	public Set<PriceItemDto> getItems() {
 		return items;
 	}

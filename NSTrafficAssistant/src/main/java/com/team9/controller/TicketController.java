@@ -2,6 +2,7 @@ package com.team9.controller;
 
 
 
+import org.springframework.data.domain.Pageable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -11,12 +12,15 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team9.dto.ReportDto;
@@ -24,6 +28,8 @@ import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
 import com.team9.exceptions.PriceItemNotFoundException;
+import com.team9.exceptions.TicketAlreadyUsedException;
+import com.team9.exceptions.TicketNotFound;
 import com.team9.exceptions.UserNotFoundException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
@@ -48,9 +54,10 @@ public class TicketController {
 	/*
 	 * TREBA ZAMENITI DA VRACA PAGE OBJEKAT
 	 */
-	@GetMapping(value="/myTicket",
+	@GetMapping(value="/myTicket", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<Ticket>> getMyTicket(HttpServletRequest request){
+	public ResponseEntity<Collection<TicketReaderDto>> getMyTicket(HttpServletRequest request, 
+			Pageable pageable){
 		/*
 		 * korisnika uzimamo iz tokena 
 		 */
@@ -58,11 +65,12 @@ public class TicketController {
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
 		logger.info(">> get tickets by " + username);
+
 		
-		Collection<Ticket> allTicket = ticketService.allTicket(username);
+		Collection<TicketReaderDto> allTicket = ticketService.allTicket(pageable , username);
 		
 		logger.info("<< get tickets by " + username);
-		return new ResponseEntity<Collection<Ticket>>(allTicket, HttpStatus.OK);	
+		return new ResponseEntity<Collection<TicketReaderDto>>(allTicket, HttpStatus.OK);	
 	}
 	
 	@GetMapping(value="/price", consumes="application/json", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -76,7 +84,7 @@ public class TicketController {
 		double price = 0;
 		try {
 			try {
-				price = ticketService.getTicketPrice(t.getTimeType(), t.getTrafficZone(), t.getTrafficType(), username);
+				price = ticketService.getTicketPrice(t, username);
 			} catch (UserNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -87,7 +95,17 @@ public class TicketController {
 				e.printStackTrace();
 				logger.info("pricelist does not exists");
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
+			} catch (WrongTrafficTypeException e) {
+				// TODO Auto-generated catch block
+				logger.info("wrong trafic type");
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			} catch (WrongTicketTimeException e) {
+				logger.info("wrong ticket time");
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			} catch (WrongTrafficZoneException e) {
+				logger.info("wrong trafic zone");
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+							}
 			logger.info("<< get ticket price: " + price);
 			return new ResponseEntity<Double>(price, HttpStatus.OK);
 		} catch (PriceItemNotFoundException e) {
@@ -110,7 +128,6 @@ public class TicketController {
 		
 	}
 
-	@PreAuthorize("hasRole('PASSENGER')")
 	@PostMapping(value="/buyTicket", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TicketReaderDto> buyTicket(@RequestBody TicketDto t, HttpServletRequest request){
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
@@ -124,16 +141,40 @@ public class TicketController {
 		} catch (WrongTrafficTypeException | UserNotFoundException | WrongTrafficZoneException
 				| WrongTicketTimeException | PriceItemNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 			logger.info("bad request, ticket is not bought");
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} catch (NotFoundActivePricelistException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 			logger.info("pricelist does not exist");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 	}
+	
+/*	@RequestMapping(value = "/useTicket/{serialNo}", method = RequestMethod.GET)
+	public ResponseEntity<HttpStatus> useTicket(@RequestParam("serialNo") String serialNo, HttpServletRequest request){
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		String authToken = httpRequest.getHeader("X-Auth-Token");
+		String username = this.tokenUtils.getUsernameFromToken(authToken);
+		logger.info(">> use ticket with serial number: " + serialNo +   "; user:  " + username);
+		try {
+			boolean use = this.ticketService.useTicket(serialNo, username);
+			if(use == true){
+				logger.info("<< successful use ticket");
+				return new ResponseEntity<>(HttpStatus.OK);
+			}
+		} catch (TicketNotFound e) {
+			// TODO Auto-generated catch block
+			logger.info(">> use ticket: ticket not found");
+			return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
+		
+		} catch (TicketAlreadyUsedException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			logger.info("use ticket: ticket already used exception");
+			return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+		}
+		return null;
+	}*/
 }
 
