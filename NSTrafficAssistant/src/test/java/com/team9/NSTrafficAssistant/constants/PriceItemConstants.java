@@ -94,7 +94,7 @@ public class PriceItemConstants {
 	public static final Set<PriceItemDto> items_wrong_number = new HashSet<PriceItemDto>(Arrays.asList(it_23));
 	
 	
-	public static final PriceList p  = new PriceList(new java.sql.Date(new java.util.Date().getTime()), null, true);
+	public static final PriceList p  = new PriceList(1L, new java.sql.Date(new java.util.Date().getTime()), null, true);
 
 	public static final PriceItem i = new PriceItem(1L, 100, TrafficType.BUS, TimeTicketType.MONTH, TrafficZone.FIRST, 10, 5, 5, p);
 

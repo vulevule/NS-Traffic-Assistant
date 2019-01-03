@@ -75,19 +75,19 @@ public class TicketServiceUnitTest {
 		 * user-i koje vracamo, trebaju nam razliciti zbog racunanja cene karte
 		 */
 		Passenger p_student = new Passenger("Pera Peric", "123456", "peraperic", "pass", "pera@gmail.com",
-				Role.PASSANGER, new Address(1L, "Vuka Karadzica", "Novi Sad", 21000), true, UserTicketType.STUDENT);
+				Role.PASSENGER, new Address(1L, "Vuka Karadzica", "Novi Sad", 21000), true, UserTicketType.STUDENT);
 		Mockito.when(this.userService_mock.getUser("peraperic")).thenReturn(p_student);
 
-		Passenger p = new Passenger("Pera Peric", "123456", "pericpera", "pass", "pera@gmail.com", Role.PASSANGER,
+		Passenger p = new Passenger("Pera Peric", "123456", "pericpera", "pass", "pera@gmail.com", Role.PASSENGER,
 				new Address(1L, "Vuka Karadzica", "Novi Sad", 21000), false, UserTicketType.STUDENT);
 		Mockito.when(this.userService_mock.getUser("pericpera")).thenReturn(p);
 
 		Passenger p_senior = new Passenger("Mika Peric", "123456", "mikaperic", "pass", "pera@gmail.com",
-				Role.PASSANGER, new Address(1L, "Vuka Karadzica", "Novi Sad", 21000), true, UserTicketType.SENIOR);
+				Role.PASSENGER, new Address(1L, "Vuka Karadzica", "Novi Sad", 21000), true, UserTicketType.SENIOR);
 		Mockito.when(this.userService_mock.getUser("mikaperic")).thenReturn(p_senior);
 
 		Passenger p_handycap = new Passenger("Petra Peric", "123456", "petraperic", "pass", "pera@gmail.com",
-				Role.PASSANGER, new Address(1L, "Vuka Karadzica", "Novi Sad", 21000), true, UserTicketType.HANDYCAP);
+				Role.PASSENGER, new Address(1L, "Vuka Karadzica", "Novi Sad", 21000), true, UserTicketType.HANDYCAP);
 		Mockito.when(this.userService_mock.getUser("petraperic")).thenReturn(p_handycap);
 
 		PriceList list = new PriceList(1L, new Date(new java.util.Date().getTime()), null, null, true);

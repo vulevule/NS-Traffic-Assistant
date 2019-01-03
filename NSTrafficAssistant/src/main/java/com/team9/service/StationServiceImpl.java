@@ -70,9 +70,9 @@ public class StationServiceImpl implements StationService {
 		ArrayList<Station> list = (ArrayList<Station>) stationRepository.findAll();
 		
 		for (Station s : list) {
-			if (s.getLines().contains(l)) {
+			/*if (s.getLines().contains(l)) {
 				retVal.add(s);
-			}
+			}*/
 		}
 		
 		return retVal;

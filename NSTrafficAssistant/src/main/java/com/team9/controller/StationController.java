@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.team9.model.Station;
 import com.team9.model.TrafficType;
 import com.team9.service.StationService;
-
+/*
 @RestController
 public class StationController {
 	
@@ -42,7 +42,7 @@ public class StationController {
 	public ResponseEntity<List<Station>> getAllByLine(@PathVariable Long lineId){
 		logger.info(">> get stations by line " + lineId);
 		
-		ResponseEntity<List<Station>> allStations = new ResponseEntity<List<Station>>((List<Station>) stationService.getAllByType(type), HttpStatus.OK);
+		ResponseEntity<List<Station>> allStations = new ResponseEntity<List<Station>>((List<Station>) stationService.getAllByType(), HttpStatus.OK);
 		
 		logger.info("<< get stations by line " + lineId);
 		return allStations;
@@ -108,4 +108,4 @@ public class StationController {
 	}
 	
 	
-}
+}*/

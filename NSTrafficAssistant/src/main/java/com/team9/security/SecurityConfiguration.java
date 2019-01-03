@@ -77,12 +77,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/user/login").permitAll()
 					.antMatchers("/user/create").permitAll()
 					.antMatchers("/pricelist/addPricelist").hasAuthority("ADMIN")
-					.antMatchers("/ticket/buyTicket").hasAuthority(Role.PASSANGER.name())
-					.antMatchers("/ticket/myTicket").hasAuthority(Role.PASSANGER.name())
+					.antMatchers("/ticket/buyTicket").hasAuthority(Role.PASSENGER.name())
+					.antMatchers("/ticket/myTicket").hasAuthority(Role.PASSENGER.name())
 					.antMatchers("/pricelist/getPricelist").permitAll()
-					.antMatchers("/ticket/useTicket").hasAuthority(Role.PASSANGER.name())
+					.antMatchers("/ticket/useTicket").hasAuthority(Role.PASSENGER.name())
 					.antMatchers("/ticket/checkTicket").hasAuthority(Role.INSPECTOR.name())
 					.antMatchers("/ticket/monthReport").hasAuthority(Role.ADMIN.name())
+
 				/*.anyRequest().authenticated()*/;
 				//if we use AngularJS on client side
 				//.and().csrf().csrfTokenRepository(csrfTokenRepository()); 
