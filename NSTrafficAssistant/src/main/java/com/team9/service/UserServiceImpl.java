@@ -1,6 +1,12 @@
 package com.team9.service;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -12,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import com.team9.dto.UpdateProfileDto;
 import com.team9.dto.UserDto;
+import com.team9.dto.ValidationDTO;
+import com.team9.exceptions.UserNotFoundException;
 import com.team9.model.Address;
 import com.team9.model.Authority;
 import com.team9.model.Inspector;
@@ -63,7 +71,7 @@ public class UserServiceImpl implements UserService {
 			authorityRepository.save(a);			
 			return true;
 		}
-		else if(u.getRole() == Role.PASSANGER) {
+		else if(u.getRole() == Role.PASSENGER) {
 			Passenger p = new Passenger(u.getName(), u.getPersonalNo(), u.getUsername(), u.getPassword(), u.getEmail(), u.getRole(), u.getAddress(), false, UserTicketType.REGULAR); 
 			User saveUser = userRepository.save(p);
 			Authority a = new Authority("PASSENGER", saveUser);
@@ -104,8 +112,8 @@ public class UserServiceImpl implements UserService {
 		if(udto.getRole().toUpperCase().equals("ADMIN")) {
 			u.setRole(Role.ADMIN);
 		}
-		else if(udto.getRole().toUpperCase().equals("PASSANGER")) {
-			u.setRole(Role.PASSANGER);
+		else if(udto.getRole().toUpperCase().equals("PASSENGER")) {
+			u.setRole(Role.PASSENGER);
 			
 		}
 		else if(udto.getRole().toUpperCase().equals("INSPECTOR")){
@@ -115,6 +123,8 @@ public class UserServiceImpl implements UserService {
 		return u;
 	}
 
+	
+	
 	@Override
 	public User getUser(String username, String password) {
 		return userRepository.findUserByUsernameAndPassword(username, password);
@@ -167,5 +177,62 @@ public User UpdateDtoToUser(UpdateProfileDto update) {
 	user.setAddress(a);
 	
 	return user;
+}
+@Override
+public ArrayList<Passenger> readyToValidate() {
+	ArrayList<Passenger> passengers= new ArrayList<Passenger>();
+	 List<User> users=userRepository.findAll();
+	 for (User user : users) {
+		 if (user.getRole().equals(Role.PASSENGER) && user.getImagePath()!=null) {
+			
+			Passenger pas=(Passenger) user;
+			if(pas.getActivate()==false) {
+			passengers.add(pas);}
+				
+			}
+		 }
+	return passengers;
+}
+
+@Override
+public Passenger validationProcess(ValidationDTO val) throws UserNotFoundException {
+	// TODO Auto-generated method stub
+	User user=getUser(val.getUsername());
+	Passenger pas=(Passenger)user;
+	
+	Date date1 = new Date();
+	pas.setExpirationDate(date1);
+	
+	if(val.getTicketType().toUpperCase().equals("STUDENT")) {
+		pas.setActivate(true);
+		pas.setUserTicketType(UserTicketType.STUDENT);
+		return pas;
+		
+		
+	}
+	else if(val.getTicketType().toUpperCase().equals("HANDYCAP")) {
+		pas.setActivate(true);
+		pas.setUserTicketType(UserTicketType.HANDYCAP);
+		return pas;
+		
+	}
+    else if(val.getTicketType().toUpperCase().equals("SENIOR")) {
+	
+	    pas.setActivate(true);
+	    pas.setUserTicketType(UserTicketType.SENIOR);
+	    return pas;
+		
+	}
+    else {
+	throw new UserNotFoundException();}
+}
+
+@Override
+public boolean SaveUpdated(User u) {
+	try {
+	userRepository.save(u);
+	return true;
+}catch(Exception e){
+	return false;}
 }
 }
