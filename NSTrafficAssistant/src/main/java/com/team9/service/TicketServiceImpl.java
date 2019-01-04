@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
@@ -215,11 +213,6 @@ public class TicketServiceImpl implements TicketService {
 		return price;
 	}
 
-	@Override
-	public Set<TicketReaderDto> getReports(ReportDto report) {
-		return null;
-		
-	}
 
 	private String convertToString(Date date) {
 		// TODO Auto-generated method stub

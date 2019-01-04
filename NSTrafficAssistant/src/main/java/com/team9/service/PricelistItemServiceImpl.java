@@ -113,11 +113,7 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 		return (price - ((discount/100)*price));
 	}
 
-	@Override
-	public Set<PriceItem> getItemsByPricelist(PriceList pl) {
-		// TODO Auto-generated method stub
-		return this.repository.findByPricelist(pl);
-	}
+
 
 	@Override
 	public PriceItem getPriceItem(TrafficType type, TimeTicketType time, TrafficZone zone, PriceList p_id)
@@ -129,10 +125,5 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 		return foundItem;
 	}
 
-	@Override
-	public void deleteItems(Set<PriceItem> items) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

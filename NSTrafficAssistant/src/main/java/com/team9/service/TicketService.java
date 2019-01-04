@@ -2,11 +2,9 @@
 package com.team9.service;
 
 import java.util.Collection;
-import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
 
-import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
@@ -32,8 +30,7 @@ public interface TicketService {
 	
 	double getTicketPrice(TicketDto t, String username) throws PriceItemNotFoundException, UserNotFoundException, NotFoundActivePricelistException, WrongTrafficTypeException, WrongTicketTimeException, WrongTrafficZoneException;
 
-	Set<TicketReaderDto> getReports(ReportDto report);
-	
+
 	java.sql.Date calculateExpirationDate(TimeTicketType type, java.sql.Date date);
 	
 	String generateSerialNumber(TrafficType trafficType, TimeTicketType timeType, TrafficZone trafficZone,

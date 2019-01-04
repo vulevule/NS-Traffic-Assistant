@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.team9.dto.PriceItemDto;
+import com.team9.dto.PricelistDto;
 import com.team9.model.PriceItem;
 import com.team9.model.PriceList;
 import com.team9.model.TimeTicketType;
@@ -38,6 +39,7 @@ public class PriceItemConstants {
 	public static final PriceItemDto pi23 = new PriceItemDto(100, "metro", "single", "first", 10, 5, 5);
 	public static final PriceItemDto pi24 = new PriceItemDto(12, "metro", "single", "second", 10, 5, 5);
 
+	
 	public static final PriceItemDto[] it_normal = new PriceItemDto[] {pi1, pi2, pi3, pi4, pi5, pi6, pi7, pi8, pi9,
 			pi10, pi11, pi12, pi13, pi14, pi15, pi16, pi17, pi18, pi19, pi20, pi21, pi22, pi23, pi24};
 	
@@ -45,6 +47,13 @@ public class PriceItemConstants {
 	public static final Set<PriceItemDto> items_normal= new HashSet<PriceItemDto>(Arrays.asList(it_normal));
 	
 	
+	public static final PriceItemDto pi_twice = new PriceItemDto(10000, "metro", "annual", "second", 10, 5, 5);
+
+	public static final PriceItemDto[] it_twice = new PriceItemDto[] {pi1, pi2, pi3, pi4, pi5, pi6, pi7, pi8, pi9,
+			pi10, pi11, pi12, pi13, pi14, pi15, pi16, pi17, pi18, pi19, pi20, pi21, pi22, pi23, pi_twice};
+	
+	
+	public static final Set<PriceItemDto> items_twice= new HashSet<PriceItemDto>(Arrays.asList(it_twice));
 	
 	
 	public static final PriceItemDto pi24_price_less0 = new PriceItemDto(-12, "metro", "single", "second", 10, 5, 5);
@@ -93,8 +102,9 @@ public class PriceItemConstants {
 			pi10, pi11, pi12, pi13, pi14, pi15, pi16, pi17, pi18, pi19, pi20, pi21, pi22, pi23};
 	public static final Set<PriceItemDto> items_wrong_number = new HashSet<PriceItemDto>(Arrays.asList(it_23));
 	
+
 	
-	public static final PriceList p  = new PriceList(1L, new java.sql.Date(new java.util.Date().getTime()), null, true);
+	public static final PriceList p  = new PriceList(100L, new java.sql.Date(new java.util.Date().getTime()), null, true);
 
 	public static final PriceItem i = new PriceItem(1L, 100, TrafficType.BUS, TimeTicketType.MONTH, TrafficZone.FIRST, 10, 5, 5, p);
 

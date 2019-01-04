@@ -1,7 +1,6 @@
 package com.team9.controller;
 
 import java.util.Collection;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
@@ -118,16 +116,6 @@ public class TicketController {
 			logger.info("price item does not exist");
 			return new ResponseEntity<Double>((double) 0, HttpStatus.BAD_REQUEST);
 		}
-
-	}
-
-	@PostMapping(value = "/reports", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Set<TicketReaderDto>> getReports(@RequestBody ReportDto report) {
-		logger.info(">> get reports: start date: " + report.getStartDate() + "; end time: " + report.getEndDate());
-		Set<TicketReaderDto> tickets = this.ticketService.getReports(report);
-
-		logger.info("<< get reports: start date: " + report.getStartDate() + "; end time: " + report.getEndDate());
-		return new ResponseEntity<Set<TicketReaderDto>>(tickets, HttpStatus.OK);
 
 	}
 

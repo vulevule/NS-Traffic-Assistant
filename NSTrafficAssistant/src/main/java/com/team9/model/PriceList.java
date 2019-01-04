@@ -22,7 +22,7 @@ public class PriceList implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column
@@ -33,7 +33,7 @@ public class PriceList implements Serializable {
 
 	// jedan cenovnik sadrzi vise stavki, a jedna stavka pripada jednom
 	// cenovniku
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	private Set<PriceItem> items;
 
 	@Column

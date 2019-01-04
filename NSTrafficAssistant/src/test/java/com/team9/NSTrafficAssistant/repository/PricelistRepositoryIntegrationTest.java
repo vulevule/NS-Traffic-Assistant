@@ -33,13 +33,12 @@ public class PricelistRepositoryIntegrationTest {
 		//postoji trenutno aktivan cenovnik, sa id-em = 10;
 		
 		Date issue = new java.sql.Date(new GregorianCalendar(2018, Calendar.DECEMBER, 25).getTime().getTime());
-		PriceList pl = new PriceList(new Long(10), issue, null, true);//ovo ocekujemo
 		
 		Optional<PriceList> found = this.repository.findByActivateTrue();
 		
 		assertNotNull(found.get());
 		assertTrue(found.get().getId() == 10);
-		assertTrue(found.get().getIssueDate().equals(pl.getIssueDate()));
+		assertTrue(found.get().getIssueDate().equals(issue));
 		assertTrue(found.get().isActivate());
 	}
 

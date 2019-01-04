@@ -13,6 +13,8 @@ values(6,'Passenger', 'Pavle Peric', '11129956325632', 'pavleperic', '4444', 'pa
 insert into user (id, type, name, personal_no, username, password, email, role, activate, user_ticket_type, address_id)
 values(7,'Passenger',  'Mika Peric', '11129956325632', 'mikaperic', '5555', 'mika@gmail.com', 1, false, 0, 2);
 
+insert into user (id, type, name, personal_no, username, password, email, role, address_id )
+values(50, 'Inspector', 'Lena Lukic', '451278965533', 'lenalukic', '6666', 'lena@gmail.com', 2 , 1);
 
 --karte
 insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_type, 
@@ -23,6 +25,18 @@ insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_
 traffic_zone, active, price,traffic_type, used, passenger_id ) 
 values (9, 'BMFS12121212001', '2018-12-27', '2019-01-27', 1, 1, 0, true, 950, 0, false, 4);
 
+-- karta koja nije koriscena, single karta
+insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_type, 
+traffic_zone, active, price,traffic_type, used, passenger_id ) 
+values (55, 'BMFS12121212023', '2019-01-04', '2019-01-19', 2, 3, 0, true, 95, 0,false, 6);
+-- karta kojoj je isteklo vreme trajanja, dnevna karta
+insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_type, 
+traffic_zone, active, price,traffic_type, used, passenger_id ) 
+values (56, 'BMFS12121212025', '2019-01-01', '2019-01-02', 2, 2, 0, true, 95, 0,false, 6);
+-- karta koje je koriscena, single karta
+insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_type, 
+traffic_zone, active, price,traffic_type, used, passenger_id ) 
+values (57, 'BMFS12121212024', '2019-01-03', '2019-01-18', 2, 3, 0, true, 95, 0,true, 6);
 --cenovnik
 insert into price_list(id,issue_date, activate) values (10, '2018-12-25', true);
 
