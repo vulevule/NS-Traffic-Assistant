@@ -44,7 +44,7 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 			for (PriceItem p : priceItems) {
 				// 1. proverimo da li je cena veca od 0
 				if (p.getPrice() <= 0) {
-					throw new PriceLessThanZeroException();
+					throw new PriceLessThanZeroException("The price of the item is less than 0!");
 				}
 				// proverimo da li su nam popusti izmendju 0 i 100
 				checkDiscount(p.getHandycapDiscount(), p.getSeniorDiscount(), p.getStudentDiscount());
@@ -54,7 +54,7 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 						p.getTrafficType(), p.getTimeType(), p.getZone(), list);
 				if (pi.isPresent() == true) {
 					// znaci da vec postoji u bazi pa bacamo exception
-					throw new PriceItemAlreadyExistsException();
+					throw new PriceItemAlreadyExistsException("The price list must not contain the same items ");
 				}
 				// sad unesemo stavku u cenovnik
 				PriceItem saveItem = this.repository.save(p);
@@ -64,7 +64,7 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 			list.setItems(saveItems);
 			return list;
 		}else{
-			throw new WrongNumberOfPriceItemException();
+			throw new WrongNumberOfPriceItemException("The price list has more than or equal to 24 items!");
 		}
 
 	}
@@ -75,7 +75,7 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 		if ((handycapDiscont < 0 || handycapDiscont > 100) || (seniorDiscount < 0 || handycapDiscont > 100)
 				|| (studentDiscount < 0 || studentDiscount > 100)) {
 			// bacimo izuzetak
-			throw new WrongDiscountException();
+			throw new WrongDiscountException("The discount must be between 0 and 100");
 		}
 
 	}
@@ -120,7 +120,7 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 			throws PriceItemNotFoundException {
 		// TODO Auto-generated method stub
 		PriceItem foundItem = this.repository.findByTrafficTypeAndTimeTypeAndZoneAndPricelist(type, time, zone, p_id)
-				.orElseThrow(() -> new PriceItemNotFoundException());
+				.orElseThrow(() -> new PriceItemNotFoundException("Not item found for traffic type: " + type + ", ticket time: " + time + " and zone: " + zone));
 
 		return foundItem;
 	}

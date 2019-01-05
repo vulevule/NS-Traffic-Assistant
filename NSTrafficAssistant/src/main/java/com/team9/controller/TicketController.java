@@ -120,7 +120,7 @@ public class TicketController {
 	}
 
 	@PostMapping(value = "/buyTicket", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TicketReaderDto> buyTicket(@RequestBody TicketDto t, HttpServletRequest request) {
+	public ResponseEntity<Object> buyTicket(@RequestBody TicketDto t, HttpServletRequest request) {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
@@ -129,22 +129,22 @@ public class TicketController {
 		try {
 			TicketReaderDto ticket = this.ticketService.buyTicket(t, username);
 			logger.info("ticket is bought");
-			return new ResponseEntity<TicketReaderDto>(ticket, HttpStatus.CREATED);
+			return new ResponseEntity<Object>(ticket, HttpStatus.CREATED);
 		} catch (WrongTrafficTypeException | UserNotFoundException | WrongTrafficZoneException
 				| WrongTicketTimeException | PriceItemNotFoundException e) {
 			// TODO Auto-generated catch block
 			logger.info("bad request, ticket is not bought");
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (NotFoundActivePricelistException e) {
 			// TODO Auto-generated catch block
 			logger.info("pricelist does not exist");
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
 
 	}
 
 	@PutMapping(value = "/useTicket", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<HttpStatus> useTicket(@RequestParam("serialNo") String serialNo, HttpServletRequest request) {
+	public ResponseEntity<String> useTicket(@RequestParam("serialNo") String serialNo, HttpServletRequest request) {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
@@ -153,29 +153,29 @@ public class TicketController {
 			boolean use = this.ticketService.useTicket(serialNo, username);
 			if (use == true) {
 				logger.info("<< successful use ticket");
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<String>("The ticket was successfully used", HttpStatus.OK);
 			}
 		} catch (TicketNotFound e) {
 			// TODO Auto-generated catch block
 			logger.info(">> use ticket: ticket not found");
-			return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
 
 		} catch (TicketAlreadyUsedException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			logger.info("use ticket: ticket already used exception");
-			return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (TicketIsNotValidException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			logger.info("ticket is not a valid");
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		return null;
 	}
 
 	@PutMapping(value = "/checkTicket", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TicketReaderDto> checkTicket(@RequestParam("serialNo") String serialNo,
+	public ResponseEntity<String> checkTicket(@RequestParam("serialNo") String serialNo,
 			HttpServletRequest request) {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
@@ -185,26 +185,26 @@ public class TicketController {
 		try {
 			TicketReaderDto t = this.ticketService.checkTicket(serialNo, username);
 			logger.info("<< check ticket");
-			return new ResponseEntity<TicketReaderDto>(t, HttpStatus.OK);
+			return new ResponseEntity<String>("The ticket was successfully checked", HttpStatus.OK);
 		} catch (TicketNotFound e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			logger.info("<< check ticket: ticket not found");
-			return new ResponseEntity<TicketReaderDto>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
 		} catch (TicketIsNotUseException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			logger.info("<< check ticket: ticket is not use");
-			return new ResponseEntity<TicketReaderDto>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		} catch (TicketIsNotValidException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			logger.info("<< check ticket: ticket is not valid");
-			return new ResponseEntity<TicketReaderDto>(HttpStatus.CONFLICT);
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.CONFLICT);
 		} catch (UserNotFoundException e) {
 			// TODO Auto-generated catch block
 			logger.info("<< check ticket : inspector not found");
-			return new ResponseEntity<TicketReaderDto>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 

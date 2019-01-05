@@ -22,6 +22,6 @@ public interface PriceListService {
 	PricelistReaderDto getValidPricelist() throws NotFoundActivePricelistException;
 	
 
-	PricelistReaderDto addPricelist(PricelistDto pricelist) throws ParseException, NotFoundActivePricelistException, PriceItemAlreadyExistsException, PriceLessThanZeroException, WrongUserTicketTypeException, WrongTrafficTypeException, WrongTicketTimeException, WrongTrafficZoneException, WrongDiscountException, WrongNumberOfPriceItemException;
+	PricelistReaderDto addPricelist(PricelistDto pricelist) throws ParseException, NotFoundActivePricelistException, PriceItemAlreadyExistsException, PriceLessThanZeroException,  WrongTrafficTypeException, WrongTicketTimeException, WrongTrafficZoneException, WrongDiscountException, WrongNumberOfPriceItemException;
 
 }
