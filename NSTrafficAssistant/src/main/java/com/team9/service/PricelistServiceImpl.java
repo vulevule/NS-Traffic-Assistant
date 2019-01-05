@@ -83,7 +83,7 @@ public class PricelistServiceImpl implements PriceListService {
 			return null;
 		}
 		Set<PriceItemDto> itemsDto = this.pricelistItemService.convertToDto(savepl.getItems());
-		PricelistReaderDto prdto = new PricelistReaderDto(savepl.getId(), convertToString(savepl.getIssueDate()), convertToString(savepl.getExpirationDate()), savepl.isActivate(), itemsDto);
+		PricelistReaderDto prdto = new PricelistReaderDto(savepl.getId(), savepl.getIssueDate(), savepl.getExpirationDate(), savepl.isActivate(), itemsDto);
 		return prdto;
 	}
 

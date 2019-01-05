@@ -34,21 +34,21 @@ public class StationController {
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 	
 	@GetMapping(value="/station/getAllByType/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Station>> getAllByType(@PathVariable TrafficType type){
+	public ResponseEntity<Collection<Station>> getAllByType(@PathVariable TrafficType type){
 		logger.info(">> get stations by type " + type);
 		
-		ResponseEntity<List<Station>> allStations = new ResponseEntity<List<Station>>(stationService.getAllByType(type), HttpStatus.OK);
+		ResponseEntity<Collection<Station>> allStations = new ResponseEntity<Collection<Station>>(stationService.getAllByType(type), HttpStatus.OK);
 		
 		logger.info("<< get stations by type " + type);
 		return allStations;
 	}
 	
 	@GetMapping(value="/station/getAllByLine/{lineId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Station>> getAllByLine(@PathVariable Long lineId){
+	public ResponseEntity<Collection<Station>> getAllByLine(@PathVariable Long lineId){
 		logger.info(">> get stations by line " + lineId);
 		
-		ResponseEntity<List<Station>> allStations = new ResponseEntity<List<Station>>((List<Station>) stationService.getAllByLine(lineId), HttpStatus.OK);
-		
+		ResponseEntity<Collection<Station>> allStations = new ResponseEntity<Collection<Station>>(stationService.getAllByLine(lineId), HttpStatus.OK);
+
 		logger.info("<< get stations by line " + lineId);
 		return allStations;
 	}

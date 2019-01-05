@@ -1,6 +1,6 @@
 package com.team9.service;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.team9.dto.StationDTO;
 import com.team9.exceptions.StationAlreadyExistsException;
@@ -15,15 +15,15 @@ public interface StationService {
 	
 	Station updateStation(StationDTO s) throws StationNotFoundException;
 	
-	List<Station> getAll();
+	Collection<Station> getAll();
 	
-	List<Station> getAllByType(TrafficType t);
+	Collection<Station> getAllByType(TrafficType t);
 	
-	List<Station> getAllByLine(Long lineId);
+	Collection<Station> getAllByLine(Long lineId);
 	
-	List<Station> getByName(String name);
+	Collection<Station> getByName(String name);
 	
-	List<Station> getByNameContains(String name);
+	Collection<Station> getByNameContains(String name);
 	
 	Station getById(Long id);
 	

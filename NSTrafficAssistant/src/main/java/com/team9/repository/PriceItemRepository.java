@@ -10,7 +10,6 @@ import com.team9.model.PriceList;
 import com.team9.model.TimeTicketType;
 import com.team9.model.TrafficType;
 import com.team9.model.TrafficZone;
-import com.team9.model.UserTicketType;
 
 public interface PriceItemRepository extends JpaRepository<PriceItem, Long>{
 	

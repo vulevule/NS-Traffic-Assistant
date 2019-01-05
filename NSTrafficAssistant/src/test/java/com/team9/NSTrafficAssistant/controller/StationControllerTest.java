@@ -45,13 +45,24 @@ public class StationControllerTest {
 		Station s4 = new Station(4L, "Futoska", TrafficType.TRAM, 47.0, 21.0, a3, null);
 		Station s5 = new Station(5L, "Zeleznicka", TrafficType.METRO, 48.0, 22.0, a4, null);
 		
+		ArrayList<Station> r1 = new ArrayList<Station>();
+		r1.add(s1);
+		r1.add(s2);
+		
 		Mockito.when(stationServiceMocked.getAllByType(TrafficType.BUS)).thenReturn(new ArrayList<Station>(Arrays.asList(s1,s2)));
 		Mockito.when(stationServiceMocked.getAllByLine(1L)).thenReturn(new ArrayList<Station>(Arrays.asList(s1,s3)));
+		Mockito.when(stationServiceMocked.getAll()).thenReturn(r1);
+
+	}
+	
+	@Test
+	public void testGetAll() {
+		ResponseEntity<Collection> response = restTemplate.getForEntity("/station/getAll", Collection.class);
 	}
 	
 	@Test
 	public void testGetAllByType() {
-		ResponseEntity<List> response = restTemplate.getForEntity("/station/getAllByType/BUS", List.class);
+//		ResponseEntity<List> response = restTemplate.getForEntity("/station/getAllByType/BUS", List.class);
 //		List<Station> stations = response.getBody();
 //		
 //		assertEquals(HttpStatus.OK, response.getStatusCode());

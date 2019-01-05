@@ -17,7 +17,6 @@ import com.team9.model.PriceList;
 import com.team9.model.TimeTicketType;
 import com.team9.model.TrafficType;
 import com.team9.model.TrafficZone;
-import com.team9.model.UserTicketType;
 
 public interface PricelistItemService {
 	
@@ -26,10 +25,7 @@ public interface PricelistItemService {
 	public Set<PriceItemDto> convertToDto(Set<PriceItem> items);
 
 
-	public Set<PriceItem> getItemsByPricelist(PriceList pl);
 
-	public void deleteItems(Set<PriceItem> items);
-	
 	
 	public PriceItem getPriceItem(TrafficType type, TimeTicketType time, TrafficZone zone, PriceList p_id) throws PriceItemNotFoundException;
 }

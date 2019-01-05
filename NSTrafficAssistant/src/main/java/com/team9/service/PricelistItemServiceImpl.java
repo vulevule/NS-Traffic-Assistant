@@ -33,7 +33,7 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 
 	@Override
 	public PriceList addPricelistItems(Set<PriceItemDto> items, PriceList list)
-			throws PriceItemAlreadyExistsException, PriceLessThanZeroException, WrongUserTicketTypeException,
+			throws PriceItemAlreadyExistsException, PriceLessThanZeroException,
 			WrongTrafficTypeException, WrongTicketTimeException, WrongTrafficZoneException, WrongDiscountException, WrongNumberOfPriceItemException {
 		// TODO Auto-generated method stub
 		// 1. konvertujemo sve item-e u priceitem
@@ -47,7 +47,7 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 					throw new PriceLessThanZeroException();
 				}
 				// proverimo da li su nam popusti izmendju 0 i 100
-				checkDiscount(p.getHandycapDiscont(), p.getSeniorDiscount(), p.getStudentDiscount());
+				checkDiscount(p.getHandycapDiscount(), p.getSeniorDiscount(), p.getStudentDiscount());
 				// 2. proverimo da vec ne postoji uneta stavka sa istim
 				// parametrima
 				Optional<PriceItem> pi = this.repository.findByTrafficTypeAndTimeTypeAndZoneAndPricelist(
@@ -98,21 +98,22 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 
 	@Override
 	public Set<PriceItemDto> convertToDto(Set<PriceItem> items) {
+		//stavicemo da kada nam vraca stavke, ne vraca procente , nego stvarne cene
 		Set<PriceItemDto> itemsDto = new HashSet<PriceItemDto>();
 		for (PriceItem pi : items) {
 			PriceItemDto pdto = new PriceItemDto(pi.getPrice(), pi.getTrafficType().name(), pi.getTimeType().name(),
-					pi.getZone().name(), pi.getStudentDiscount(), pi.getHandycapDiscont(), pi.getSeniorDiscount());
+					pi.getZone().name(),calculateTicketPrice(pi.getPrice(), pi.getStudentDiscount()),calculateTicketPrice(pi.getPrice(), pi.getHandycapDiscount()),calculateTicketPrice(pi.getPrice(), pi.getSeniorDiscount()));
 			itemsDto.add(pdto);
 		}
 		return itemsDto;
 
 	}
-
-	@Override
-	public Set<PriceItem> getItemsByPricelist(PriceList pl) {
-		// TODO Auto-generated method stub
-		return this.repository.findByPricelist(pl);
+	
+	public double calculateTicketPrice(double price, double discount){
+		return (price - ((discount/100)*price));
 	}
+
+
 
 	@Override
 	public PriceItem getPriceItem(TrafficType type, TimeTicketType time, TrafficZone zone, PriceList p_id)
@@ -124,10 +125,5 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 		return foundItem;
 	}
 
-	@Override
-	public void deleteItems(Set<PriceItem> items) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

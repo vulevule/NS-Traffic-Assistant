@@ -11,13 +11,13 @@ import com.team9.model.TrafficType;
 
 public interface StationRepository extends JpaRepository<Station, Long>{
 	
-	List<Station> findByName(String name);
+	Collection<Station> findByName(String name);
 	
-	List<Station> findByNameContains(String name);
+	Collection<Station> findByNameContains(String name);
 	
 	Station findByNameAndType(String name, TrafficType type);
 	
 	Optional<Station> findById(Long id);
 	
-	List<Station> findByType(TrafficType type);
+	Collection<Station> findByType(TrafficType type);
 	}

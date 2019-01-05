@@ -22,7 +22,7 @@ public class PriceItem implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column
 	private double price;
@@ -40,7 +40,7 @@ public class PriceItem implements Serializable {
 	@Column
 	private double seniorDiscount;
 	@Column
-	private double handycapDiscont;
+	private double handycapDiscount;
 
 	// stavka pripada jednom cenovniku
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -61,7 +61,7 @@ public class PriceItem implements Serializable {
 		this.zone = zone;
 		this.studentDiscount = studentDiscount;
 		this.seniorDiscount = seniorDiscount;
-		this.handycapDiscont = handycapDiscont;
+		this.handycapDiscount = handycapDiscont;
 		this.pricelist = pricelist;
 	}
 
@@ -74,7 +74,7 @@ public class PriceItem implements Serializable {
 		this.zone = zone;
 		this.studentDiscount = studentDiscount;
 		this.seniorDiscount = seniorDiscount;
-		this.handycapDiscont = handycapDiscont;
+		this.handycapDiscount = handycapDiscont;
 		this.pricelist = pricelist;
 	}
 
@@ -110,12 +110,13 @@ public class PriceItem implements Serializable {
 		this.seniorDiscount = seniorDiscount;
 	}
 
-	public double getHandycapDiscont() {
-		return handycapDiscont;
+	
+	public double getHandycapDiscount() {
+		return handycapDiscount;
 	}
 
-	public void setHandycapDiscont(double handycapDiscont) {
-		this.handycapDiscont = handycapDiscont;
+	public void setHandycapDiscount(double handycapDiscount) {
+		this.handycapDiscount = handycapDiscount;
 	}
 
 	public TrafficType getTrafficType() {

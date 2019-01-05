@@ -1,6 +1,7 @@
 package com.team9.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -8,7 +9,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.team9.dto.StationDTO;
 import com.team9.dto.StationDTO;
 import com.team9.exceptions.StationAlreadyExistsException;
 import com.team9.exceptions.StationNotFoundException;
@@ -77,17 +77,17 @@ public class StationServiceImpl implements StationService {
 	}
 
 	@Override
-	public List<Station> getAllByType(TrafficType t) {
+	public Collection<Station> getAllByType(TrafficType t) {
 		return stationRepository.findByType(t);
 	}
 
 	@Override
-	public List<Station> getByName(String name) {
+	public Collection<Station> getByName(String name) {
 		return stationRepository.findByName(name);
 	}
 	
 	@Override
-	public List<Station> getByNameContains(String name) {
+	public Collection<Station> getByNameContains(String name) {
 		return stationRepository.findByNameContains(name);
 	}
 
@@ -97,13 +97,14 @@ public class StationServiceImpl implements StationService {
 	}
 
 	@Override
-	public List<Station> getAllByLine(Long lineId) {
+	public Collection<Station> getAllByLine(Long lineId) {
 		Optional<Line> line = lineRepository.findById(lineId);
 		Set<StationLine> temp = line.get().getStations();
 		List<Station> retVal = new ArrayList<Station>();
 		
 		for(StationLine iter : temp) {
 			retVal.add(iter.getStation());
+
 		}
 		
 		return retVal;
@@ -111,7 +112,7 @@ public class StationServiceImpl implements StationService {
 	}
 
 	@Override
-	public List<Station> getAll() {
+	public Collection<Station> getAll() {
 		return stationRepository.findAll();
 	}
 

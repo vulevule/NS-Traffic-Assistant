@@ -22,7 +22,7 @@ public class Address implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
 	private String street;
@@ -46,6 +46,16 @@ public class Address implements Serializable{
 		this.zip = zip;
 		this.users = users;
 		//this.stations = stations;
+	}
+
+	
+	
+	public Address(Long id, String street, String city, Integer zip) {
+		super();
+		this.id = id;
+		this.street = street;
+		this.city = city;
+		this.zip = zip;
 	}
 
 	public Address(Long id, String street, String city, Integer zip, Set<User> users, Set<Station> stations) {

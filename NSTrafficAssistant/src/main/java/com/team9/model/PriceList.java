@@ -22,7 +22,7 @@ public class PriceList implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column
@@ -31,10 +31,11 @@ public class PriceList implements Serializable {
 	@Column
 	private Date expirationDate;
 
-	// jedan cenovnik sadrzi vise stavki, a jedna stavka pripada jednom cenovniku
-	@OneToMany(fetch = FetchType.LAZY)
+	// jedan cenovnik sadrzi vise stavki, a jedna stavka pripada jednom
+	// cenovniku
+	@OneToMany(fetch = FetchType.EAGER)
 	private Set<PriceItem> items;
-	
+
 	@Column
 	private boolean activate;
 
@@ -49,8 +50,6 @@ public class PriceList implements Serializable {
 		this.items = items;
 		this.activate = activate;
 	}
-	
-	
 
 	public PriceList(Date issueDate, Date expirationDate, Set<PriceItem> items, boolean activate) {
 		this();
@@ -59,9 +58,17 @@ public class PriceList implements Serializable {
 		this.items = items;
 		this.activate = activate;
 	}
-	
+
 	public PriceList(Date issueDate, Date expirationDate, boolean activate) {
 		this();
+		this.issueDate = issueDate;
+		this.expirationDate = expirationDate;
+		this.activate = activate;
+	}
+
+	public PriceList(Long id, Date issueDate, Date expirationDate, boolean activate) {
+		this();
+		this.id = id;
 		this.issueDate = issueDate;
 		this.expirationDate = expirationDate;
 		this.activate = activate;
@@ -107,5 +114,4 @@ public class PriceList implements Serializable {
 		this.activate = activate;
 	}
 
-	
 }

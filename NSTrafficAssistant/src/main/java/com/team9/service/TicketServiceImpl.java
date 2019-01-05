@@ -9,21 +9,26 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
 import com.team9.exceptions.PriceItemNotFoundException;
+import com.team9.exceptions.TicketAlreadyUsedException;
+import com.team9.exceptions.TicketIsNotUseException;
+import com.team9.exceptions.TicketIsNotValidException;
+import com.team9.exceptions.TicketNotFound;
 import com.team9.exceptions.UserNotFoundException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
 import com.team9.exceptions.WrongTrafficZoneException;
+import com.team9.model.Inspector;
 import com.team9.model.Passenger;
 import com.team9.model.PriceItem;
 import com.team9.model.PriceList;
@@ -65,7 +70,7 @@ public class TicketServiceImpl implements TicketService {
 	public TicketReaderDto buyTicket(TicketDto t, String username) throws WrongTrafficTypeException, UserNotFoundException, WrongTrafficZoneException, WrongTicketTimeException, PriceItemNotFoundException, NotFoundActivePricelistException {
 		// kupovina karte
 		// sa servera nam stignu potrebni podaci
-		// izvucemo trazenog korisnika na osnovu usrname-a
+		// izvucemo trazenog korisnika na osnovu username-a
 		Ticket buyTicket = new Ticket();
 		Passenger passenger = getPassengerByUsername(username);
 		buyTicket.setPassenger(passenger);
@@ -108,12 +113,19 @@ public class TicketServiceImpl implements TicketService {
 
 	private TicketReaderDto convertToTicketDto(Ticket saveTicket) {
 		// konvertovanje ticket-a u dto objekat za slanje na front
-		 TicketReaderDto t = new TicketReaderDto(saveTicket.getId(), saveTicket.getSerialNo(), saveTicket.getIssueDate(), saveTicket.getExpirationDate(), saveTicket.getUserType(),saveTicket.getTimeType()
-				 , saveTicket.getTrafficZone(), saveTicket.getActive(), saveTicket.getTrafficType(),saveTicket.getPrice(), saveTicket.getPassenger().getUsername());
+		ArrayList<String> inspectors = new ArrayList<>();
+		if(saveTicket.getCheckInspectors() != null){
+			for(Inspector i : saveTicket.getCheckInspectors()){
+				inspectors.add(i.getUsername());
+			}
+		}
+		TicketReaderDto t = new TicketReaderDto(saveTicket.getId(), saveTicket.getSerialNo(), saveTicket.getIssueDate(), saveTicket.getExpirationDate(), saveTicket.getUserType(),saveTicket.getTimeType()
+				 , saveTicket.getTrafficZone(), saveTicket.getActive(), saveTicket.getTrafficType(),saveTicket.getPrice(), saveTicket.getPassenger().getUsername(), inspectors);
 		return t;
 	}
 
-	private String generateSerialNumber(TrafficType trafficType, TimeTicketType timeType, TrafficZone trafficZone,
+	@Override
+	public String generateSerialNumber(TrafficType trafficType, TimeTicketType timeType, TrafficZone trafficZone,
 			UserTicketType ut) {
 		// prva slova od enuma i plus neki broj
 		String serialNum = "";
@@ -123,7 +135,8 @@ public class TicketServiceImpl implements TicketService {
 		return serialNum;
 	}
 
-	private Date calculateExpirationDate(TimeTicketType timeType, Date issueDate) {
+	@Override
+	public  Date calculateExpirationDate(TimeTicketType timeType, Date issueDate) {
 		//vraca nam izracunati period vazenja karte u odnosu na datum kupovine karte i izabrani period
 		LocalDate date = issueDate.toLocalDate();
 		if(timeType == TimeTicketType.ANNUAL){
@@ -144,12 +157,13 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public Collection<TicketReaderDto> allTicket(Pageable pageable, String username) {
+	public Collection<TicketReaderDto> allTicket(String username, Pageable pageable) throws UserNotFoundException {
 		// return all tickets for one passenger
-		Passenger passenger = (Passenger) userService.getUser(username);
+		Passenger passenger = getPassengerByUsername(username);
 		Page<Ticket> allTicket = ticketRepository.findByPassenger(passenger, pageable);
 		
 		List<TicketReaderDto> tickets = new ArrayList<TicketReaderDto>();
+		
 		for(Ticket t : allTicket){
 			tickets.add(convertToTicketDto(t));
 		}
@@ -186,7 +200,7 @@ public class TicketServiceImpl implements TicketService {
 		// na osnovu regularne cene i tipa korisnika racunamo cenu karte
 		double discount = 0 ;
 		if(ut == UserTicketType.HANDYCAP){
-			discount = priceItem.getHandycapDiscont();
+			discount = priceItem.getHandycapDiscount();
 		}else if(ut == UserTicketType.SENIOR){
 			discount = priceItem.getSeniorDiscount();
 		}else if(ut == UserTicketType.STUDENT){
@@ -199,11 +213,6 @@ public class TicketServiceImpl implements TicketService {
 		return price;
 	}
 
-	@Override
-	public Set<TicketReaderDto> getReports(ReportDto report) {
-		return null;
-		
-	}
 
 	private String convertToString(Date date) {
 		// TODO Auto-generated method stub
@@ -227,6 +236,81 @@ public class TicketServiceImpl implements TicketService {
 		}
 
 		return sqlDate;
+	}
+
+	@Override
+	public boolean useTicket(String serialNo, String username) throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException {
+		// 1. na osnovu serijskog broja pronadjemo kartu u bazi 
+		Ticket foundTicket = this.ticketRepository.findBySerialNo(serialNo).orElseThrow(()->new TicketNotFound());
+		Date today = new Date(new java.util.Date().getTime());
+		if(foundTicket.getIssueDate().before(today) && today.before(foundTicket.getExpirationDate())){
+			//proverimo da li je karta single, ako jeste i ako je vec koriscena bacamo gresku
+			if(foundTicket.getTimeType() == TimeTicketType.SINGLE){
+				if (foundTicket.isUsed() == true){
+					throw new TicketAlreadyUsedException();
+				}else{
+					foundTicket.setUsed(true); //ako nije koriscena setujemo na true
+				}
+			}
+			Ticket saveTicket = this.ticketRepository.save(foundTicket);//update karte
+			return true;//iskoriscena karta
+		}else{
+			throw new TicketIsNotValidException(); //kada je istekla karta
+		}
+		
+	}
+
+	@Override
+	public TicketReaderDto checkTicket(String serialNo, String username) throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException {
+		// kontrola karte od strane inspektora
+		//1. pronadjemo kartu na osnovu serijskog broja
+		Ticket foundTicket = this.ticketRepository.findBySerialNo(serialNo).orElseThrow(()-> new TicketNotFound());
+		Date today = new Date(new java.util.Date().getTime());
+		Inspector i = (Inspector) this.userService.getUser(username);//ovde treba proveriti da li postoji inspektor
+		if(i == null){
+			throw new UserNotFoundException();
+		}
+		//proverimo da li je karta jos uvek vazeca
+		if(foundTicket.getIssueDate().before(today) && today.before(foundTicket.getExpirationDate())){
+			//karta je vazeca proverimo da li je single 
+			if(foundTicket.getTimeType() == TimeTicketType.SINGLE){
+				if(foundTicket.isUsed() == false){
+					//karta nije upotrebljena
+					throw new TicketIsNotUseException();
+				}
+				
+			}
+			//ok , dodamo inspektora koji je proverio kartu
+			Set<Inspector> inspectors = foundTicket.getCheckInspectors();
+			inspectors.add(i);
+			//sacuvamo u bazi 
+			foundTicket.setCheckInspectors(inspectors);
+			Ticket updateTicket = this.ticketRepository.save(foundTicket);
+			return convertToTicketDto(updateTicket);
+		}else{
+			throw new TicketIsNotValidException();
+		}
+	
+	}
+
+	@Override
+	public Collection<TicketReaderDto> getMonthReport(int month, int year) throws IllegalArgumentException{
+		// TODO Auto-generated method stub
+		Collection<Ticket> allTicket = (Collection<Ticket>) this.ticketRepository.findAll();
+		
+		List<Ticket> report = new ArrayList<Ticket>();
+		List<TicketReaderDto> result = new ArrayList<TicketReaderDto>();
+		if((month > 12 || month < 1) || (year > 2019))
+		{
+			throw new IllegalArgumentException();
+		}
+		report = allTicket.stream().filter(t -> t.getIssueDate().toLocalDate().getMonthValue() == month && t.getIssueDate().toLocalDate().getYear() == year).collect(Collectors.toList());
+		
+		for(Ticket t : report){
+			result.add(convertToTicketDto(t));
+		}
+		
+		return result;
 	}
 
 }

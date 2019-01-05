@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -92,6 +93,20 @@ public class PricelistController {
 		
 	}
 
-
+	@GetMapping(value="/getPricelist", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<PricelistReaderDto> getPricelist(){
+		//metoda vraca cenovnik, samo umesto popusta za studente i ostale putnike, vraticemo izracunatu cenu karte
+		logger.info(">> get pricelist: ");
+		try {
+			PricelistReaderDto found_p = this.pricelistService.getValidPricelist();
+			logger.info("<< return pricelist ");
+			return new ResponseEntity<PricelistReaderDto>(found_p, HttpStatus.OK);
+		} catch (NotFoundActivePricelistException e) {
+			// TODO Auto-generated catch block
+			logger.info("<< does not exist active pricelist");
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+	}
 
 }

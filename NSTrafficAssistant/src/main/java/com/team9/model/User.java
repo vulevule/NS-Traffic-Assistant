@@ -28,7 +28,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
 	private String name;
@@ -42,6 +42,16 @@ public class User implements Serializable {
 	private String email;
 	@Column(nullable = false)
 	private Role role;
+	@Column
+	private String imagePath;
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
 
 	@ManyToOne(optional = false)
 	private Address address;
