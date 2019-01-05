@@ -3,7 +3,8 @@ package com.team9.dto;
 import com.team9.model.TrafficType;
 
 public class StationDTO {
-
+	
+	private Long id;
 	private String name;
 	private TrafficType type;
 	private double xCoordinate;
@@ -24,6 +25,27 @@ public class StationDTO {
 		this.addressZip = addressZip;
 	}
 	
+	public StationDTO(Long id, String name, TrafficType type, double xCoordinate, double yCoordinate,
+			String addressName, String addressCity, int addressZip) {
+		super();
+		this.setId(id);
+		this.name = name;
+		this.type = type;
+		this.xCoordinate = xCoordinate;
+		this.yCoordinate = yCoordinate;
+		this.addressName = addressName;
+		this.addressCity = addressCity;
+		this.addressZip = addressZip;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public StationDTO() {}
 
 	public String getName() {

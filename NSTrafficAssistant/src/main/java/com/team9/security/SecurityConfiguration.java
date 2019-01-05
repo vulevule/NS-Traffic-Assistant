@@ -62,14 +62,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 			.authorizeRequests()
-				.antMatchers("/user/login").
-					permitAll()
-					.antMatchers("/user/create").permitAll()
-					.antMatchers("/pricelist/addPricelist").hasAuthority("ADMIN")
-					.antMatchers("/ticket/buyTicket").hasAuthority(Role.PASSANGER.name())
-					.antMatchers("/ticket/myTicket").hasAuthority(Role.PASSANGER.name())
+				.antMatchers("/user/login").permitAll()
+				.antMatchers("/user/create").permitAll()
+				.antMatchers("/pricelist/addPricelist").hasAuthority("ADMIN")
+				.antMatchers("/station/create").hasAuthority(Role.ADMIN.name())
+				.antMatchers("/station/update").hasAuthority(Role.ADMIN.name())
+				.antMatchers("/station/delete/{id}").hasAuthority(Role.ADMIN.name())
+				.antMatchers("/ticket/buyTicket").hasAuthority(Role.PASSANGER.name())
+				.antMatchers("/ticket/myTicket").hasAuthority(Role.PASSANGER.name())
 		
-				/*.anyRequest().authenticated()*/;
+				.anyRequest().authenticated();
 				//if we use AngularJS on client side
 				//.and().csrf().csrfTokenRepository(csrfTokenRepository()); 
 		

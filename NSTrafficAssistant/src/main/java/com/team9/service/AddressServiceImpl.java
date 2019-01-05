@@ -13,9 +13,10 @@ public class AddressServiceImpl implements AddressService{
 	private AddressRepository addressRepository;
 
 	@Override
-	public Address findByStreetAndCityAndZip(Address a) {
-		return addressRepository.findByStreetAndCityAndZip(a.getStreet(), a.getCity(), a.getZip());
-		
+	public Address findByStreetAndCityAndZip(String street, String city, int zip) {
+		return addressRepository.findByStreetAndCityAndZip(street, city, zip);
 	}
+
+	
 
 }
