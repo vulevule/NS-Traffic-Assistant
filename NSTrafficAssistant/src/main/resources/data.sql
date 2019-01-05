@@ -3,18 +3,29 @@ insert into address (id, street, city, zip)values(1, 'Bulevar Vojvode Stepe', 'B
 insert into address (id, street, city, zip)values(2, 'Vuka Karadzica 5', 'Novi Sad', 21000);
 --korisnici
 insert into user (id,type,  name, personal_no, username, password, email, role, activate, user_ticket_type, address_id)
-values(3, 'Passenger','Pera Peric', '11129956325632', 'peraperic', '1111', 'pera@gmail.com', 1, true, 0, 1);	
-insert into user (id,type,name, personal_no, username, password, email, role, activate, user_ticket_type, address_id)
-values(4, 'Passenger', 'Petar Petrovic', '11129956325632', 'petarpetrovic', '2222', 'petar@gmail.com', 1, true, 1, 1);
-insert into user (id,type, name, personal_no, username, password, email, role, activate, user_ticket_type, address_id)
-values(5,'Passenger',  'Petra Peric', '11129956325632', 'petraperic', '3333', 'petra@gmail.com', 1, true, 2, 1);
-insert into user (id, type, name, personal_no, username, password, email, role, activate, user_ticket_type, address_id)
-values(6,'Passenger', 'Pavle Peric', '11129956325632', 'pavleperic', '4444', 'pavle@gmail.com', 1, true, 3, 2);
-insert into user (id, type, name, personal_no, username, password, email, role, activate, user_ticket_type, address_id)
-values(7,'Passenger',  'Mika Peric', '11129956325632', 'mikaperic', '5555', 'mika@gmail.com', 1, false, 0, 2);
+values(3, 'Passenger','Pera Peric', '11129956325632', 'peraperic', '$2a$10$nWigsJopzu.0AL5bO.79meRVJGcMhSOv5Yxh476nDL5ZZcIBotv7G', 'pera@gmail.com', 1, true, 0, 1);--pass = 1111
 
-insert into user (id, type, name, personal_no, username, password, email, role, address_id )
-values(50, 'Inspector', 'Lena Lukic', '451278965533', 'lenalukic', '6666', 'lena@gmail.com', 2 , 1);
+insert into user (id,type,name, personal_no, username, password, email, role, activate, user_ticket_type, address_id)
+values(4, 'Passenger', 'Petar Petrovic', '11129956325632', 'petarpetrovic', '$2a$10$jcTXnU3oS2SzxxgXCcTpd.QW0ZzRiDPNE74/kT6dZMDhYkKahQJ5S', 'petar@gmail.com', 1, true, 1, 1); --pass = 2222
+insert into user (id,type, name, personal_no, username, password, email, role, activate, user_ticket_type, address_id) --pass = 3333
+values(5,'Passenger',  'Petra Peric', '11129956325632', 'petraperic', '$2a$10$.t83Y.qOskliQZZdWhcJvOn9ogqC.H1lvCCFtslWKqmWTQBfKW2eq', 'petra@gmail.com', 1, true, 2, 1);
+insert into user (id, type, name, personal_no, username, password, email, role, activate, user_ticket_type, address_id)--pass = 4444
+values(6,'Passenger', 'Pavle Peric', '11129956325632', 'pavleperic', '$2a$10$Xdj3Oezo6maXaUyf.YzI8eiGh93TqqfwgUolPo0WqOSwsgRAUvQme', 'pavle@gmail.com', 1, true, 3, 2);
+insert into user (id, type, name, personal_no, username, password, email, role, activate, user_ticket_type, address_id)--pass = 5555
+values(7,'Passenger',  'Mika Peric', '11129956325632', 'mikaperic', '$2a$10$ifDULT1TOVUfuGxWOnSiAO8p2Rgw6yBuyytYVn39u3hqRkILAMF9K', 'mika@gmail.com', 1, false, 0, 2);
+
+insert into user (id, type, name, personal_no, username, password, email, role, address_id ) --pass = 6666
+values(50, 'Inspector', 'Lena Lukic', '451278965533', 'lenalukic', '$2a$10$z0EIf/A8qb/WzxwNKR94Ne31T0rP6IVwDcJjv4Fp4ir6MiT9vQF0m', 'lena@gmail.com', 2 , 1);
+insert into user (id, type, name, personal_no, username, password, email, role, address_id ) -- pass = 7777
+values(51, 'Admin', 'Lara Lukic', '4512789655335', 'laralukic', '$2a$10$tFHPAi/oFW99K/5lTfw29.YKf6r6UYmFZTSzCIrMOHhtLDZKghGM6', 'lara@gmail.com', 0 , 1);
+--authority
+insert into authority (id, name, user_id) values (1, 'ADMIN', 51);
+insert into authority (id, name,user_id) values (2, 'INSPECTOR', 50);
+insert into authority (id, name,user_id) values (3, 'PASSENGER', 3);
+insert into authority (id, name,user_id) values (4, 'PASSENGER', 4);
+insert into authority (id, name,user_id) values (5, 'PASSENGER', 5);
+insert into authority (id, name,user_id) values (6, 'PASSENGER', 6);
+insert into authority (id, name,user_id) values (7, 'PASSENGER', 7);
 
 --karte
 insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_type, 
@@ -46,6 +57,7 @@ insert into price_item(id, price, traffic_type, time_type, zone, student_discoun
 				values (11, 10000, 0,0,0, 10, 5, 5,10 );
 insert into price_item(id, price, traffic_type, time_type, zone, student_discount, senior_discount, handycap_discount,pricelist_id)
 				values (12, 10000, 0,0,1, 10, 5, 5, 10 );
+				
 insert into price_item(id, price, traffic_type, time_type, zone, student_discount, senior_discount, handycap_discount, pricelist_id)
 				values (13, 1000, 0,1,0, 10, 5, 5 ,10);
 insert into price_item(id, price, traffic_type, time_type, zone, student_discount, senior_discount, handycap_discount, pricelist_id)

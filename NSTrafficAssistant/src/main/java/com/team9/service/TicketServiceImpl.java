@@ -241,13 +241,13 @@ public class TicketServiceImpl implements TicketService {
 	@Override
 	public boolean useTicket(String serialNo, String username) throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException {
 		// 1. na osnovu serijskog broja pronadjemo kartu u bazi 
-		Ticket foundTicket = this.ticketRepository.findBySerialNo(serialNo).orElseThrow(()->new TicketNotFound());
+		Ticket foundTicket = this.ticketRepository.findBySerialNo(serialNo).orElseThrow(()->new TicketNotFound("Ticket with serialNo: " + serialNo + " does not exist!"));
 		Date today = new Date(new java.util.Date().getTime());
 		if(foundTicket.getIssueDate().before(today) && today.before(foundTicket.getExpirationDate())){
 			//proverimo da li je karta single, ako jeste i ako je vec koriscena bacamo gresku
 			if(foundTicket.getTimeType() == TimeTicketType.SINGLE){
 				if (foundTicket.isUsed() == true){
-					throw new TicketAlreadyUsedException();
+					throw new TicketAlreadyUsedException("Ticket with serialNo: " + serialNo + " has already been used!");
 				}else{
 					foundTicket.setUsed(true); //ako nije koriscena setujemo na true
 				}
@@ -255,7 +255,7 @@ public class TicketServiceImpl implements TicketService {
 			Ticket saveTicket = this.ticketRepository.save(foundTicket);//update karte
 			return true;//iskoriscena karta
 		}else{
-			throw new TicketIsNotValidException(); //kada je istekla karta
+			throw new TicketIsNotValidException("Ticket with serialNo: " + serialNo + " has expired!"); //kada je istekla karta
 		}
 		
 	}
@@ -264,7 +264,7 @@ public class TicketServiceImpl implements TicketService {
 	public TicketReaderDto checkTicket(String serialNo, String username) throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException {
 		// kontrola karte od strane inspektora
 		//1. pronadjemo kartu na osnovu serijskog broja
-		Ticket foundTicket = this.ticketRepository.findBySerialNo(serialNo).orElseThrow(()-> new TicketNotFound());
+		Ticket foundTicket = this.ticketRepository.findBySerialNo(serialNo).orElseThrow(()-> new TicketNotFound("Ticket with serialNo: " + serialNo + " does not exist!"));
 		Date today = new Date(new java.util.Date().getTime());
 		Inspector i = (Inspector) this.userService.getUser(username);//ovde treba proveriti da li postoji inspektor
 		if(i == null){
@@ -276,7 +276,7 @@ public class TicketServiceImpl implements TicketService {
 			if(foundTicket.getTimeType() == TimeTicketType.SINGLE){
 				if(foundTicket.isUsed() == false){
 					//karta nije upotrebljena
-					throw new TicketIsNotUseException();
+					throw new TicketIsNotUseException("Ticket with serialNo: " + serialNo + " was not used!");
 				}
 				
 			}
@@ -288,7 +288,7 @@ public class TicketServiceImpl implements TicketService {
 			Ticket updateTicket = this.ticketRepository.save(foundTicket);
 			return convertToTicketDto(updateTicket);
 		}else{
-			throw new TicketIsNotValidException();
+			throw new TicketIsNotValidException("Ticket with serialNo: " + serialNo + " has expired!");
 		}
 	
 	}

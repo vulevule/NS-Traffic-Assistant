@@ -37,7 +37,7 @@ public class PricelistServiceImpl implements PriceListService {
 	
 	@Override
 	public PriceList getPricelist() throws NotFoundActivePricelistException{
-		return pricelistRepo.findByActivateTrue().orElseThrow(() -> new NotFoundActivePricelistException());
+		return pricelistRepo.findByActivateTrue().orElseThrow(() -> new NotFoundActivePricelistException("There is no active price list!"));
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class PricelistServiceImpl implements PriceListService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public PricelistReaderDto addPricelist(PricelistDto pricelist) throws ParseException, PriceItemAlreadyExistsException, PriceLessThanZeroException, WrongUserTicketTypeException, WrongTrafficTypeException, WrongTicketTimeException, WrongTrafficZoneException, WrongDiscountException, WrongNumberOfPriceItemException {
+	public PricelistReaderDto addPricelist(PricelistDto pricelist) throws ParseException, PriceItemAlreadyExistsException, PriceLessThanZeroException, WrongTrafficTypeException, WrongTicketTimeException, WrongTrafficZoneException, WrongDiscountException, WrongNumberOfPriceItemException {
 		//1.konvertujemo prosledjeni raspored
 		PriceList pl = convertDtoToPricelist(pricelist);
 		
@@ -87,18 +87,6 @@ public class PricelistServiceImpl implements PriceListService {
 		return prdto;
 	}
 
-	private String convertToString(Date date) {
-		// convert date to  string
-		if(date == null){
-			return "";
-		}
-		SimpleDateFormat dateformatyyyyMMdd = new SimpleDateFormat("dd-MM-yyyy");
-		String date_to_string = dateformatyyyyMMdd.format(date);
-
-
-		return date_to_string;
-	}
-
 	private PriceList convertDtoToPricelist(PricelistDto pricelist) throws ParseException {
 		// imam sledece atribute:
 		//pricelist : date issuedate, date expirationdate, activate 
@@ -113,14 +101,6 @@ public class PricelistServiceImpl implements PriceListService {
 		PriceList pl = new PriceList(java.sql.Date.valueOf(date),null, true);
 		
 		return pl;
-	}
-
-	private Date convertToDate(String stringDate) throws ParseException {
-		// TODO Auto-generated method stub
-		SimpleDateFormat sdf1 = new SimpleDateFormat("dd-mm-yyyy");
-		java.util.Date date = sdf1.parse(stringDate);
-		java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-		return sqlDate;
 	}
 
 

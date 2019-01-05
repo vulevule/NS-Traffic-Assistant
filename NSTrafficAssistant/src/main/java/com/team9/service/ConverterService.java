@@ -33,7 +33,7 @@ public class ConverterService {
 		}else if(zone.toUpperCase().equals(TrafficZone.SECOND.name())){
 			return TrafficZone.SECOND;
 		}else{
-			throw new WrongTrafficZoneException();
+			throw new WrongTrafficZoneException("Incorect traffic zone: " + zone);
 		}
 	}
 	
@@ -47,7 +47,7 @@ public class ConverterService {
 		}else if(time.toUpperCase().equals(TimeTicketType.SINGLE.name())){
 			return TimeTicketType.SINGLE;
 		}else{
-			throw new WrongTicketTimeException();
+			throw new WrongTicketTimeException("Incorect time ticket: " + time);
 		}
 	}
 	
@@ -61,7 +61,7 @@ public class ConverterService {
 		}else if(user.toUpperCase().equals(UserTicketType.SENIOR.name())){
 			return UserTicketType.SENIOR;
 		}else{
-			throw new WrongUserTicketTypeException();
+			throw new WrongUserTicketTypeException("Incorect user ticket type: " + user);
 		}
 	}
 }

@@ -20,7 +20,7 @@ import com.team9.model.TrafficZone;
 
 public interface PricelistItemService {
 	
-	public PriceList addPricelistItems(Set<PriceItemDto> items, PriceList savepl) throws  PriceItemAlreadyExistsException, PriceLessThanZeroException, WrongUserTicketTypeException, WrongTrafficTypeException, WrongTicketTimeException, WrongTrafficZoneException, WrongDiscountException, WrongNumberOfPriceItemException;
+	public PriceList addPricelistItems(Set<PriceItemDto> items, PriceList savepl) throws  PriceItemAlreadyExistsException, PriceLessThanZeroException,  WrongTrafficTypeException, WrongTicketTimeException, WrongTrafficZoneException, WrongDiscountException, WrongNumberOfPriceItemException;
 
 	public Set<PriceItemDto> convertToDto(Set<PriceItem> items);
 
