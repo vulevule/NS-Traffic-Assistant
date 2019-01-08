@@ -1,5 +1,9 @@
 package com.team9.dto;
 
+import java.util.ArrayList;
+
+import com.team9.model.Station;
+import com.team9.model.StationLine;
 import com.team9.model.TrafficType;
 
 public class StationDTO {
@@ -12,9 +16,32 @@ public class StationDTO {
 	private String addressName;
 	private String addressCity;
 	private int addressZip;
+	private ArrayList<String> lines;
+	
+	public StationDTO(Station s) {
+		this.id = s.getId();
+		this.name = s.getName();
+		this.type = s.getType();
+		this.xCoordinate = s.getxCoordinate();
+		this.yCoordinate = s.getyCoordinate();
+		
+		if(s.getAddress() != null) {
+			this.addressName = s.getAddress().getStreet();
+			this.addressCity = s.getAddress().getCity();
+			this.addressZip = s.getAddress().getZip();
+		}
+		
+		this.lines = new ArrayList<String>();
+		if(s.getLines() != null) {
+			for(StationLine sl : s.getLines()) {
+				this.lines.add(sl.getLine().getName());
+			}
+		}
+		
+	}
 	
 	public StationDTO(String name, TrafficType type, double xCoordinate, double yCoordinate, String addressName,
-			String addressCity, int addressZip) {
+			String addressCity, int addressZip, ArrayList<String> lines) {
 		super();
 		this.name = name;
 		this.type = type;
@@ -23,12 +50,13 @@ public class StationDTO {
 		this.addressName = addressName;
 		this.addressCity = addressCity;
 		this.addressZip = addressZip;
+		this.setLines(lines);
 	}
-	
+
 	public StationDTO(Long id, String name, TrafficType type, double xCoordinate, double yCoordinate,
-			String addressName, String addressCity, int addressZip) {
+			String addressName, String addressCity, int addressZip, ArrayList<String> lines) {
 		super();
-		this.setId(id);
+		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.xCoordinate = xCoordinate;
@@ -36,8 +64,9 @@ public class StationDTO {
 		this.addressName = addressName;
 		this.addressCity = addressCity;
 		this.addressZip = addressZip;
+		this.setLines(lines);
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -102,6 +131,14 @@ public class StationDTO {
 
 	public void setAddressZip(int addressZip) {
 		this.addressZip = addressZip;
+	}
+
+	public ArrayList<String> getLines() {
+		return lines;
+	}
+
+	public void setLines(ArrayList<String> lines) {
+		this.lines = lines;
 	}
 	
 	

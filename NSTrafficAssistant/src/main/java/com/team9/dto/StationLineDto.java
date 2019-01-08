@@ -6,6 +6,12 @@ public class StationLineDto {
 	private int arrival;
 	private String Station;
 	
+	public StationLineDto(int stationNum, int arrival, String station) {
+		super();
+		this.stationNum = stationNum;
+		this.arrival = arrival;
+		Station = station;
+	}
 	public int getStationNum() {
 		return stationNum;
 	}

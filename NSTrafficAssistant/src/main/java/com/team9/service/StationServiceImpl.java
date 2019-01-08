@@ -77,27 +77,27 @@ public class StationServiceImpl implements StationService {
 	}
 
 	@Override
-	public Collection<Station> getAllByType(TrafficType t) {
+	public List<Station> getAllByType(TrafficType t) {
 		return stationRepository.findByType(t);
 	}
 
 	@Override
-	public Collection<Station> getByName(String name) {
+	public List<Station> getByName(String name) {
 		return stationRepository.findByName(name);
 	}
 	
 	@Override
-	public Collection<Station> getByNameContains(String name) {
+	public List<Station> getByNameContains(String name) {
 		return stationRepository.findByNameContains(name);
 	}
 
 	@Override
 	public Station getById(Long id) {
-		return stationRepository.findById(id).get();
+		return stationRepository.findById(id).orElse(null);
 	}
 
 	@Override
-	public Collection<Station> getAllByLine(Long lineId) {
+	public List<Station> getAllByLine(Long lineId) {
 		Optional<Line> line = lineRepository.findById(lineId);
 		Set<StationLine> temp = line.get().getStations();
 		List<Station> retVal = new ArrayList<Station>();
@@ -112,7 +112,7 @@ public class StationServiceImpl implements StationService {
 	}
 
 	@Override
-	public Collection<Station> getAll() {
+	public List<Station> getAll() {
 		return stationRepository.findAll();
 	}
 
