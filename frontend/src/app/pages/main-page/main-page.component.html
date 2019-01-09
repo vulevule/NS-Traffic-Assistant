@@ -1,7 +1,9 @@
-<div>
-  <app-header></app-header>
 
-  <app-menu-bar></app-menu-bar>
+<div class="main">
+  <app-header [loggedUser]="loggedUser"></app-header>
+
+  <app-menu-bar [loggedUser]="loggedUser"></app-menu-bar>
 
   <router-outlet name="secondary"></router-outlet>
-</div>
+</div>  
+
