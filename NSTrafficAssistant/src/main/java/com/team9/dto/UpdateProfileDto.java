@@ -3,6 +3,14 @@ package com.team9.dto;
 import com.team9.model.Address;
 
 public class UpdateProfileDto {
+	public UpdateProfileDto(String username, String name, String email, String password, Address address) {
+		super();
+		this.username = username;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.address = address;
+	}
 	private String username;
 	private String name;
 	private String email;

@@ -4,6 +4,29 @@ import java.io.Serializable;
 
 public class UserDto implements Serializable{
 	
+	public UserDto(String name, String personalNo, String username, String password, String password1, String email,
+			String role) {
+		super();
+		this.name = name;
+		this.personalNo = personalNo;
+		this.username = username;
+		this.password = password;
+		this.password1 = password1;
+		this.email = email;
+		this.role = role;
+	}
+	public UserDto(String name, String personalNo, String username, String password, String password1, String email,
+			String role, AddressDto address) {
+		super();
+		this.name = name;
+		this.personalNo = personalNo;
+		this.username = username;
+		this.password = password;
+		this.password1 = password1;
+		this.email = email;
+		this.role = role;
+		this.address = address;
+	}
 	/**
 	 * 
 	 */
@@ -68,5 +91,11 @@ public class UserDto implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
+	public UserDto() {
+		super();
+	}
+	
+	
 
 }
