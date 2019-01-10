@@ -112,7 +112,7 @@ public class LineServiceImpl implements LineService{
 		for (StationLineDto station : stationsInLine) {
 			Station s = stationRepository.findByNameAndType(station.getStation(), l.getType());
 			if(s != null) {
-				l.getStations().add(new StationLine(station.getStationNum(), station.getArrival(), s));
+				l.getStations().add(new StationLine(station.getStationNum(), station.getArrival(), s, l));
 			}
 			else {
 				throw new StationNotFoundException("Station "+station.getStation()+" doesn't exist!");

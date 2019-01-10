@@ -59,7 +59,7 @@ public class UserServiceUnitTest {
 		
 		
 		Address a=new Address(1L, "Vuka Karadzica", "Novi Sad", 21000);
-		Mockito.when(this.addressService.findByStreetAndCityAndZip(a)).thenReturn(a);
+		Mockito.when(this.addressService.findByStreetAndCityAndZip(a.getStreet(),a.getCity(),a.getZip())).thenReturn(a);
 		
 		
 		

@@ -4,6 +4,6 @@ import com.team9.model.Address;
 
 public interface AddressService {
 	
-	Address findByStreetAndCityAndZip(Address a);
+	Address findByStreetAndCityAndZip(String street, String city, int zip);
 
 }

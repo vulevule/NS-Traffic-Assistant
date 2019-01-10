@@ -1,5 +1,8 @@
 package com.team9.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -8,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,95 +19,136 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.team9.dto.StationDTO;
+import com.team9.exceptions.StationAlreadyExistsException;
+import com.team9.exceptions.StationNotFoundException;
 import com.team9.model.Station;
 import com.team9.model.TrafficType;
 import com.team9.service.StationService;
-/*
+
 @RestController
 public class StationController {
 	
 	@Autowired
 	private StationService stationService;
+	
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 	
 	@GetMapping(value="/station/getAllByType/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Station>> getAllByType(@PathVariable TrafficType type){
+	public ResponseEntity<List<StationDTO>> getAllByType(@PathVariable TrafficType type){
 		logger.info(">> get stations by type " + type);
 		
-		ResponseEntity<List<Station>> allStations = new ResponseEntity<List<Station>>((List<Station>) stationService.getAllByType(type), HttpStatus.OK);
+		List<Station> stations = stationService.getAllByType(type);
+		
+		List<StationDTO> retVal = convertStationsToDTO(stations);
 		
 		logger.info("<< get stations by type " + type);
-		return allStations;
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
 	
-	@GetMapping(value="/station/getAllByLine/{line}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Station>> getAllByLine(@PathVariable Long lineId){
+	@GetMapping(value="/station/getAllByLine/{lineId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<StationDTO>> getAllByLine(@PathVariable Long lineId){
 		logger.info(">> get stations by line " + lineId);
 		
-		ResponseEntity<List<Station>> allStations = new ResponseEntity<List<Station>>((List<Station>) stationService.getAllByType(), HttpStatus.OK);
+		List<Station> stations = stationService.getAllByLine(lineId);
 		
+		List<StationDTO> retVal = convertStationsToDTO(stations);
+
 		logger.info("<< get stations by line " + lineId);
-		return allStations;
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/station/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<Station>> getAll(){
+	public ResponseEntity<List<StationDTO>> getAll(){
 		logger.info(">> get all stations");
 		
-		ResponseEntity<Collection<Station>> allStations = new ResponseEntity<Collection<Station>>(stationService.getAll(), HttpStatus.OK);
+		List<Station> stations = stationService.getAll();
+		
+		List<StationDTO> retVal = convertStationsToDTO(stations);
 		
 		logger.info("<< get all stations");
-		return allStations;
-		
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping(value="/station/getById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<StationDTO> getById(@PathVariable Long id){
+		logger.info(">> get station by id " + id);
+		
+		Station found = stationService.getById(id);
+		
+		logger.info("<< get station by id " + id);
+		if(found == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(new StationDTO(found), HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping(value="/station/getByNameAndType/{name}/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<StationDTO> getByNameAndType(@PathVariable("name") String name, @PathVariable("type") TrafficType type) throws UnsupportedEncodingException{
+		name = URLDecoder.decode(name, "UTF-8" );
+		
+		logger.info(">> get " + type + " station by name " + name);
+
+		Station found = stationService.getByNameAndType(name, type);
+		
+		logger.info("<< get " + type + " station by name " + name);
+		if(found == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(new StationDTO(found), HttpStatus.OK);
+		}
+	}
+	
 	@PostMapping(value="/station/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Station> createStation(@RequestBody Station station){
+	public ResponseEntity<StationDTO> createStation(@RequestBody StationDTO station){
 		logger.info(">> Creating station  " + station.getName());
-		
-		Station created = stationService.createStation(station);
-		
-		logger.info("<< Creating station  " + station.getName());
-		if (created == null) {
-			return new ResponseEntity<>(created, HttpStatus.NOT_ACCEPTABLE);
-		} else {
-			return new ResponseEntity<>(created, HttpStatus.CREATED);
+
+		Station created = null;
+		try {
+			created = stationService.createStation(station);
+			logger.info("<< Creating station  " + station.getName());
+			return new ResponseEntity<>(new StationDTO(created), HttpStatus.CREATED);
+		} catch (StationAlreadyExistsException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value="/station/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Station> updateStation(@RequestBody Station station){
+	public ResponseEntity<StationDTO> updateStation(@RequestBody StationDTO station){
 		logger.info(">> Updating station  " + station.getName());
-		
-		Station updated = stationService.updateStation(station);
-		
-		logger.info("<< Updating station  " + station.getName());
-		if (updated == null) {
-			return new ResponseEntity<>(updated, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<>(updated, HttpStatus.CREATED);
+
+		Station updated = null;
+		try {
+			updated = stationService.updateStation(station);
+			logger.info("<< Updating station  " + station.getName());
+			return new ResponseEntity<>(new StationDTO(updated), HttpStatus.CREATED);
+		} catch (StationNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(value="/station/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Boolean> deleteStation(@PathVariable Long id){
+	public ResponseEntity<Void> deleteStation(@PathVariable Long id){
 		logger.info(">> Deleting station  " + id);
-		
-		boolean retVal = stationService.deleteStation(id);
-		
-		logger.info("<< Deleting station  " + id);
-		if(retVal) {
-			return new ResponseEntity<>(retVal, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(retVal, HttpStatus.NOT_FOUND);
+
+		try {
+			stationService.deleteStation(id);
+			logger.info("<< Deleting station  " + id);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (StationNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
 	}
 	
-	
-}*/
+	private List<StationDTO> convertStationsToDTO(List<Station> stations) {
+		List<StationDTO> retVal = new ArrayList<StationDTO>();
+		for(Station s : stations) {
+			StationDTO newDTO = new StationDTO(s);
+			retVal.add(newDTO);
+		}
+		
+		return retVal;
+	}
+}

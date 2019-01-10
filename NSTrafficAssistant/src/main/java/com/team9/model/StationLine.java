@@ -31,23 +31,24 @@ public class StationLine implements Serializable{
 	
 	@ManyToOne(optional=false)
 	private Line line;
-
-	public StationLine(int stationNum, int arrival, Station station) {
+	
+	public StationLine(int stationNum, int arrival, Station station, Line line) {
 		super();
 		this.stationNum = stationNum;
 		this.arrival = arrival;
 		this.station = station;
+		this.line = line;
 	}
 
-	public StationLine(Long id, int stationNum, int arrival, Station station) {
+	public StationLine(Long id, int stationNum, int arrival, Station station, Line line) {
 		super();
 		this.id = id;
 		this.stationNum = stationNum;
 		this.arrival = arrival;
 		this.station = station;
+		this.line = line;
 	}
 
-	
 	public StationLine() {
 		// TODO Auto-generated constructor stub
 	}
@@ -82,6 +83,14 @@ public class StationLine implements Serializable{
 
 	public void setStation(Station station) {
 		this.station = station;
+	}
+
+	public Line getLine() {
+		return line;
+	}
+
+	public void setLine(Line line) {
+		this.line = line;
 	}
 	
 	

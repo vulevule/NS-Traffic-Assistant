@@ -104,3 +104,17 @@ insert into price_item(id, price, traffic_type, time_type, zone, student_discoun
 values (33, 100, 2,3,0, 10, 5, 5 ,10);
 insert into price_item(id, price, traffic_type, time_type, zone, student_discount, senior_discount, handycap_discount, pricelist_id)
 values (34, 100, 2,3,1, 10, 5, 5 ,10);
+
+--stanice
+insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
+values(1, 'Bazar', 0, 19.0, 48.0, 1);
+insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
+values(2, 'Bazar', 2, 19.0, 48.0, 1);
+insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
+values(3, 'Bazar-Podhodnik', 1, 20.0, 48.0, 1);
+insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
+values(4, 'Narodnog Fronta', 0, 21.0, 48.0, 2);
+insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
+values(5, 'Zeleznicka', 0, 22.0, 48.0, 2);
+insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
+values(6, 'Balzakova', 1, 23.0, 48.0, 2);

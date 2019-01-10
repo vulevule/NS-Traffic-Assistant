@@ -2,14 +2,23 @@ package com.team9.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.team9.dto.StationDTO;
+import com.team9.exceptions.StationAlreadyExistsException;
+import com.team9.exceptions.StationNotFoundException;
+import com.team9.model.Address;
 import com.team9.model.Line;
 import com.team9.model.Station;
+import com.team9.model.StationLine;
 import com.team9.model.TrafficType;
+import com.team9.repository.AddressRepository;
+import com.team9.repository.LineRepository;
 import com.team9.repository.StationRepository;
 
 @Service
@@ -18,61 +27,84 @@ public class StationServiceImpl implements StationService {
 	@Autowired
 	private StationRepository stationRepository;
 	
+	@Autowired
+	private LineRepository lineRepository;
+	
+	@Autowired
+	private AddressRepository addressRepository;
+	
 	@Override
-	public Station createStation(Station s) {
+	public Station createStation(StationDTO s) throws StationAlreadyExistsException {
 		Station find = stationRepository.findByNameAndType(s.getName(), s.getType());
 		if (find == null) {
-			return stationRepository.save(s);
-		}
-		
-		return null;
+			Station station = new Station(s.getName(), s.getType(), s.getxCoordinate(), s.getyCoordinate(), null, null);
+			Address findAddress = addressRepository.findByStreetAndCityAndZip(s.getAddressName(), s.getAddressCity(), s.getAddressZip());
+			station.setAddress(findAddress);
+			
+			return stationRepository.save(station);
+		} else {
+			throw new StationAlreadyExistsException();
+		}		
 	}
 
 	@Override
-	public boolean deleteStation(Long id) {
+	public boolean deleteStation(Long id) throws StationNotFoundException {
 		Optional<Station> find = stationRepository.findById(id);
 		if (!find.isPresent()) {
-			return false;
+			throw new StationNotFoundException();
+		} else {
+			stationRepository.delete(find.get());
+			return true;
 		}
-		
-		stationRepository.delete(find.get());
-		return true;
 	}
 
 	@Override
-	public Station updateStation(Station s) {
+	public Station updateStation(StationDTO s) throws StationNotFoundException {
 		Optional<Station> find = stationRepository.findById(s.getId());
-		if (!find.isPresent()) {
-			return null;
-		}
-		
-		return stationRepository.save(s);		
+		if (find.isPresent()) {
+			Station station = find.get();
+			station.setName(s.getName());
+			station.setxCoordinate(s.getxCoordinate());
+			station.setyCoordinate(s.getyCoordinate());
+			station.getAddress().setStreet(s.getAddressName());
+			station.getAddress().setCity(s.getAddressCity());
+			station.getAddress().setZip(s.getAddressZip());
+			
+			return stationRepository.save(station);
+		} else {
+			throw new StationNotFoundException();
+		}		
 	}
 
 	@Override
-	public Collection<Station> getAllByType(TrafficType t) {
+	public List<Station> getAllByType(TrafficType t) {
 		return stationRepository.findByType(t);
 	}
 
 	@Override
-	public Collection<Station> getByName(String name) {
+	public List<Station> getByName(String name) {
 		return stationRepository.findByName(name);
+	}
+	
+	@Override
+	public List<Station> getByNameContains(String name) {
+		return stationRepository.findByNameContains(name);
 	}
 
 	@Override
 	public Station getById(Long id) {
-		return stationRepository.findById(id).get();
+		return stationRepository.findById(id).orElse(null);
 	}
 
 	@Override
-	public Collection<Station> getAllByLine(Long lineId) {
-		ArrayList<Station> retVal = new ArrayList<Station>();
-		ArrayList<Station> list = (ArrayList<Station>) stationRepository.findAll();
+	public List<Station> getAllByLine(Long lineId) {
+		Optional<Line> line = lineRepository.findById(lineId);
+		Set<StationLine> temp = line.get().getStations();
+		List<Station> retVal = new ArrayList<Station>();
 		
-		for (Station s : list) {
-			/*if (s.getLines().contains(l)) {
-				retVal.add(s);
-			}*/
+		for(StationLine iter : temp) {
+			retVal.add(iter.getStation());
+
 		}
 		
 		return retVal;
@@ -80,8 +112,13 @@ public class StationServiceImpl implements StationService {
 	}
 
 	@Override
-	public Collection<Station> getAll() {
-		return (Collection<Station>) stationRepository.findAll();
+	public List<Station> getAll() {
+		return stationRepository.findAll();
+	}
+
+	@Override
+	public Station getByNameAndType(String name, TrafficType type) {
+		return stationRepository.findByNameAndType(name, type);
 	}
 
 }

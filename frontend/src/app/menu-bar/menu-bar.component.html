@@ -1,0 +1,38 @@
+<div class="menu">
+  <ul class="nav">
+    <li ngbDropdown class="nav-item">
+        <a class="nav-item btn" id="stationsDropdown" ngbDropdownToggle>Stations</a>
+        <div ngbDropdownMenu aria-labelledby="stationsDropdown">
+          <button class="dropdown-item" (click)="router.navigate(['/main', {outlets: { 'secondary': 'displaystations'}}])">Display all</button>
+          <button class="dropdown-item">Add new</button>
+        </div>     
+    </li>
+
+    <li ngbDropdown class="nav-item">
+      <a class="nav-item btn" id="linesDropdown" ngbDropdownToggle>Lines</a>
+      <div ngbDropdownMenu aria-labelledby="linesDropdown">
+        <button class="dropdown-item">Display all</button>
+        <button class="dropdown-item">Add new</button>
+      </div>     
+    </li>
+    
+    <li ngbDropdown class="nav-item">
+      <a class="nav-item btn" id="ticketsDropdown" ngbDropdownToggle>Tickets</a>
+      <div ngbDropdownMenu aria-labelledby="ticketsDropdown">
+        <button class="dropdown-item">My Tickets</button>
+        <button class="dropdown-item">Add new station</button>
+      </div>     
+    </li>
+    
+  </ul>
+</div>
+
+<!-- <div ngbDropdown class="d-inline-block">
+  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle dropdown</button>
+  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+    <a class="dropdown-item" href="#">Test</a>
+    <button class="dropdown-item">Action - 1</button>
+    <button class="dropdown-item">Another Action</button>
+    <button class="dropdown-item">Something else is here</button>
+  </div>
+</div> -->
