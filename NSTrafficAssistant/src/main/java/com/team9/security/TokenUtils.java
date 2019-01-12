@@ -4,10 +4,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.team9.model.User;
+import com.team9.repository.UserRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -21,6 +25,9 @@ public class TokenUtils {
 	
 	@Value("18000") //in seconds (5 hours)
 	private Long expiration;
+	
+	@Autowired
+	private UserRepository repository;
 	
 	public String getUsernameFromToken(String token) {
 		String username;
@@ -64,11 +71,14 @@ public class TokenUtils {
 		final String username = getUsernameFromToken(token);
 		return username.equals(userDetails.getUsername())
 				&& !isTokenExpired(token);
+
 	}
 	
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<String, Object>();
+		User u = this.repository.findUserByUsername(userDetails.getUsername());
 		claims.put("sub", userDetails.getUsername());
+		claims.put("role", u.getRole());
 		claims.put("created", new Date(System.currentTimeMillis()));
 		return Jwts.builder().setClaims(claims)
 				.setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
