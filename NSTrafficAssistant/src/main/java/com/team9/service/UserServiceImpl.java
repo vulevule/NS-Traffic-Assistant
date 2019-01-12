@@ -42,8 +42,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private AuthorityRepository authorityRepository;
 	
-	@Autowired
-	private JavaMailSender javaMailSender;
+//	@Autowired
+//	private JavaMailSender javaMailSender;
 
 	@Autowired
 	private Environment env;
@@ -129,28 +129,28 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findUserByUsernameAndPassword(username, password);
 	}
 
-public void sendNotificaitionSync(UserDto user)  {
-
-		
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Sending email...");
-        try {
-		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(user.getEmail());
-		System.out.println(user.getEmail());
-		mail.setFrom(env.getProperty("spring.mail.username"));
-		mail.setSubject("Welcome to NSTrafficAssistant");
-		mail.setText("Hello " + user.getName() + ",\n\nThank you for using our application. Please wait for our admins to confirm your user ticket type and enjoy your ride. :)");
-		javaMailSender.send(mail);}
-        catch(MailException e) {e.printStackTrace();};
-
-		System.out.println("Email sent!");
-	}
+//public void sendNotificaitionSync(UserDto user)  {
+//
+//		
+//		try {
+//			Thread.sleep(10000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println("Sending email...");
+//        try {
+//		SimpleMailMessage mail = new SimpleMailMessage();
+//		mail.setTo(user.getEmail());
+//		System.out.println(user.getEmail());
+//		mail.setFrom(env.getProperty("spring.mail.username"));
+//		mail.setSubject("Welcome to NSTrafficAssistant");
+//		mail.setText("Hello " + user.getName() + ",\n\nThank you for using our application. Please wait for our admins to confirm your user ticket type and enjoy your ride. :)");
+//		javaMailSender.send(mail);}
+//        catch(MailException e) {e.printStackTrace();};
+//
+//		System.out.println("Email sent!");
+//	}
 
 
 

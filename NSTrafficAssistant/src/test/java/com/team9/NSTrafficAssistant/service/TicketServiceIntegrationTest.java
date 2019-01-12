@@ -1,13 +1,11 @@
 package com.team9.NSTrafficAssistant.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
@@ -231,23 +230,27 @@ public class TicketServiceIntegrationTest {
 		assertTrue(res);
 	}
 
-	//16. getMonthReport - kada prosledimo pogresne argumenta za mesec i godinu
+	// 16. getMonthReport - kada prosledimo pogresne argumenta za mesec i godinu
 	@Test(expected = IllegalArgumentException.class)
-	public void test_monthReport_whenMonthEquals0(){
-		Collection<TicketReaderDto> report = this.service.getMonthReport(0, 2019);
+	public void test_monthReport_whenMonthEquals0() {
+		ReportDto report = this.service.getMonthReport(0, 2019);
 	}
+
 	@Test(expected = IllegalArgumentException.class)
-	public void test_monthReport_whenYearEquals2020(){
-		Collection<TicketReaderDto> report = this.service.getMonthReport(0, 2020);
+	public void test_monthReport_whenYearEquals2020() {
+		ReportDto report = this.service.getMonthReport(0, 2020);
 	}
-	
-	//17. getMonthReport - kada su parametri korektni
+
+	// 17. getMonthReport - kada su parametri korektni
 	@Test
-	public void test_monthReport_OK(){
-		List<TicketReaderDto> result = (List<TicketReaderDto>) this.service.getMonthReport(1, 2019);
-		
-		assertTrue(result.size() == 3);
+	public void test_monthReport_OK() {
+		ReportDto result = this.service.getMonthReport(12, 2018);
+
+		assertNotNull(result);
+		assertTrue(result.getNumOfStudentMonthTicket() == 1);
+		assertTrue(result.getNumOfSeniorMonthTicket() == 1);
+		assertTrue(result.getNumOfBusTicket() == 2);
+		assertTrue(result.getMoney() == 1850);
 	}
-	
-	
+
 }

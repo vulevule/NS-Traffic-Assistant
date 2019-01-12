@@ -77,11 +77,11 @@ public class UserController {
 			return new ResponseEntity<String>(HttpStatus.CONFLICT);
 		}
 		userService.saveUser(userService.UserDtoToUser(user));
-		if(user.getRole().equalsIgnoreCase("PASSENGER")) {
-			
-			userService.sendNotificaitionSync(user);
-		}
-		
+//		if(user.getRole().equalsIgnoreCase("PASSENGER")) {
+//			
+//			userService.sendNotificaitionSync(user);
+//		}
+//		
 		return new ResponseEntity<String>(HttpStatus.CREATED);}
 catch(Exception ex) {
 			

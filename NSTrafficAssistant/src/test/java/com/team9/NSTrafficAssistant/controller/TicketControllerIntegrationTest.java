@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -26,6 +24,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.team9.dto.LoginDto;
+import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.model.Ticket;
@@ -76,8 +75,6 @@ public class TicketControllerIntegrationTest {
 
 	// 1. kada je pogresan tip prevoza
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void test_buyTicket_whenWrongTrafficType() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_passenger_active);
@@ -94,8 +91,6 @@ public class TicketControllerIntegrationTest {
 
 	// 2. kada je pogresno vreme
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void test_buyTicket_whenWrongTicketTime() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_passenger_active);
@@ -112,8 +107,6 @@ public class TicketControllerIntegrationTest {
 
 	// 3. pogresna zona
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void test_buyTicket_whenWrongZone() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_passenger_active);
@@ -130,8 +123,6 @@ public class TicketControllerIntegrationTest {
 
 	// 4. kupujemo kartu za aktivnog korisnika
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void test_buyTicket_whenUserIsActive() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_passenger_active);
@@ -155,13 +146,13 @@ public class TicketControllerIntegrationTest {
 		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
 		assertTrue(fmt.format(result.getBody().getIssueDate()).equals(fmt.format(d)));
 		assertTrue(fmt.format(result.getBody().getExpirationDate()).equals(fmt.format(exp)));
+		// izbrisemo kupljenu kartu
+		this.repository.deleteById(result.getBody().getId());
 
 	}
 
 	// 5. kupujemo kartu za korisnika koji nije aktivan
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void test_buyTicket_whenUserIsNotActive() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_passenger_no_active);
@@ -185,6 +176,8 @@ public class TicketControllerIntegrationTest {
 		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
 		assertTrue(fmt.format(result.getBody().getIssueDate()).equals(fmt.format(d)));
 		assertTrue(fmt.format(result.getBody().getExpirationDate()).equals(fmt.format(exp)));
+		// izbrisemo kupljenu kartu
+		this.repository.deleteById(result.getBody().getId());
 
 	}
 
@@ -193,8 +186,6 @@ public class TicketControllerIntegrationTest {
 	 */
 	// 6. kada karta ne postoji
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void test_useTicket_whenTicketNotFound() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_passenger_no_active);
@@ -210,8 +201,6 @@ public class TicketControllerIntegrationTest {
 
 	// 7. kada je single karta vec koriscena
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void test_useTicket_whenTicketAlreadyUse() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_passenger_no_active);
@@ -227,8 +216,6 @@ public class TicketControllerIntegrationTest {
 
 	// 8. kada je karta istekla
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void test_useTicket_whenTicketIsNotValid() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_passenger_no_active);
@@ -261,13 +248,14 @@ public class TicketControllerIntegrationTest {
 		// atribut used na true
 		Ticket t = this.repository.findBySerialNo(serialNo).get();
 		assertTrue(t.isUsed());
+		// vratimo bazu na staro
+		t.setUsed(false);
+		this.repository.save(t);
 	}
 
 	// 10. koristimo bilo koju drugu kartu koja nije single
 
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void test_useTicket_OK() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_passenger_no_active);
@@ -287,8 +275,6 @@ public class TicketControllerIntegrationTest {
 	 */
 	// 11. kada karta ne postoji
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void test_checkTicket_whenTicketNotFound() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_inspector);
@@ -304,27 +290,31 @@ public class TicketControllerIntegrationTest {
 	}
 
 	// 12. single karta koja nije koriscena
-//	@Test
-//	@Transactional
-//	@Rollback(true)
-//	public void test_checkTicket_whenTicketNotUse() {
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.add("X-Auth-Token", token_inspector);
-//		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
-//
-//		String serialNo = "BMFS12121212024";
-//		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo,
-//				HttpMethod.PUT, httpEntity, String.class);
-//
-//		assertTrue(result.getStatusCode() == HttpStatus.BAD_REQUEST);
-//		assertTrue(result.getBody().equals("Ticket with serialNo: " + serialNo + " was not used!"));
-//
-//	}
+	@Test
+	public void test_checkTicket_whenTicketNotUse() {
+		/*
+		 * proverim da li je ta karta mozda koriscena
+		 * 
+		 */
+		String serialNo = "BMFS12121212023";
+		Ticket t = this.repository.findBySerialNo(serialNo).get();
+		assertTrue(t.isUsed());
+		t.setUsed(false);
+		this.repository.save(t);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Auth-Token", token_inspector);
+		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
+
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo,
+				HttpMethod.PUT, httpEntity, String.class);
+
+		assertTrue(result.getStatusCode() == HttpStatus.BAD_REQUEST);
+		assertTrue(result.getBody().equals("Ticket with serialNo: " + serialNo + " was not used!"));
+
+	}
 
 	// 13. karta koja je istekla
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void test_checkTicket_whenTicketIsNotValid() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_inspector);
@@ -341,8 +331,6 @@ public class TicketControllerIntegrationTest {
 
 	// 14. kada je sve ok
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void test_checkTicket_OK() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_inspector);
@@ -357,6 +345,9 @@ public class TicketControllerIntegrationTest {
 
 		Ticket t = this.repository.findBySerialNo(serialNo).get();
 		assertTrue(t.getCheckInspectors().size() == 1);
+		// vratimo bazu na staro
+		t.setCheckInspectors(null);
+		this.repository.save(t);
 
 	}
 
@@ -374,9 +365,8 @@ public class TicketControllerIntegrationTest {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 		int month = 0;
 		int year = 2019;
-		ResponseEntity<TicketReaderDto[]> result = restTemplate.exchange(
-				"/ticket/monthReport?month=" + month + "&year=" + year, HttpMethod.GET, httpEntity,
-				TicketReaderDto[].class);
+		ResponseEntity<ReportDto> result = restTemplate.exchange("/ticket/monthReport?month=" + month + "&year=" + year,
+				HttpMethod.GET, httpEntity, ReportDto.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
 
@@ -392,12 +382,15 @@ public class TicketControllerIntegrationTest {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 		int month = 1;
 		int year = 2019;
-		ResponseEntity<TicketReaderDto[]> result = restTemplate.exchange(
-				"/ticket/monthReport?month=" + month + "&year=" + year, HttpMethod.GET, httpEntity,
-				TicketReaderDto[].class);
+		ResponseEntity<ReportDto> result = restTemplate.exchange("/ticket/monthReport?month=" + month + "&year=" + year,
+				HttpMethod.GET, httpEntity, ReportDto.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.OK);
-		assertTrue(result.getBody().length == 3);
+		assertNotNull(result.getBody());
+		assertTrue(result.getBody().getNumOfHandycapSingleTicket() == 2);
+		assertTrue(result.getBody().getNumOfHandycapDailyTicket() == 1);
+		assertTrue(result.getBody().getNumOfBusTicket() == 3);
+		assertTrue(result.getBody().getMoney() == 285);
 
 	}
 
@@ -421,7 +414,7 @@ public class TicketControllerIntegrationTest {
 		assertEquals(result.getStatusCode(), HttpStatus.FORBIDDEN);
 
 	}
-/*
+
 	// 18. inspektor kupuje kartu
 	@Test
 	@Transactional
@@ -450,13 +443,12 @@ public class TicketControllerIntegrationTest {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 		int month = 1;
 		int year = 2019;
-		ResponseEntity<Collection> result = restTemplate.exchange(
-				"/ticket/monthReport?month=" + month + "&year=" + year, HttpMethod.GET, httpEntity,
-				Collection.class);
+		ResponseEntity<ReportDto> result = restTemplate.exchange("/ticket/monthReport?month=" + month + "&year=" + year,
+				HttpMethod.GET, httpEntity, ReportDto.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.FORBIDDEN);
 
-	}*/
+	}
 
 	// 20. inspektor gleda izvestaj
 	@Test
@@ -468,14 +460,13 @@ public class TicketControllerIntegrationTest {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 		int month = 1;
 		int year = 2019;
-		ResponseEntity<Collection> result = restTemplate.exchange(
-				"/ticket/monthReport?month=" + month + "&year=" + year, HttpMethod.GET, httpEntity,
-				Collection.class);
+		ResponseEntity<ReportDto> result = restTemplate.exchange("/ticket/monthReport?month=" + month + "&year=" + year,
+				HttpMethod.GET, httpEntity, ReportDto.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.FORBIDDEN);
 
 	}
-	
+
 	// 21. admin upotrebljava kartu
 
 	@Test
@@ -493,8 +484,8 @@ public class TicketControllerIntegrationTest {
 		assertEquals(result.getStatusCode(), HttpStatus.FORBIDDEN);
 
 	}
-	
-	//22. putnik pregleda kartu
+
+	// 22. putnik pregleda kartu
 	@Test
 	@Transactional
 	@Rollback(true)
@@ -504,8 +495,8 @@ public class TicketControllerIntegrationTest {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 
 		String serialNo = "BMFS12121212000";
-		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo, HttpMethod.PUT,
-				httpEntity, String.class);
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo,
+				HttpMethod.PUT, httpEntity, String.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.FORBIDDEN);
 	}

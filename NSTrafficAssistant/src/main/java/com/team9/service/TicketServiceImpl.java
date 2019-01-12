@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
@@ -294,23 +295,79 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public Collection<TicketReaderDto> getMonthReport(int month, int year) throws IllegalArgumentException{
+	public ReportDto getMonthReport(int month, int year) throws IllegalArgumentException{
 		// TODO Auto-generated method stub
 		Collection<Ticket> allTicket = (Collection<Ticket>) this.ticketRepository.findAll();
 		
 		List<Ticket> report = new ArrayList<Ticket>();
-		List<TicketReaderDto> result = new ArrayList<TicketReaderDto>();
 		if((month > 12 || month < 1) || (year > 2019))
 		{
 			throw new IllegalArgumentException();
 		}
+		//ovo su sve karte koje su kupljene u trazenom mesecu, sad treba da izdvojimo odredjene karte
 		report = allTicket.stream().filter(t -> t.getIssueDate().toLocalDate().getMonthValue() == month && t.getIssueDate().toLocalDate().getYear() == year).collect(Collectors.toList());
 		
-		for(Ticket t : report){
-			result.add(convertToTicketDto(t));
-		}
+		ReportDto result = new ReportDto();
+		
+		//1. izracunamo sve sto je potrebno za studentske karte
+		int numStudentMonthTicket = report.stream().filter(t -> t.getUserType() == UserTicketType.STUDENT && t.getTimeType() == TimeTicketType.MONTH).collect(Collectors.toList()).size();
+		int numStudentYearTicket =  report.stream().filter(t -> t.getUserType() == UserTicketType.STUDENT && t.getTimeType() == TimeTicketType.ANNUAL).collect(Collectors.toList()).size();
+		int numStudentDailyTicket =  report.stream().filter(t -> t.getUserType() == UserTicketType.STUDENT && t.getTimeType() == TimeTicketType.DAILY).collect(Collectors.toList()).size();;
+		int numStudentSingleTicket =  report.stream().filter(t -> t.getUserType() == UserTicketType.STUDENT && t.getTimeType() == TimeTicketType.SINGLE).collect(Collectors.toList()).size();;
+
+		result.setNumOfStudentDailyTicket(numStudentDailyTicket);
+		result.setNumOfStudentMonthTicket(numStudentMonthTicket);
+		result.setNumOfStudentSingleTicket(numStudentSingleTicket);
+		result.setNumOfStudentYearTicket(numStudentYearTicket);
+		
+		//2. izracunamo sve za penzionere
+		int numSeniorMonthTicket = report.stream().filter(t -> t.getUserType() == UserTicketType.SENIOR && t.getTimeType() == TimeTicketType.MONTH).collect(Collectors.toList()).size();
+		int numSeniorYearTicket =  report.stream().filter(t -> t.getUserType() == UserTicketType.SENIOR && t.getTimeType() == TimeTicketType.ANNUAL).collect(Collectors.toList()).size();
+		int numSeniorDailyTicket =  report.stream().filter(t -> t.getUserType() == UserTicketType.SENIOR && t.getTimeType() == TimeTicketType.DAILY).collect(Collectors.toList()).size();;
+		int numSeniorSingleTicket =  report.stream().filter(t -> t.getUserType() == UserTicketType.SENIOR && t.getTimeType() == TimeTicketType.SINGLE).collect(Collectors.toList()).size();;
+
+		result.setNumOfSeniorDailyTicket(numSeniorDailyTicket);
+		result.setNumOfSeniorMonthTicket(numSeniorMonthTicket);
+		result.setNumOfSeniorSingleTicket(numSeniorSingleTicket);
+		result.setNumOfSeniorYearTicket(numSeniorYearTicket);
+		
+		//3. izracunamo sve za invalide
+		int numHandycapMonthTicket = report.stream().filter(t -> t.getUserType() == UserTicketType.HANDYCAP && t.getTimeType() == TimeTicketType.MONTH).collect(Collectors.toList()).size();
+		int numHandycapYearTicket =  report.stream().filter(t -> t.getUserType() == UserTicketType.HANDYCAP && t.getTimeType() == TimeTicketType.ANNUAL).collect(Collectors.toList()).size();
+		int numHandycapDailyTicket =  report.stream().filter(t -> t.getUserType() == UserTicketType.HANDYCAP && t.getTimeType() == TimeTicketType.DAILY).collect(Collectors.toList()).size();;
+		int numHandycapSingleTicket =  report.stream().filter(t -> t.getUserType() == UserTicketType.HANDYCAP && t.getTimeType() == TimeTicketType.SINGLE).collect(Collectors.toList()).size();;
+
+		result.setNumOfHandycapDailyTicket(numHandycapDailyTicket);
+		result.setNumOfHandycapMonthTicket(numHandycapMonthTicket);
+		result.setNumOfHandycapSingleTicket(numHandycapSingleTicket);
+		result.setNumOfHandycapYearTicket(numHandycapYearTicket);
+		
+		//4. regularne karte
+		int numRegularMonthTicket = report.stream().filter(t -> t.getUserType() == UserTicketType.REGULAR && t.getTimeType() == TimeTicketType.MONTH).collect(Collectors.toList()).size();
+		int numRegularYearTicket =  report.stream().filter(t -> t.getUserType() == UserTicketType.REGULAR && t.getTimeType() == TimeTicketType.ANNUAL).collect(Collectors.toList()).size();
+		int numRegularDailyTicket =  report.stream().filter(t -> t.getUserType() == UserTicketType.REGULAR && t.getTimeType() == TimeTicketType.DAILY).collect(Collectors.toList()).size();;
+		int numRegularSingleTicket =  report.stream().filter(t -> t.getUserType() == UserTicketType.REGULAR && t.getTimeType() == TimeTicketType.SINGLE).collect(Collectors.toList()).size();;
+
+		result.setNumOfRegularDailyTicket(numRegularDailyTicket);
+		result.setNumOfRegularMonthTicket(numRegularMonthTicket);
+		result.setNumOfRegularSingleTicket(numRegularSingleTicket);
+		result.setNumOfRegularYearTicket(numRegularYearTicket);
+		
+		//5. izracunamo za vrstu prevoza
+		int numBusTicket = report.stream().filter(t->t.getTrafficType() == TrafficType.BUS).collect(Collectors.toList()).size();
+		int numMetroTicket = report.stream().filter(t->t.getTrafficType() == TrafficType.METRO).collect(Collectors.toList()).size();
+		int numTramTicket = report.stream().filter(t->t.getTrafficType() == TrafficType.TRAM).collect(Collectors.toList()).size();
+		
+		result.setNumOfTramTicket(numTramTicket);
+		result.setNumOfBusTicket(numBusTicket);
+		result.setNumOfMetroTicket(numMetroTicket);
+		
+		//6. ukupna zarada
+		double money = report.stream().mapToDouble(t -> t.getPrice()).sum();
+		result.setMoney(money);
 		
 		return result;
 	}
+
 
 }

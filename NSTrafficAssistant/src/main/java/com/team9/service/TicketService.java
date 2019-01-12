@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.springframework.data.domain.Pageable;
 
+import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
@@ -40,5 +41,5 @@ public interface TicketService {
 	
 	TicketReaderDto checkTicket(String serialNo, String username) throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException;
 	
-	Collection<TicketReaderDto> getMonthReport(int month, int year) throws IllegalArgumentException;
+	ReportDto getMonthReport(int month, int year) throws IllegalArgumentException;
 }

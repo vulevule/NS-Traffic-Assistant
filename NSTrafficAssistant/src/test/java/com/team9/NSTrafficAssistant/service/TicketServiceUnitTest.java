@@ -1,5 +1,6 @@
 package com.team9.NSTrafficAssistant.service;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.Date;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
@@ -123,8 +125,6 @@ public class TicketServiceUnitTest {
 
 		Mockito.when(this.ticketRepository_mock.findBySerialNo("MSDE3445")).thenReturn(Optional.of(t_is_not_valid));
 
-		
-		
 		// single karta koja je vec koriscena
 		// uzmemo danasnji datum i oduzmemo 5 dana = issue date, i dodamo 10
 		// dana = expiration date
@@ -147,9 +147,11 @@ public class TicketServiceUnitTest {
 				Role.INSPECTOR, new Address(1L, "Vuka Karadzica", "Novi Sad", 21000));
 		Mockito.when(this.userService_mock.getUser("dankica")).thenReturn(i);
 
-		//izvestaj, stavimo karte u
+		// izvestaj, stavimo karte u
 		ArrayList<Ticket> tickets = new ArrayList<>();
-		tickets.add(t_not_used); tickets.add(t_is_not_valid); tickets.add(t_is_used);
+		tickets.add(t_not_used);
+		tickets.add(t_is_not_valid);
+		tickets.add(t_is_used);
 		Mockito.when(this.ticketRepository_mock.findAll()).thenReturn(tickets);
 	}
 
@@ -390,34 +392,39 @@ public class TicketServiceUnitTest {
 			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException {
 		TicketReaderDto t = this.ticketService.checkTicket("MDS3456", "dankica");
 	}
-	
+
 	/*
-	 * TESTIRANJE MESECNOG IZVESTAJA 
+	 * TESTIRANJE MESECNOG IZVESTAJA
 	 */
-	//kada format meseca nije dobar
+	// kada format meseca nije dobar
 	@Test(expected = IllegalArgumentException.class)
-	public void test_monthReports_whenMonthNotCorrect(){
-		Collection<TicketReaderDto> result = this.ticketService.getMonthReport(0, 2018);
-		
+	public void test_monthReports_whenMonthNotCorrect() {
+		ReportDto result = this.ticketService.getMonthReport(0, 2018);
+
 	}
-	//pogresna godina
+
+	// pogresna godina
 	@Test(expected = IllegalArgumentException.class)
-	public void test_monthReports_whenYearNotCorrect(){
-		Collection<TicketReaderDto> result = this.ticketService.getMonthReport(1, 2020);
-		
+	public void test_monthReports_whenYearNotCorrect() {
+		ReportDto result = this.ticketService.getMonthReport(1, 2020);
+
 	}
-	
-	//kada nam vrati izvstaj za odredjeni mesec, npr za februar, 2017, treba da nam vrati 1 kartu
+
+	// kada nam vrati izvstaj za odredjeni mesec, npr za februar, 2017, treba da
+	// nam vrati 1 kartu
 	@Test
-	public void test_monthReports_OK(){
-		Collection<TicketReaderDto> result = this.ticketService.getMonthReport(2, 2017);
-		assertTrue(1 == result.size());
-		
+	public void test_monthReports_OK() {
+		ReportDto result = this.ticketService.getMonthReport(2, 2017);
+		assertNotNull(result);
+		assertTrue(result.getNumOfStudentYearTicket() == 1);
+		assertTrue(result.getNumOfBusTicket() == 1);
+		assertTrue(result.getMoney() == 10000);
+
 	}
-	
-	//test kada se traze karte za korisnika koji ne postoji
+
+	// test kada se traze karte za korisnika koji ne postoji
 	@Test(expected = UserNotFoundException.class)
-	public void test_getTicket_whenUsetNotFound() throws UserNotFoundException{
+	public void test_getTicket_whenUsetNotFound() throws UserNotFoundException {
 		Collection<TicketReaderDto> result = this.ticketService.allTicket("username", null);
 	}
 }

@@ -42,9 +42,10 @@ public class UserServiceUnitTest {
 	
 	@MockBean
 	private UserRepository userRepository;
-	@MockBean
-	private JavaMailSender javaMailSender;
 	
+//	@MockBean
+//	private JavaMailSender javaMailSender;
+//	
 	@MockBean
 	private AddressService addressService;
 	
@@ -141,17 +142,17 @@ public class UserServiceUnitTest {
 		
 	}
 	
-	
-	@Test
-	public void sendNotification() throws MailException, InterruptedException {
-		UserDto u=new UserDto("Jelena Pejicic", "1234567", "pejicicjelena", "pass", "pass","jelenapejicic9@gmail.com","Passenger",new AddressDto("Vuka Karadzica", "Novi Sad", 21000));
-		this.userService.sendNotificaitionSync(u);
-		
-		
-		
-		
-	}
-	
+//	
+//	@Test
+//	public void sendNotification() throws MailException, InterruptedException {
+//		UserDto u=new UserDto("Jelena Pejicic", "1234567", "pejicicjelena", "pass", "pass","jelenapejicic9@gmail.com","Passenger",new AddressDto("Vuka Karadzica", "Novi Sad", 21000));
+//		this.userService.sendNotificaitionSync(u);
+//		
+//		
+//		
+//		
+//	}
+//	
 	
 	
 	
