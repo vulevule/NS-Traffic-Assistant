@@ -19,7 +19,7 @@ public interface UserService {
 	boolean saveUser(User u);
 	User UserDtoToUser(UserDto udto);
 	User getUser(String username,String password);
-	void sendNotificaitionSync(UserDto user) throws MailException, InterruptedException;
+	//void sendNotificaitionSync(UserDto user) throws MailException, InterruptedException;
 	ArrayList<Passenger> readyToValidate();
 	Passenger validationProcess(ValidationDTO val) throws UserNotFoundException;
 	boolean SaveUpdated(User u);

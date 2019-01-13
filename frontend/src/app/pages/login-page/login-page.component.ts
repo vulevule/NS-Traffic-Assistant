@@ -1,23 +1,45 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { LoggedUserService } from 'src/app/services/loggedUserService';
-import { User } from 'src/app/model/User';
+import { Component, OnInit, Input ,ViewEncapsulation} from '@angular/core';
+import {AuthenticationService} from 'src/app/services/authentication.service';
+import {Observable} from 'rxjs';
+import { throwError } from 'rxjs';
+import{Router} from '@angular/router'
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.css']
+  styleUrls: ['./login-page.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent implements OnInit{
 
-  @Input()
-  loggedUser: User;
+  public user;
+  public wrongUsernameOrPass:boolean;
 
-  constructor(private loggedUserService: LoggedUserService) { }
+  constructor(
+    private AuthenticationService:AuthenticationService,private router:Router)
+  {
+    this.user={};
+    this.wrongUsernameOrPass=false;
+}
+ngOnInit(){}
+login():void{
+  this.AuthenticationService.login(this.user.username,this.user.password).subscribe((loggedIn:boolean)=>{
+    console.log("loggedIn");
+    if(loggedIn){
+      console.log(loggedIn);
+      this.router.navigate(['/main']);
+    }
+  },(err:Error)=>{
+    if(err.toString()==='Illegal login'){
+      this.wrongUsernameOrPass=true;
+      console.log(err);
+    }else{
+      throwError(err);
+    }
 
-  ngOnInit() {
-    this.loggedUser = this.loggedUserService.loggedUser;
-    // Ubaciti proveru ako je ulogovan (loggedUser nije undefined) redirektovati na main stranicu
-    // na kraju logovanja postaviti loggedUser na tog sto se ulogovao
-  }
+  
+  })
+
+}
 
 }

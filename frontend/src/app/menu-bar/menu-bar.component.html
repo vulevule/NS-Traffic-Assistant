@@ -5,6 +5,7 @@
         <div ngbDropdownMenu aria-labelledby="stationsDropdown">
           <button class="dropdown-item" (click)="router.navigate(['/main', {outlets: { 'secondary': 'displaystations'}}])">Display all</button>
           <button class="dropdown-item">Add new</button>
+          <button class="dropdown-item" (click)="router.navigate(['/main', {outlets: { 'primary': 'login'}}])"> Login </button>
         </div>     
     </li>
 

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
 import com.team9.exceptions.NotFoundActivePricelistException;
@@ -209,17 +210,17 @@ public class TicketController {
 	}
 
 	@GetMapping(value = "/monthReport", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<TicketReaderDto>> getMonthReports(@RequestParam("month") int month,
+	public ResponseEntity<ReportDto> getMonthReports(@RequestParam("month") int month,
 			@RequestParam("year") int year) {
 		logger.info(">> month report: month " + month + "; year " + year);
 
 		try {
-			Collection<TicketReaderDto> ticket = this.ticketService.getMonthReport(month, year);
-			logger.info("<< month report: " + ticket.size());
-			return new ResponseEntity<Collection<TicketReaderDto>>(ticket, HttpStatus.OK);
+			ReportDto report = this.ticketService.getMonthReport(month, year);
+			logger.info("<< month report: " );
+			return new ResponseEntity<ReportDto>(report, HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
 			logger.info("<< month report: illegal argument");
-			return new ResponseEntity<Collection<TicketReaderDto>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 	}

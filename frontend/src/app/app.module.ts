@@ -11,6 +11,7 @@ import { LoggedUserService } from './services/loggedUserService';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DisplayStationsComponent } from './stations/display-stations/display-stations.component';
 import { StationServiceService } from './services/stations/station-service.service';
+import {AuthenticationService} from './services/authentication.service';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FilterByTypePipe } from './stations/display-stations/pipes/filter-by-type.pipe';
@@ -23,7 +24,8 @@ const appRoutes: Routes = [
   { path: 'main',
     component: MainPageComponent,
     children: [
-      { path: 'displaystations', component: DisplayStationsComponent, outlet: "secondary"}
+      { path: 'displaystations', component: DisplayStationsComponent, outlet: "secondary"},
+      { path: 'login', component: LoginPageComponent, outlet: "primary"}
     ] 
   },
   { path: 'login',      component: LoginPageComponent },
@@ -57,6 +59,7 @@ const appRoutes: Routes = [
   ],
   providers: [
     LoggedUserService,
+    AuthenticationService,
     StationServiceService
   ],
   bootstrap: [AppComponent]

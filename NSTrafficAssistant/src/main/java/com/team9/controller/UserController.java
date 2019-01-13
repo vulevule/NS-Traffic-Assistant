@@ -1,3 +1,4 @@
+
 package com.team9.controller;
 
 import java.io.File;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -59,6 +61,7 @@ public class UserController {
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
+	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	TokenUtils tokenUtils;
@@ -74,11 +77,11 @@ public class UserController {
 			return new ResponseEntity<String>(HttpStatus.CONFLICT);
 		}
 		userService.saveUser(userService.UserDtoToUser(user));
-		if(user.getRole().equalsIgnoreCase("PASSENGER")) {
-			
-			userService.sendNotificaitionSync(user);
-		}
-		
+//		if(user.getRole().equalsIgnoreCase("PASSENGER")) {
+//			
+//			userService.sendNotificaitionSync(user);
+//		}
+//		
 		return new ResponseEntity<String>(HttpStatus.CREATED);}
 catch(Exception ex) {
 			
@@ -95,6 +98,7 @@ catch(Exception ex) {
 			method=RequestMethod.POST,
 			consumes="application/json")
 	public ResponseEntity<String> login(@RequestBody LoginDto log){
+		logger.info(">> login: username - " + log.getUsername() + " password - " + log.getPassword());
 		
 		try {
 			
@@ -108,6 +112,7 @@ catch(Exception ex) {
             // Reload user details so we can generate token
             UserDetails details = userDetailsService.
             		loadUserByUsername(log.getUsername());
+            logger.info("<< ok login");
             return new ResponseEntity<String>(
             		tokenUtils.generateToken(details), HttpStatus.OK);
 			
@@ -121,7 +126,7 @@ catch(Exception ex) {
 		return new ResponseEntity<User>(user, HttpStatus.OK);*/
 		
 		}catch(Exception ex) {
-			
+			logger.info("invalid login");
 			return new ResponseEntity<String>("Invalid login",HttpStatus.BAD_REQUEST);
 		}
 		}

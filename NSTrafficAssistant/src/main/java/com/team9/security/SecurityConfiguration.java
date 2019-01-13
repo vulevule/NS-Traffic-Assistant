@@ -1,5 +1,7 @@
 package com.team9.security;
 
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +16,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.team9.model.Role;
+
 
 
 
@@ -46,6 +52,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception{
 		return super.authenticationManagerBean();
 	}
+	
+	@Bean
+    public CorsFilter corsFilter() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        config.setAllowCredentials(true);
+        config.setAllowedHeaders(Collections.singletonList("*"));
+        config.setAllowedMethods(Collections.singletonList("*"));
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 	
 	@Bean
 	public AuthenticationTokenFilter authenticationTokenFilterBean()

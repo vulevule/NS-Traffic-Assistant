@@ -1,8 +1,7 @@
 package com.team9.service;
 
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +28,6 @@ import com.team9.model.User;
 import com.team9.model.UserTicketType;
 import com.team9.repository.AddressRepository;
 import com.team9.repository.AuthorityRepository;
-import com.team9.repository.InspectorRepository;
 import com.team9.repository.UserRepository;
 
 @Service
@@ -44,7 +42,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private AuthorityRepository authorityRepository;
 	
-	private JavaMailSender javaMailSender;
+//	@Autowired
+//	private JavaMailSender javaMailSender;
 
 	@Autowired
 	private Environment env;
@@ -130,21 +129,28 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findUserByUsernameAndPassword(username, password);
 	}
 
-public void sendNotificaitionSync(UserDto user) throws MailException, InterruptedException {
-
-		
-		Thread.sleep(10000);
-		System.out.println("Sending email...");
-        
-		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(user.getEmail());
-		mail.setFrom(env.getProperty("spring.mail.username"));
-		mail.setSubject("Welcome to NSTrafficAssistant");
-		mail.setText("Hello " + user.getName() + ",\n\nThank you for using our application. Please wait for our admins to confirm your user ticket type and enjoy your ride. :)");
-		javaMailSender.send(mail);
-
-		System.out.println("Email sent!");
-	}
+//public void sendNotificaitionSync(UserDto user)  {
+//
+//		
+//		try {
+//			Thread.sleep(10000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println("Sending email...");
+//        try {
+//		SimpleMailMessage mail = new SimpleMailMessage();
+//		mail.setTo(user.getEmail());
+//		System.out.println(user.getEmail());
+//		mail.setFrom(env.getProperty("spring.mail.username"));
+//		mail.setSubject("Welcome to NSTrafficAssistant");
+//		mail.setText("Hello " + user.getName() + ",\n\nThank you for using our application. Please wait for our admins to confirm your user ticket type and enjoy your ride. :)");
+//		javaMailSender.send(mail);}
+//        catch(MailException e) {e.printStackTrace();};
+//
+//		System.out.println("Email sent!");
+//	}
 
 
 
@@ -198,6 +204,10 @@ public ArrayList<Passenger> readyToValidate() {
 public Passenger validationProcess(ValidationDTO val) throws UserNotFoundException {
 	// TODO Auto-generated method stub
 	User user=getUser(val.getUsername());
+	if (user==null) {
+		throw new UserNotFoundException();
+		
+	}
 	Passenger pas=(Passenger)user;
 	
 	Date date1 = new Date();
@@ -229,6 +239,9 @@ public Passenger validationProcess(ValidationDTO val) throws UserNotFoundExcepti
 
 @Override
 public boolean SaveUpdated(User u) {
+	if(u==null) {
+		return false;
+	}
 	try {
 	userRepository.save(u);
 	return true;
