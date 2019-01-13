@@ -1,22 +1,241 @@
-<div class="displayStationsContainer">
-  <label>
-    Currently we have {{stations.length}} stations
-  </label>
+<div class="displayStationsContainer row content">
+  <div class="col-12 col-md-3 sidebar-content">
+    <ngb-tabset>
+      <ngb-tab title="Display stations">
+        <ng-template ngbTabContent>
+          <label class="col-12 col-form-label">
+            Currently we have {{ stations.length }} stations in total.
+          </label>
 
-  <div class="map-content">
+          <ng-template #rt let-r="result" let-t="term">
+            <img
+              [src]="'../../../assets/images/' + r.type + '-station.png'"
+              class="mr-1"
+              style="width: 20px"
+            />
+            <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+          </ng-template>
+
+          <form #directionsForm="ngForm">
+            <label class="col-12 col-form-label"
+              >Display:
+
+              <div class="btn-group btn-group-toggle">
+                <label class="btn-primary" ngbButtonLabel>
+                  <input
+                    type="checkbox"
+                    ngbButton
+                    [(ngModel)]="displayType.bus"
+                    name="displayBus"
+                  />
+                  Bus
+                </label>
+                <label class="btn-primary" ngbButtonLabel>
+                  <input
+                    type="checkbox"
+                    ngbButton
+                    [(ngModel)]="displayType.metro"
+                    name="displayMetro"
+                  />
+                  Metro
+                </label>
+                <label class="btn-primary" ngbButtonLabel>
+                  <input
+                    type="checkbox"
+                    ngbButton
+                    [(ngModel)]="displayType.tram"
+                    name="displayTram"
+                  />
+                  Tram
+                </label>
+              </div>
+            </label>
+            <!-- <div class="form-group row search-item">
+                <label for="displayBus" class="col-12 col-xl-2 col-form-label">Bus</label>
+                <input type="checkbox" id="displayBus" name="displayBus">
+      
+                <label for="displayTram" class="col-12 col-xl-2 col-form-label">Tram</label>
+                <input type="checkbox" id="displayTram" name="displayTram">
+      
+                <label for="displayMetro" class="col-12 col-xl-2 col-form-label">Metro</label>
+                <input type="checkbox" id="displayMetro" name="displayMetro">
+            </div> -->
+
+            <!-- <label for="stname" class="col-12 col-form-label"
+              >Search by name</label
+            > -->
+            <div class="search-item ">
+              <input
+                #stname
+                type="text"
+                id="stname"
+                class="form-control"
+                name="stname"
+                placeholder="Search by name"
+                [(ngModel)]="modelSearchName"
+                [ngbTypeahead]="search"
+                [resultTemplate]="rt"
+                [inputFormatter]="formatter"
+              />
+            </div>
+
+            <!--  <label for="end" class="col-12 col-form-label"
+              >Search by address</label
+            > -->
+            <div class="search-item">
+              <input
+                #staddress
+                type="text"
+                id="staddress"
+                class="form-control"
+                name="staddress"
+                placeholder="Search by address"
+              />
+            </div>
+          </form>
+
+          <div id="stationCollapseArea" *ngIf="selectedStation">
+            <label>Selected station: </label>
+            <button class="close" title="Close" (click)="selectedStation = null">
+                x
+              </button>
+            <div class="card">
+              <div class="card-body">
+                <p>Name: {{ selectedStation ? selectedStation.name : "" }}</p>
+                <p>Type: {{ selectedStation ? selectedStation.type : "" }}</p>
+                <p>
+                  Address:
+                  {{ selectedStation ? selectedStation.addressName : "" }}
+                </p>
+              </div>
+
+              <button type="button" class="btn btn-danger" (click)="deleteStation(selectedStation)">Delete</button>
+            </div>
+          </div>
+
+          <hr />
+          <label>Stations:</label>
+
+          <div id="routes">
+            <div
+              *ngFor="
+                let station of (stations
+                  | filterByType: displayType
+                  | filterByName: stname.value
+                  | filterByAddress: staddress.value)
+              "
+              class="row route"
+              (click)="selectStation(station)"
+            >
+              <div class="col-2 estimated-time">
+                <img
+                  src="../../../assets/images/{{ station.type }}-station.png"
+                  style="width: 40px"
+                />
+              </div>
+
+              <div class="col-10 estimated-time">
+                <span>{{ station.name }}</span>
+                <span>{{ station.addressName }}</span>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab title="Create new">
+        <ng-template ngbTabContent>
+          <form #createForm="ngForm">
+            <label class="col-12 col-form-label"
+              >Choose type:
+
+              <div
+                class="btn-group btn-group-toggle"
+                ngbRadioGroup
+                name="radioBasic"
+                [(ngModel)]="newStationType"
+              >
+                <label ngbButtonLabel class="btn-primary">
+                  <input ngbButton type="radio" value="BUS" /> Bus
+                </label>
+                <label ngbButtonLabel class="btn-primary">
+                  <input ngbButton type="radio" value="TRAM" /> Tram
+                </label>
+                <label ngbButtonLabel class="btn-primary">
+                  <input ngbButton type="radio" value="METRO" /> Metro
+                </label>
+              </div>
+            </label>
+
+            <label for="stnameNew" class="col-12 col-form-label"
+              >Enter station name:
+            </label>
+            <div class="search-item ">
+              <input
+                #stnameNew
+                type="text"
+                id="stnameNew"
+                class="form-control"
+                name="stnameNew"
+                placeholder="Enter station name"
+              />
+            </div>
+
+            <label for="street" class="col-12 col-form-label"
+              >Enter address:
+            </label>
+            <div class="search-item">
+              <input
+                type="text"
+                id="street"
+                class="form-control"
+                name="street"
+                placeholder="Enter street"
+              />
+
+              <input
+                type="text"
+                id="street"
+                class="form-control"
+                name="street"
+                placeholder="Enter city"
+              />
+
+              <input
+                type="number"
+                id="street"
+                class="form-control"
+                name="street"
+                placeholder="Enter zip"
+              />
+            </div>
+
+            <label for="stlocNew" class="col-12 col-form-label"
+              >Choose location on map:
+            </label>
+            <div class="search-item ">
+              <input
+                #stlocNew
+                type="text"
+                id="stlocNew"
+                readonly
+                class="form-control"
+                name="stlocNew"
+                [(ngModel)]="markerOnMap"
+                placeholder="Choose location on map"
+              />
+            </div>
+          </form>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
+
+  <div class="col-12 col-md-9 map-content">
     <div class="legend">
-      <div class="legend-title">
-        <span>Legend:</span>
-      </div>
-      <div class="legend-bus">
-        <span>Bus</span>
-      </div>
-      <div class="legend-walking">
-        <span>Walking</span>
-      </div>
+      <div class="legend-title"><span>Legend:</span></div>
+      <div class="legend-bus"><span>Bus</span></div>
     </div>
     <div id="map" class="map"></div>
   </div>
-
 </div>
-

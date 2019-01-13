@@ -13,6 +13,10 @@ import { DisplayStationsComponent } from './stations/display-stations/display-st
 import { StationServiceService } from './services/stations/station-service.service';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { FilterByTypePipe } from './stations/display-stations/pipes/filter-by-type.pipe';
+import { FilterByNamePipe } from './stations/display-stations/pipes/filter-by-name.pipe';
+import { FilterByAddressPipe } from './stations/display-stations/pipes/filter-by-address.pipe';
+
 
 
 const appRoutes: Routes = [
@@ -36,7 +40,10 @@ const appRoutes: Routes = [
     NotFoundPageComponent,
     HeaderComponent,
     MenuBarComponent,
-    DisplayStationsComponent
+    DisplayStationsComponent,
+    FilterByTypePipe,
+    FilterByNamePipe,
+    FilterByAddressPipe,
   ],
   imports: [
     NgbModule,

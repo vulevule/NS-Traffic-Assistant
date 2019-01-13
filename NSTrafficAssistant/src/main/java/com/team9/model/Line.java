@@ -1,6 +1,7 @@
 package com.team9.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -33,6 +34,8 @@ public class Line implements Serializable{
 	private TrafficZone zone;
 	@Column(nullable = false)
 	private boolean inUse;
+	@Column(nullable = false)
+	private ArrayList<String> route;
 	
 	//linija moze da pripada vise redova voznje, jedan red voznje moze da ima vise linija
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy="lines")
@@ -42,29 +45,35 @@ public class Line implements Serializable{
 	private Set<StationLine> stations;
 	
 	public Line() {}
-	
-	
-	public Line(String name, TrafficType type, TrafficZone zone, Set<TimetableItem> timetableItems,
-			Set<StationLine> stations, boolean inUse) {
-		this();
+
+	public Line(String name, TrafficType type, TrafficZone zone, boolean inUse, ArrayList<String> route,
+			Set<TimetableItem> timetableItems, Set<StationLine> stations) {
+		super();
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
+		this.inUse = inUse;
+		this.route = route;
 		this.timetableItems = timetableItems;
 		this.stations = stations;
-		this.inUse = inUse;
 	}
-	public Line(Long id, String name, TrafficType type, TrafficZone zone, Set<TimetableItem> timetableItems,
-			Set<StationLine> stations, boolean inUse) {
-		this();
+
+
+
+	public Line(Long id, String name, TrafficType type, TrafficZone zone, boolean inUse, ArrayList<String> route,
+			Set<TimetableItem> timetableItems, Set<StationLine> stations) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
+		this.inUse = inUse;
+		this.route = route;
 		this.timetableItems = timetableItems;
 		this.stations = stations;
-		this.inUse = inUse;
 	}
+
+
 
 	public String getName() {
 		return name;
@@ -105,6 +114,26 @@ public class Line implements Serializable{
 
 	public void setInUse(boolean inUse) {
 		this.inUse = inUse;
+	}
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public ArrayList<String> getRoute() {
+		return route;
+	}
+
+
+	public void setRoute(ArrayList<String> route) {
+		this.route = route;
 	}
 
 }

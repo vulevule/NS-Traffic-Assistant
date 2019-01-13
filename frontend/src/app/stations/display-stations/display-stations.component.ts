@@ -19,7 +19,8 @@ import Stroke from 'ol/style/Stroke';
 import LineString from 'ol/geom/LineString';
 import Text from 'ol/style/Text';
 import Fill from 'ol/style/Fill';
-
+import { Observable } from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-display-stations',
@@ -29,24 +30,51 @@ import Fill from 'ol/style/Fill';
 export class DisplayStationsComponent implements OnInit {
 
   stations:StationDTO[];
+  searchStations:StationDTO[];
+  public selectedStation: StationDTO;
 
-  //Novi Sad coordinates
+  search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 2 ? []
+        : this.stations.filter(s => s.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 20))
+    )
+
+  formatter = (result: StationDTO) => result.name;
+  
+  displayType = {
+    bus: true,
+    tram: true,
+    metro: true
+  }
+
+  // Novi Sad coordinates
   latitude: number = 45.26060794;
   longitude: number = 19.83221305;
   zoomSize: number = 16;
  
-  markersOnMap: any[];
+  markerOnMap: any;
+  currentMarker: any;
 
   map: any;
   vectorSource = new VectorSource()
 
+
   constructor(private stationService:StationServiceService, private route:ActivatedRoute) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.stations = [];
-    /* this.stationService.getAll().subscribe(data => {
+    this.searchStations = [];
+    this.markerOnMap = '';
+    this.currentMarker = null;
+    await this.stationService.getAll().toPromise().then(data => {
       this.stations = data;
-    }); */
+      this.searchStations = data;
+    });
+
+    // Latitude - Y
+    // Longitude - X
 
     let vm = this
     // create map and set initial layers
@@ -65,17 +93,44 @@ export class DisplayStationsComponent implements OnInit {
         zoom: this.zoomSize
       })
     });
+    
     // set marker on click event
     vm.map.on('click', function (args) {   
       // draw marker
       vm.drawMarker(args.coordinate);
       var lonlat = transform(args.coordinate, 'EPSG:3857', 'EPSG:4326');
-      vm.markersOnMap.push(lonlat);
+      vm.markerOnMap = lonlat;
       
+    });
+    console.log("CRTAM " + this.stations.length + " STANICA");
+    this.drawStations();
+  }
+
+  deleteStation(station: StationDTO) {
+    alert(`You are about to delete ${station.name} station.`);
+  }
+
+  selectStation(station: StationDTO) {
+    this.selectedStation = station;
+    this.positionOnMap(station);
+  }
+
+  positionOnMap(station: StationDTO) {
+    this.map.getView().setCenter(transform([station.xCoordinate, station.yCoordinate], 'EPSG:4326', 'EPSG:3857'));
+    this.map.getView().setZoom(17);
+  }
+
+  drawStations() {
+    this.searchStations.forEach((station) => {
+      this.drawStation(station.xCoordinate, station.yCoordinate, station.name, station.type);
     });
   }
 
   drawMarker(coordinates) {
+    if(this.currentMarker) {
+      this.vectorSource.removeFeature(this.currentMarker);
+    }
+
     // define style for the marker
     let markerStyle = new Style({
       image: new Icon({
@@ -86,7 +141,8 @@ export class DisplayStationsComponent implements OnInit {
         src: '../../../assets/images/map-marker.png',
         scale: 0.1
       }),
-      zIndex: 5
+      zIndex: 5,
+      
     });
     // create marker feature and set style
     let marker = new Feature({
@@ -95,10 +151,12 @@ export class DisplayStationsComponent implements OnInit {
     });
     marker.setStyle(markerStyle);
     // add marker to layer
+    this.currentMarker = marker;
+
     this.vectorSource.addFeature(marker);
   }
 
-  drawBusStation(lon, lat, stationName) {
+  drawStation(lon, lat, stationName, stationType) {
     // create station feature and set style
     let busStationStyle = new Style({
       image: new Icon({
@@ -106,7 +164,7 @@ export class DisplayStationsComponent implements OnInit {
         anchorXUnits: 'fraction',
         anchorYUnits: 'fraction',
         opacity: 1,
-        src: '../../../assets/images/bus-station.png',
+        src: (stationType === 'BUS' ? '../../../assets/images/BUS-station.png' : (stationType === 'METRO' ? '../../../assets/images/METRO-station.png' : '../../../assets/images/TRAM-station.png')),
         scale: 0.07
       }),
       text: new Text({
@@ -124,13 +182,29 @@ export class DisplayStationsComponent implements OnInit {
         })
       })
     });
+
     let busStation = new Feature({
       geometry: new Point(fromLonLat([lon, lat])),
       name: 'Station'
     });
+
     busStation.setStyle(busStationStyle);
     // add bus station to the layer
     this.vectorSource.addFeature(busStation);
   }
 
+  clearMap() {
+    // remove features from layer
+    this.vectorSource.clear();
+    
+  }
+
+  redrawMap() {
+    this.clearMap();
+    this.drawStations();
+  }
+
+  updateDisplay() {
+    
+  }
 }

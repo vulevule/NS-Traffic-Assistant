@@ -85,9 +85,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/ticket/monthReport").hasAuthority(Role.ADMIN.name())
 				.antMatchers("/station/create").hasAuthority(Role.ADMIN.name())
 				.antMatchers("/station/update").hasAuthority(Role.ADMIN.name())
-				.antMatchers("/station/delete/{id}").hasAuthority(Role.ADMIN.name())
+				.antMatchers("/station/delete/{id}").hasAuthority(Role.ADMIN.name());
 
-				.anyRequest().authenticated();
+				//.anyRequest().authenticated();
 
 				//if we use AngularJS on client side
 				//.and().csrf().csrfTokenRepository(csrfTokenRepository()); 

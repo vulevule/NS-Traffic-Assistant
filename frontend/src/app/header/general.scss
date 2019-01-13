@@ -1,5 +1,10 @@
 @import 'src/variables.scss';
 
+.title:hover {
+	cursor: pointer;
+	opacity: 0.8;
+}
+
 .userInfo {
 	padding-right: 10px;
 	text-align: right;

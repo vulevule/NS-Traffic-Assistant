@@ -1,7 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StationDTO } from 'src/app/model/StationDTO';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -30,12 +34,12 @@ export class StationServiceService {
     return this.http.get<StationDTO>('/api/station/getById/' + id);
   }
 
-  createStation(station:StationDTO) {
-    return this.http.post('/api/station/create', station);
+  createStation(station:StationDTO):Observable<StationDTO> {
+    return this.http.post<StationDTO>('/api/station/create', station);
   }
 
-  updateStation(station:StationDTO) {
-    return this.http.put('/api/station/update', station);
+  updateStation(station:StationDTO):Observable<StationDTO> {
+    return this.http.put<StationDTO>('/api/station/update', station);
   }
 
   deleteStation(id:any) {

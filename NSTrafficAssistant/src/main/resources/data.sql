@@ -107,14 +107,14 @@ values (34, 100, 2,3,1, 10, 5, 5 ,10);
 
 --stanice
 insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
-values(1, 'Bazar', 0, 19.0, 48.0, 1);
+values(1, 'Bazar', 0, 19.830287933873482, 45.26408747364272, 1);
 insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
-values(2, 'Bazar', 2, 19.0, 48.0, 1);
+values(2, 'Bazar', 2, 19.83210754551692, 45.26066810367371, 1);
 insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
-values(3, 'Bazar-Podhodnik', 1, 20.0, 48.0, 1);
+values(3, 'Bazar-Podhodnik', 1, 19.835214616439767, 45.255242602344424, 1);
 insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
-values(4, 'Narodnog Fronta', 0, 21.0, 48.0, 2);
+values(4, 'Narodnog Fronta', 0, 19.837051391077697, 45.25194354772586, 2);
 insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
-values(5, 'Zeleznicka', 0, 22.0, 48.0, 2);
+values(5, 'Zeleznicka', 0, 19.839197158813473, 45.24794333819497, 2);
 insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
-values(6, 'Balzakova', 1, 23.0, 48.0, 2);
+values(6, 'Balzakova', 1, 19.841394424962346, 45.243882414390214, 2);

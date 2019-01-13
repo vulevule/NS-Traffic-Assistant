@@ -1,6 +1,7 @@
 package com.team9.dto;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class LineDto {
@@ -8,7 +9,7 @@ public class LineDto {
 	private String name;
 	private String trafficType;
 	private String trafficZone;
-	private Collection<StationLineDto> stations;
+	private ArrayList<StationLineDto> stations;
 	private Collection<Time> timeTableItems;
 	
 	public String getName() {
@@ -32,7 +33,7 @@ public class LineDto {
 	public Collection<StationLineDto> getStations() {
 		return stations;
 	}
-	public void setStations(Collection<StationLineDto> stations) {
+	public void setStations(ArrayList<StationLineDto> stations) {
 		this.stations = stations;
 	}
 	public Collection<Time> getTimeTableItems() {
