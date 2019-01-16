@@ -1,48 +1,86 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { StationDTO } from 'src/app/model/StationDTO';
-
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { StationDTO } from "src/app/model/StationDTO";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class StationServiceService {
+  private headers = new HttpHeaders({ "Content-Type": "application/json" });
+  private stationsUrl = "/api/station";
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getAll():Observable<StationDTO[]> {
-    return this.http.get<StationDTO[]>('/api/station/getAll');
+  getAll(): Promise<StationDTO[]> {
+    return this.http
+      .get<StationDTO[]>(`${this.stationsUrl}/getAll`)
+      .toPromise()
+      .then(response => response as StationDTO[])
+      .catch(this.handleError);
   }
 
-  getAllByType(type:String):Observable<StationDTO[]> {
-    return this.http.get<StationDTO[]>('/api/station/getAllByType/' + type);
+  getAllByType(type: String): Promise<StationDTO[]> {
+    return this.http
+      .get<StationDTO[]>(`${this.stationsUrl}/getAllByType/${type}`)
+      .toPromise()
+      .then(response => response as StationDTO[])
+      .catch(this.handleError);
   }
 
-  getAllByLine(id:any):Observable<StationDTO[]> {
-    return this.http.get<StationDTO[]>('/api/station/getAllByLine/' + id);
+  getAllByLine(id: any): Promise<StationDTO[]> {
+    return this.http
+      .get<StationDTO[]>(`${this.stationsUrl}/getAllByLine/${id}`)
+      .toPromise()
+      .then(response => response as StationDTO[])
+      .catch(this.handleError);
   }
 
-  getByNameAndType(name:String, type:String):Observable<StationDTO> {
-    return this.http.get<StationDTO>('/api/station/getByNameAndType/' + name + '/' + type);
+  getByNameAndType(name: String, type: String): Promise<StationDTO> {
+    return this.http
+      .get<StationDTO>(`${this.stationsUrl}/getByNameAndType/${name}/${type}`)
+      .toPromise()
+      .then(response => response as StationDTO)
+      .catch(this.handleError);
   }
 
-  getById(id:any):Observable<StationDTO> {
-    return this.http.get<StationDTO>('/api/station/getById/' + id);
+  getById(id: any): Promise<StationDTO> {
+    return this.http
+      .get<StationDTO>(`${this.stationsUrl}/getById/${id}`)
+      .toPromise()
+      .then(response => response as StationDTO)
+      .catch(this.handleError);
   }
 
-  createStation(station:StationDTO):Observable<StationDTO> {
-    return this.http.post<StationDTO>('/api/station/create', station);
+  createStation(station: StationDTO): Promise<StationDTO> {
+    return this.http
+      .post<StationDTO>(`${this.stationsUrl}/create`, JSON.stringify(station), {
+        headers: this.headers
+      })
+      .toPromise()
+      .then(response => response as StationDTO)
+      .catch(this.handleError);
   }
 
-  updateStation(station:StationDTO):Observable<StationDTO> {
-    return this.http.put<StationDTO>('/api/station/update', station);
+  updateStation(station: StationDTO): Promise<StationDTO> {
+    return this.http
+      .put<StationDTO>(`${this.stationsUrl}/update`, JSON.stringify(station), {
+        headers: this.headers
+      })
+      .toPromise()
+      .then(response => response as StationDTO)
+      .catch(this.handleError);
   }
 
-  deleteStation(id:any) {
-    return this.http.delete('/api/station/delete/' + id);
+  deleteStation(id: any): Promise<{}> {
+    return this.http
+      .delete(`${this.stationsUrl}/delete/${id}`)
+      .toPromise()
+      .catch(this.handleError);
+  }
+
+  handleError(error: any): Promise<any> {
+    console.error("Error... ", error);
+    return Promise.reject(error.message || error);
   }
 }

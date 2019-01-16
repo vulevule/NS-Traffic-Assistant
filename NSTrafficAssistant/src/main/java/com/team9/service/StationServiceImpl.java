@@ -39,6 +39,10 @@ public class StationServiceImpl implements StationService {
 		if (find == null) {
 			Station station = new Station(s.getName(), s.getType(), s.getxCoordinate(), s.getyCoordinate(), null, null);
 			Address findAddress = addressRepository.findByStreetAndCityAndZip(s.getAddressName(), s.getAddressCity(), s.getAddressZip());
+			if (findAddress == null) {
+				findAddress = new Address(s.getAddressName(), s.getAddressCity(), s.getAddressZip(), null, null);
+				addressRepository.save(findAddress);
+			}
 			station.setAddress(findAddress);
 			
 			return stationRepository.save(station);

@@ -21,6 +21,7 @@ import Text from 'ol/style/Text';
 import Fill from 'ol/style/Fill';
 import { Observable } from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import { Station } from 'src/app/model/Station';
 
 @Component({
   selector: 'app-display-stations',
@@ -49,6 +50,11 @@ export class DisplayStationsComponent implements OnInit {
     metro: true
   }
 
+  newStation: StationDTO;
+  editStation: StationDTO;
+
+  activeTabId: String;
+
   // Novi Sad coordinates
   latitude: number = 45.26060794;
   longitude: number = 19.83221305;
@@ -67,11 +73,12 @@ export class DisplayStationsComponent implements OnInit {
     this.stations = [];
     this.searchStations = [];
     this.markerOnMap = '';
-    this.currentMarker = null;
-    await this.stationService.getAll().toPromise().then(data => {
-      this.stations = data;
-      this.searchStations = data;
-    });
+    this.currentMarker = undefined;
+    this.newStation = new StationDTO();
+    this.newStation.type = "BUS";
+    this.editStation = undefined;
+    
+    await this.getData();
 
     // Latitude - Y
     // Longitude - X
@@ -100,18 +107,71 @@ export class DisplayStationsComponent implements OnInit {
       vm.drawMarker(args.coordinate);
       var lonlat = transform(args.coordinate, 'EPSG:3857', 'EPSG:4326');
       vm.markerOnMap = lonlat;
-      
     });
     console.log("CRTAM " + this.stations.length + " STANICA");
     this.drawStations();
   }
 
-  deleteStation(station: StationDTO) {
-    alert(`You are about to delete ${station.name} station.`);
+  async getData() {
+    await this.stationService.getAll().then(data => {
+      this.stations = data;
+      this.searchStations = data;
+    });
+  }
+
+  async updateStation(station: StationDTO) {
+    station.xCoordinate = this.markerOnMap[0];
+    station.yCoordinate = this.markerOnMap[1];
+
+    await this.stationService.updateStation(station).then(data => {
+      
+      alert(`Station ${data.name} updated!`);
+    }, reason => {
+      alert("Station with this id does not exist!");
+    });
+
+    this.selectedStation = station;
+    this.editStation = undefined;
+    await this.getData();
+    this.drawStations();
+  }
+
+  async deleteStation(station: StationDTO) {
+    if(confirm(`You are about to delete ${station.name} station.\nAre you sure?`)) {
+      await this.stationService.deleteStation(station.id).then(data => {
+        
+        alert(`Station deleted!`);
+      }, reason => {
+        alert("Station with this id is not found!");
+      });
+
+      this.selectedStation = undefined;
+      await this.getData();
+      this.drawStations();
+    }
+  }
+
+  async createStation(station: StationDTO) {
+    station.xCoordinate = this.markerOnMap[0];
+    station.yCoordinate = this.markerOnMap[1];
+    station.lines = [];
+    
+    await this.stationService.createStation(station).then(data => {
+      
+      alert(`Station ${data.name} created!`);
+    }, reason => {
+      alert("Station with this name and type already exists!");
+    });
+
+    await this.getData();
+    this.drawStations();
+    
+    this.activeTabId = "displayStationsTab";
   }
 
   selectStation(station: StationDTO) {
     this.selectedStation = station;
+    this.editStation = undefined;
     this.positionOnMap(station);
   }
 
@@ -121,7 +181,9 @@ export class DisplayStationsComponent implements OnInit {
   }
 
   drawStations() {
-    this.searchStations.forEach((station) => {
+    this.clearMap();
+
+    this.stations.forEach((station) => {
       this.drawStation(station.xCoordinate, station.yCoordinate, station.name, station.type);
     });
   }
@@ -206,5 +268,23 @@ export class DisplayStationsComponent implements OnInit {
 
   updateDisplay() {
     
+  }
+
+  tabChange() {
+    this.newStation = new StationDTO();
+    this.newStation.type = "BUS";
+    this.markerOnMap = [];
+    if(this.currentMarker) {
+      this.vectorSource.removeFeature(this.currentMarker);
+    }
+    this.currentMarker = undefined;
+  }
+
+  removeMarkers() {
+    this.markerOnMap = [];
+    if(this.currentMarker) {
+      this.vectorSource.removeFeature(this.currentMarker);
+    }
+    this.currentMarker = undefined;
   }
 }
