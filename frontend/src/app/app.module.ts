@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FilterByTypePipe } from './stations/display-stations/pipes/filter-by-type.pipe';
 import { FilterByNamePipe } from './stations/display-stations/pipes/filter-by-name.pipe';
 import { FilterByAddressPipe } from './stations/display-stations/pipes/filter-by-address.pipe';
+import { TicketComponent } from './ticket/ticket.component';
 
 
 
@@ -25,7 +26,8 @@ const appRoutes: Routes = [
     component: MainPageComponent,
     children: [
       { path: 'displaystations', component: DisplayStationsComponent, outlet: "secondary"},
-      { path: 'login', component: LoginPageComponent, outlet: "primary"}
+      { path: 'login', component: LoginPageComponent, outlet: "primary"},
+      { path: 'tickets', component : TicketComponent, outlet: "secondary"}
     ] 
   },
   { path: 'login',      component: LoginPageComponent },
@@ -46,6 +48,7 @@ const appRoutes: Routes = [
     FilterByTypePipe,
     FilterByNamePipe,
     FilterByAddressPipe,
+    TicketComponent,
   ],
   imports: [
     NgbModule,

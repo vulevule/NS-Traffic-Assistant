@@ -1,7 +1,7 @@
 <div class="menu">
   <ul class="nav">
     <li ngbDropdown class="nav-item">
-        <a class="nav-link btn" id="stationsDropdown" ngbDropdownToggle>Stations</a>
+        <a class="nav-item btn" id="stationsDropdown" ngbDropdownToggle>Stations</a>
         <div ngbDropdownMenu aria-labelledby="stationsDropdown">
           <button class="dropdown-item" (click)="router.navigate(['/main', {outlets: { 'secondary': 'displaystations'}}])">Display all</button>
           <button class="dropdown-item">Add new</button>
@@ -10,7 +10,7 @@
     </li>
 
     <li ngbDropdown class="nav-item">
-      <a class="nav-link btn" id="linesDropdown" ngbDropdownToggle>Lines</a>
+      <a class="nav-item btn" id="linesDropdown" ngbDropdownToggle>Lines</a>
       <div ngbDropdownMenu aria-labelledby="linesDropdown">
         <button class="dropdown-item">Display all</button>
         <button class="dropdown-item">Add new</button>
@@ -18,9 +18,9 @@
     </li>
     
     <li ngbDropdown class="nav-item">
-      <a class="nav-link btn" id="ticketsDropdown" ngbDropdownToggle>Tickets</a>
+      <a class="nav-item btn" id="ticketsDropdown" >Tickets</a>
       <div ngbDropdownMenu aria-labelledby="ticketsDropdown">
-        <button class="dropdown-item">My Tickets</button>
+        <button class="dropdown-item" (click) = "router.navigate(['/main', {outlets:{ 'secondary' : tickets'}}])">My Tickets</button>
         <button class="dropdown-item">Add new station</button>
       </div>     
     </li>
