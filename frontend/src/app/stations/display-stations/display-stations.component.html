@@ -1,7 +1,7 @@
 <div class="displayStationsContainer row content">
   <div class="col-12 col-md-3 sidebar-content">
-    <ngb-tabset>
-      <ngb-tab title="Display stations">
+    <ngb-tabset (tabChange)="tabChange()" [activeId]="activeTabId">
+      <ngb-tab title="Display stations" id="displayStationsTab">
         <ng-template ngbTabContent>
           <label class="col-12 col-form-label">
             Currently we have {{ stations.length }} stations in total.
@@ -94,11 +94,15 @@
             </div>
           </form>
 
-          <div id="stationCollapseArea" *ngIf="selectedStation">
+          <div id="stationCollapseArea" *ngIf="selectedStation && !editStation">
             <label>Selected station: </label>
-            <button class="close" title="Close" (click)="selectedStation = null">
-                x
-              </button>
+            <button
+              class="close"
+              title="Close"
+              (click)="selectedStation = undefined"
+            >
+              x
+            </button>
             <div class="card">
               <div class="card-body">
                 <p>Name: {{ selectedStation ? selectedStation.name : "" }}</p>
@@ -109,7 +113,112 @@
                 </p>
               </div>
 
-              <button type="button" class="btn btn-danger" (click)="deleteStation(selectedStation)">Delete</button>
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary"
+                  (click)="editStation = selectedStation; markerOnMap = [editStation.xCoordinate, editStation.yCoordinate]"
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="deleteStation(selectedStation)"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="stationCollapseArea" *ngIf="editStation">
+            <label>Edit station: </label>
+            <button
+              class="close"
+              title="Close"
+              (click)="editStation = undefined; removeMarkers()"
+            >
+              x
+            </button>
+            <div class="card">
+              <div class="card-body">
+                <p>Type: {{ editStation ? editStation.type : "" }}</p>
+                <div class="search-item">
+                  <label class="col-form-label"> Name: </label>
+
+                  <input
+                    #stnameEdit
+                    type="text"
+                    id="stnameEdit"
+                    class="form-control"
+                    name="stnameEdit"
+                    placeholder="Enter station name"
+                    [(ngModel)]="editStation.name"
+                  />
+                </div>
+
+                <div class="search-item">
+                  <label class="col-form-label"> Address: </label>
+                  <input
+                    type="text"
+                    id="streetEdit"
+                    class="form-control"
+                    name="street"
+                    placeholder="Enter street"
+                    [(ngModel)]="editStation.addressName"
+                  />
+
+                  <input
+                    type="text"
+                    id="cityEdit"
+                    class="form-control"
+                    name="streetEdit"
+                    placeholder="Enter city"
+                    [(ngModel)]="editStation.addressCity"
+                  />
+
+                  <input
+                    type="number"
+                    id="zipEdit"
+                    class="form-control"
+                    name="streetEdit"
+                    placeholder="Enter zip"
+                    [(ngModel)]="editStation.addressZip"
+                  />
+                </div>
+
+                <div class="search-item ">
+                  <label class="col-form-label"> Location: </label>
+                  <input
+                    #stlocEdit
+                    type="text"
+                    id="stlocEdit"
+                    readonly
+                    class="form-control"
+                    name="stlocEdit"
+                    [(ngModel)]="markerOnMap"
+                    placeholder="Choose location on map"
+                  />
+                </div>
+              </div>
+
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn"
+                  (click)="editStation = undefined; removeMarkers()"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="updateStation(editStation)"
+                >
+                  Save
+                </button>
+              </div>
             </div>
           </div>
 
@@ -143,7 +252,7 @@
         </ng-template>
       </ngb-tab>
 
-      <ngb-tab title="Create new">
+      <ngb-tab title="Create new" id="createStationTab">
         <ng-template ngbTabContent>
           <form #createForm="ngForm">
             <label class="col-12 col-form-label"
@@ -153,7 +262,7 @@
                 class="btn-group btn-group-toggle"
                 ngbRadioGroup
                 name="radioBasic"
-                [(ngModel)]="newStationType"
+                [(ngModel)]="newStation.type"
               >
                 <label ngbButtonLabel class="btn-primary">
                   <input ngbButton type="radio" value="BUS" /> Bus
@@ -178,6 +287,7 @@
                 class="form-control"
                 name="stnameNew"
                 placeholder="Enter station name"
+                [(ngModel)]="newStation.name"
               />
             </div>
 
@@ -191,22 +301,25 @@
                 class="form-control"
                 name="street"
                 placeholder="Enter street"
+                [(ngModel)]="newStation.addressName"
               />
 
               <input
                 type="text"
-                id="street"
+                id="city"
                 class="form-control"
                 name="street"
                 placeholder="Enter city"
+                [(ngModel)]="newStation.addressCity"
               />
 
               <input
                 type="number"
-                id="street"
+                id="zip"
                 class="form-control"
                 name="street"
                 placeholder="Enter zip"
+                [(ngModel)]="newStation.addressZip"
               />
             </div>
 
@@ -225,7 +338,16 @@
                 placeholder="Choose location on map"
               />
             </div>
+            <hr />
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              (click)="createStation(newStation)"
+            >
+              Create
+            </button>
           </form>
+          {{ newStation | json }}
         </ng-template>
       </ngb-tab>
     </ngb-tabset>
