@@ -103,7 +103,7 @@ public class StationServiceImpl implements StationService {
 	@Override
 	public List<Station> getAllByLine(Long lineId) {
 		Optional<Line> line = lineRepository.findById(lineId);
-		Set<StationLine> temp = line.get().getStations();
+		Set<StationLine> temp = (Set<StationLine>) line.get().getStations();
 		List<Station> retVal = new ArrayList<Station>();
 		
 		for(StationLine iter : temp) {
