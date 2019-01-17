@@ -18,6 +18,7 @@ import com.team9.exceptions.UserNotFoundException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
 import com.team9.exceptions.WrongTrafficZoneException;
+import com.team9.exceptions.ZonesDoNotMatchException;
 import com.team9.model.TimeTicketType;
 import com.team9.model.TrafficType;
 import com.team9.model.TrafficZone;
@@ -37,9 +38,9 @@ public interface TicketService {
 	String generateSerialNumber(TrafficType trafficType, TimeTicketType timeType, TrafficZone trafficZone,
 			UserTicketType ut);
 	
-	boolean useTicket(String serialNo, String username) throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException;
+	boolean useTicket(String serialNo, String username, String zone) throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException, WrongTrafficZoneException, ZonesDoNotMatchException;
 	
-	TicketReaderDto checkTicket(String serialNo, String username) throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException;
+	TicketReaderDto checkTicket(String serialNo, String username, String zone) throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException, WrongTrafficZoneException, ZonesDoNotMatchException;
 	
 	ReportDto getMonthReport(int month, int year) throws IllegalArgumentException;
 }

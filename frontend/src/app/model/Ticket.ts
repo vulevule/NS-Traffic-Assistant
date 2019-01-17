@@ -23,6 +23,7 @@ export class Ticket implements TicketInterface {
     expirationDate : Date;
     issueDate : Date;
     userTicketType : string;
+    serialNo : string;
 
     constructor(ticketCfg:TicketInterface)
     {
@@ -34,6 +35,7 @@ export class Ticket implements TicketInterface {
         this.userTicketType = ticketCfg.userTicketType;
         this.expirationDate = ticketCfg.expirationDate;
         this.issueDate = ticketCfg.issueDate;
+        this.serialNo = ticketCfg.serialNo;
     }
 }
 
@@ -46,4 +48,5 @@ interface TicketInterface{
     expirationDate? : Date;
     issueDate? : Date;
     userTicketType? : string;
+    serialNo? : string;
 }

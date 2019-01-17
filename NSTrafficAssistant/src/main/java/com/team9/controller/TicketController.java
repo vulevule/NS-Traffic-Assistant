@@ -31,6 +31,7 @@ import com.team9.exceptions.UserNotFoundException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
 import com.team9.exceptions.WrongTrafficZoneException;
+import com.team9.exceptions.ZonesDoNotMatchException;
 import com.team9.security.TokenUtils;
 import com.team9.service.TicketService;
 
@@ -145,13 +146,13 @@ public class TicketController {
 	}
 
 	@PutMapping(value = "/useTicket", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> useTicket(@RequestParam("serialNo") String serialNo, HttpServletRequest request) {
+	public ResponseEntity<String> useTicket(@RequestParam("serialNo") String serialNo, @RequestParam("zone") String zone,  HttpServletRequest request) {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
-		logger.info(">> use ticket with serial number: " + serialNo + "; user:  " + username);
+		logger.info(">> use ticket with serial number: " + serialNo + "; user:  " + username + "; zone: " + zone);
 		try {
-			boolean use = this.ticketService.useTicket(serialNo, username);
+			boolean use = this.ticketService.useTicket(serialNo, username, zone);
 			if (use == true) {
 				logger.info("<< successful use ticket");
 				return new ResponseEntity<String>("The ticket was successfully used", HttpStatus.OK);
@@ -171,20 +172,29 @@ public class TicketController {
 			// e.printStackTrace();
 			logger.info("ticket is not a valid");
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (WrongTrafficZoneException e) {
+			logger.info("<< use ticket: invalid zone ");
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (ZonesDoNotMatchException e) {
+			// TODO Auto-generated catch block
+			logger.info("<< use ticket: zone do not match");
+			//e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
 		}
 		return null;
 	}
 
 	@PutMapping(value = "/checkTicket", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> checkTicket(@RequestParam("serialNo") String serialNo,
+	public ResponseEntity<String> checkTicket(@RequestParam("serialNo") String serialNo, @RequestParam("zone") String zone,
 			HttpServletRequest request) {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
-		logger.info(">> check ticket with serial number: " + serialNo + "; inspector:  " + username);
+		logger.info(">> check ticket with serial number: " + serialNo + "; zone: " + zone + "; inspector:  " + username);
 
 		try {
-			TicketReaderDto t = this.ticketService.checkTicket(serialNo, username);
+			TicketReaderDto t = this.ticketService.checkTicket(serialNo, username, zone); 
 			logger.info("<< check ticket");
 			return new ResponseEntity<String>("The ticket was successfully checked", HttpStatus.OK);
 		} catch (TicketNotFound e) {
@@ -206,6 +216,15 @@ public class TicketController {
 			// TODO Auto-generated catch block
 			logger.info("<< check ticket : inspector not found");
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (WrongTrafficZoneException e) {
+			logger.info("<< check ticket: invalid zone ");
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (ZonesDoNotMatchException e) {
+			// TODO Auto-generated catch block
+			logger.info("<< check ticket: zone do not match");
+			//e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
 		}
 	}
 

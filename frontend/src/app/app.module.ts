@@ -17,7 +17,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { FilterByTypePipe } from './stations/display-stations/pipes/filter-by-type.pipe';
 import { FilterByNamePipe } from './stations/display-stations/pipes/filter-by-name.pipe';
 import { FilterByAddressPipe } from './stations/display-stations/pipes/filter-by-address.pipe';
-import { TicketComponent } from './ticket/ticket.component';
+import { TicketComponent } from './ticket/ticket/ticket.component';
+import { BuyTicketFormComponent } from './ticket/buy-ticket-form/buy-ticket-form.component';
+import { DisplayTicketComponent } from './ticket/display-ticket/display-ticket.component';
+import { SearchFormComponent } from './ticket/search-form/search-form.component';
+import { FilterByTrafficTypePipe } from './ticket/pipes/filter-by-traffic-type.pipe';
 
 
 
@@ -27,8 +31,8 @@ const appRoutes: Routes = [
     children: [
       { path: 'displaystations', component: DisplayStationsComponent, outlet: "secondary"},
       { path: 'login', component: LoginPageComponent, outlet: "primary"},
-      { path: 'tickets', component : TicketComponent, outlet: "secondary"}
-    ] 
+      { path : 'ticket' , component : TicketComponent, outlet:"secondary"}
+  ] 
   },
   { path: 'login',      component: LoginPageComponent },
   { path: '', redirectTo: '/main', pathMatch: 'full'},
@@ -49,6 +53,10 @@ const appRoutes: Routes = [
     FilterByNamePipe,
     FilterByAddressPipe,
     TicketComponent,
+    BuyTicketFormComponent,
+    DisplayTicketComponent,
+    SearchFormComponent,
+    FilterByTrafficTypePipe,
   ],
   imports: [
     NgbModule,
