@@ -1,5 +1,6 @@
 <div class="menu">
   <ul class="nav">
+
     <li class="nav-item">
       <a
         class="nav-link btn"
@@ -10,24 +11,20 @@
             { outlets: { secondary: 'displaystations' } }
           ])
         "
-        >Stations</a
-      >
+        >Stations</a>
     </li>
 
     <li ngbDropdown class="nav-item">
-      <a class="nav-link btn" id="linesDropdown" ngbDropdownToggle>Lines</a>
+      <a class="nav-item btn" id="linesDropdown" ngbDropdownToggle>Lines</a>
       <div ngbDropdownMenu aria-labelledby="linesDropdown">
         <button class="dropdown-item">Display all</button>
         <button class="dropdown-item">Add new</button>
       </div>
     </li>
 
-    <li ngbDropdown class="nav-item">
-      <a class="nav-link btn" id="ticketsDropdown" ngbDropdownToggle>Tickets</a>
-      <div ngbDropdownMenu aria-labelledby="ticketsDropdown">
-        <button class="dropdown-item">My Tickets</button>
-        <button class="dropdown-item">Add new station</button>
-      </div>
+    <li  class="nav-item">
+      <a class="nav-link btn" id="ticketsDropdown" (click)="router.navigate(['/main', {outlets : {secondary: 'ticket'}}])">Tickets</a>
+      
     </li>
   </ul>
 </div>

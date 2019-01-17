@@ -1,0 +1,69 @@
+<!-- forma za pretragu svih karata po izabranom kriterijum-->
+<div class="displayTicket row content">
+  <div class="col-12 col-md-3 sidebar-content">
+  <form #directionsForm="ngForm">
+    <label class="col-12 col-form-label">Traffic type:
+
+      <div class="btn-group btn-group-toggle" (click)=search()>
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" ngbButton name="displayBus" />
+          Bus
+        </label>
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" ngbButton name="displayMetro" />
+          Metro
+        </label>
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" ngbButton name="displayTram" />
+          Tram
+        </label>
+      </div>
+    </label>
+
+
+    <label class="col-12 col-form-label">Traffic zone:
+
+      <div class="btn-group btn-group-toggle">
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" ngbButton name="displayFirst" />
+          First
+        </label>
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" ngbButton name="displaySecond" />
+          Second
+        </label>
+      </div>
+    </label>
+
+    <label class="col-12 col-form-label">Ticket time:
+
+      <div class="btn-group btn-group-toggle">
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" ngbButton name="displayAnnual" />
+          Annual
+        </label>
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" ngbButton name="displayMonth" />
+          Month
+        </label>
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" ngbButton name="displaySingle" />
+          Single
+        </label>
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" ngbButton name="displayDaily" />
+          Daily
+        </label>
+      </div>
+    </label>
+
+  </form>
+  </div>
+
+  <div class="col-12 col-md-9 map-content">
+    <div id="map" class="map">
+      <div *ngFor="let t of tickets"> <app-display-ticket [ticket]="t"></app-display-ticket></div>
+    </div>
+  </div>
+
+</div>

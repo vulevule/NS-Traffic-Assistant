@@ -1,0 +1,84 @@
+<!-- forma za kupovinu karte-->
+<div class="displayTicket row content">
+  <div class="col-12 col-md-3 sidebar-content">
+
+    <form #createForm="ngForm">
+      <!-- traffic type -->
+      <label class="col-12 col-form-label">Traffic type:
+
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="buyTicket.trafficType"
+          (click)="getPrice()">
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="BUS" /> Bus
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="TRAM" /> Tram
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="METRO" /> Metro
+          </label>
+        </div>
+      </label>
+
+      <!-- zone -->
+      <label class="col-12 col-form-label">Traffic:
+
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="buyTicket.trafficZone"
+          (click)="getPrice()">
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="FIRST" /> First
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="SECOND" /> Second
+          </label>
+        </div>
+      </label>
+
+      <!-- time -->
+      <label class="col-12 col-form-label">Ticket time:
+
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="buyTicket.ticketTime"
+          (click)="getPrice()">
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="ANNUAL" /> Annual
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="MONTH" /> Month
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="SINGLE" /> Single
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="DAILY" /> Daily
+          </label>
+        </div>
+      </label>
+
+      <!-- price -->
+      <label class="col-12 col-form-label"> Price:
+        <div class="search-item">
+          <input #staddress type="text" id="staddress" class="form-control" name="staddress" readonly [(ngModel)]="buyTicket.price" />
+        </div>
+      </label>
+
+
+      <button type="button" class="btn btn-outline-primary" (click)="buy()">
+        Buy
+      </button>
+    </form>
+
+
+    <p> Selected is: traffic type: {{buyTicket.trafficType}}
+      traffic zone : {{buyTicket.trafficZone}}
+      ticket time : {{ buyTicket.ticketTime}}
+    </p>
+
+  </div>
+
+  <div class="col-12 col-md-9 map-content">
+    <div id="map" class="map">
+      <p> {{message}}</p>
+      <div *ngIf= "ticket != undefined"> <app-display-ticket  [ticket]="ticket"> </app-display-ticket></div>
+    </div>
+  </div>
+</div>

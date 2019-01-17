@@ -65,6 +65,7 @@ public class StationController {
 		
 	}
 
+
 	@GetMapping(value="/station/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<StationDTO>> getAll(){
 		logger.info(">> get all stations");

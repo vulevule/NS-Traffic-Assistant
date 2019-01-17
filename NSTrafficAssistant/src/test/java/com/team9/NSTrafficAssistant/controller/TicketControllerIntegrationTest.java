@@ -192,7 +192,8 @@ public class TicketControllerIntegrationTest {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 
 		String serialNo = "BMSKK88778";
-		ResponseEntity<String> result = restTemplate.exchange("/ticket/useTicket?serialNo=" + serialNo, HttpMethod.PUT,
+		String zone = "second";
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/useTicket?serialNo=" + serialNo + "&zone=" + zone, HttpMethod.PUT,
 				httpEntity, String.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
@@ -207,7 +208,8 @@ public class TicketControllerIntegrationTest {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 
 		String serialNo = "BMFS12121212024";
-		ResponseEntity<String> result = restTemplate.exchange("/ticket/useTicket?serialNo=" + serialNo, HttpMethod.PUT,
+		String zone = "first";
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/useTicket?serialNo=" + serialNo + "&zone=" + zone, HttpMethod.PUT,
 				httpEntity, String.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
@@ -220,9 +222,9 @@ public class TicketControllerIntegrationTest {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_passenger_no_active);
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
-
+		String zone = "first";
 		String serialNo = "BMFS12121212025";
-		ResponseEntity<String> result = restTemplate.exchange("/ticket/useTicket?serialNo=" + serialNo, HttpMethod.PUT,
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/useTicket?serialNo=" + serialNo + "&zone=" + zone, HttpMethod.PUT,
 				httpEntity, String.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
@@ -238,8 +240,9 @@ public class TicketControllerIntegrationTest {
 		headers.add("X-Auth-Token", token_passenger_no_active);
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 
+		String zone = "first";
 		String serialNo = "BMFS12121212023";
-		ResponseEntity<String> result = restTemplate.exchange("/ticket/useTicket?serialNo=" + serialNo, HttpMethod.PUT,
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/useTicket?serialNo=" + serialNo + "&zone=" + zone, HttpMethod.PUT,
 				httpEntity, String.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.OK);
@@ -262,26 +265,62 @@ public class TicketControllerIntegrationTest {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 
 		String serialNo = "BMFS12121212000";
-		ResponseEntity<String> result = restTemplate.exchange("/ticket/useTicket?serialNo=" + serialNo, HttpMethod.PUT,
+		String zone = "first";
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/useTicket?serialNo=" + serialNo + "&zone=" + zone, HttpMethod.PUT,
 				httpEntity, String.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.OK);
 		assertTrue(result.getBody().equals("The ticket was successfully used"));
 
 	}
+	
+	//11. kada posaljemo pogresnu zonu 
+	@Test
+	public void test_useTicket_whenWrongZone() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Auth-Token", token_passenger_no_active);
+		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
+
+		String serialNo = "BMFS12121212000";
+		String zone = "f";
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/useTicket?serialNo=" + serialNo + "&zone=" + zone, HttpMethod.PUT,
+				httpEntity, String.class);
+
+		assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
+		assertTrue(result.getBody().equals("Incorect traffic zone: " + zone));
+
+	}
+	
+	//12. kada koristimo kartu u pogresnoj zoni
+	@Test
+	public void test_useTicket_whenZonesDoNotMatch() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Auth-Token", token_passenger_no_active);
+		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
+
+		String serialNo = "BMFS12121212000";
+		String zone = "second";
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/useTicket?serialNo=" + serialNo + "&zone=" + zone, HttpMethod.PUT,
+				httpEntity, String.class);
+
+		assertEquals(result.getStatusCode(), HttpStatus.CONFLICT);
+		assertTrue(result.getBody().equals("The ticket can be used in the zone for which it was purchased."));
+
+	}
 
 	/*
 	 * testiramo metodu check ticket
 	 */
-	// 11. kada karta ne postoji
+	// 13. kada karta ne postoji
 	@Test
 	public void test_checkTicket_whenTicketNotFound() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_inspector);
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 
+		String zone = "second";
 		String serialNo = "BMSKK88778";
-		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo,
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo + "&zone=" + zone,
 				HttpMethod.PUT, httpEntity, String.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
@@ -289,7 +328,7 @@ public class TicketControllerIntegrationTest {
 
 	}
 
-	// 12. single karta koja nije koriscena
+	// 14. single karta koja nije koriscena
 	@Test
 	public void test_checkTicket_whenTicketNotUse() {
 		/*
@@ -297,6 +336,7 @@ public class TicketControllerIntegrationTest {
 		 * 
 		 */
 		String serialNo = "BMFS12121212023";
+		String zone = "first";
 		Ticket t = this.repository.findBySerialNo(serialNo).get();
 		assertTrue(t.isUsed());
 		t.setUsed(false);
@@ -305,7 +345,7 @@ public class TicketControllerIntegrationTest {
 		headers.add("X-Auth-Token", token_inspector);
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 
-		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo,
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo + "&zone="+zone,
 				HttpMethod.PUT, httpEntity, String.class);
 
 		assertTrue(result.getStatusCode() == HttpStatus.BAD_REQUEST);
@@ -313,15 +353,16 @@ public class TicketControllerIntegrationTest {
 
 	}
 
-	// 13. karta koja je istekla
+	// 15. karta koja je istekla
 	@Test
 	public void test_checkTicket_whenTicketIsNotValid() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token_inspector);
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 
+		String zone = "first";
 		String serialNo = "BMFS12121212025";
-		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo,
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo + "&zone=" + zone,
 				HttpMethod.PUT, httpEntity, String.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.CONFLICT);
@@ -329,7 +370,7 @@ public class TicketControllerIntegrationTest {
 
 	}
 
-	// 14. kada je sve ok
+	// 16. kada je sve ok
 	@Test
 	public void test_checkTicket_OK() {
 		HttpHeaders headers = new HttpHeaders();
@@ -337,7 +378,8 @@ public class TicketControllerIntegrationTest {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 
 		String serialNo = "BMFS12121212000";
-		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo,
+		String zone = "first";
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo + "&zone="+ zone,
 				HttpMethod.PUT, httpEntity, String.class);
 
 		assertEquals(result.getStatusCode(), HttpStatus.OK);
@@ -350,12 +392,47 @@ public class TicketControllerIntegrationTest {
 		this.repository.save(t);
 
 	}
+	
+	//17. kada je pogresna vrednost zone
+	@Test
+	public void test_checkTicket_whenWrongZone() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Auth-Token", token_inspector);
+		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 
+		String serialNo = "BMFS12121212000";
+		String zone = "f";
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo + "&zone=" + zone, HttpMethod.PUT,
+				httpEntity, String.class);
+
+		assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
+		assertTrue(result.getBody().equals("Incorect traffic zone: " + zone));
+
+	}
+
+	
+	//18. kada je karta koriscena u pogresnoj zoni
+	
+	@Test
+	public void test_checkTicket_whenZonesDoNotMatch() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Auth-Token", token_inspector);
+		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
+
+		String serialNo = "BMFS12121212000";
+		String zone = "second";
+		ResponseEntity<String> result = restTemplate.exchange("/ticket/checkTicket?serialNo=" + serialNo + "&zone=" + zone, HttpMethod.PUT,
+				httpEntity, String.class);
+
+		assertEquals(result.getStatusCode(), HttpStatus.CONFLICT);
+		assertTrue(result.getBody().equals("The ticket with serialNo: " + serialNo + " was not used in the appropriate zone."));
+
+	}
 	/*
 	 * izvestaj
 	 */
 
-	// 15. kada pogresimo neki od parametara
+	// 19. kada pogresimo neki od parametara
 	@Test
 	@Transactional
 	@Rollback(true)
@@ -372,7 +449,7 @@ public class TicketControllerIntegrationTest {
 
 	}
 
-	// 16. svi parametri ok
+	// 20. svi parametri ok
 	@Test
 	@Transactional
 	@Rollback(true)
@@ -397,7 +474,7 @@ public class TicketControllerIntegrationTest {
 	/*
 	 * sad gledamo pravo pristupa
 	 */
-	// 17. admin kupuje kartu
+	// 21. admin kupuje kartu
 	@Test
 	@Transactional
 	@Rollback(true)
@@ -415,7 +492,7 @@ public class TicketControllerIntegrationTest {
 
 	}
 
-	// 18. inspektor kupuje kartu
+	// 22. inspektor kupuje kartu
 	@Test
 	@Transactional
 	@Rollback(true)
@@ -433,7 +510,7 @@ public class TicketControllerIntegrationTest {
 
 	}
 
-	// 19. putnik gleda izvestaj
+	// 23. putnik gleda izvestaj
 	@Test
 	@Transactional
 	@Rollback(true)
@@ -450,7 +527,7 @@ public class TicketControllerIntegrationTest {
 
 	}
 
-	// 20. inspektor gleda izvestaj
+	// 24. inspektor gleda izvestaj
 	@Test
 	@Transactional
 	@Rollback(true)
@@ -467,7 +544,7 @@ public class TicketControllerIntegrationTest {
 
 	}
 
-	// 21. admin upotrebljava kartu
+	// 25. admin upotrebljava kartu
 
 	@Test
 	@Transactional
@@ -485,7 +562,7 @@ public class TicketControllerIntegrationTest {
 
 	}
 
-	// 22. putnik pregleda kartu
+	// 26. putnik pregleda kartu
 	@Test
 	@Transactional
 	@Rollback(true)
