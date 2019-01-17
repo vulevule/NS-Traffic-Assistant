@@ -1,4 +1,4 @@
-import { Line } from './Line';
+import { LineDTO } from './LineDTO';
 import { Address } from './Address';
 
 export class Station {
@@ -7,6 +7,6 @@ export class Station {
     type: String;
     xCoordinate: Number;
     yCoordinate: Number;
-    lines: Line[];
+    lines: LineDTO[];
     address: Address
 }
