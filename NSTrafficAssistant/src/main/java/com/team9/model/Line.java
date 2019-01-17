@@ -35,13 +35,13 @@ public class Line implements Serializable{
 	private TrafficZone zone;
 	
 	//@Column(nullable = false)
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.LAZY)
 	private List<Location> route;
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	private Timetable timeTable;
 	
-	@OneToMany(fetch=FetchType.EAGER, mappedBy="line")
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="line")
 	private List<StationLine> stations;
 	
 	public Line() {}

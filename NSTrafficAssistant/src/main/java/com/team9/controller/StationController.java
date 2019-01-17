@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team9.dto.StationDTO;
+import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.StationAlreadyExistsException;
 import com.team9.exceptions.StationNotFoundException;
 import com.team9.model.Station;
@@ -50,12 +51,18 @@ public class StationController {
 	public ResponseEntity<List<StationDTO>> getAllByLine(@PathVariable Long lineId){
 		logger.info(">> get stations by line " + lineId);
 		
-		List<Station> stations = stationService.getAllByLine(lineId);
-		
-		List<StationDTO> retVal = convertStationsToDTO(stations);
+		List<Station> stations;
+		try {
+			stations = stationService.getAllByLine(lineId);
+			List<StationDTO> retVal = convertStationsToDTO(stations);
 
-		logger.info("<< get stations by line " + lineId);
-		return new ResponseEntity<>(retVal, HttpStatus.OK);
+			logger.info("<< get stations by line " + lineId);
+			return new ResponseEntity<>(retVal, HttpStatus.OK);
+		} catch (LineNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		
 	}
 	
 	@GetMapping(value="/station/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
