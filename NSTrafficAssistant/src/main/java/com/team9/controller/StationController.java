@@ -47,24 +47,23 @@ public class StationController {
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
 	
-/*	@GetMapping(value="/station/getAllByLine/{lineId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/station/getAllByLine/{lineId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<StationDTO>> getAllByLine(@PathVariable Long lineId){
 		logger.info(">> get stations by line " + lineId);
-	/*	
+
 		List<Station> stations;
 		try {
 			stations = stationService.getAllByLine(lineId);
+			List<StationDTO> retVal = convertStationsToDTO(stations);
+
+			logger.info("<< get stations by line " + lineId);
+			return new ResponseEntity<>(retVal, HttpStatus.OK);
 		} catch (LineNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		List<StationDTO> retVal = convertStationsToDTO(stations);
-
-		logger.info("<< get stations by line " + lineId);
-		return new ResponseEntity<>(retVal, HttpStatus.OK);
-		}*/
-	
+		
+	}
 	
 	@GetMapping(value="/station/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<StationDTO>> getAll(){
