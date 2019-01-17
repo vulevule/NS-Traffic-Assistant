@@ -3,6 +3,7 @@ package com.team9.service;
 import java.util.List;
 
 import com.team9.dto.StationDTO;
+import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.StationAlreadyExistsException;
 import com.team9.exceptions.StationNotFoundException;
 import com.team9.model.Station;
@@ -19,7 +20,7 @@ public interface StationService {
 	
 	List<Station> getAllByType(TrafficType t);
 	
-	List<Station> getAllByLine(Long lineId);
+	List<Station> getAllByLine(Long lineId) throws LineNotFoundException;
 	
 	List<Station> getByName(String name);
 	

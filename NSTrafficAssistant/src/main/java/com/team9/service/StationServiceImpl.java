@@ -1,15 +1,14 @@
 package com.team9.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.team9.dto.StationDTO;
+import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.StationAlreadyExistsException;
 import com.team9.exceptions.StationNotFoundException;
 import com.team9.model.Address;
@@ -101,17 +100,24 @@ public class StationServiceImpl implements StationService {
 	}
 
 	@Override
-	public List<Station> getAllByLine(Long lineId) {
-		Optional<Line> line = lineRepository.findById(lineId);
-		Set<StationLine> temp = (Set<StationLine>) line.get().getStations();
-		List<Station> retVal = new ArrayList<Station>();
-		
-		for(StationLine iter : temp) {
-			retVal.add(iter.getStation());
 
+	public List<Station> getAllByLine(Long lineId) throws LineNotFoundException {
+		Line line = lineRepository.findById(lineId).orElse(null);
+		if (line != null) {
+			List<StationLine> temp = line.getStations();
+			List<Station> retVal = new ArrayList<Station>();
+			
+			for(StationLine iter : temp) {
+				retVal.add(iter.getStation());
+
+
+			}
+			
+			return retVal;
+		} else {
+			throw new LineNotFoundException();
 		}
 		
-		return retVal;
 		
 	}
 
