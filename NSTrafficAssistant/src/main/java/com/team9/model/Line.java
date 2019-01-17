@@ -2,6 +2,7 @@ package com.team9.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -10,7 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -24,7 +25,7 @@ public class Line implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
 	private String name;
@@ -32,48 +33,43 @@ public class Line implements Serializable{
 	private TrafficType type;
 	@Column(nullable = false)
 	private TrafficZone zone;
-	@Column(nullable = false)
-	private boolean inUse;
-	@Column(nullable = false)
-	private ArrayList<String> route;
 	
-	//linija moze da pripada vise redova voznje, jedan red voznje moze da ima vise linija
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy="lines")
-	private Set<TimetableItem> timetableItems;
+	//@Column(nullable = false)
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<Location> route;
 	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="line")
-	private Set<StationLine> stations;
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	private Timetable timeTable;
+	
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="line")
+	private List<StationLine> stations;
 	
 	public Line() {}
-
-	public Line(String name, TrafficType type, TrafficZone zone, boolean inUse, ArrayList<String> route,
-			Set<TimetableItem> timetableItems, Set<StationLine> stations) {
+	
+	public Line(String name, TrafficType type, TrafficZone zone, List<Location> route, Timetable timeTable,
+			List<StationLine> stations) {
 		super();
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
-		this.inUse = inUse;
 		this.route = route;
-		this.timetableItems = timetableItems;
+		this.timeTable = timeTable;
 		this.stations = stations;
 	}
 
 
 
-	public Line(Long id, String name, TrafficType type, TrafficZone zone, boolean inUse, ArrayList<String> route,
-			Set<TimetableItem> timetableItems, Set<StationLine> stations) {
+	public Line(Long id, String name, TrafficType type, TrafficZone zone, List<Location> route, Timetable timeTable,
+			List<StationLine> stations) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
-		this.inUse = inUse;
 		this.route = route;
-		this.timetableItems = timetableItems;
+		this.timeTable = timeTable;
 		this.stations = stations;
 	}
-
-
 
 	public String getName() {
 		return name;
@@ -93,30 +89,15 @@ public class Line implements Serializable{
 	public void setZone(TrafficZone zone) {
 		this.zone = zone;
 	}
-	public Set<TimetableItem> getTimetableItems() {
-		return timetableItems;
-	}
-	public void setTimetableItems(Set<TimetableItem> timetableItems) {
-		this.timetableItems = timetableItems;
-	}
 	
-	public Set<StationLine> getStations() {
+	public List<StationLine> getStations() {
 		return stations;
 	}
 
-	public void setStations(Set<StationLine> stations) {
+	public void setStations(List<StationLine> stations) {
 		this.stations = stations;
 	}
 	
-	public boolean isInUse() {
-		return inUse;
-	}
-
-	public void setInUse(boolean inUse) {
-		this.inUse = inUse;
-	}
-
-
 	public Long getId() {
 		return id;
 	}
@@ -127,13 +108,21 @@ public class Line implements Serializable{
 	}
 
 
-	public ArrayList<String> getRoute() {
+	public List<Location> getRoute() {
 		return route;
 	}
 
 
-	public void setRoute(ArrayList<String> route) {
+	public void setRoute(List<Location> route) {
 		this.route = route;
+	}
+
+	public Timetable getTimeTable() {
+		return timeTable;
+	}
+
+	public void setTimeTable(Timetable timeTable) {
+		this.timeTable = timeTable;
 	}
 
 }

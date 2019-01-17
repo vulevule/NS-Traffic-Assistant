@@ -2,18 +2,19 @@ package com.team9.model;
 
 import java.io.Serializable;
 import java.sql.Time;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name="timetableItem")
@@ -27,26 +28,34 @@ public class TimetableItem implements Serializable {
 	private Long id;
 	@Column(nullable = false)
 	private Time startTime;
-
-	@ManyToMany(cascade={CascadeType.ALL})
-	@JoinTable(name = "timetableItem_line", joinColumns = {
-			@JoinColumn(name = "timetableItem_id") }, inverseJoinColumns = { @JoinColumn(name = "line_id") })
-	private Set<Line> lines;
+	@Column(nullable = false)
+	private TimeTableType type;
 	
-	public TimetableItem() {
+	@ManyToOne
+	@JoinColumn(name = "line_id")
+	private Line line;
+	
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "timetable_id", nullable = false)
+	private Timetable timeTable;
+	
+	public TimetableItem(Time startTime, TimeTableType type, Line line) {
+		this();
+		this.startTime = startTime;
+		this.type = type;
+		this.line = line;
 	}
 
-	public TimetableItem(Long id, Time startTime, Set<Line> lines) {
-		super();
+	public TimetableItem(Long id, Time startTime, TimeTableType type, Line line) {
+		this();
 		this.id = id;
 		this.startTime = startTime;
-		this.lines = lines;
+		this.type = type;
+		this.line = line;
 	}
 
-	public TimetableItem(Time startTime, Set<Line> lines) {
-		super();
-		this.startTime = startTime;
-		this.lines = lines;
+	public TimetableItem() {
 	}
 
 	public Long getId() {
@@ -65,13 +74,20 @@ public class TimetableItem implements Serializable {
 		this.startTime = startTime;
 	}
 
-	public Set<Line> getLines() {
-		return lines;
+	public TimeTableType getType() {
+		return type;
 	}
 
-	public void setLines(Set<Line> lines) {
-		this.lines = lines;
+	public void setType(TimeTableType type) {
+		this.type = type;
 	}
 
-	
+	public Line getLine() {
+		return line;
+	}
+
+	public void setLine(Line line) {
+		this.line = line;
+	}
+
 }

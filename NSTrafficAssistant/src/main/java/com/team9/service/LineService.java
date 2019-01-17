@@ -1,34 +1,33 @@
 package com.team9.service;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.team9.dto.LineDto;
-import com.team9.exceptions.StationNotFoundException;
-import com.team9.exceptions.WrongTrafficTypeException;
-import com.team9.exceptions.WrongTrafficZoneException;
+import com.team9.exceptions.LineAlreadyExistsException;
+import com.team9.exceptions.LineNotFoundException;
 import com.team9.model.Line;
-import com.team9.model.Station;
-import com.team9.model.TimetableItem;
 import com.team9.model.TrafficType;
 import com.team9.model.TrafficZone;
 
 public interface LineService {
 
-	boolean createLine(Line l);
+	Line createLine(LineDto l) throws LineAlreadyExistsException;
 	
-	Line updateLine(Line l);
+	Line updateLine(LineDto l) throws LineNotFoundException;
 	
-	boolean deleteLine(Line l);
+	boolean deleteLine(Long id) throws LineNotFoundException;
 	
-	Line getByName(String name);
+	List<Line> getAll();
 	
-	Collection<Line> getAllByTrafficType(TrafficType tt);
+	List<Line> getAllByName(String name);
 	
-	Collection<Line> getAllByTrafficZone(TrafficZone tz);
+	List<Line> getAllByTrafficType(TrafficType type);
 	
-	Collection<Line> getAllByStation(Station s);
+	List<Line> getAllByTrafficZone(TrafficZone zone);
 	
-	Collection<Line> getAllByTimetableItem(TimetableItem tti);
+	List<Line> getAllByStation(Long stationId);
 	
-	Line LineDtoToLine(LineDto ldto) throws WrongTrafficTypeException, WrongTrafficZoneException, StationNotFoundException;
+	Line getById(Long id);
+	
+	Line getByNameAndType(String name, TrafficType type);
 }

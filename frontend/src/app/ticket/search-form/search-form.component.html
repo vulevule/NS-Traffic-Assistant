@@ -4,7 +4,7 @@
   <form #directionsForm="ngForm">
     <label class="col-12 col-form-label">Traffic type:
 
-      <div class="btn-group btn-group-toggle">
+      <div class="btn-group btn-group-toggle" (click)=search()>
         <label class="btn-primary" ngbButtonLabel>
           <input type="checkbox" ngbButton name="displayBus" />
           Bus

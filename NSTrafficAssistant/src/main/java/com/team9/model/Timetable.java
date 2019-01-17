@@ -4,15 +4,13 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -26,28 +24,34 @@ public class Timetable implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column
+	@Column(nullable = false)
 	private Date expirationDate; 
-	@Column
+	@Column(nullable = false)
 	private Date issueDate;
+	//ima vise item-a, a item ima jedan timetable 
+	@OneToMany(fetch = FetchType.EAGER)
+	private Set<TimetableItem> items;
 	
-	//red voznje sadrzi vise stavki, stavka pripada u vise redova voznje
-	@ManyToMany(cascade={CascadeType.ALL})
-	@JoinTable(name = "workdayItems", joinColumns = {
-			@JoinColumn(name = "timetable_id") }, inverseJoinColumns = { @JoinColumn(name = "timetableItem_id") })
-	private Set<TimetableItem> workdayItems;
+	@Column (nullable = false)
+	private boolean activate;
 	
-	@ManyToMany(cascade={CascadeType.ALL})
-	@JoinTable(name = "saturdayItems", joinColumns = {
-			@JoinColumn(name = "timetable_id") }, inverseJoinColumns = { @JoinColumn(name = "timetableItem_id") })
-	private Set<TimetableItem> saturdayItems;
+	public Timetable() {}
 	
-	@ManyToMany(cascade={CascadeType.ALL})
-	@JoinTable(name = "sundayItems", joinColumns = {
-			@JoinColumn(name = "timetable_id") }, inverseJoinColumns = { @JoinColumn(name = "timetableItem_id") })
-	private Set<TimetableItem> sundayItems;
+	public Timetable(Long id, Date expirationDate, Date issueDate, Set<TimetableItem> items) {
+		this();
+		this.id = id;
+		this.expirationDate = expirationDate;
+		this.issueDate = issueDate;
+		this.items = items;
+	}
+	
+	public Timetable(Date expirationDate, Date issueDate, Set<TimetableItem> items) {
+		this();
+		this.expirationDate = expirationDate;
+		this.issueDate = issueDate;
+		this.items = items;
+	}
 
-	
 	public Long getId() {
 		return id;
 	}
@@ -65,6 +69,14 @@ public class Timetable implements Serializable {
 	}
 	public void setIssueDate(Date issueDate) {
 		this.issueDate = issueDate;
+	}
+
+	public Set<TimetableItem> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<TimetableItem> items) {
+		this.items = items;
 	}
 	
 	

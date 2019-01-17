@@ -1,24 +1,23 @@
 package com.team9.repository;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.team9.model.Line;
-import com.team9.model.Station;
-import com.team9.model.TimetableItem;
 import com.team9.model.TrafficType;
 import com.team9.model.TrafficZone;
 
 public interface LineRepository extends JpaRepository<Line, Long>{
+		
+	List<Line> findByName(String name);
 	
-	Line findByName(String name);
+	List<Line> findByType(TrafficType type);
 	
-	Collection<Line> getAllByType(TrafficType tt);
+	List<Line> findByZone(TrafficZone zone);
 	
-	Collection<Line> getAllByZone(TrafficZone tz);
+	Line findByNameAndType(String name, TrafficType type);
 	
-	Collection<Line> getAllByStations(Station s);
-	
-	Collection<Line> getAllByTimetableItems(TimetableItem tti);
+	Optional<Line> findById(Long id);
 }
