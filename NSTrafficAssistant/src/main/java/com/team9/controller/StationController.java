@@ -50,7 +50,7 @@ public class StationController {
 	@GetMapping(value="/station/getAllByLine/{lineId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<StationDTO>> getAllByLine(@PathVariable Long lineId){
 		logger.info(">> get stations by line " + lineId);
-
+		
 		List<Station> stations;
 		try {
 			stations = stationService.getAllByLine(lineId);
@@ -64,7 +64,8 @@ public class StationController {
 		
 		
 	}
-	
+
+
 	@GetMapping(value="/station/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<StationDTO>> getAll(){
 		logger.info(">> get all stations");
