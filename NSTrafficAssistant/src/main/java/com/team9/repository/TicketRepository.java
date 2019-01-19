@@ -15,5 +15,7 @@ public interface TicketRepository extends CrudRepository<Ticket, Long>{
 	
 
 	Optional<Ticket> findBySerialNo(String serialNo);
+	
+	Page<Ticket> findAll(Pageable page);
 }
 

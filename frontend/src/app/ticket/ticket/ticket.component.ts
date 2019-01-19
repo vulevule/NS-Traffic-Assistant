@@ -17,9 +17,5 @@ export class TicketComponent implements OnInit {
   ngOnInit() {
   }
 
-  displayTicket($event){
-    //prvi parametar je poslata vrednost iz potomka 
-    this.ticket = $event;
-  }
 
 }

@@ -47,6 +47,8 @@ export class AuthenticationService {
         return token ? token:"";    
     }
 
+    
+
     logout():void {
         localStorage.removeItem('currentUser');
 

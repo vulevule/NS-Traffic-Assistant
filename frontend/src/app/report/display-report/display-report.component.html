@@ -1,0 +1,68 @@
+<!-- ispisujemo izvestaj u vidu tabele-->
+
+<table>
+  <tr>
+    <th> </th>
+    <th> Regular </th>
+    <th> Student </th>
+    <th> Senior </th>
+    <th> Handicap </th>
+  </tr>
+  <tr>
+    <th> Annual </th>
+    <td> {{report.numOfRegularYearTicket}} </td>
+    <td> {{report.numOfStudentYearTicket}}</td>
+    <td> {{report.numOfSeniorYearTicket}}</td>
+    <td>  {{report.numOfHandycapYearTicket}}</td>
+  </tr>
+  <tr>
+    <th> Month </th>
+    <td> {{report.numOfRegularMonthTicket}} </td>
+    <td> {{report.numOfStudentMonthTicket}}</td>
+    <td> {{report.numOfSeniorMonthTicket}}</td>
+    <td>  {{report.numOfHandycapMonthTicket}}</td>
+  </tr>
+  <tr>
+    <th> Daily </th>
+    <td> {{report.numOfRegularDailyTicket}} </td>
+    <td> {{report.numOfStudentDailyTicket}}</td>
+    <td> {{report.numOfSeniorDailyTicket}}</td>
+    <td>  {{report.numOfHandycapDailyTicket}}</td>
+  </tr>
+  <tr>
+    <th> Single </th>
+    <td> {{report.numOfRegularSingleTicket}} </td>
+    <td> {{report.numOfStudentSingleTicket}}</td>
+    <td> {{report.numOfSeniorSingleTicket}}</td>
+    <td>  {{report.numOfHandycapSingleTicket}}</td>
+  </tr>
+
+  <tr>
+    <th colspan="4"> Money: </th>
+    <td> {{report.money}}</td>
+  </tr>
+
+</table>
+
+<table>
+  <tr>
+    <th> </th>
+    <th> Num of ticket</th>
+  </tr>
+  <tr>
+    <th> Bus</th>
+    <td> {{report.numOfBusTicket}}</td>
+  </tr>
+  <tr>
+    <th> Metro </th>
+    <td> {{report.numOfMetroTicket}}</td>
+  </tr>
+  <tr>
+    <th> Tram</th>
+    <td> {{report.numOfTramTicket}} </td>
+  </tr>
+  <tr>
+    <th> Total </th>
+    <td> {{total}}</td>
+  </tr>
+</table>

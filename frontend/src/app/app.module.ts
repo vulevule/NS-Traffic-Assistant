@@ -22,6 +22,12 @@ import { BuyTicketFormComponent } from './ticket/buy-ticket-form/buy-ticket-form
 import { DisplayTicketComponent } from './ticket/display-ticket/display-ticket.component';
 import { SearchFormComponent } from './ticket/search-form/search-form.component';
 import { FilterByTrafficTypePipe } from './ticket/pipes/filter-by-traffic-type.pipe';
+import { PricelistComponent } from './pricelist/pricelist/pricelist.component';
+import { DisplayPriceListComponent } from './pricelist/display-price-list/display-price-list.component';
+import { CreateNewPricelistComponent } from './pricelist/create-new-pricelist/create-new-pricelist.component';
+import { UseCheckTicketComponent } from './ticket/use-check-ticket/use-check-ticket.component';
+import { ReportComponent } from './report/report/report.component';
+import { DisplayReportComponent } from './report/display-report/display-report.component';
 
 
 
@@ -31,8 +37,10 @@ const appRoutes: Routes = [
     children: [
       { path: 'displaystations', component: DisplayStationsComponent, outlet: "secondary"},
       { path: 'login', component: LoginPageComponent, outlet: "primary"},
-      { path : 'ticket' , component : TicketComponent, outlet:"secondary"}
-  ] 
+      { path : 'ticket' , component : TicketComponent, outlet:"secondary"},
+      { path : 'pricelist', component : PricelistComponent, outlet : "secondary"},
+      { path : 'report', component : ReportComponent, outlet : "secondary"}
+      ] 
   },
   { path: 'login',      component: LoginPageComponent },
   { path: '', redirectTo: '/main', pathMatch: 'full'},
@@ -57,6 +65,12 @@ const appRoutes: Routes = [
     DisplayTicketComponent,
     SearchFormComponent,
     FilterByTrafficTypePipe,
+    PricelistComponent,
+    DisplayPriceListComponent,
+    CreateNewPricelistComponent,
+    UseCheckTicketComponent,
+    ReportComponent,
+    DisplayReportComponent,
   ],
   imports: [
     NgbModule,

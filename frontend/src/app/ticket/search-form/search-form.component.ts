@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Ticket } from 'src/app/model/Ticket';
+import { TicketServiceService } from 'src/app/services/ticket/ticket-service.service';
 
 @Component({
   selector: 'app-search-form',
@@ -8,44 +9,32 @@ import { Ticket } from 'src/app/model/Ticket';
 })
 export class SearchFormComponent implements OnInit {
 
-  tickets : Ticket[];
-  
+  tickets: Ticket[];
+  page : number;
+  numOfTicket : number;
 
-  constructor() { }
 
-  ngOnInit() {
-    this.tickets = [{
-      id: 12,
-      trafficType: 'BUS',
-      trafficZone: 'FIRST',
-      ticketTime: 'ANNUAL',
-      price: 12000,
-      userTicketType: 'STUDENT',
-      serialNo: 'JBHGHAGHD1215',
-      issueDate : new Date(),
-      expirationDate : new Date()
-    },{
-      id: 12,
-      trafficType: 'METRO',
-      trafficZone: 'FIRST',
-      ticketTime: 'ANNUAL',
-      price: 12000,
-      userTicketType: 'STUDENT',
-      serialNo: 'JBHGHAGHD1215',
-      issueDate : new Date(),
-      expirationDate : new Date()
-    },{
-      id: 12,
-      trafficType: 'TRAM',
-      trafficZone: 'FIRST',
-      ticketTime: 'ANNUAL',
-      price: 12000,
-      userTicketType: 'STUDENT',
-      serialNo: 'JBHGHAGHD1215',
-      issueDate : new Date(),
-      expirationDate : new Date()
-    }];
+  constructor(private ticketService: TicketServiceService) { }
+
+  async ngOnInit() {
+    this.page = 1;
+    await this.ticketService.getAll(this.page-1)
+      .then(data => {
+        this.tickets = data;
+      })
+
+    await this.ticketService.getNumOfTicket()
+    .then( data => {
+      this.numOfTicket = data;
+    })
+
   }
-    
 
+  async changePage(){
+    await this.ticketService.getAll(this.page-1)
+      .then(data => {
+        this.tickets = data;
+      })
+  }
 }
+

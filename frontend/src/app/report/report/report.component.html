@@ -1,0 +1,63 @@
+<!-- ovde cemo napraviti formu za izbor izvestaja, bira se vrsta, mesec i godina-->
+
+<div class="displayTicket row content">
+  <div class="col-12 col-md-3 sidebar-content">
+
+    <form #createForm="ngForm">
+
+      <label class="col-12 col-form-label"> Report type:
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="type">
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="MONTH" /> Month
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="YEAR" /> Year
+          </label>
+        </div>
+      </label>
+
+
+      <label for="typeahead-focus" class="col-12 col-form-label" *ngIf="type === 'MONTH'"> Month:
+        <input  #month
+        type="text"
+        id="month"
+        class="form-control"
+        name="month"
+        [(ngModel)]="model"
+        [ngbTypeahead]="search"
+           />
+      </label>
+
+      <label class="col-12 col-form-label"> Year: 
+        <input #staddress type="text" id="staddress" class="form-control" name="staddress" [(ngModel)]="year" />
+      </label>
+
+
+      <button type="button" class="btn btn-outline-primary" (click)="getReport()">
+        OK
+      </button>
+
+    </form>
+
+    <hr>
+    <pre> type : {{type}}</pre>
+    <pre> model : {{model}}</pre>
+    <pre> year : {{year}}</pre>
+
+  </div>
+  <div class="col-12 col-md-9 map-content">
+    <div id="map" class="map">
+      <p *ngIf="message !== ''">
+        <ngb-alert [type]="errorType" [dismissible]="false">{{ message }}</ngb-alert>
+      </p>
+      <!--pozovemo komponentu za ispis izvestaja -->
+      <div *ngIf="report !== undefined  && report.money !== 0">
+        <pre *ngIf="type === 'MONTH'"> Month report: {{model}} , {{year}} </pre>
+        <pre *ngIf="type ==='YEAR'"> Year report: {{year}}</pre>
+        <app-display-report [report]="report"></app-display-report>
+      </div>
+
+      <!--ako postoji izvestaj a cena je 0, onda prikazemo div da ne postoji izvestaj za trazeni period-->
+    </div>
+  </div>
+</div>

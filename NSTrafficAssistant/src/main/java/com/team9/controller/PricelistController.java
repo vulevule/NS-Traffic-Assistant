@@ -35,54 +35,54 @@ public class PricelistController {
 	private PriceListService pricelistService;
 
 	@PostMapping(value = "/addPricelist", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> addPricelist(@RequestBody PricelistDto pricelist) {
+	public ResponseEntity<String> addPricelist(@RequestBody PricelistDto pricelist) {
 		logger.info(">> add pricelist: ");
 		PricelistReaderDto pl = null;
 		try {
 			pl = this.pricelistService.addPricelist(pricelist);
 			logger.info("<< add pricelist");
-			return new ResponseEntity<Object>(pl, HttpStatus.CREATED);
+			return new ResponseEntity<String>("The price list has been successfully added!", HttpStatus.CREATED);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			logger.info("<< parse exception");
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (NotFoundActivePricelistException e) {
 			// TODO Auto-generated catch block
 			logger.info("<< does not found active pricelist");
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (PriceItemAlreadyExistsException e) {
 			// TODO Auto-generated catch block
 			logger.info("<< double price item in pricelist");
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (PriceLessThanZeroException e) {
 			// TODO Auto-generated catch block
 			logger.info("<< price less than zero exception");
-			return new ResponseEntity<Object>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		
 		} catch (WrongTrafficTypeException e) {
 			// TODO Auto-generated catch block
 			logger.info(e.getMessage());
 			logger.info("<< wrong traffic ticket type");
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (WrongTicketTimeException e) {
 			// TODO Auto-generated catch block
 			logger.info("<< wrong ticket time");
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (WrongTrafficZoneException e) {
 			// TODO Auto-generated catch block
 			logger.info("<< wrong traffic zone");
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (WrongDiscountException e) {
 			// TODO Auto-generated catch block
 			
 			logger.info("<< wrong discount");
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (WrongNumberOfPriceItemException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 			logger.info("<< wrong number of price items in pricelist");
-			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		
 

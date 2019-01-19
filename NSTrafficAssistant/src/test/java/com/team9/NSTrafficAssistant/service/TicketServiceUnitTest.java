@@ -32,6 +32,7 @@ import com.team9.exceptions.TicketIsNotUseException;
 import com.team9.exceptions.TicketIsNotValidException;
 import com.team9.exceptions.TicketNotFound;
 import com.team9.exceptions.UserNotFoundException;
+import com.team9.exceptions.WrongReportTypeException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
 import com.team9.exceptions.WrongTrafficZoneException;
@@ -431,23 +432,23 @@ public class TicketServiceUnitTest {
 	 */
 	// kada format meseca nije dobar
 	@Test(expected = IllegalArgumentException.class)
-	public void test_monthReports_whenMonthNotCorrect() {
-		ReportDto result = this.ticketService.getMonthReport(0, 2018);
+	public void test_monthReports_whenMonthNotCorrect() throws IllegalArgumentException, WrongReportTypeException {
+		ReportDto result = this.ticketService.getReport(0, 2018, "MONTH");
 
 	}
 
 	// pogresna godina
 	@Test(expected = IllegalArgumentException.class)
-	public void test_monthReports_whenYearNotCorrect() {
-		ReportDto result = this.ticketService.getMonthReport(1, 2020);
+	public void test_monthReports_whenYearNotCorrect() throws IllegalArgumentException, WrongReportTypeException {
+		ReportDto result = this.ticketService.getReport(1, 2020, "MONTH");
 
 	}
 
 	// kada nam vrati izvstaj za odredjeni mesec, npr za februar, 2017, treba da
 	// nam vrati 1 kartu
 	@Test
-	public void test_monthReports_OK() {
-		ReportDto result = this.ticketService.getMonthReport(2, 2017);
+	public void test_monthReports_OK() throws IllegalArgumentException, WrongReportTypeException {
+		ReportDto result = this.ticketService.getReport(2, 2017, "MONTH");
 		assertNotNull(result);
 		assertTrue(result.getNumOfStudentYearTicket() == 1);
 		assertTrue(result.getNumOfBusTicket() == 1);
@@ -458,6 +459,6 @@ public class TicketServiceUnitTest {
 	// test kada se traze karte za korisnika koji ne postoji
 	@Test(expected = UserNotFoundException.class)
 	public void test_getTicket_whenUsetNotFound() throws UserNotFoundException {
-		Collection<TicketReaderDto> result = this.ticketService.allTicket("username", null);
+		Collection<TicketReaderDto> result = this.ticketService.allTicket("username", 0, 4);
 	}
 }

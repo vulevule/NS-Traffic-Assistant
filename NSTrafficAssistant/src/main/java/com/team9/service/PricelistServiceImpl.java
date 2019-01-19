@@ -1,10 +1,9 @@
 package com.team9.service;
 
-import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import com.team9.exceptions.WrongNumberOfPriceItemException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
 import com.team9.exceptions.WrongTrafficZoneException;
-import com.team9.exceptions.WrongUserTicketTypeException;
+import com.team9.model.PriceItem;
 import com.team9.model.PriceList;
 import com.team9.repository.PriceListRepository;
 
@@ -82,7 +81,11 @@ public class PricelistServiceImpl implements PriceListService {
 		if(savepl == null){
 			return null;
 		}
-		Set<PriceItemDto> itemsDto = this.pricelistItemService.convertToDto(savepl.getItems());
+		
+		Set<PriceItem> items = this.pricelistItemService.getPriceItemsByPricelist(savepl);
+		
+		savepl.setItems(items);
+		List<PriceItemDto> itemsDto = this.pricelistItemService.convertToDto(savepl.getItems());
 		PricelistReaderDto prdto = new PricelistReaderDto(savepl.getId(), savepl.getIssueDate(), savepl.getExpirationDate(), savepl.isActivate(), itemsDto);
 		return prdto;
 	}
