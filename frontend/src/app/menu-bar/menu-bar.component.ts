@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from '../model/User';
 import { Router } from '@angular/router';
+import { UserDTO } from '../model/UserDTO';
+
 
 @Component({
   selector: 'app-menu-bar',
@@ -10,7 +12,7 @@ import { Router } from '@angular/router';
 export class MenuBarComponent implements OnInit {
 
   @Input()
-  loggedUser: User;
+  loggedUser: UserDTO; //ovde nam je bitna samo uloga da bi mu prikazali odredjene funkcionalnosti 
 
   constructor(private router:Router) { }
 

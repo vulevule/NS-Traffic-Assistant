@@ -99,8 +99,6 @@ public class StationServiceImpl implements StationService {
 		return stationRepository.findById(id).orElse(null);
 	}
 
-	@Override
-
 	public List<Station> getAllByLine(Long lineId) throws LineNotFoundException {
 		Line line = lineRepository.findById(lineId).orElse(null);
 		if (line != null) {
@@ -120,6 +118,7 @@ public class StationServiceImpl implements StationService {
 		
 		
 	}
+
 
 
 

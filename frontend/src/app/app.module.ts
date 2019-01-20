@@ -13,7 +13,7 @@ import { DisplayStationsComponent } from './stations/display-stations/display-st
 import { StationServiceService } from './services/stations/station-service.service';
 import {AuthenticationService} from './services/authentication.service';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FilterByTypePipe } from './stations/display-stations/pipes/filter-by-type.pipe';
 import { FilterByNamePipe } from './stations/display-stations/pipes/filter-by-name.pipe';
 import { FilterByAddressPipe } from './stations/display-stations/pipes/filter-by-address.pipe';
@@ -22,6 +22,7 @@ import { BuyTicketFormComponent } from './ticket/buy-ticket-form/buy-ticket-form
 import { DisplayTicketComponent } from './ticket/display-ticket/display-ticket.component';
 import { SearchFormComponent } from './ticket/search-form/search-form.component';
 import { FilterByTrafficTypePipe } from './ticket/pipes/filter-by-traffic-type.pipe';
+import { TokenInterceptorService } from './services/token-interceptor.service';
 
 
 
@@ -69,6 +70,7 @@ const appRoutes: Routes = [
     )
   ],
   providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true },,
     LoggedUserService,
     AuthenticationService,
     StationServiceService

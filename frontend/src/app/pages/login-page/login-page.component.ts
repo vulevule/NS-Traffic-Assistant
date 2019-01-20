@@ -3,6 +3,7 @@ import {AuthenticationService} from 'src/app/services/authentication.service';
 import {Observable} from 'rxjs';
 import { throwError } from 'rxjs';
 import{Router} from '@angular/router'
+import { HeaderComponent } from 'src/app/header/header.component';
 
 @Component({
   selector: 'app-login-page',
@@ -22,12 +23,25 @@ export class LoginPageComponent implements OnInit{
     this.wrongUsernameOrPass=false;
 }
 ngOnInit(){}
+
+dismiss(){
+  var element=document.getElementById('login') as HTMLElement;
+  element.hidden=true;
+
+}
+
 login():void{
   this.AuthenticationService.login(this.user.username,this.user.password).subscribe((loggedIn:boolean)=>{
     console.log("loggedIn");
     if(loggedIn){
       console.log(loggedIn);
-      this.router.navigate(['/main']);
+      this.dismiss();
+      
+      this.router.navigate(['http://localhost:4200/main']);
+    }
+    else{
+      this.wrongUsernameOrPass=true;
+
     }
   },(err:Error)=>{
     if(err.toString()==='Illegal login'){
@@ -35,10 +49,13 @@ login():void{
       console.log(err);
     }else{
       throwError(err);
+      this.wrongUsernameOrPass=true;
     }
 
   
   })
+
+  
 
 }
 
