@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.team9.dto.ReportDto;
@@ -26,6 +26,7 @@ import com.team9.exceptions.TicketIsNotUseException;
 import com.team9.exceptions.TicketIsNotValidException;
 import com.team9.exceptions.TicketNotFound;
 import com.team9.exceptions.UserNotFoundException;
+import com.team9.exceptions.WrongReportTypeException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
 import com.team9.exceptions.WrongTrafficZoneException;
@@ -170,10 +171,10 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public Collection<TicketReaderDto> allTicket(String username, Pageable pageable) throws UserNotFoundException {
+	public Collection<TicketReaderDto> allTicket(String username, int page, int size) throws UserNotFoundException {
 		// return all tickets for one passenger
 		Passenger passenger = getPassengerByUsername(username);
-		Page<Ticket> allTicket = ticketRepository.findByPassenger(passenger, pageable);
+		Page<Ticket> allTicket = ticketRepository.findByPassenger(passenger, new PageRequest(page, size));
 
 		List<TicketReaderDto> tickets = new ArrayList<TicketReaderDto>();
 
@@ -253,25 +254,26 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public boolean useTicket(String serialNo, String username, String zone)
-			throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException, WrongTrafficZoneException,
-			ZonesDoNotMatchException {
-		//konvertujemo string u zone
+	public boolean useTicket(String serialNo, String username, String zone) throws TicketNotFound,
+			TicketAlreadyUsedException, TicketIsNotValidException, WrongTrafficZoneException, ZonesDoNotMatchException {
+		// konvertujemo string u zone
 		TrafficZone z = ConverterService.convertStringToZone(zone);
 		// 1. na osnovu serijskog broja pronadjemo kartu u bazi
 		Ticket foundTicket = this.ticketRepository.findBySerialNo(serialNo)
 				.orElseThrow(() -> new TicketNotFound("Ticket with serialNo: " + serialNo + " does not exist!"));
 		Date today = new Date(new java.util.Date().getTime());
-		if(foundTicket.getTrafficZone() == z){
+		if (foundTicket.getTrafficZone() == z) {
 			if (foundTicket.getIssueDate().before(today) && today.before(foundTicket.getExpirationDate())) {
-				// proverimo da li je karta single, ako jeste i ako je vec koriscena
+				// proverimo da li je karta single, ako jeste i ako je vec
+				// koriscena
 				// bacamo gresku
 				if (foundTicket.getTimeType() == TimeTicketType.SINGLE) {
 					if (foundTicket.isUsed() == true) {
 						throw new TicketAlreadyUsedException(
 								"Ticket with serialNo: " + serialNo + " has already been used!");
 					} else {
-						foundTicket.setUsed(true); // ako nije koriscena setujemo na
+						foundTicket.setUsed(true); // ako nije koriscena
+													// setujemo na
 													// true
 					}
 				}
@@ -284,16 +286,18 @@ public class TicketServiceImpl implements TicketService {
 																											// istekla
 																											// karta
 			}
-		}else{
-			//bacamo gresku da karta moze da se koristi samo u zoni za koju je kupljena 
+		} else {
+			// bacamo gresku da karta moze da se koristi samo u zoni za koju je
+			// kupljena
 			throw new ZonesDoNotMatchException("The ticket can be used in the zone for which it was purchased.");
 		}
 
 	}
 
 	@Override
-	public TicketReaderDto checkTicket(String serialNo, String username, String zone) throws TicketNotFound,
-			TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException, WrongTrafficZoneException, ZonesDoNotMatchException {
+	public TicketReaderDto checkTicket(String serialNo, String username, String zone)
+			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException,
+			WrongTrafficZoneException, ZonesDoNotMatchException {
 		// kontrola karte od strane inspektora
 		// da li je dobra zone prosledjena
 		TrafficZone z = ConverterService.convertStringToZone(zone);
@@ -333,14 +337,17 @@ public class TicketServiceImpl implements TicketService {
 			} else {
 				throw new TicketIsNotValidException("Ticket with serialNo: " + serialNo + " has expired!");
 			}
-		}else {
-			//bacamo error da karta moze da se koristi samo u zoni za koju je kupljena
-			throw new ZonesDoNotMatchException("The ticket with serialNo: " + serialNo + " was not used in the appropriate zone.");
+		} else {
+			// bacamo error da karta moze da se koristi samo u zoni za koju je
+			// kupljena
+			throw new ZonesDoNotMatchException(
+					"The ticket with serialNo: " + serialNo + " was not used in the appropriate zone.");
 		}
 	}
 
 	@Override
-	public ReportDto getMonthReport(int month, int year) throws IllegalArgumentException {
+	public ReportDto getReport(int month, int year, String reportType)
+			throws IllegalArgumentException, WrongReportTypeException {
 		// TODO Auto-generated method stub
 		Collection<Ticket> allTicket = (Collection<Ticket>) this.ticketRepository.findAll();
 
@@ -350,8 +357,15 @@ public class TicketServiceImpl implements TicketService {
 		}
 		// ovo su sve karte koje su kupljene u trazenom mesecu, sad treba da
 		// izdvojimo odredjene karte
-		report = allTicket.stream().filter(t -> t.getIssueDate().toLocalDate().getMonthValue() == month
-				&& t.getIssueDate().toLocalDate().getYear() == year).collect(Collectors.toList());
+		if (reportType.toUpperCase().equals("MONTH")) {
+			report = allTicket.stream().filter(t -> t.getIssueDate().toLocalDate().getMonthValue() == month
+					&& t.getIssueDate().toLocalDate().getYear() == year).collect(Collectors.toList());
+		} else if (reportType.toUpperCase().equals("YEAR")) {
+			report = allTicket.stream().filter(t -> t.getIssueDate().toLocalDate().getYear() == year)
+					.collect(Collectors.toList());
+		} else {
+			throw new WrongReportTypeException("Wrong report type!");
+		}
 
 		ReportDto result = new ReportDto();
 
@@ -456,6 +470,26 @@ public class TicketServiceImpl implements TicketService {
 		result.setMoney(money);
 
 		return result;
+	}
+
+	@Override
+	public Collection<TicketReaderDto> getAll(int page, int size) {
+		// TODO Auto-generated method stub
+		Page<Ticket> result = this.ticketRepository.findAll(new PageRequest(page, size));
+		ArrayList<TicketReaderDto> res = new ArrayList<>();
+		for (Ticket t : result) {
+			res.add(convertToTicketDto(t));
+		}
+
+		return res;
+
+	}
+
+	@Override
+	public int getNumberOfTicket() {
+		// TODO Auto-generated method stub
+		ArrayList<Ticket> t = (ArrayList<Ticket>) this.ticketRepository.findAll();
+		return t.size();
 	}
 
 }

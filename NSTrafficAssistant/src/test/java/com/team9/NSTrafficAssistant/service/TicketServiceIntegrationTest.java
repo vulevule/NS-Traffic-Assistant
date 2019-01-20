@@ -29,6 +29,7 @@ import com.team9.exceptions.TicketIsNotUseException;
 import com.team9.exceptions.TicketIsNotValidException;
 import com.team9.exceptions.TicketNotFound;
 import com.team9.exceptions.UserNotFoundException;
+import com.team9.exceptions.WrongReportTypeException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
 import com.team9.exceptions.WrongTrafficZoneException;
@@ -268,19 +269,19 @@ public class TicketServiceIntegrationTest {
 
 	// 19. getMonthReport - kada prosledimo pogresne argumenta za mesec i godinu
 	@Test(expected = IllegalArgumentException.class)
-	public void test_monthReport_whenMonthEquals0() {
-		ReportDto report = this.service.getMonthReport(0, 2019);
+	public void test_monthReport_whenMonthEquals0() throws IllegalArgumentException, WrongReportTypeException {
+		ReportDto report = this.service.getReport(0, 2019, "MONTH");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void test_monthReport_whenYearEquals2020() {
-		ReportDto report = this.service.getMonthReport(0, 2020);
+	public void test_monthReport_whenYearEquals2020() throws IllegalArgumentException, WrongReportTypeException {
+		ReportDto report = this.service.getReport(0, 2020, "month");
 	}
 
 	// 20. getMonthReport - kada su parametri korektni
 	@Test
-	public void test_monthReport_OK() {
-		ReportDto result = this.service.getMonthReport(12, 2018);
+	public void test_monthReport_OK() throws IllegalArgumentException, WrongReportTypeException {
+		ReportDto result = this.service.getReport(12, 2018, "month");
 
 		assertNotNull(result);
 		assertTrue(result.getNumOfStudentMonthTicket() == 1);

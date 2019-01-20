@@ -37,7 +37,7 @@
       <!-- time -->
       <label class="col-12 col-form-label">Ticket time:
 
-        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="buyTicket.ticketTime"
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="buyTicket.timeType"
           (click)="getPrice()">
           <label ngbButtonLabel class="btn-primary">
             <input ngbButton type="radio" value="ANNUAL" /> Annual
@@ -70,7 +70,7 @@
 
     <p> Selected is: traffic type: {{buyTicket.trafficType}}
       traffic zone : {{buyTicket.trafficZone}}
-      ticket time : {{ buyTicket.ticketTime}}
+      ticket time : {{ buyTicket.timeType}}
     </p>
 
   </div>

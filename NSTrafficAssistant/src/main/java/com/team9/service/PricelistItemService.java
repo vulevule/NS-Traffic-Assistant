@@ -1,5 +1,6 @@
 package com.team9.service;
 
+import java.util.List;
 import java.util.Set;
 
 import com.team9.dto.PriceItemDto;
@@ -22,10 +23,12 @@ public interface PricelistItemService {
 	
 	public PriceList addPricelistItems(Set<PriceItemDto> items, PriceList savepl) throws  PriceItemAlreadyExistsException, PriceLessThanZeroException,  WrongTrafficTypeException, WrongTicketTimeException, WrongTrafficZoneException, WrongDiscountException, WrongNumberOfPriceItemException;
 
-	public Set<PriceItemDto> convertToDto(Set<PriceItem> items);
+	public List<PriceItemDto> convertToDto(Set<PriceItem> items);
 
 
 
 	
 	public PriceItem getPriceItem(TrafficType type, TimeTicketType time, TrafficZone zone, PriceList p_id) throws PriceItemNotFoundException;
+
+	public Set<PriceItem> getPriceItemsByPricelist(PriceList savepl);
 }

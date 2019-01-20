@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { BuyTicket, Ticket } from 'src/app/model/Ticket';
+import { TicketServiceService } from 'src/app/services/ticket/ticket-service.service';
 
 @Component({
   selector: 'app-buy-ticket-form',
@@ -14,14 +15,14 @@ export class BuyTicketFormComponent implements OnInit {
 
 
 
-  constructor() { }
+  constructor(private ticketService : TicketServiceService) { }
 
   async ngOnInit() {
     this.buyTicket = {
       price: 0,
       trafficType: 'BUS',
       trafficZone: 'FIRST',
-      ticketTime: 'ANNUAL',
+      timeType: 'ANNUAL',
     }
     this.message = '';
   }
@@ -29,27 +30,29 @@ export class BuyTicketFormComponent implements OnInit {
 
   async getPrice() {
     //ovde cemo pozivati funkciju sa back-a za dobavljanje cene 
-    this.buyTicket.price = 98878;
+    await this.ticketService.getPrice(this.buyTicket)
+    .then(data => {
+      alert(`Price is ${data}`);
+      this.buyTicket.price = data;
+    }, reason =>{
+      alert('Error');
+    })
   }
 
 
   async buy() {
     //pozvatu metodu iz servisa za kupovinu karata
-
-    //dobijenu kartu prosledimo pretku da bi je prikazao 
-    this.ticket = {
-      id: 12,
-      trafficType: 'BUS',
-      trafficZone: 'FIRST',
-      ticketTime: 'ANNUAL',
-      price: 12000,
-      userTicketType: 'STUDENT',
-      serialNo: 'JBHGHAGHD1215',
-      issueDate : new Date(),
-      expirationDate : new Date()
-    };
-    this.message = 'Success buy ticket ' + this.ticket.serialNo;
-  
+    //ovde samo pozovemo metodu za kupovinu karte
+    await this.ticketService.buyTicket(this.buyTicket)
+    .then(data => {
+      this.message = "Ticket is buy!!";
+      this.ticket = data;
+    },
+      reason => {
+        this.message = "ERROR!!!";
+      } 
+    );
+    
   }
 
 
