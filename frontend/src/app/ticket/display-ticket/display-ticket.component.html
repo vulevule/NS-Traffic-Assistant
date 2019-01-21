@@ -1,0 +1,43 @@
+<div class="displayTicket row content">
+
+
+  <div class="ticket">
+    <div class="col-12  sidebar-content">
+
+        <table style="width:100%">
+            <tr>
+              <th>TICKET</th>
+              <th colspan="2">SNO: {{ticket.serialNo}}</th>
+              <th>{{ticket.trafficType}}</th>
+            </tr>
+            <tr>
+              <th>Issue date:</th>
+              <td>{{ticket.issueDate | date:"dd.MM.yyyy."}}</td>
+              <th>Expiration date: </th>
+              <td>{{ticket.expirationDate | date:"dd.MM.yyyy."}}</td>
+            </tr>
+            <tr>
+              <th>Zone: </th>
+              <td> {{ticket.trafficZone}} </td>
+              <th>Type: </th>
+              <td>{{ticket.userType}}</td>
+            </tr>
+            
+            <tr> 
+              <th>Time: </th>
+              <td>{{ticket.timeType}} </td>
+              <th>Price: </th>
+              <td>{{ticket.price}}</td>
+            </tr>
+          </table>
+          
+    </div>
+   
+
+
+
+
+
+  </div>
+
+</div>

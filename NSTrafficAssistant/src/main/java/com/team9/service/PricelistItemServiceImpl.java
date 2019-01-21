@@ -1,6 +1,8 @@
 package com.team9.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,13 +18,11 @@ import com.team9.exceptions.WrongNumberOfPriceItemException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
 import com.team9.exceptions.WrongTrafficZoneException;
-import com.team9.exceptions.WrongUserTicketTypeException;
 import com.team9.model.PriceItem;
 import com.team9.model.PriceList;
 import com.team9.model.TimeTicketType;
 import com.team9.model.TrafficType;
 import com.team9.model.TrafficZone;
-import com.team9.model.UserTicketType;
 import com.team9.repository.PriceItemRepository;
 
 @Service
@@ -97,9 +97,9 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 	}
 
 	@Override
-	public Set<PriceItemDto> convertToDto(Set<PriceItem> items) {
+	public List<PriceItemDto> convertToDto(Set<PriceItem> items) {
 		//stavicemo da kada nam vraca stavke, ne vraca procente , nego stvarne cene
-		Set<PriceItemDto> itemsDto = new HashSet<PriceItemDto>();
+		List<PriceItemDto> itemsDto = new ArrayList<PriceItemDto>();
 		for (PriceItem pi : items) {
 			PriceItemDto pdto = new PriceItemDto(pi.getPrice(), pi.getTrafficType().name(), pi.getTimeType().name(),
 					pi.getZone().name(),calculateTicketPrice(pi.getPrice(), pi.getStudentDiscount()),calculateTicketPrice(pi.getPrice(), pi.getHandycapDiscount()),calculateTicketPrice(pi.getPrice(), pi.getSeniorDiscount()));
@@ -123,6 +123,12 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 				.orElseThrow(() -> new PriceItemNotFoundException("Not item found for traffic type: " + type + ", ticket time: " + time + " and zone: " + zone));
 
 		return foundItem;
+	}
+
+	@Override
+	public Set<PriceItem> getPriceItemsByPricelist(PriceList savepl) {
+		// TODO Auto-generated method stub
+		return this.repository.findByPricelist(savepl);
 	}
 
 

@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +27,11 @@ import com.team9.exceptions.TicketIsNotUseException;
 import com.team9.exceptions.TicketIsNotValidException;
 import com.team9.exceptions.TicketNotFound;
 import com.team9.exceptions.UserNotFoundException;
+import com.team9.exceptions.WrongReportTypeException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
 import com.team9.exceptions.WrongTrafficZoneException;
+import com.team9.exceptions.ZonesDoNotMatchException;
 import com.team9.security.TokenUtils;
 import com.team9.service.TicketService;
 
@@ -46,11 +47,24 @@ public class TicketController {
 	@Autowired
 	private TokenUtils tokenUtils;
 
+	
+	@GetMapping(value="/all", params={"page", "size"}, produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Collection<TicketReaderDto>> getAll(@RequestParam("page")int page, @RequestParam("size") int size){
+		Collection<TicketReaderDto> result = this.ticketService.getAll(page, size);
+		return new ResponseEntity<Collection<TicketReaderDto>>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/size", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Integer> getNumberOfTicket(){
+		int num = this.ticketService.getNumberOfTicket();
+		return new ResponseEntity<Integer>(num, HttpStatus.OK);
+	}
+	
 	/*
 	 * TREBA ZAMENITI DA VRACA PAGE OBJEKAT
 	 */
-	@GetMapping(value = "/myTicket", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<TicketReaderDto>> getMyTicket(HttpServletRequest request, Pageable pageable) {
+	@GetMapping(value = "/myTicket", produces = MediaType.APPLICATION_JSON_VALUE, params={"page", "size"})
+	public ResponseEntity<Collection<TicketReaderDto>> getMyTicket(@RequestParam("page") int page, @RequestParam("size") int size,HttpServletRequest request) {
 		/*
 		 * korisnika uzimamo iz tokena
 		 */
@@ -61,7 +75,7 @@ public class TicketController {
 
 		Collection<TicketReaderDto> allTicket;
 		try {
-			allTicket = ticketService.allTicket(username, pageable);
+			allTicket = ticketService.allTicket(username, page, size);
 			logger.info("<< get tickets by " + username);
 			return new ResponseEntity<Collection<TicketReaderDto>>(allTicket, HttpStatus.OK);
 		} catch (UserNotFoundException e) {
@@ -74,13 +88,16 @@ public class TicketController {
 		
 	}
 
-	@GetMapping(value = "/price", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Double> getTicketPrice(@RequestBody TicketDto t, HttpServletRequest request) {
+	@GetMapping(value = "/price", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Double> getTicketPrice(@RequestParam("type") String type, @RequestParam("zone") String zone, @RequestParam("time") String time, HttpServletRequest request) {
 		// trazimo cenu za izabrane parametre i treba mu jos proslediti i
 		// korisnika da bi znali za koji tip korisnika trazimo kartu
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
+		logger.info(zone + " " + time + " " + type + " " + username);
+		
+		TicketDto t = new TicketDto(time, zone, type, 0);
 
 		logger.info(">> get ticket price by: " + t.getTimeType() + "; " + t.getTrafficZone() + "; " + t.getTrafficType()
 				+ "; " + username);
@@ -145,13 +162,13 @@ public class TicketController {
 	}
 
 	@PutMapping(value = "/useTicket", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> useTicket(@RequestParam("serialNo") String serialNo, HttpServletRequest request) {
+	public ResponseEntity<String> useTicket(@RequestParam("serialNo") String serialNo, @RequestParam("zone") String zone,  HttpServletRequest request) {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
-		logger.info(">> use ticket with serial number: " + serialNo + "; user:  " + username);
+		logger.info(">> use ticket with serial number: " + serialNo + "; user:  " + username + "; zone: " + zone);
 		try {
-			boolean use = this.ticketService.useTicket(serialNo, username);
+			boolean use = this.ticketService.useTicket(serialNo, username, zone);
 			if (use == true) {
 				logger.info("<< successful use ticket");
 				return new ResponseEntity<String>("The ticket was successfully used", HttpStatus.OK);
@@ -171,20 +188,29 @@ public class TicketController {
 			// e.printStackTrace();
 			logger.info("ticket is not a valid");
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (WrongTrafficZoneException e) {
+			logger.info("<< use ticket: invalid zone ");
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (ZonesDoNotMatchException e) {
+			// TODO Auto-generated catch block
+			logger.info("<< use ticket: zone do not match");
+			//e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
 		}
 		return null;
 	}
 
 	@PutMapping(value = "/checkTicket", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> checkTicket(@RequestParam("serialNo") String serialNo,
+	public ResponseEntity<String> checkTicket(@RequestParam("serialNo") String serialNo, @RequestParam("zone") String zone,
 			HttpServletRequest request) {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
-		logger.info(">> check ticket with serial number: " + serialNo + "; inspector:  " + username);
+		logger.info(">> check ticket with serial number: " + serialNo + "; zone: " + zone + "; inspector:  " + username);
 
 		try {
-			TicketReaderDto t = this.ticketService.checkTicket(serialNo, username);
+			TicketReaderDto t = this.ticketService.checkTicket(serialNo, username, zone); 
 			logger.info("<< check ticket");
 			return new ResponseEntity<String>("The ticket was successfully checked", HttpStatus.OK);
 		} catch (TicketNotFound e) {
@@ -206,21 +232,33 @@ public class TicketController {
 			// TODO Auto-generated catch block
 			logger.info("<< check ticket : inspector not found");
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (WrongTrafficZoneException e) {
+			logger.info("<< check ticket: invalid zone ");
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (ZonesDoNotMatchException e) {
+			// TODO Auto-generated catch block
+			logger.info("<< check ticket: zone do not match");
+			//e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
 		}
 	}
 
-	@GetMapping(value = "/monthReport", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ReportDto> getMonthReports(@RequestParam("month") int month,
-			@RequestParam("year") int year) {
-		logger.info(">> month report: month " + month + "; year " + year);
+	@GetMapping(value = "/report", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> getMonthReports(@RequestParam("month") int month,
+			@RequestParam("year") int year, @RequestParam("type")String reportType) {
+		logger.info(">> month report: month " + month + "; year " + year + "; report type: " + reportType);
 
 		try {
-			ReportDto report = this.ticketService.getMonthReport(month, year);
+			ReportDto report = this.ticketService.getReport(month, year, reportType);
 			logger.info("<< month report: " );
-			return new ResponseEntity<ReportDto>(report, HttpStatus.OK);
+			return new ResponseEntity<Object>(report, HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
 			logger.info("<< month report: illegal argument");
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (WrongReportTypeException e) {
+			logger.info("<< report: invalid type of report");
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 
 	}

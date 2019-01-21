@@ -13,7 +13,7 @@ import { DisplayStationsComponent } from './stations/display-stations/display-st
 import { StationServiceService } from './services/stations/station-service.service';
 import {AuthenticationService} from './services/authentication.service';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FilterByTypePipe } from './stations/display-stations/pipes/filter-by-type.pipe';
 import { FilterByNamePipe } from './stations/display-stations/pipes/filter-by-name.pipe';
 import { LinesComponent } from './lines/lines/lines.component';
@@ -25,6 +25,19 @@ import { LineService } from './services/lines/line.service';
 import { FilterByZonePipe } from './lines/lines-display/pipes/filter-by-zone.pipe';
 import { FilterByLinePipe } from './stations/display-stations/pipes/filter-by-line.pipe';
 import { FilterByStationPipe } from './lines/lines-display/pipes/filter-by-station.pipe';
+import { TicketComponent } from './ticket/ticket/ticket.component';
+import { BuyTicketFormComponent } from './ticket/buy-ticket-form/buy-ticket-form.component';
+import { DisplayTicketComponent } from './ticket/display-ticket/display-ticket.component';
+import { SearchFormComponent } from './ticket/search-form/search-form.component';
+import { FilterByTrafficTypePipe } from './ticket/pipes/filter-by-traffic-type.pipe';
+import { TokenInterceptorService } from './services/token-interceptor.service';
+
+import { PricelistComponent } from './pricelist/pricelist/pricelist.component';
+import { DisplayPriceListComponent } from './pricelist/display-price-list/display-price-list.component';
+import { CreateNewPricelistComponent } from './pricelist/create-new-pricelist/create-new-pricelist.component';
+import { UseCheckTicketComponent } from './ticket/use-check-ticket/use-check-ticket.component';
+import { ReportComponent } from './report/report/report.component';
+import { DisplayReportComponent } from './report/display-report/display-report.component';
 
 
 
@@ -34,8 +47,14 @@ const appRoutes: Routes = [
     children: [
       { path: 'displaystations', component: DisplayStationsComponent, outlet: "secondary"},
       { path: 'lines', component: LinesComponent, outlet: "secondary"},
+      { path: 'login', component: LoginPageComponent, outlet: "primary"},
+      { path : 'ticket' , component : TicketComponent, outlet:"secondary"},
+      { path : 'pricelist', component : PricelistComponent, outlet : "secondary"},
+      { path : 'report', component : ReportComponent, outlet : "secondary"}
     ] 
   },
+       
+  
   { path: 'login',      component: LoginPageComponent },
   { path: '', redirectTo: '/main', pathMatch: 'full'},
   { path: '**', component: NotFoundPageComponent },
@@ -61,6 +80,17 @@ const appRoutes: Routes = [
     FilterByZonePipe,
     FilterByLinePipe,
     FilterByStationPipe,
+    TicketComponent,
+    BuyTicketFormComponent,
+    DisplayTicketComponent,
+    SearchFormComponent,
+    FilterByTrafficTypePipe,
+    PricelistComponent,
+    DisplayPriceListComponent,
+    CreateNewPricelistComponent,
+    UseCheckTicketComponent,
+    ReportComponent,
+    DisplayReportComponent,
   ],
   imports: [
     NgbModule,
@@ -73,6 +103,7 @@ const appRoutes: Routes = [
     )
   ],
   providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true },,
     LoggedUserService,
     AuthenticationService,
     StationServiceService,

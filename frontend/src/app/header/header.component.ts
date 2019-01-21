@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../model/User';
-import { Router } from '@angular/router';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { LoginPageComponent } from '../pages/login-page/login-page.component';
 
 @Component({
   selector: 'app-header',
@@ -12,9 +13,28 @@ export class HeaderComponent implements OnInit {
   @Input()
   loggedUser: User;
 
-  constructor(private router:Router) { }
+  //moze da se user povuce iz storage-a; uloga i username, ne ceo user, jer se cuva token 
+  constructor(private modalService: NgbModal) {}
 
   ngOnInit() {
   }
 
+  open() {
+    const modalRef = this.modalService.open(LoginPageComponent);
+    modalRef.componentInstance.name = 'Login';
+  }
+ 
+
 }
+export class NgbdModalContent implements OnInit {
+
+    @Input() title = `Information`;
+  
+    constructor(
+      public activeModal: NgbActiveModal
+    ) {}
+  
+    ngOnInit() {
+    }
+
+  }

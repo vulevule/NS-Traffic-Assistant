@@ -1,0 +1,27 @@
+<div>
+<table style="width:100%">
+  <tr> 
+    <th> Traffic type </th>
+    <th> Traffic zone </th>
+    <th> Ticket time </th>
+    <th> Price </th>
+    <th> Student discount </th>
+    <th> Senior discount </th>
+    <th> Handicap discount </th>
+  </tr> 
+  <tr *ngFor="let i of items"> 
+      <td> {{i.trafficType}}</td>
+      <td> {{i.zone}}</td>
+      <td> {{i.timeType}}</td>
+      <td> <input type='text' [(ngModel)]="i.price"/></td>
+      <td> <input type='text' [(ngModel)]="i.studentDiscount"/></td>
+      <td> <input type='text' [(ngModel)]="i.seniorDiscount"/></td>
+      <td> <input type='text' [(ngModel)]="i.handycapDiscount"></td> 
+  </tr>
+
+</table>
+
+<button type="button" class="btn btn-outline-primary" (click)="save()">
+    Save
+  </button>
+<div>

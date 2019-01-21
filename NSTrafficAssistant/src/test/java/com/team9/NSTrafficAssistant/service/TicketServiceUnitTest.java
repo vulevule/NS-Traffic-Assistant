@@ -32,9 +32,11 @@ import com.team9.exceptions.TicketIsNotUseException;
 import com.team9.exceptions.TicketIsNotValidException;
 import com.team9.exceptions.TicketNotFound;
 import com.team9.exceptions.UserNotFoundException;
+import com.team9.exceptions.WrongReportTypeException;
 import com.team9.exceptions.WrongTicketTimeException;
 import com.team9.exceptions.WrongTrafficTypeException;
 import com.team9.exceptions.WrongTrafficZoneException;
+import com.team9.exceptions.ZonesDoNotMatchException;
 import com.team9.model.Address;
 import com.team9.model.Inspector;
 import com.team9.model.Passenger;
@@ -339,8 +341,8 @@ public class TicketServiceUnitTest {
 	 */
 	@Test(expected = TicketIsNotValidException.class)
 	public void test_useTicket_ticketIsNotValid()
-			throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException {
-		boolean t = this.ticketService.useTicket("MSDE3445", "pericpera");
+			throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException, WrongTrafficZoneException, ZonesDoNotMatchException {
+		boolean t = this.ticketService.useTicket("MSDE3445", "pericpera", "second");
 	}
 
 	/*
@@ -348,8 +350,8 @@ public class TicketServiceUnitTest {
 	 */
 	@Test(expected = TicketNotFound.class)
 	public void test_useTicket_whenTicketWithSerialNo_does_not_exist()
-			throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException {
-		boolean t = this.ticketService.useTicket("MDF1236", "pericpera");
+			throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException, WrongTrafficZoneException, ZonesDoNotMatchException {
+		boolean t = this.ticketService.useTicket("MDF1236", "pericpera", "second");
 	}
 
 	/*
@@ -357,9 +359,27 @@ public class TicketServiceUnitTest {
 	 */
 	@Test(expected = TicketAlreadyUsedException.class)
 	public void test_useTicket_whenSingleTicketAlreadyUsed()
-			throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException {
-		boolean t = this.ticketService.useTicket("MDS345", "pericpera");
+			throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException, WrongTrafficZoneException, ZonesDoNotMatchException {
+		boolean t = this.ticketService.useTicket("MDS345", "pericpera", "second");
 	}
+	/*
+	 * d. pogresna zona, treba da baci wrong traffic zone
+	 */
+	@Test(expected = WrongTrafficZoneException.class)
+	public void test_useTicket_whenWrongTrafficZone()
+			throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException, WrongTrafficZoneException, ZonesDoNotMatchException {
+		boolean t = this.ticketService.useTicket("MDS345", "pericpera", "f");
+	}
+	
+	/*
+	 *  e. kada je karta kupljena za drugu zonu
+	 */
+	@Test(expected = ZonesDoNotMatchException.class)
+	public void test_useTicket_whenZonesDoNotMatch()
+			throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException, WrongTrafficZoneException, ZonesDoNotMatchException {
+		boolean t = this.ticketService.useTicket("MDS345", "pericpera", "first");
+	}
+	
 
 	/*
 	 * testiranje provere karte od strane inspektora
@@ -368,29 +388,43 @@ public class TicketServiceUnitTest {
 	// a. testiranje kada inspektor koji pregleda kartu ne postoji
 	@Test(expected = UserNotFoundException.class)
 	public void test_checkTicket_whenInspectorNotFound()
-			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException {
-		TicketReaderDto t = this.ticketService.checkTicket("MDS3456", "kkkkk");
+			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException, WrongTrafficZoneException, ZonesDoNotMatchException {
+		TicketReaderDto t = this.ticketService.checkTicket("MDS3456", "kkkkk", "first");
 	}
 
 	// b. testiranje kada karta ne postoji
 	@Test(expected = TicketNotFound.class)
 	public void test_checkTicket_whenTicketNotFound()
-			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException {
-		TicketReaderDto t = this.ticketService.checkTicket("MSSS1236", "dankica");
+			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException, WrongTrafficZoneException, ZonesDoNotMatchException {
+		TicketReaderDto t = this.ticketService.checkTicket("MSSS1236", "dankica", "first");
 	}
 
 	// c. testiranje kada je istekao period vazenja karte
 	@Test(expected = TicketIsNotValidException.class)
 	public void test_checkTicket_whenTicketIsNotValid()
-			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException {
-		TicketReaderDto t = this.ticketService.checkTicket("MSDE3445", "dankica");
+			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException, WrongTrafficZoneException, ZonesDoNotMatchException {
+		TicketReaderDto t = this.ticketService.checkTicket("MSDE3445", "dankica", "second");
 	}
 
 	// d. testiranje kada single karta nije iskoriscena
 	@Test(expected = TicketIsNotUseException.class)
 	public void test_checkTicket_whenTicketIsNotUse()
-			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException {
-		TicketReaderDto t = this.ticketService.checkTicket("MDS3456", "dankica");
+			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException, WrongTrafficZoneException, ZonesDoNotMatchException {
+		TicketReaderDto t = this.ticketService.checkTicket("MDS3456", "dankica", "second");
+	}
+	
+	// e. kada  je pogresna zona
+	@Test(expected = WrongTrafficZoneException.class)
+	public void test_checkTicket_whenWrongTrafficZone()
+			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException, WrongTrafficZoneException, ZonesDoNotMatchException {
+		TicketReaderDto t = this.ticketService.checkTicket("MDS3456", "dankica", "s");
+	}
+	
+	//f. ako je karta ocitana u pogresnoj zoni 
+	@Test(expected = ZonesDoNotMatchException.class)
+	public void test_checkTicket_whenZonesDoNotMatch()
+			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException, WrongTrafficZoneException, ZonesDoNotMatchException {
+		TicketReaderDto t = this.ticketService.checkTicket("MDS3456", "dankica", "first");
 	}
 
 	/*
@@ -398,23 +432,23 @@ public class TicketServiceUnitTest {
 	 */
 	// kada format meseca nije dobar
 	@Test(expected = IllegalArgumentException.class)
-	public void test_monthReports_whenMonthNotCorrect() {
-		ReportDto result = this.ticketService.getMonthReport(0, 2018);
+	public void test_monthReports_whenMonthNotCorrect() throws IllegalArgumentException, WrongReportTypeException {
+		ReportDto result = this.ticketService.getReport(0, 2018, "MONTH");
 
 	}
 
 	// pogresna godina
 	@Test(expected = IllegalArgumentException.class)
-	public void test_monthReports_whenYearNotCorrect() {
-		ReportDto result = this.ticketService.getMonthReport(1, 2020);
+	public void test_monthReports_whenYearNotCorrect() throws IllegalArgumentException, WrongReportTypeException {
+		ReportDto result = this.ticketService.getReport(1, 2020, "MONTH");
 
 	}
 
 	// kada nam vrati izvstaj za odredjeni mesec, npr za februar, 2017, treba da
 	// nam vrati 1 kartu
 	@Test
-	public void test_monthReports_OK() {
-		ReportDto result = this.ticketService.getMonthReport(2, 2017);
+	public void test_monthReports_OK() throws IllegalArgumentException, WrongReportTypeException {
+		ReportDto result = this.ticketService.getReport(2, 2017, "MONTH");
 		assertNotNull(result);
 		assertTrue(result.getNumOfStudentYearTicket() == 1);
 		assertTrue(result.getNumOfBusTicket() == 1);
@@ -425,6 +459,6 @@ public class TicketServiceUnitTest {
 	// test kada se traze karte za korisnika koji ne postoji
 	@Test(expected = UserNotFoundException.class)
 	public void test_getTicket_whenUsetNotFound() throws UserNotFoundException {
-		Collection<TicketReaderDto> result = this.ticketService.allTicket("username", null);
+		Collection<TicketReaderDto> result = this.ticketService.allTicket("username", 0, 4);
 	}
 }

@@ -10,4 +10,6 @@ export class AppComponent {
   title = 'NS Traffic Assistant';
 
   loggedUser: User
+
+  
 }

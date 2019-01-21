@@ -43,7 +43,7 @@ public class PriceItem implements Serializable {
 	private double handycapDiscount;
 
 	// stavka pripada jednom cenovniku
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "pricelist_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private PriceList pricelist;

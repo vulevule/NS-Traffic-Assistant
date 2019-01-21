@@ -1,20 +1,24 @@
 <div class="header">
   <div class="appInfo">
     <div>
-      <label class="title" ><a href="" (click)="router.navigate(['/main'])">NS Traffic Assistant</a></label>
+      <label class="title">NS Traffic Assistant</label>
     </div>
     <div>
       <label>-Novi Sad-</label>
     </div>
   </div>
+<!-- ovde treba pogledati da li je korisnik ulogovan, ako nije prikazati mu log in i register button, a ako 
+jetse onda ovaj dole meni -->
 
   <div class="userInfo">
     <img src="assets/images/bus.png">
     <div ngbDropdown class="nav-item">
-      <a class="nav-item btn" id="userDropdown" ngbDropdownToggle>Test Testic</a>
+      <a class="nav-item btn" id="userDropdown" ngbDropdownToggle>Test Testic</a><!--ovde moze da se prikaze username korisnika-->
       <div ngbDropdownMenu aria-labelledby="userDropdown">
-        <button class="dropdown-item">Edit profile</button>
-        <button class="dropdown-item">Log out</button>
+        <button class="dropdown-item" id="editItem" [hidden]="!isHidden">Edit profile</button>
+        <button class="dropdown-item" id="loginItem" [hidden]="isHidden" (click)="open()" >Login</button>
+        <button class="dropdown-item" id="registerItem" [hidden]="isHidden">Register</button>
+        <button class="dropdown-item" id="logoutItem" [hidden]="!isHidden">Log out</button>
       </div>     
     </div>
   </div>
