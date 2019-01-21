@@ -213,7 +213,7 @@ public class TicketServiceUnitTest {
 	 */
 
 	@Test(expected = PriceItemNotFoundException.class)
-	public void getTicketPrice_whenSendWrongTrafficType_throwException()
+	public void getTicketPrice_whenPriceItemNotFound_throwException()
 			throws PriceItemNotFoundException, UserNotFoundException, NotFoundActivePricelistException,
 			WrongTrafficTypeException, WrongTicketTimeException, WrongTrafficZoneException {
 		TicketDto t = new TicketDto("month", "first", "tram", 10.0);
@@ -363,7 +363,7 @@ public class TicketServiceUnitTest {
 		boolean t = this.ticketService.useTicket("MDS345", "pericpera", "second");
 	}
 	/*
-	 * d. pogresna zona, treba da baci wrong traffic zone
+	 * d. pogresna zona, treba da baci wrong traffic zone //ovde ce biti da linija ne postoji
 	 */
 	@Test(expected = WrongTrafficZoneException.class)
 	public void test_useTicket_whenWrongTrafficZone()
@@ -413,7 +413,7 @@ public class TicketServiceUnitTest {
 		TicketReaderDto t = this.ticketService.checkTicket("MDS3456", "dankica", "second");
 	}
 	
-	// e. kada  je pogresna zona
+	// e. kada  je pogresna zona //ovaj zameniti sa tim da linija ne postoji
 	@Test(expected = WrongTrafficZoneException.class)
 	public void test_checkTicket_whenWrongTrafficZone()
 			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException, WrongTrafficZoneException, ZonesDoNotMatchException {
@@ -456,9 +456,4 @@ public class TicketServiceUnitTest {
 
 	}
 
-	// test kada se traze karte za korisnika koji ne postoji
-	@Test(expected = UserNotFoundException.class)
-	public void test_getTicket_whenUsetNotFound() throws UserNotFoundException {
-		Collection<TicketReaderDto> result = this.ticketService.allTicket("username", 0, 4);
-	}
 }

@@ -14,6 +14,7 @@
       <input type="password" id="inputPassword" class="form-control" name="password" [(ngModel)]="user.password" placeholder="Password" required>
       <button class="btn btn-primary btn-block" type="submit">Sign in</button>
     </form>
+    <pre> loading : {{loading}} </pre>
     <div *ngIf=wrongUsernameorPass class="alert alert-warning box-msg" role="alert">Wrong username or password.</div>  
   </div> 
   

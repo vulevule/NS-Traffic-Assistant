@@ -15,9 +15,9 @@ export class DisplayPriceListComponent implements OnInit {
   constructor(private pricelistService: PriceListServiceService) { }
 
   async ngOnInit() {
-    // await this.pricelistService.getPricelist()
-    //   .then(data => { this.pricelist = data });
-    // this.items = this.pricelist.items;
+    await this.pricelistService.getPricelist()
+      .then(data => { this.pricelist = data });
+    this.items = this.pricelist.items;
   }
 
 }

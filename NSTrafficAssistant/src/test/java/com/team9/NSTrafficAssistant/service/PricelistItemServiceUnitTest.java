@@ -1,8 +1,9 @@
 package com.team9.NSTrafficAssistant.service;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Optional;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -117,5 +118,12 @@ public class PricelistItemServiceUnitTest {
 		PriceList p = this.pricelistItemService.addPricelistItems(PriceItemConstants.items_normal, PriceItemConstants.p);
 
 	}
-	
+	/*
+	 * 9. izracunavanje cene karte
+	 */
+	@Test
+	public void test_calculatePrice(){
+		double price = this.pricelistItemService.calculateTicketPrice(1000, 10);
+		assertTrue(price == 900);
+	}
 }

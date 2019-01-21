@@ -109,6 +109,7 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 
 	}
 	
+	@Override
 	public double calculateTicketPrice(double price, double discount){
 		return (price - ((discount/100)*price));
 	}

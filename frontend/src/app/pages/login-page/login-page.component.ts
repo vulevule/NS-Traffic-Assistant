@@ -1,9 +1,10 @@
 import { Component, OnInit, Input ,ViewEncapsulation} from '@angular/core';
 import {AuthenticationService} from 'src/app/services/authentication.service';
-import {Observable} from 'rxjs';
+
+import{Router} from '@angular/router';
+import { first } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import{Router} from '@angular/router'
-import { HeaderComponent } from 'src/app/header/header.component';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-page',
@@ -15,6 +16,8 @@ export class LoginPageComponent implements OnInit{
 
   public user;
   public wrongUsernameOrPass:boolean;
+  public role;
+  public loading : string;
 
   constructor(
     private AuthenticationService:AuthenticationService,private router:Router)
@@ -30,13 +33,20 @@ dismiss(){
 
 }
 
-login():void{
-  this.AuthenticationService.login(this.user.username,this.user.password).subscribe((loggedIn:boolean)=>{
+async login(){
+  // await this.AuthenticationService.getXToken(this.user.username, this.user.password)
+  // .then(data => {this.loading = data});
+
+  var response : any;
+  //await this.AuthenticationService.getXToken(this.user.username, this.user.password).subscribe(data => response = data);
+  
+  await this.AuthenticationService.login(this.user.username,this.user.password).subscribe((loggedIn:boolean)=>{
     console.log("loggedIn");
     if(loggedIn){
       console.log(loggedIn);
       this.dismiss();
-      
+      var currentUser = JSON.parse(
+        localStorage.getItem('currentUser'));
       this.router.navigate(['http://localhost:4200/main']);
     }
     else{

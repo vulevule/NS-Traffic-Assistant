@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,13 +33,10 @@ import com.team9.dto.UpdateProfileDto;
 import com.team9.dto.UserDto;
 import com.team9.dto.ValidationDTO;
 import com.team9.exceptions.UserNotFoundException;
-
 import com.team9.model.Inspector;
 import com.team9.model.Passenger;
-
 import com.team9.model.User;
 import com.team9.security.TokenUtils;
-
 import com.team9.service.UserService;
 
 
@@ -96,7 +92,8 @@ catch(Exception ex) {
 	@RequestMapping(
 			value="/user/login",
 			method=RequestMethod.POST,
-			consumes="application/json")
+			consumes="application/json",
+			produces = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<String> login(@RequestBody LoginDto log){
 		logger.info(">> login: username - " + log.getUsername() + " password - " + log.getPassword());
 		
@@ -108,13 +105,20 @@ catch(Exception ex) {
 					log.getUsername(), log.getPassword());
             Authentication authentication = authenticationManager.authenticate(token);            
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
+            
+            HttpHeaders headers = new HttpHeaders();
+           
+            
             // Reload user details so we can generate token
             UserDetails details = userDetailsService.
             		loadUserByUsername(log.getUsername());
+            
+            String authToken = tokenUtils.generateToken(details);
+            headers.add("X-Auth-Token", authToken);
+            
             logger.info("<< ok login");
             return new ResponseEntity<String>(
-            		tokenUtils.generateToken(details), HttpStatus.OK);
+            		tokenUtils.generateToken(details),headers,  HttpStatus.OK);
 			
 			
 		
