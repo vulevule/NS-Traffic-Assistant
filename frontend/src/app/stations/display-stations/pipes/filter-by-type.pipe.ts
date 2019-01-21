@@ -7,13 +7,16 @@ import { StationDTO } from 'src/app/model/StationDTO';
 })
 export class FilterByTypePipe implements PipeTransform {
 
-  transform(stations: StationDTO[], type?: {bus:boolean, tram:boolean, metro:boolean}): StationDTO[] {
+  transform(stations: any[], type?: {bus:boolean, tram:boolean, metro:boolean}): any[] {
     if(stations) {
-      return stations.filter((station: StationDTO) => this.applyFilter(station, type));
+      /* if(!type.bus && !type.tram && !type.metro) {
+        return stations;
+      } */
+      return stations.filter((station: any) => this.applyFilter(station, type));
     }
   }
 
-  applyFilter(station: StationDTO, type: {bus:boolean, tram:boolean, metro:boolean}):boolean {
+  applyFilter(station: any, type: {bus:boolean, tram:boolean, metro:boolean}):boolean {
     if(type.bus && station.type === 'BUS') {
       return true;
     }
@@ -28,3 +31,4 @@ export class FilterByTypePipe implements PipeTransform {
   }
 
 }
+

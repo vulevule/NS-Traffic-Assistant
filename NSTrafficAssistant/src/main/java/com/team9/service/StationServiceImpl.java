@@ -43,6 +43,7 @@ public class StationServiceImpl implements StationService {
 				addressRepository.save(findAddress);
 			}
 			station.setAddress(findAddress);
+			station.setLines(new ArrayList<StationLine>());
 			
 			return stationRepository.save(station);
 		} else {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,13 +36,13 @@ public class Line implements Serializable{
 	private TrafficZone zone;
 	
 	//@Column(nullable = false)
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<Location> route;
 	
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false, cascade=CascadeType.ALL)
 	private Timetable timeTable;
 	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="line")
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="line", cascade=CascadeType.ALL)
 	private List<StationLine> stations;
 	
 	public Line() {}

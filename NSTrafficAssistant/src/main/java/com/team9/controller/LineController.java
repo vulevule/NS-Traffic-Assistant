@@ -39,14 +39,18 @@ public class LineController {
 	@PostMapping(value="/line/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<LineDto> createLine(@RequestBody LineDto line){
 		logger.info(">> Creating line  " + line.getName());
-
+		logger.info("GLEDAJ VAMO: " + line);
+		
 		Line created = null;
 		try {
 			created = lineService.createLine(line);
 			logger.info("<< Creating line  " + line.getName());
+			
 			return new ResponseEntity<>(new LineDto(created), HttpStatus.CREATED);
 		} catch (LineAlreadyExistsException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		} catch (StationNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 	}
@@ -61,6 +65,9 @@ public class LineController {
 			logger.info("<< Updating station  " + line.getName());
 			return new ResponseEntity<>(new LineDto(updated), HttpStatus.CREATED);
 		} catch (LineNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (StationNotFoundException e) {
+			// TODO Auto-generated catch block
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -149,8 +156,7 @@ public class LineController {
 		for(Line l : lines) {
 			LineDto newDTO = new LineDto(l);
 			retVal.add(newDTO);
-		}
-		
+		}		
 		return retVal;
 	}
 

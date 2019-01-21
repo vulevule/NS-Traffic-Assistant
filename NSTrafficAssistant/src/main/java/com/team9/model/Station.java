@@ -1,17 +1,14 @@
 package com.team9.model;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -40,12 +37,12 @@ public class Station implements Serializable{
 	
 	//stanica moze da pripada vise linija, linija sadrzi vise stanica 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="station")
-	private Set<StationLine> stationLines;
+	private List<StationLine> stationLines;
 	
 	public Station() {}
 	
 	public Station(Long id, String name, TrafficType type, double xCoordinate, double yCoordinate, Address address,
-			Set<StationLine> stationLines) {
+			List<StationLine> stationLines) {
 		this();
 		this.id = id;
 		this.name = name;
@@ -57,7 +54,7 @@ public class Station implements Serializable{
 	}
 
 	public Station(String name, TrafficType type, double xCoordinate, double yCoordinate, Address address,
-			Set<StationLine> stationLines) {
+			List<StationLine> stationLines) {
 		super();
 		this.name = name;
 		this.type = type;
@@ -67,12 +64,12 @@ public class Station implements Serializable{
 		this.stationLines = stationLines;
 	}
 
-	public Set<StationLine> getLines() {
+	public List<StationLine> getLines() {
 		return stationLines;
 	}
 
 
-	public void setLines(Set<StationLine> stationLines) {
+	public void setLines(List<StationLine> stationLines) {
 		this.stationLines = stationLines;
 	}
 

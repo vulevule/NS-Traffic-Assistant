@@ -1,6 +1,7 @@
 package com.team9.dto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.team9.model.Station;
 import com.team9.model.StationLine;
@@ -16,7 +17,7 @@ public class StationDTO {
 	private String addressName;
 	private String addressCity;
 	private int addressZip;
-	private ArrayList<String> lines;
+	private List<StationLineDto> lines;
 	
 	public StationDTO(Station s) {
 		this.id = s.getId();
@@ -31,18 +32,18 @@ public class StationDTO {
 			this.addressZip = s.getAddress().getZip();
 		}
 		
-		this.lines = new ArrayList<String>();
+		this.lines = new ArrayList<StationLineDto>();
 		if(s.getLines() != null) {
 			for(StationLine sl : s.getLines()) {
-				this.lines.add(sl.getLine().getName());
+				this.lines.add(new StationLineDto(sl));
 			}
 		}
 		
 	}
-	
+		
 	public StationDTO(String name, TrafficType type, double xCoordinate, double yCoordinate, String addressName,
-			String addressCity, int addressZip, ArrayList<String> lines) {
-		super();
+			String addressCity, int addressZip, List<StationLineDto> lines) {
+		this();
 		this.name = name;
 		this.type = type;
 		this.xCoordinate = xCoordinate;
@@ -50,12 +51,12 @@ public class StationDTO {
 		this.addressName = addressName;
 		this.addressCity = addressCity;
 		this.addressZip = addressZip;
-		this.setLines(lines);
+		this.lines = lines;
 	}
 
 	public StationDTO(Long id, String name, TrafficType type, double xCoordinate, double yCoordinate,
-			String addressName, String addressCity, int addressZip, ArrayList<String> lines) {
-		super();
+			String addressName, String addressCity, int addressZip, List<StationLineDto> lines) {
+		this();
 		this.id = id;
 		this.name = name;
 		this.type = type;
@@ -64,7 +65,7 @@ public class StationDTO {
 		this.addressName = addressName;
 		this.addressCity = addressCity;
 		this.addressZip = addressZip;
-		this.setLines(lines);
+		this.lines = lines;
 	}
 
 	public Long getId() {
@@ -133,11 +134,11 @@ public class StationDTO {
 		this.addressZip = addressZip;
 	}
 
-	public ArrayList<String> getLines() {
+	public List<StationLineDto> getLines() {
 		return lines;
 	}
 
-	public void setLines(ArrayList<String> lines) {
+	public void setLines(List<StationLineDto> lines) {
 		this.lines = lines;
 	}
 	

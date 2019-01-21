@@ -1,0 +1,21 @@
+<div class="linesContainer">
+  <ngb-tabset (tabChange)="tabChange()" [activeId]="activeTabId">
+    <ngb-tab title="Display lines" id="displayLinesTab">
+      <ng-template ngbTabContent>
+        <app-lines-display
+          [lines]="lines"
+          [stations]="stations"
+          (onSelectLine)="onSelectLine($event)"
+        ></app-lines-display>
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab title="Create new" id="createLineTab">
+      <ng-template ngbTabContent>
+        <app-lines-create [stations]="stations"></app-lines-create>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>
+
+<!-- <app-lines-map [lines]="lines" [stations]="stations"></app-lines-map> -->

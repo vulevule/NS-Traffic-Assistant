@@ -16,7 +16,15 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FilterByTypePipe } from './stations/display-stations/pipes/filter-by-type.pipe';
 import { FilterByNamePipe } from './stations/display-stations/pipes/filter-by-name.pipe';
-import { FilterByAddressPipe } from './stations/display-stations/pipes/filter-by-address.pipe';
+import { LinesComponent } from './lines/lines/lines.component';
+import { LinesSidebarComponent } from './lines/lines-sidebar/lines-sidebar.component';
+import { LinesMapComponent } from './lines/lines-map/lines-map.component';
+import { LinesDisplayComponent } from './lines/lines-display/lines-display.component';
+import { LinesCreateComponent } from './lines/lines-create/lines-create.component';
+import { LineService } from './services/lines/line.service';
+import { FilterByZonePipe } from './lines/lines-display/pipes/filter-by-zone.pipe';
+import { FilterByLinePipe } from './stations/display-stations/pipes/filter-by-line.pipe';
+import { FilterByStationPipe } from './lines/lines-display/pipes/filter-by-station.pipe';
 
 
 
@@ -25,7 +33,7 @@ const appRoutes: Routes = [
     component: MainPageComponent,
     children: [
       { path: 'displaystations', component: DisplayStationsComponent, outlet: "secondary"},
-      { path: 'login', component: LoginPageComponent, outlet: "primary"}
+      { path: 'lines', component: LinesComponent, outlet: "secondary"},
     ] 
   },
   { path: 'login',      component: LoginPageComponent },
@@ -45,7 +53,14 @@ const appRoutes: Routes = [
     DisplayStationsComponent,
     FilterByTypePipe,
     FilterByNamePipe,
-    FilterByAddressPipe,
+    LinesComponent,
+    LinesSidebarComponent,
+    LinesMapComponent,
+    LinesDisplayComponent,
+    LinesCreateComponent,
+    FilterByZonePipe,
+    FilterByLinePipe,
+    FilterByStationPipe,
   ],
   imports: [
     NgbModule,
@@ -60,7 +75,8 @@ const appRoutes: Routes = [
   providers: [
     LoggedUserService,
     AuthenticationService,
-    StationServiceService
+    StationServiceService,
+    LineService
   ],
   bootstrap: [AppComponent]
 })

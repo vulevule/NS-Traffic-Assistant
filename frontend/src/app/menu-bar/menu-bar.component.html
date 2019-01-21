@@ -14,12 +14,15 @@
       >
     </li>
 
-    <li ngbDropdown class="nav-item">
-      <a class="nav-link btn" id="linesDropdown" ngbDropdownToggle>Lines</a>
-      <div ngbDropdownMenu aria-labelledby="linesDropdown">
-        <button class="dropdown-item">Display all</button>
-        <button class="dropdown-item">Add new</button>
-      </div>
+    <li class="nav-item">
+      <a
+        class="nav-link btn"
+        id="linesDropdown"
+        (click)="
+          router.navigate(['/main', { outlets: { secondary: 'lines' } }])
+        "
+        >Lines</a
+      >
     </li>
 
     <li ngbDropdown class="nav-item">

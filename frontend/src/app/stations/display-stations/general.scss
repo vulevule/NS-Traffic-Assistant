@@ -8,12 +8,26 @@
 	color: black
 }
 
+.btnFloatRight {
+	float: right;
+	margin: 0 5px 5px 0
+}
+
+.tableContent {
+	width: 100%;
+}
+
+.tdContent {
+	width: 10px;
+}
+
 .row {
 	margin: 0;
 }
 
 #routes {
-	overflow-y: scroll
+	overflow-y: scroll;
+	max-height: 50vh;
 }
 
 .route {
@@ -50,6 +64,7 @@
 	padding-left: 0px;
 	padding-right: 0px;
 	height: 100%;
+	max-height: 100vh;
 }
 .main {
 	background-color: $main-color;

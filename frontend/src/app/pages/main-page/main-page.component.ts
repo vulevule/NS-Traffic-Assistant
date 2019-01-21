@@ -2,6 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { User } from 'src/app/model/User';
 import { LoggedUserService } from 'src/app/services/loggedUserService';
 import { Router } from '@angular/router';
+import { StationDTO } from 'src/app/model/StationDTO';
+import { LineDTO } from 'src/app/model/LineDTO';
+import { StationServiceService } from 'src/app/services/stations/station-service.service';
+import { LineService } from 'src/app/services/lines/line.service';
+import { SharedService } from 'src/app/services/sharedVars/shared.service';
 
 @Component({
   selector: 'app-main-page',
@@ -13,10 +18,19 @@ export class MainPageComponent implements OnInit {
   @Input()
   loggedUser: User;
 
-  constructor(private loggedUserService: LoggedUserService, private router: Router) { }
+  stations: StationDTO[];
+  lines: LineDTO[];
+
+  constructor(private loggedUserService: LoggedUserService, private router: Router, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.loggedUser = this.loggedUserService.loggedUser;
+
+    this.sharedService.stations.subscribe(stations => this.stations = stations);
+    this.sharedService.lines.subscribe(lines => this.lines = lines);
+
+    this.sharedService.updateAll();
+
     // Ubaciti proveru ako nije ulogovan (loggedUser je undefined) redirektovati na login stranicu
     // na logoutu postaviti loggedUser na undefined
 

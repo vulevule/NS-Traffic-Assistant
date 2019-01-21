@@ -110,7 +110,8 @@ public class StationController {
 	@PostMapping(value="/station/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<StationDTO> createStation(@RequestBody StationDTO station){
 		logger.info(">> Creating station  " + station.getName());
-
+		logger.info("GELDAJ VAMO: " + station.getType());
+		
 		Station created = null;
 		try {
 			created = stationService.createStation(station);

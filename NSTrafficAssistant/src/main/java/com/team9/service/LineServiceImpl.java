@@ -12,10 +12,12 @@ import com.team9.dto.LocationDto;
 import com.team9.dto.StationLineDto;
 import com.team9.exceptions.LineAlreadyExistsException;
 import com.team9.exceptions.LineNotFoundException;
+import com.team9.exceptions.StationNotFoundException;
 import com.team9.model.Line;
 import com.team9.model.Location;
 import com.team9.model.Station;
 import com.team9.model.StationLine;
+import com.team9.model.Timetable;
 import com.team9.model.TrafficType;
 import com.team9.model.TrafficZone;
 import com.team9.repository.LineRepository;
@@ -43,21 +45,32 @@ public class LineServiceImpl implements LineService{
 	private TimeTableRepository timeTableRepository;
 	
 	@Override
-	public Line createLine(LineDto ldto) throws LineAlreadyExistsException {
-		Line find = lineRepository.findByNameAndType(ldto.getName(), ldto.getTrafficType());
+	public Line createLine(LineDto ldto) throws LineAlreadyExistsException, StationNotFoundException {
+		Line find = lineRepository.findByNameAndType(ldto.getName(), ldto.getType());
 		if (find == null) {
-			Line line = new Line(ldto.getName(), ldto.getTrafficType(), ldto.getTrafficZone(), null, null, null);
-			line.setTimeTable(timeTableRepository.findByActivate(true));
+			Line line = new Line(ldto.getName(), ldto.getType(), ldto.getZone(), null, null, null);
+			Timetable timetable = timeTableRepository.findByActivate(true);
+			if(timetable == null) {
+				timetable = new Timetable();
+			}
+			line.setTimeTable(timetable);
+			
 			
 			line.setRoute(new ArrayList<Location>());
 			for(LocationDto loc : ldto.getRoute()) {
 				Location newLoc = new Location(loc.getLat(), loc.getLon());
+				
 				line.getRoute().add(newLoc);
 			}
 			
 			line.setStations(new ArrayList<StationLine>());
 			for(StationLineDto sl: ldto.getStations()) {
 				Station foundStation = stationRepository.findById(sl.getStationId()).orElse(null);
+				
+				if(foundStation == null) {
+					throw new StationNotFoundException();
+				}
+				
 				StationLine newSl = new StationLine(sl.getStationNum(), sl.getArrival(), foundStation, line);
 				line.getStations().add(newSl);
 			}
@@ -69,11 +82,11 @@ public class LineServiceImpl implements LineService{
 	}
 
 	@Override
-	public Line updateLine(LineDto ldto) throws LineNotFoundException {
+	public Line updateLine(LineDto ldto) throws LineNotFoundException, StationNotFoundException {
 		Optional<Line> find = lineRepository.findById(ldto.getId());
 		if (find.isPresent()) {
 			Line line = find.get();
-			line.setZone(ldto.getTrafficZone());	
+			line.setZone(ldto.getZone());	
 			
 			for(Location loc : line.getRoute()) {
 				locationRepository.delete(loc);
@@ -90,6 +103,11 @@ public class LineServiceImpl implements LineService{
 			line.getStations().clear();
 			for(StationLineDto sl: ldto.getStations()) {
 				Station foundStation = stationRepository.findById(sl.getStationId()).orElse(null);
+				
+				if(foundStation == null) {
+					throw new StationNotFoundException();
+				}
+				
 				StationLine newSl = new StationLine(sl.getStationNum(), sl.getArrival(), foundStation, line);
 				line.getStations().add(newSl);
 			}
