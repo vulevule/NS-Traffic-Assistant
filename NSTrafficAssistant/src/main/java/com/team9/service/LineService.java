@@ -5,15 +5,16 @@ import java.util.List;
 import com.team9.dto.LineDto;
 import com.team9.exceptions.LineAlreadyExistsException;
 import com.team9.exceptions.LineNotFoundException;
+import com.team9.exceptions.StationNotFoundException;
 import com.team9.model.Line;
 import com.team9.model.TrafficType;
 import com.team9.model.TrafficZone;
 
 public interface LineService {
 
-	Line createLine(LineDto l) throws LineAlreadyExistsException;
+	Line createLine(LineDto l) throws LineAlreadyExistsException, StationNotFoundException;
 	
-	Line updateLine(LineDto l) throws LineNotFoundException;
+	Line updateLine(LineDto l) throws LineNotFoundException, StationNotFoundException;
 	
 	boolean deleteLine(Long id) throws LineNotFoundException;
 	

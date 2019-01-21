@@ -30,6 +30,11 @@ public class LocationDto {
 	public void setLon(Double lon) {
 		this.lon = lon;
 	}
+
+	@Override
+	public String toString() {
+		return "LocationDto [lat=" + lat + ", lon=" + lon + "]";
+	}
 	
 	
 

@@ -21,29 +21,29 @@ public class LineDto {
 	
 	public LineDto() {}
 	
-	public LineDto(String name, TrafficType trafficType, TrafficZone trafficZone, List<StationLineDto> stations,
-			Long timeTable, List<LocationDto> route) {
+	public LineDto(String name, TrafficType type, TrafficZone zone, List<StationLineDto> stations, Long timeTable,
+			List<LocationDto> route) {
 		this();
 		this.name = name;
-		this.type = trafficType;
-		this.zone = trafficZone;
+		this.type = type;
+		this.zone = zone;
 		this.stations = stations;
 		this.timeTable = timeTable;
 		this.route = route;
 	}
 
-	public LineDto(Long id, String name, TrafficType trafficType, TrafficZone trafficZone, List<StationLineDto> stations,
+	public LineDto(Long id, String name, TrafficType type, TrafficZone zone, List<StationLineDto> stations,
 			Long timeTable, List<LocationDto> route) {
-		super();
+		this();
 		this.id = id;
 		this.name = name;
-		this.type = trafficType;
-		this.zone = trafficZone;
+		this.type = type;
+		this.zone = zone;
 		this.stations = stations;
 		this.timeTable = timeTable;
 		this.route = route;
 	}
-	
+
 	public LineDto(Line l) {
 		this.id = l.getId();
 		this.name = l.getName();
@@ -62,6 +62,14 @@ public class LineDto {
 		}
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -70,20 +78,20 @@ public class LineDto {
 		this.name = name;
 	}
 
-	public TrafficType getTrafficType() {
+	public TrafficType getType() {
 		return type;
 	}
 
-	public void setTrafficType(TrafficType trafficType) {
-		this.type = trafficType;
+	public void setType(TrafficType type) {
+		this.type = type;
 	}
 
-	public TrafficZone getTrafficZone() {
+	public TrafficZone getZone() {
 		return zone;
 	}
 
-	public void setTrafficZone(TrafficZone trafficZone) {
-		this.zone = trafficZone;
+	public void setZone(TrafficZone zone) {
+		this.zone = zone;
 	}
 
 	public List<StationLineDto> getStations() {
@@ -110,14 +118,11 @@ public class LineDto {
 		this.route = route;
 	}
 
-	public Long getId() {
-		return id;
+	@Override
+	public String toString() {
+		return "LineDto [id=" + id + ", name=" + name + ", type=" + type + ", zone=" + zone + ", stations=" + stations
+				+ ", timeTable=" + timeTable + ", route=" + route + "]";
 	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	
 	
 	

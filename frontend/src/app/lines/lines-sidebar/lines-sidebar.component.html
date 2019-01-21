@@ -1,0 +1,15 @@
+<div class="col-12 col-md-3 sidebar-content">
+  <ngb-tabset (tabChange)="tabChange()" [activeId]="activeTabId">
+    <ngb-tab title="Display lines" id="displayLinesTab">
+      <ng-template ngbTabContent>
+        <app-lines-display></app-lines-display>
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab title="Create new" id="createLineTab">
+      <ng-template ngbTabContent>
+        <app-lines-create></app-lines-create>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>

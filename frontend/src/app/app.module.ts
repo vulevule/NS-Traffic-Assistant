@@ -16,7 +16,15 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FilterByTypePipe } from './stations/display-stations/pipes/filter-by-type.pipe';
 import { FilterByNamePipe } from './stations/display-stations/pipes/filter-by-name.pipe';
-import { FilterByAddressPipe } from './stations/display-stations/pipes/filter-by-address.pipe';
+import { LinesComponent } from './lines/lines/lines.component';
+import { LinesSidebarComponent } from './lines/lines-sidebar/lines-sidebar.component';
+import { LinesMapComponent } from './lines/lines-map/lines-map.component';
+import { LinesDisplayComponent } from './lines/lines-display/lines-display.component';
+import { LinesCreateComponent } from './lines/lines-create/lines-create.component';
+import { LineService } from './services/lines/line.service';
+import { FilterByZonePipe } from './lines/lines-display/pipes/filter-by-zone.pipe';
+import { FilterByLinePipe } from './stations/display-stations/pipes/filter-by-line.pipe';
+import { FilterByStationPipe } from './lines/lines-display/pipes/filter-by-station.pipe';
 import { TicketComponent } from './ticket/ticket/ticket.component';
 import { BuyTicketFormComponent } from './ticket/buy-ticket-form/buy-ticket-form.component';
 import { DisplayTicketComponent } from './ticket/display-ticket/display-ticket.component';
@@ -38,12 +46,15 @@ const appRoutes: Routes = [
     component: MainPageComponent,
     children: [
       { path: 'displaystations', component: DisplayStationsComponent, outlet: "secondary"},
+      { path: 'lines', component: LinesComponent, outlet: "secondary"},
       { path: 'login', component: LoginPageComponent, outlet: "primary"},
       { path : 'ticket' , component : TicketComponent, outlet:"secondary"},
       { path : 'pricelist', component : PricelistComponent, outlet : "secondary"},
       { path : 'report', component : ReportComponent, outlet : "secondary"}
-      ] 
+    ] 
   },
+       
+  
   { path: 'login',      component: LoginPageComponent },
   { path: '', redirectTo: '/main', pathMatch: 'full'},
   { path: '**', component: NotFoundPageComponent },
@@ -61,7 +72,14 @@ const appRoutes: Routes = [
     DisplayStationsComponent,
     FilterByTypePipe,
     FilterByNamePipe,
-    FilterByAddressPipe,
+    LinesComponent,
+    LinesSidebarComponent,
+    LinesMapComponent,
+    LinesDisplayComponent,
+    LinesCreateComponent,
+    FilterByZonePipe,
+    FilterByLinePipe,
+    FilterByStationPipe,
     TicketComponent,
     BuyTicketFormComponent,
     DisplayTicketComponent,
@@ -88,7 +106,8 @@ const appRoutes: Routes = [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true },,
     LoggedUserService,
     AuthenticationService,
-    StationServiceService
+    StationServiceService,
+    LineService
   ],
   bootstrap: [AppComponent]
 })

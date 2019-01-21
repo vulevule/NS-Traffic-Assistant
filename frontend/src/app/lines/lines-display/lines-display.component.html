@@ -1,0 +1,195 @@
+<div class="row content">
+  <div class="col-12 col-md-4 sidebar-content">
+    <label class="col-12 col-form-label">
+      Currently we have {{ lines.length }} lines in total.
+    </label>
+
+    <ng-template #rt let-r="result" let-t="term">
+      <img
+        [src]="'../../../assets/images/' + r.type + '-icon.png'"
+        class="mr-1"
+        style="width: 20px"
+      />
+      <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+    </ng-template>
+
+    <form #directionsForm="ngForm">
+      <label class="col-12 col-form-label"
+        >Display:
+
+        <div class="btn-group btn-group-toggle">
+          <label class="btn-primary" ngbButtonLabel>
+            <input
+              type="checkbox"
+              ngbButton
+              [(ngModel)]="displayType.bus"
+              name="displayBus"
+            />
+            Bus
+          </label>
+          <label class="btn-primary" ngbButtonLabel>
+            <input
+              type="checkbox"
+              ngbButton
+              [(ngModel)]="displayType.metro"
+              name="displayMetro"
+            />
+            Metro
+          </label>
+          <label class="btn-primary" ngbButtonLabel>
+            <input
+              type="checkbox"
+              ngbButton
+              [(ngModel)]="displayType.tram"
+              name="displayTram"
+            />
+            Tram
+          </label>
+        </div>
+      </label>
+
+      <label class="col-12 col-form-label"
+        >Display:
+
+        <div class="btn-group btn-group-toggle">
+          <label class="btn-primary" ngbButtonLabel>
+            <input
+              type="checkbox"
+              ngbButton
+              [(ngModel)]="displayZone.first"
+              name="displayFirstZone"
+            />
+            First
+          </label>
+          <label class="btn-primary" ngbButtonLabel>
+            <input
+              type="checkbox"
+              ngbButton
+              [(ngModel)]="displayZone.second"
+              name="displaySecondZone"
+            />
+            Second
+          </label>
+        </div>
+      </label>
+
+      <div class="search-item ">
+        <input
+          #linename
+          type="text"
+          id="linename"
+          class="form-control"
+          name="linename"
+          placeholder="Search by name"
+          [ngbTypeahead]="search"
+          [resultTemplate]="rt"
+          [inputFormatter]="formatter"
+        />
+      </div>
+
+      <div class="search-item">
+        <input
+          #linest
+          type="text"
+          id="linest"
+          class="form-control"
+          name="linest"
+          placeholder="Search by station"
+          [(ngModel)]="selectedStation"
+          [ngbTypeahead]="searchByStation"
+          [resultTemplate]="rt"
+          [inputFormatter]="formatterStation"
+        />
+      </div>
+    </form>
+
+    <div id="stationCollapseArea" *ngIf="selectedLine">
+      <label>Selected line: </label>
+      <button class="close" title="Close" (click)="selectedLine = undefined">
+        x
+      </button>
+      <div class="card">
+        <div class="card-body">
+          <p>
+            <img
+              src="../../../assets/images/{{ selectedLine.type }}-icon.png"
+              style="width: 40px"
+            />
+            &nbsp; {{ selectedLine.name }}
+          </p>
+          <span
+            >Zone: {{ selectedLine.zone }} | Total stations:
+            {{ selectedLine.stations.length }}</span
+          >
+        </div>
+
+        <div>
+          <div class="btn-group btnFloatRight">
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              (click)="openEditor(selectedLine)"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="deleteLine(selectedLine)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+    <label>Lines:</label>
+
+    <div id="routes">
+      <div
+        *ngFor="
+          let line of (lines
+            | filterByType: displayType
+            | filterByZone: displayZone
+            | filterByStation: selectedStation:linest.value
+            | filterByName: linename.value)
+        "
+        class="row route"
+        (click)="selectLine(line)"
+      >
+        <div class="col-2 estimated-time">
+          <img
+            src="../../../assets/images/{{ line.type }}-icon.png"
+            style="width: 40px"
+          />
+        </div>
+
+        <div class="col-10 estimated-time">
+          <span>{{ line.name }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-8 map-content">
+    <div class="mapButton">
+      <button type="button" class="btn btn-primary" (click)="clearMap()">
+        Clear map
+      </button>
+    </div>
+
+    <div class="legend">
+      <div class="legend-title"><span>Legend:</span></div>
+      <div class="legend-bus"><span>Bus</span></div>
+    </div>
+
+    <div id="map" class="map"></div>
+
+    <div id="popup" class="ol-popup">
+      <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+      <div id="popup-content"></div>
+    </div>
+  </div>
+</div>

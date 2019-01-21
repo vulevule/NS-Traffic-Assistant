@@ -2,6 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { User } from 'src/app/model/User';
 import { LoggedUserService } from 'src/app/services/loggedUserService';
 import { Router } from '@angular/router';
+import { StationDTO } from 'src/app/model/StationDTO';
+import { LineDTO } from 'src/app/model/LineDTO';
+import { StationServiceService } from 'src/app/services/stations/station-service.service';
+import { LineService } from 'src/app/services/lines/line.service';
+import { SharedService } from 'src/app/services/sharedVars/shared.service';
 import { UserDTO } from 'src/app/model/UserDTO';
 
 @Component({
@@ -14,9 +19,17 @@ export class MainPageComponent implements OnInit {
   @Input()
   loggedUser: UserDTO;
 
-  constructor(private loggedUserService: LoggedUserService, private router: Router) { }
+  stations: StationDTO[];
+  lines: LineDTO[];
+
+  constructor(private loggedUserService: LoggedUserService, private router: Router, private sharedService: SharedService) { }
 
   ngOnInit() {
+    this.sharedService.stations.subscribe(stations => this.stations = stations);
+    this.sharedService.lines.subscribe(lines => this.lines = lines);
+
+    this.sharedService.updateAll();
+
     
     this.loggedUser = JSON.parse(
       localStorage.getItem('currentUser'));

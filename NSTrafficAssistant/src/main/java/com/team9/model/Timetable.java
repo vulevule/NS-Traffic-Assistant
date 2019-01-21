@@ -1,7 +1,9 @@
 package com.team9.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -35,7 +37,14 @@ public class Timetable implements Serializable {
 	@Column (nullable = false)
 	private boolean activate;
 	
-	public Timetable() {}
+	public Timetable() {
+		this.issueDate = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, 3);
+		this.expirationDate = cal.getTime();
+		this.activate = true;
+		this.items = new HashSet<TimetableItem>();
+	}
 	
 	public Timetable(Long id, Date expirationDate, Date issueDate, Set<TimetableItem> items) {
 		this();
