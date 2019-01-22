@@ -1,7 +1,7 @@
 <div class="menu">
   <ul class="nav">
 
-    <li class="nav-item">
+    <li class="nav-item" id='stations'>
       <a
         class="nav-link btn"
         id="stationsDropdown"
@@ -14,7 +14,7 @@
         >Stations</a>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item" id='lines'>
       <a
         class="nav-link btn"
         id="linesDropdown"
@@ -25,17 +25,17 @@
       >
     </li>
 
-    <li  class="nav-item" id="tickets" [hidden]="!isHidden">
+    <li  class="nav-item" id="tickets">
       <a class="nav-link btn" id="ticketsDropdown" (click)="router.navigate(['/main', {outlets : {secondary: 'ticket'}}])">Tickets</a>
       
     </li>
 
-    <li  class="nav-item">
+    <li  class="nav-item" id='pricelist'>
         <a class="nav-link btn" id="pricelistDropdown" (click)="router.navigate(['/main', {outlets : {secondary: 'pricelist'}}])">Price list</a>
         
       </li>
 
-      <li class="nav-item"> 
+      <li class="nav-item" id='report'> 
         <a class="nav-link btn" id="reportDropdown" (click)="router.navigate(['/main', {outlets : {secondary: 'report'}}])">Report</a>
       </li>
   </ul>

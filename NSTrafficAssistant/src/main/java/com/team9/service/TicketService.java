@@ -45,5 +45,5 @@ public interface TicketService {
 
 	Collection<TicketReaderDto> getAll(int page, int size);
 
-	int getNumberOfTicket();
+	int getNumberOfTicket(String username) throws UserNotFoundException;
 }

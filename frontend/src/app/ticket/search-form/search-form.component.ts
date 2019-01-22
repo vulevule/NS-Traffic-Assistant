@@ -18,22 +18,32 @@ export class SearchFormComponent implements OnInit {
 
   async ngOnInit() {
     this.page = 1;
-    await this.ticketService.getAll(this.page-1)
-      .then(data => {
+    this.ticketService.getAll(this.page-1)
+      .subscribe(data => {
         this.tickets = data;
-      })
+      }, 
+      error => {
+        alert(error.message);
+      }
+      )
 
-    await this.ticketService.getNumOfTicket()
-    .then( data => {
+    this.ticketService.getNumOfTicket()
+    .subscribe( data => {
       this.numOfTicket = data;
-    })
+    }, 
+      error => {
+        alert(error.message);
+      }
+      )
 
   }
 
   async changePage(){
-    await this.ticketService.getAll(this.page-1)
-      .then(data => {
+    this.ticketService.getAll(this.page-1)
+      .subscribe(data => {
         this.tickets = data;
+      }, error => {
+        alert (error.message);
       })
   }
 }

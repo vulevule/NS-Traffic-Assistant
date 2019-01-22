@@ -486,9 +486,10 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public int getNumberOfTicket() {
+	public int getNumberOfTicket(String username) throws UserNotFoundException {
 		// TODO Auto-generated method stub
-		ArrayList<Ticket> t = (ArrayList<Ticket>) this.ticketRepository.findAll();
+		Passenger p = getPassengerByUsername(username);
+		ArrayList<Ticket> t = (ArrayList<Ticket>) this.ticketRepository.findByPassenger(p);
 		return t.size();
 	}
 

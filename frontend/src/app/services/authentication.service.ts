@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable , of as observableOf} from 'rxjs';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { JwtUtilsService } from 'src/app/security/jwt-utils.service';
-import { map, catchError, tap } from 'rxjs/operators';
-import { promise } from 'protractor';
-import { stringify } from '@angular/compiler/src/util';
+import { LoginUserDtoInterface } from '../model/LoginUserDto';
 
 @Injectable({
     providedIn: 'root'
@@ -18,33 +16,24 @@ export class AuthenticationService {
 
     constructor(private http: HttpClient, private jwtUtilsService: JwtUtilsService) { }
 
-     
+
     //izmeniti da bude jednostavnije, samo sa subscribe, observable da vraca svaki servis
 
-    login(username: string, password: string): Observable<boolean> {
-               return this.http.post(this.loginPath, JSON.stringify({ username, password }), {headers : this.headers, responseType:"text"})
-            .pipe(map((res: any) => {
-                console.log(res);
-                alert(res);
-                let token = res && res['token'];
-                if (token) {
-                    localStorage.setItem('currentUser', JSON.stringify({ username: username, roles: this.jwtUtilsService.getRoles(token), token: token }));
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }), catchError((error: any) => {
-                if (error.status === 400) {
-                    return Observable.throw('Illegal login');
-                } else {
-                    return Observable.throw(
-                        error.json().error || 'Server error'
-                    );
-                }
-            })
-            )
-
+    login(username: string, password: string):Observable<LoginUserDtoInterface>{
+        var token = '';
+        var role = '';
+        return this.http.post<LoginUserDtoInterface>(this.loginPath, JSON.stringify({ username, password }), { headers: this.headers, responseType: 'json' });
+            // .subscribe(
+            //     (data: LoginUserDtoInterface) => {
+            //         alert(data.token);
+            //         token = data.token;
+            //         role = data.role;
+            //         localStorage.setItem('currentUser', JSON.stringify({ username: username, role:role, token: token }));
+            //         return observableOf(true)
+            //     },
+            //     err => { return observableOf(false); }
+            // )
+       
 
     }
 

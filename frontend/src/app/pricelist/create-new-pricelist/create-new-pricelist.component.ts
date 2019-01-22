@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Item } from 'src/app/model/PriceItem';
 import { forEach } from '@angular/router/src/utils/collection';
-import { PriceListReaderDto, PriceList } from 'src/app/model/Pricelist';
+import { PriceListInterface } from 'src/app/model/Pricelist';
 import { PriceListServiceService } from 'src/app/services/pricelist/price-list-service.service';
 
 @Component({
@@ -13,7 +13,7 @@ export class CreateNewPricelistComponent implements OnInit {
 
   items: Item[] = [];
 
-  pricelist : PriceListReaderDto;
+  pricelist : PriceListInterface;
 
   type: string[] = ['BUS', 'METRO', 'TRAM'];
   zone: string[] = ['FIRST', 'SECOND'];
@@ -47,11 +47,11 @@ export class CreateNewPricelistComponent implements OnInit {
 
   async save() {
     //pozvati metodu iz servisa za kreiranje rasporeda
-    var p = new PriceList({ items: this.items });
+    // var p = new PriceListInterface({ items: this.items });
 
-    this.items.forEach(element => {
-      alert(element.price);
-    });
+    // this.items.forEach(element => {
+    //   alert(element.price);
+    // });
   /*  await this.pricelistService.addPricelist(p)
     .then(data => { this.pricelist = data });
 */

@@ -1,7 +1,7 @@
 <div class="displayPricelist row content">
     <div>
       <ngb-tabset>
-        <ngb-tab title="Price list" id="displayStationsTab">
+        <ngb-tab title="Price list" id="displayPricelist">
           <ng-template ngbTabContent>
             <app-display-price-list></app-display-price-list>
           </ng-template>
@@ -10,7 +10,7 @@
         </ngb-tab>
   
   
-        <ngb-tab title="Create new price list" id="createStationTab">
+        <ngb-tab *ngIf="role === 'ADMIN'" title="Create new price list" id="createPricelist">
           <ng-template ngbTabContent>
             <app-create-new-pricelist></app-create-new-pricelist>
           </ng-template>

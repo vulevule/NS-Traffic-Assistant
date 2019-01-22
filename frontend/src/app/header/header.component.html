@@ -15,10 +15,10 @@ jetse onda ovaj dole meni -->
     <div ngbDropdown class="nav-item">
       <a class="nav-item btn" id="userDropdown" ngbDropdownToggle>Test Testic</a><!--ovde moze da se prikaze username korisnika-->
       <div ngbDropdownMenu aria-labelledby="userDropdown">
-        <button class="dropdown-item" id="editItem" [hidden]="!isHidden">Edit profile</button>
-        <button class="dropdown-item" id="loginItem" [hidden]="isHidden" (click)="open()" >Login</button>
-        <button class="dropdown-item" id="registerItem" [hidden]="isHidden">Register</button>
-        <button class="dropdown-item" id="logoutItem" [hidden]="!isHidden">Log out</button>
+        <button class="dropdown-item" id="editItem" >Edit profile</button>
+        <button class="dropdown-item" id="loginItem" (click)="open()" >Login</button>
+        <button class="dropdown-item" id="registerItem" >Register</button>
+        <button class="dropdown-item" id="logoutItem" (click)="logout()">Log out</button>
       </div>     
     </div>
   </div>

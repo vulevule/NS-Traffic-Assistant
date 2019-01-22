@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.team9.dto.LoginDto;
+import com.team9.dto.LoginUserDto;
 import com.team9.dto.UpdateProfileDto;
 import com.team9.dto.UserDto;
 import com.team9.dto.ValidationDTO;
@@ -93,8 +94,8 @@ catch(Exception ex) {
 			value="/user/login",
 			method=RequestMethod.POST,
 			consumes="application/json",
-			produces = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<String> login(@RequestBody LoginDto log){
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<LoginUserDto> login(@RequestBody LoginDto log){
 		logger.info(">> login: username - " + log.getUsername() + " password - " + log.getPassword());
 		
 		try {
@@ -115,10 +116,25 @@ catch(Exception ex) {
             
             String authToken = tokenUtils.generateToken(details);
             headers.add("X-Auth-Token", authToken);
+            String userRole = "";
+            LoginUserDto lu = new LoginUserDto();
+            User user=userService.getUser(log.getUsername());
+            logger.info(user.getUsername() + ' ' + user.getPassword());
+    		if (user!=null){
+    			userRole = user.getRole().name();
+    			logger.info(userRole);
+    			lu.setRole(userRole);
+    			lu.setToken(authToken);
+    		}else{
+    			logger.info("not exists user");
+    			return new ResponseEntity<LoginUserDto>(lu,HttpStatus.BAD_REQUEST);
+    		}
+    			
+            
+            
             
             logger.info("<< ok login");
-            return new ResponseEntity<String>(
-            		tokenUtils.generateToken(details),headers,  HttpStatus.OK);
+            return new ResponseEntity<LoginUserDto>(lu,headers,  HttpStatus.OK);
 			
 			
 		
@@ -131,7 +147,7 @@ catch(Exception ex) {
 		
 		}catch(Exception ex) {
 			logger.info("invalid login");
-			return new ResponseEntity<String>("Invalid login",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		}
 	

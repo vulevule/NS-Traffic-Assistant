@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Ticket, BuyTicket } from 'src/app/model/Ticket';
 import { Report } from 'src/app/model/Report';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,40 +16,26 @@ export class TicketServiceService {
   constructor(private http : HttpClient) { }
 
   //proba
-  getAll(page:number):Promise<Ticket[]>{
+  getAll(page:number):Observable<Ticket[]>{
     this.size = 4;
     return this.http
-      .get<Ticket[]>(`${this.ticketUrl}/all?page=${page}&size=${this.size}`)
-      .toPromise()
-      .then(response => response as Ticket[])
-      .catch(this.handleError);
+      .get<Ticket[]>(`${this.ticketUrl}/myTicket?page=${page}&size=${this.size}`);
   } 
 
-  //sve karte od jednog korisnika, koji je trenutno ulogovan 
-  getMyTicket(page:number):Promise<Ticket[]>{
-    this.size = 4;
-    return this.http
-      .get<Ticket[]>(`${this.ticketUrl}/myTicket?page=${page}&size=${this.size}`)
-      .toPromise()
-      .then(response => response as Ticket[])
-      .catch(this.handleError);
-  }
 
   //kupovina karte
-  buyTicket(t : BuyTicket) : Promise<Ticket>{
+  buyTicket(t : BuyTicket) : Observable<Ticket>{
     return this.http
       .post<Ticket>(`${this.ticketUrl}/buyTicket`, JSON.stringify(t),{
         headers : this.headers
-      })
-      .toPromise()
-      .then(response => response as Ticket)
-      .catch(this.handleError);
+      });
   }
-
-/*
-  //koriscenje karte
-  useTicket() : Promise<String>{
-    ret
+  /*
+  treba nam zbog stranicenja podataka 
+  */
+  getNumOfTicket():Observable<number>{
+    return this.http
+      .get<number>(`${this.ticketUrl}/size`);
   }
 
 
@@ -57,24 +44,11 @@ export class TicketServiceService {
 
   //dobavljanje cene karte 
 
-  getPrice(t : BuyTicket):Promise<number>{
+  getPrice(t : BuyTicket):Observable<number>{
     return this.http
-      .get<number>(`${this.ticketUrl}/price?type=${t.trafficType}&zone=${t.trafficZone}&time=${t.timeType}`)
-      .toPromise()
-      .then(response => response as number)
-      .catch(this.handleError);
+      .get<number>(`${this.ticketUrl}/price?type=${t.trafficType}&zone=${t.trafficZone}&time=${t.timeType}`);
   }
 
-/*
-treba nam zbog stranicenja podataka 
-*/
-  getNumOfTicket():Promise<number>{
-    return this.http
-      .get<number>(`${this.ticketUrl}/size`)
-      .toPromise()
-      .then(response => response as number)
-      .catch(this.handleError);
-  }
 
 
   getReport(month : string, year : number, type : string): Promise<Report>{

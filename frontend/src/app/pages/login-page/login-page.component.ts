@@ -5,6 +5,7 @@ import{Router} from '@angular/router';
 import { first } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
+import { LoginUserDtoInterface } from 'src/app/model/LoginUserDto';
 
 @Component({
   selector: 'app-login-page',
@@ -17,7 +18,7 @@ export class LoginPageComponent implements OnInit{
   public user;
   public wrongUsernameOrPass:boolean;
   public role;
-  public loading : string;
+  public loading : boolean;
 
   constructor(
     private AuthenticationService:AuthenticationService,private router:Router)
@@ -34,39 +35,26 @@ dismiss(){
 }
 
 async login(){
-  // await this.AuthenticationService.getXToken(this.user.username, this.user.password)
-  // .then(data => {this.loading = data});
-
-  var response : any;
-  //await this.AuthenticationService.getXToken(this.user.username, this.user.password).subscribe(data => response = data);
-  
-  await this.AuthenticationService.login(this.user.username,this.user.password).subscribe((loggedIn:boolean)=>{
-    console.log("loggedIn");
-    if(loggedIn){
-      console.log(loggedIn);
-      this.dismiss();
-      var currentUser = JSON.parse(
-        localStorage.getItem('currentUser'));
-      this.router.navigate(['http://localhost:4200/main']);
+  var loadingUser : LoginUserDtoInterface;
+  this.AuthenticationService.login(this.user.username, this.user.password)
+    .subscribe(data => {
+      loadingUser = data;
+      let token = data.token;
+      let role = data.role;
+      localStorage.setItem('currentUser', JSON.stringify({ username: this.user.username, role:role, token: token }));
+      this.loading = true;
+      alert('Success login');
+      //treba navigirati
+    }, error => {
+      this.loading = false;
+      alert("invalid login");
     }
-    else{
-      this.wrongUsernameOrPass=true;
-
-    }
-  },(err:Error)=>{
-    if(err.toString()==='Illegal login'){
-      this.wrongUsernameOrPass=true;
-      console.log(err);
-    }else{
-      throwError(err);
-      this.wrongUsernameOrPass=true;
-    }
+    );
 
   
-  })
-
   
 
 }
+
 
 }

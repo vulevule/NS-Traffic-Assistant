@@ -1,5 +1,6 @@
 package com.team9.repository;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -17,5 +18,8 @@ public interface TicketRepository extends CrudRepository<Ticket, Long>{
 	Optional<Ticket> findBySerialNo(String serialNo);
 	
 	Page<Ticket> findAll(Pageable page);
+	
+	
+	Collection<Ticket> findByPassenger(Passenger id); //treba da bi videla koliko ukupno karata ima korisnik
 }
 
