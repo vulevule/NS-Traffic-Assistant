@@ -12,6 +12,7 @@ import com.team9.model.TrafficZone;
 public class LineDto {
 
 	private Long id;
+	private String mark;
 	private String name;
 	private TrafficType type;
 	private TrafficZone zone;
@@ -19,10 +20,11 @@ public class LineDto {
 	private List<LocationDto> route;
 	
 	public LineDto() {}
-	
-	public LineDto(String name, TrafficType type, TrafficZone zone, List<StationLineDto> stations,
+
+	public LineDto(String mark, String name, TrafficType type, TrafficZone zone, List<StationLineDto> stations,
 			List<LocationDto> route) {
-		this();
+		super();
+		this.mark = mark;
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
@@ -30,10 +32,11 @@ public class LineDto {
 		this.route = route;
 	}
 
-	public LineDto(Long id, String name, TrafficType type, TrafficZone zone, List<StationLineDto> stations,
+	public LineDto(Long id, String mark, String name, TrafficType type, TrafficZone zone, List<StationLineDto> stations,
 			List<LocationDto> route) {
-		this();
+		super();
 		this.id = id;
+		this.mark = mark;
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
@@ -43,6 +46,7 @@ public class LineDto {
 
 	public LineDto(Line l) {
 		this.id = l.getId();
+		this.mark = l.getMark();
 		this.name = l.getName();
 		this.type = l.getType();
 		this.zone = l.getZone();
@@ -98,7 +102,6 @@ public class LineDto {
 		this.stations = stations;
 	}
 
-
 	public List<LocationDto> getRoute() {
 		return route;
 	}
@@ -107,10 +110,19 @@ public class LineDto {
 		this.route = route;
 	}
 
+	public String getMark() {
+		return mark;
+	}
+
+	public void setMark(String mark) {
+		this.mark = mark;
+	}
+
 	@Override
 	public String toString() {
-		return "LineDto [id=" + id + ", name=" + name + ", type=" + type + ", zone=" + zone + ", stations=" + stations
-				+  ", route=" + route + "]";
+
+		return "LineDto [id=" + id + ", mark=" + mark + ", name=" + name + ", type=" + type + ", zone=" + zone
+				+ ", stations=" + stations + ", route=" + route + "]";
 	}
 	
 	

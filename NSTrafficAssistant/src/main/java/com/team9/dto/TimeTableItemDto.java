@@ -16,16 +16,20 @@ public class TimeTableItemDto implements Serializable {
 	private ArrayList<Time> workdayTimes;
 	private Long line_id;
 	private String line_name;
+	private String line_mark;
 	private Long timeTable_id;
 
+	
+
 	public TimeTableItemDto(ArrayList<Time> sundayTimes, ArrayList<Time> saturdayTimes, ArrayList<Time> workdayTimes,
-			Long line_id, String line_name, Long timeTable_id) {
+			Long line_id, String line_name, String line_mark, Long timeTable_id) {
 		super();
 		this.sundayTimes = sundayTimes;
 		this.saturdayTimes = saturdayTimes;
 		this.workdayTimes = workdayTimes;
 		this.line_id = line_id;
 		this.line_name = line_name;
+		this.line_mark = line_mark;
 		this.timeTable_id = timeTable_id;
 	}
 
@@ -76,5 +80,14 @@ public class TimeTableItemDto implements Serializable {
 	public void setTimeTable_id(Long timeTable_id) {
 		this.timeTable_id = timeTable_id;
 	}
+
+	public String getLine_mark() {
+		return line_mark;
+	}
+
+	public void setLine_mark(String line_mark) {
+		this.line_mark = line_mark;
+	}
+	
 
 }

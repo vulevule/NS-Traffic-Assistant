@@ -14,9 +14,6 @@ public class StationDTO {
 	private TrafficType type;
 	private double xCoordinate;
 	private double yCoordinate;
-	private String addressName;
-	private String addressCity;
-	private int addressZip;
 	private List<StationLineDto> lines;
 	
 	public StationDTO(Station s) {
@@ -25,12 +22,6 @@ public class StationDTO {
 		this.type = s.getType();
 		this.xCoordinate = s.getxCoordinate();
 		this.yCoordinate = s.getyCoordinate();
-		
-		if(s.getAddress() != null) {
-			this.addressName = s.getAddress().getStreet();
-			this.addressCity = s.getAddress().getCity();
-			this.addressZip = s.getAddress().getZip();
-		}
 		
 		this.lines = new ArrayList<StationLineDto>();
 		if(s.getLines() != null) {
@@ -41,32 +32,31 @@ public class StationDTO {
 		
 	}
 		
-	public StationDTO(String name, TrafficType type, double xCoordinate, double yCoordinate, String addressName,
-			String addressCity, int addressZip, List<StationLineDto> lines) {
+
+	public StationDTO(String name, TrafficType type, double xCoordinate, double yCoordinate,
+			List<StationLineDto> lines) {
 		this();
 		this.name = name;
 		this.type = type;
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
-		this.addressName = addressName;
-		this.addressCity = addressCity;
-		this.addressZip = addressZip;
 		this.lines = lines;
 	}
 
+
+
 	public StationDTO(Long id, String name, TrafficType type, double xCoordinate, double yCoordinate,
-			String addressName, String addressCity, int addressZip, List<StationLineDto> lines) {
+			List<StationLineDto> lines) {
 		this();
 		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
-		this.addressName = addressName;
-		this.addressCity = addressCity;
-		this.addressZip = addressZip;
 		this.lines = lines;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -108,30 +98,6 @@ public class StationDTO {
 
 	public void setyCoordinate(double yCoordinate) {
 		this.yCoordinate = yCoordinate;
-	}
-
-	public String getAddressName() {
-		return addressName;
-	}
-
-	public void setAddressName(String addressName) {
-		this.addressName = addressName;
-	}
-
-	public String getAddressCity() {
-		return addressCity;
-	}
-
-	public void setAddressCity(String addressCity) {
-		this.addressCity = addressCity;
-	}
-
-	public int getAddressZip() {
-		return addressZip;
-	}
-
-	public void setAddressZip(int addressZip) {
-		this.addressZip = addressZip;
 	}
 
 	public List<StationLineDto> getLines() {

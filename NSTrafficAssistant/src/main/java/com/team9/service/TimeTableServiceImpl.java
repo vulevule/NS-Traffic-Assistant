@@ -104,7 +104,7 @@ public class TimeTableServiceImpl implements TimeTableService{
 			List<Time> saturdayTimeItems = saturdayItems.stream().map(i -> i.getStartTime()).collect(Collectors.toList());
 
 			//napravimo objekta koji vracamo 
-			TimeTableItemDto t_dto = new TimeTableItemDto((ArrayList<Time>)sundayTimeItems, (ArrayList<Time>)saturdayTimeItems, (ArrayList<Time>)workdayTimeItems, l.getId(), l.getName(), activeTimetable.getId());
+			TimeTableItemDto t_dto = new TimeTableItemDto((ArrayList<Time>)sundayTimeItems, (ArrayList<Time>)saturdayTimeItems, (ArrayList<Time>)workdayTimeItems, l.getId(), l.getName(),l.getMark(),  activeTimetable.getId());
 			result.add(t_dto);			
 		}
 		

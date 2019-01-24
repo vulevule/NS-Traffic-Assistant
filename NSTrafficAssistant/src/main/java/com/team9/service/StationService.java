@@ -14,7 +14,7 @@ public interface StationService {
 	
 	boolean deleteStation(Long id) throws StationNotFoundException;
 	
-	Station updateStation(StationDTO s) throws StationNotFoundException;
+	Station updateStation(StationDTO s) throws StationNotFoundException, StationAlreadyExistsException;
 	
 	List<Station> getAll();
 	

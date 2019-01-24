@@ -1,7 +1,7 @@
 <div class="row content">
   <div class="col-12 col-md-4 sidebar-content">
     <form #createForm="ngForm">
-      <label class="col-12 col-form-label"
+      <label class="col-12 col-form-label" *ngIf="actionType === 'CREATE'"
         >Type:
         <div
           class="btn-group btn-group-toggle"
@@ -44,6 +44,21 @@
       </label>
 
       <div class="search-item">
+        <label for="stmarkNew" class="col-form-label">Mark:&nbsp;</label>
+        <input
+          #stmarkNew
+          type="text"
+          id="stmarkNew"
+          class="form-control"
+          name="stmarkNew"
+          placeholder="Enter line mark"
+          [(ngModel)]="newLine.mark"
+          required
+          minlength="1"
+        />
+      </div>
+
+      <div class="search-item">
         <label for="stnameNew" class="col-form-label">Name:&nbsp;</label>
         <input
           #stnameNew
@@ -58,16 +73,19 @@
         />
       </div>
 
-      <label class="col-12 col-form-label" *ngIf="utilStations.length < 2"
-        ><span style="color:red"><b>Line must have at least 2 stations!</b></span> Click on map to add</label
+      <label class="col-12 col-form-label" *ngIf="newLine.stations.length < 2"
+        ><span style="color:red"
+          ><b>Line must have at least 2 stations!</b></span
+        >
+        Click on map to add</label
       >
-      <label class="col-12 col-form-label" *ngIf="utilStations.length > 0"
+      <label class="col-12 col-form-label" *ngIf="newLine.stations.length > 0"
         >Stations:</label
       >
 
-      <div class="card" *ngFor="let utilstation of utilStations; index as i">
+      <div class="card" *ngFor="let station of newLine.stations; index as i">
         <div class="card-body">
-          <label> {{ i + 1 }}. {{ utilstation.station.name }} </label>
+          <label> {{ i + 1 }}. {{ station.stationName }} </label>
 
           <label *ngIf="i !== 0">
             &nbsp;| Time:
@@ -75,8 +93,8 @@
               type="number"
               class="timeInput"
               required
-              name="timeInput{{ utilstation.stationId }}"
-              [(ngModel)]="utilstation.arrival"
+              name="timeInput{{ station.stationId }}"
+              [(ngModel)]="station.arrival"
             />
             minutes
           </label>
@@ -85,7 +103,7 @@
           <button
             class="close"
             title="Remove"
-            (click)="utilStations.splice(i, 1)"
+            (click)="newLine.stations.splice(i, 1)"
           >
             x
           </button>
@@ -93,16 +111,28 @@
       </div>
 
       <hr />
-      <button
-        type="submit"
-        class="btn btn-outline-primary"
-        (click)="createLine(newLine)"
-        [disabled]="!createForm.valid"
-      >
-        Create
-      </button>
+      <div>
+        <div class="btn-group btnFloatRight">
+          <button
+            type="button"
+            class="btn"
+            (click)="buttonClick.emit('displayLinesTab')"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-outline-primary"
+            (click)="createLine(newLine)"
+            [disabled]="!createForm.valid"
+          >
+            Save
+          </button>
+        </div>
+      </div>
     </form>
-    Form is {{ createForm.status }} {{ newLine | json }}
+    <br />
+    New line: {{ newLine | json }}
   </div>
 
   <div class="col-12 col-md-8 map-content">

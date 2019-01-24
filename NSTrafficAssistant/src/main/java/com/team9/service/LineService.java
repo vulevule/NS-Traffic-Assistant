@@ -17,7 +17,7 @@ public interface LineService {
 
 	Line createLine(LineDto l) throws LineAlreadyExistsException, StationNotFoundException;
 	
-	Line updateLine(LineDto l) throws LineNotFoundException, StationNotFoundException;
+	Line updateLine(LineDto l) throws LineNotFoundException, StationNotFoundException, LineAlreadyExistsException;
 	
 	boolean deleteLine(Long id) throws LineNotFoundException;
 	
@@ -33,6 +33,5 @@ public interface LineService {
 	
 	Line getById(Long id);
 	
-	Line getByNameAndType(String name, TrafficType type);
-
+	Line getByMarkAndType(String name, TrafficType type);
 }

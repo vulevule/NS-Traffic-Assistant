@@ -29,6 +29,8 @@ public class Line implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
+	private String mark;
+	@Column(nullable = false)
 	private String name;
 	@Column(nullable = false)
 	private TrafficType type;
@@ -39,14 +41,16 @@ public class Line implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Location> route;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "line", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "line", cascade = CascadeType.ALL)
 	private List<StationLine> stations;
 
 	public Line() {
 	}
 
-	public Line(String name, TrafficType type, TrafficZone zone, List<Location> route, List<StationLine> stations) {
-		super();
+	public Line(String mark, String name, TrafficType type, TrafficZone zone, List<Location> route,
+			List<StationLine> stations) {
+		this();
+		this.mark = mark;
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
@@ -54,10 +58,12 @@ public class Line implements Serializable {
 		this.stations = stations;
 	}
 
-	public Line(Long id, String name, TrafficType type, TrafficZone zone, List<Location> route,
+
+	public Line(Long id, String mark, String name, TrafficType type, TrafficZone zone, List<Location> route,
 			List<StationLine> stations) {
-		super();
+		this();
 		this.id = id;
+		this.mark = mark;
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
@@ -113,4 +119,12 @@ public class Line implements Serializable {
 		this.route = route;
 	}
 
+	public String getMark() {
+		return mark;
+	}
+
+	public void setMark(String mark) {
+		this.mark = mark;
+	}
+	
 }

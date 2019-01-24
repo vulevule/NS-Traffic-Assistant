@@ -3,6 +3,7 @@ package com.team9.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,16 +33,13 @@ public class Station implements Serializable{
 	@Column(nullable = false)
 	private double yCoordinate;
 	
-	@ManyToOne(optional=false)
-	private Address address;
-	
 	//stanica moze da pripada vise linija, linija sadrzi vise stanica 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="station")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="station", cascade=CascadeType.ALL)
 	private List<StationLine> stationLines;
 	
 	public Station() {}
 	
-	public Station(Long id, String name, TrafficType type, double xCoordinate, double yCoordinate, Address address,
+	public Station(Long id, String name, TrafficType type, double xCoordinate, double yCoordinate, 
 			List<StationLine> stationLines) {
 		this();
 		this.id = id;
@@ -49,18 +47,16 @@ public class Station implements Serializable{
 		this.type = type;
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
-		this.address = address;
 		this.stationLines = stationLines;
 	}
 
-	public Station(String name, TrafficType type, double xCoordinate, double yCoordinate, Address address,
+	public Station(String name, TrafficType type, double xCoordinate, double yCoordinate, 
 			List<StationLine> stationLines) {
 		super();
 		this.name = name;
 		this.type = type;
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
-		this.address = address;
 		this.stationLines = stationLines;
 	}
 
@@ -115,15 +111,4 @@ public class Station implements Serializable{
 	public void setyCoordinate(double yCoordinate) {
 		this.yCoordinate = yCoordinate;
 	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-	
-	
-
 }

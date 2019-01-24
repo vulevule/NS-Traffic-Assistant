@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -26,14 +27,14 @@ public class StationLine implements Serializable{
 	private int arrival;
 	
 	// Jedna stanica moze imati vise StationLine a jedan StationLine se odnosi samo na jednu stanicu
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=true)
 	private Station station;
 	
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=true)
 	private Line line;
 	
 	public StationLine(int stationNum, int arrival, Station station, Line line) {
-		super();
+		this();
 		this.stationNum = stationNum;
 		this.arrival = arrival;
 		this.station = station;
@@ -41,7 +42,7 @@ public class StationLine implements Serializable{
 	}
 
 	public StationLine(Long id, int stationNum, int arrival, Station station, Line line) {
-		super();
+		this();
 		this.id = id;
 		this.stationNum = stationNum;
 		this.arrival = arrival;
@@ -50,7 +51,6 @@ public class StationLine implements Serializable{
 	}
 
 	public StationLine() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public Long getId() {
@@ -93,7 +93,10 @@ public class StationLine implements Serializable{
 		this.line = line;
 	}
 	
-	
+	@Override
+	public boolean equals(Object obj) {
+		return this.id.equals(((StationLine) obj).id);
+	}
 	
 	
 }

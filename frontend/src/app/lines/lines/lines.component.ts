@@ -12,7 +12,8 @@ export class LinesComponent implements OnInit {
   lines: LineDTO[];
   stations: StationDTO[];
 
-  activeTabId: String;
+  activeTab: String;
+  selectedLine: LineDTO;
 
   constructor(private sharedService: SharedService) {}
 
@@ -22,9 +23,21 @@ export class LinesComponent implements OnInit {
     );
     this.sharedService.lines.subscribe(lines => (this.lines = lines));
     
+    //this.selectedLine = new LineDTO();
   }
 
-  tabChange(tabId: String) {
-    this.activeTabId = tabId;
+  openEditor(line: LineDTO) {
+    console.log(line);
+    this.selectedLine = JSON.parse(JSON.stringify(line));
+    this.activeTab = "editLineTab";
+    
+  }
+
+  onTabChange($event) {
+    if($event.nextId !== "editLineTab") {
+      this.selectedLine = undefined;
+    }
+    this.activeTab = $event.nextId;
+    
   }
 }

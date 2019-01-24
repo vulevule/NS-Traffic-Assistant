@@ -19,16 +19,18 @@ import View from "ol/View";
 import LineString from "ol/geom/LineString";
 import Draw from "ol/interaction/Draw";
 import { LocationDTO } from "src/app/model/LocationDTO";
-import { StationLineDTO } from 'src/app/model/StationLineDTO';
-import { UtilStation } from 'src/app/model/UtilStation';
-import { SharedService } from 'src/app/services/sharedVars/shared.service';
+import { StationLineDTO } from "src/app/model/StationLineDTO";
+import { SharedService } from "src/app/services/sharedVars/shared.service";
+import { Observable } from "rxjs";
+import { debounceTime, distinctUntilChanged, map } from "rxjs/operators";
 
 @Component({
-  selector: "app-lines-create",
+  selector: "app-lines-create-edit",
   templateUrl: "./lines-create.component.html",
   styleUrls: ["./lines-create.component.css", "../lines/general.scss"]
 })
 export class LinesCreateComponent implements OnInit {
+  @Input()
   newLine: LineDTO;
 
   // Novi Sad coordinates
@@ -38,7 +40,6 @@ export class LinesCreateComponent implements OnInit {
 
   markersOnMap: any[];
   creatingRoute: boolean;
-  utilStations: UtilStation[];
 
   map: any;
   vectorSource = new VectorSource();
@@ -46,22 +47,56 @@ export class LinesCreateComponent implements OnInit {
   drawingRouteSource: any;
 
   @Input()
+  actionType: String;
+
+  @Input()
   stations: StationDTO[];
+
+  @Input()
+  lines: LineDTO[];
 
   @Output()
   onCreation = new EventEmitter<String>();
 
-  constructor(private lineService: LineService, private sharedService: SharedService) {}
+  @Output()
+  buttonClick = new EventEmitter<String>();
+
+  search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term =>
+        term.length < 2
+          ? []
+          : this.lines
+              .filter(
+                s => s.name.toLowerCase().indexOf(term.toLowerCase()) > -1
+              )
+              .slice(0, 20)
+      )
+    );
+
+  formatter = (result: LineDTO) => result.name;
+
+  constructor(
+    private lineService: LineService,
+    private sharedService: SharedService
+  ) {}
 
   ngOnInit() {
     this.sharedService.stations.subscribe(
       stations => (this.stations = stations)
     );
 
-    this.newLine = new LineDTO();
+    if (this.actionType === "CREATE" || !this.newLine) {
+      this.newLine = new LineDTO();
+    } else {
+      console.log(this.newLine);
+    }
+
     this.markersOnMap = [];
-    this.utilStations = [];
     this.creatingRoute = false;
+
     // Latitude - Y
     // Longitude - X
 
@@ -98,11 +133,15 @@ export class LinesCreateComponent implements OnInit {
         var station = vm.stations.find(
           (s: StationDTO) => s.name === name && s.type === type
         );
-        if (vm.utilStations.find(s => s.station.id === station.id)) {
+
+        if (vm.newLine.stations.find(s => s.stationId === station.id)) {
           alert("Same station can not be selected twice!");
         } else {
-          var util = new UtilStation(station);
-          vm.utilStations.push(util);
+          var sl = new StationLineDTO();
+          sl.stationName = station.name;
+          sl.stationId = station.id;
+          sl.arrival = 0;
+          vm.newLine.stations.push(sl);
         }
       } else {
         var lonlat = transform(args.coordinate, "EPSG:3857", "EPSG:4326");
@@ -121,12 +160,12 @@ export class LinesCreateComponent implements OnInit {
         document.body.style.cursor = "";
       }
     });
-    
 
     this.drawStationsForType(this.newLine.type);
+    if (this.actionType === "EDIT") {
+      this.drawLine(this.newLine);
+    }
   }
-
-  
 
   styleFunction(feature: any) {
     var geometry = feature.getGeometry();
@@ -159,6 +198,14 @@ export class LinesCreateComponent implements OnInit {
     });
 
     return styles;
+  }
+
+  drawLine(line: LineDTO) {
+    for (let i = 0; i < line.route.length - 1; i++) {
+      let start = fromLonLat([line.route[i].lon, line.route[i].lat]);
+      let end = fromLonLat([line.route[i + 1].lon, line.route[i + 1].lat]);
+      this.drawLineBetweenLocations(start, end, line.type);
+    }
   }
 
   removeRouteFromMap() {
@@ -321,49 +368,57 @@ export class LinesCreateComponent implements OnInit {
   }
 
   createLine(line: LineDTO) {
-    if(this.utilStations.length < 2) {
+    if (line.stations.length < 2) {
       alert("Line must containt at least 2 stations!");
       return;
     }
 
-    if(line.route.length < 2) {
+    if (line.route.length < 2) {
       alert("You forgot to draw route on map :(");
       return;
     }
 
-    var max = this.utilStations[0].arrival;
-    for(let i = 1; i < this.utilStations.length; i++) {
-      if(this.utilStations[i].arrival <= max) {
-        alert(`Station ${this.utilStations[i].station.name} can not have arrival time less than stations before!`);
+    var max = line.stations[0].arrival;
+    for (let i = 1; i < line.stations.length; i++) {
+      if (line.stations[i].arrival <= max) {
+        alert(
+          `Station ${
+            line.stations[i].stationName
+          } can not have arrival time less than stations before!`
+        );
         return;
       } else {
-        max = this.utilStations[i].arrival;
+        max = line.stations[i].arrival;
       }
     }
 
-    this.utilStations.forEach((elem, index) => {
-      var sl = new StationLineDTO();
-      sl.id = 0;
-      sl.arrival = elem.arrival;
-      sl.stationId = elem.station.id;
-      sl.lineId = 0;
-      sl.stationNum = index;
-
-      line.stations.push(sl);
-    });
-
     console.log(line);
 
-    this.lineService.createLine(line).then(
-      data => {
-        alert(`Line ${data.name} created!`);
-        this.sharedService.updateAll();
-        this.onCreation.emit("displayLinesTab");
-      },
-      reason => {
-        alert("Line with this name and type already exists! " + reason);
-      }
-    );
+    if ((this.actionType === "CREATE")) {
+      this.lineService.createLine(line).subscribe(
+        data => {
+          alert(data);
+          this.sharedService.updateAll();
+          this.buttonClick.emit("displayLinesTab");
+        },
+        error => {
+          alert(error.error);
+        }
+      );
+    } else if ((this.actionType === "EDIT")) {
+      this.lineService.updateLine(line).subscribe(
+        data => {
+          alert(data);
+          this.sharedService.updateAll();
+          this.buttonClick.emit("displayLinesTab");
+        },
+        error => {
+          alert(error.error);
+        }
+      );
+    } else {
+      alert("Unsupported value of action type: " + this.actionType);
+    }
   }
 
   updateMap() {

@@ -17,8 +17,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FilterByTypePipe } from './stations/display-stations/pipes/filter-by-type.pipe';
 import { FilterByNamePipe } from './stations/display-stations/pipes/filter-by-name.pipe';
 import { LinesComponent } from './lines/lines/lines.component';
-import { LinesSidebarComponent } from './lines/lines-sidebar/lines-sidebar.component';
-import { LinesMapComponent } from './lines/lines-map/lines-map.component';
 import { LinesDisplayComponent } from './lines/lines-display/lines-display.component';
 import { LinesCreateComponent } from './lines/lines-create/lines-create.component';
 import { LineService } from './services/lines/line.service';
@@ -88,8 +86,6 @@ const appRoutes: Routes = [
     FilterByTypePipe,
     FilterByNamePipe,
     LinesComponent,
-    LinesSidebarComponent,
-    LinesMapComponent,
     LinesDisplayComponent,
     LinesCreateComponent,
     FilterByZonePipe,

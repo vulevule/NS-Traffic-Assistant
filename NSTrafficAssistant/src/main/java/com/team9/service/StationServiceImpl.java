@@ -36,13 +36,7 @@ public class StationServiceImpl implements StationService {
 	public Station createStation(StationDTO s) throws StationAlreadyExistsException {
 		Station find = stationRepository.findByNameAndType(s.getName(), s.getType());
 		if (find == null) {
-			Station station = new Station(s.getName(), s.getType(), s.getxCoordinate(), s.getyCoordinate(), null, null);
-			Address findAddress = addressRepository.findByStreetAndCityAndZip(s.getAddressName(), s.getAddressCity(), s.getAddressZip());
-			if (findAddress == null) {
-				findAddress = new Address(s.getAddressName(), s.getAddressCity(), s.getAddressZip(), null, null);
-				addressRepository.save(findAddress);
-			}
-			station.setAddress(findAddress);
+			Station station = new Station(s.getName(), s.getType(), s.getxCoordinate(), s.getyCoordinate(), null);
 			station.setLines(new ArrayList<StationLine>());
 			
 			return stationRepository.save(station);
@@ -63,16 +57,18 @@ public class StationServiceImpl implements StationService {
 	}
 
 	@Override
-	public Station updateStation(StationDTO s) throws StationNotFoundException {
+	public Station updateStation(StationDTO s) throws StationNotFoundException, StationAlreadyExistsException {
 		Optional<Station> find = stationRepository.findById(s.getId());
 		if (find.isPresent()) {
 			Station station = find.get();
+			
+			Station temp = stationRepository.findByNameAndType(s.getName(), s.getType());
+			if(temp != null && temp.getId() != station.getId()) {
+				throw new StationAlreadyExistsException();
+			}
 			station.setName(s.getName());
 			station.setxCoordinate(s.getxCoordinate());
 			station.setyCoordinate(s.getyCoordinate());
-			station.getAddress().setStreet(s.getAddressName());
-			station.getAddress().setCity(s.getAddressCity());
-			station.getAddress().setZip(s.getAddressZip());
 			
 			return stationRepository.save(station);
 		} else {

@@ -126,14 +126,14 @@ insert into timetable (id, expiration_date, issue_date, activate)
 values (1, '2019-03-03', '2019-01-03', true);
 
 --linije
-insert into line(id, name, type, zone)
-values (1, 'PETROVARADIN - CENTAR - DETELINARA', 0, 0);
-insert into line(id, name, type, zone)
-values(2, 'LIMAN IV - ZELEZNICKA STANICA - CENTAR', 0, 0);
-insert into line(id, name, type, zone)
-values (3, 'NOVO NASELJE - ZELEZNICKA - LIMAN', 0, 0);
-insert into line(id, name, type, zone)
-values (4, 'SREMSKA KAMENICA - BOCKE', 0, 1);
+insert into line(id, name, type, zone, mark)
+values (1, 'PETROVARADIN - CENTAR - DETELINARA', 0, 0, '1A');
+insert into line(id, name, type, zone, mark)
+values(2, 'LIMAN IV - ZELEZNICKA STANICA - CENTAR', 0, 0, '4A');
+insert into line(id, name, type, zone, mark)
+values (3, 'NOVO NASELJE - ZELEZNICKA - LIMAN', 0, 0, '7A');
+insert into line(id, name, type, zone, mark)
+values (4, 'SREMSKA KAMENICA - BOCKE', 0, 1, '71');
 
 --stavke reda voznje
 
@@ -147,3 +147,16 @@ insert into kts_nwt.timetable_item (id, start_time, type, line_id, timetable_id)
 values(4, "13:30", 0, 1, 1);
 insert into kts_nwt.timetable_item (id, start_time, type, line_id, timetable_id)
 values(5, "14:30", 0, 1, 1);
+=======
+insert into station(id, name, type, x_coordinate, y_coordinate)
+values(1, 'Bazar', 0, 19.830287933873482, 45.26408747364272);
+insert into station(id, name, type, x_coordinate, y_coordinate)
+values(2, 'Bazar', 2, 19.83210754551692, 45.26066810367371);
+insert into station(id, name, type, x_coordinate, y_coordinate)
+values(3, 'Bazar-Podhodnik', 1, 19.835214616439767, 45.255242602344424);
+insert into station(id, name, type, x_coordinate, y_coordinate)
+values(4, 'Narodnog Fronta', 0, 19.837051391077697, 45.25194354772586);
+insert into station(id, name, type, x_coordinate, y_coordinate)
+values(5, 'Zeleznicka', 0, 19.839197158813473, 45.24794333819497);
+insert into station(id, name, type, x_coordinate, y_coordinate)
+values(6, 'Balzakova', 1, 19.841394424962346, 45.243882414390214);
