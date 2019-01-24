@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -41,6 +42,8 @@ import { DisplayReportComponent } from './report/display-report/display-report.c
 import { FilterItemByTrafficTypePipe } from './pricelist/display-price-list/pipes/filter-item-by-traffic-type.pipe';
 import { FilterItemByZonePipe } from './pricelist/display-price-list/pipes/filter-item-by-zone.pipe';
 import { FilterItemByTicketTimePipe } from './pricelist/display-price-list/pipes/filter-item-by-ticket-time.pipe';
+import { RegisterPageComponent } from './pages/register-page/register-page.component';
+import { MatchingPasswordDirective } from './pages/register-page/matching-password.directive';
 
 
 
@@ -97,24 +100,32 @@ const appRoutes: Routes = [
     FilterItemByTrafficTypePipe,
     FilterItemByZonePipe,
     FilterItemByTicketTimePipe,
+    RegisterPageComponent,
+    MatchingPasswordDirective,
   ],
   imports: [
     NgbModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only
     )
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true },,
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true },
+    
     LoggedUserService,
     AuthenticationService,
     StationServiceService,
     LineService
+    
   ],
+  entryComponents: [
+    RegisterPageComponent
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
