@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { TicketInterface } from 'src/app/model/Ticket';
 import { TicketServiceService } from 'src/app/services/ticket/ticket-service.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-buy-ticket-form',
@@ -20,7 +20,7 @@ export class BuyTicketFormComponent implements OnInit {
 
 
 
-  constructor(private ticketService : TicketServiceService, private auth : AuthenticationService, private toastr: ToastrService) { }
+  constructor(private ticketService : TicketServiceService, private auth : AuthenticationService) { }
 
   async ngOnInit() {
     this.buyTicket = {

@@ -25,7 +25,7 @@ export class SharedService {
   }
 
   updateLines() {
-    this.lineService.getAll().then(data => {
+    this.lineService.getAll().subscribe(data => {
       this.lineSource.next(data);     
     });
   }
