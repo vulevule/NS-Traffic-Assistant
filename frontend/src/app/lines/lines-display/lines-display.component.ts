@@ -21,6 +21,7 @@ import View from "ol/View";
 import LineString from "ol/geom/LineString";
 import Overlay from "ol/Overlay";
 import { LineService } from 'src/app/services/lines/line.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: "app-lines-display",
@@ -160,7 +161,7 @@ export class LinesDisplayComponent implements OnInit {
 
         var station = vm.stations.find(s => s.name === name && s.type === type);
 
-        //alert("Now should display " + station.name + " popup");
+        
 
         vm.content.innerHTML = vm.generatePopupContent(station);
         vm.overlay.setPosition(args.coordinate);
@@ -211,12 +212,14 @@ export class LinesDisplayComponent implements OnInit {
     ) {
      this.lineService.deleteLine(line.id).subscribe(
         data => {
-          alert(data);
+          //this.toaster.success(data.toString());
+          alert(data.toString());
           this.selectedStation = undefined;
           this.sharedService.updateAll();
         },
         reason => {
-          alert(reason.error);
+          //this.toaster.error(reason.error);
+         alert(reason.error);
         }
       );
     }

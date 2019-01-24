@@ -12,12 +12,9 @@ export class LineService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Promise<LineDTO[]> {
+  getAll(): Observable<LineDTO[]> {
     return this.http
-      .get<LineDTO[]>(`${this.linesUrl}/getAll`)
-      .toPromise()
-      .then(response => response as LineDTO[])
-      .catch(this.handleError);
+      .get<LineDTO[]>(`${this.linesUrl}/getAll`);
   }
 
   getAllByType(type: String): Promise<LineDTO[]> {

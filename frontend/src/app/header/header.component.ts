@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
 
 
     if (this.loggedUser === null) {
-      alert('niko nije ulogovan');
+      //this.toaster.info('niko nije ulogovan');
       login.hidden = false;
       register.hidden = false;
       logout.hidden = true;
@@ -53,7 +53,7 @@ export class HeaderComponent implements OnInit {
 
 
   logout(){
-    alert('logout');
+    //this.toaster.info('logout');
     localStorage.removeItem('currentUser');
   }
 

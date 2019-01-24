@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import TileLayer from "ol/layer/Tile";
@@ -15,74 +14,35 @@ import Style from "ol/style/Style";
 import Text from "ol/style/Text";
 import View from "ol/View";
 import { Observable } from "rxjs";
-import { debounceTime, distinctUntilChanged, map } from "rxjs/operators";
-import { LineDTO } from "src/app/model/LineDTO";
 import { StationDTO } from "src/app/model/StationDTO";
 import { SharedService } from "src/app/services/sharedVars/shared.service";
-import { StationServiceService } from "src/app/services/stations/station-service.service";
-import { LineService } from "src/app/services/lines/line.service";
-import { ToastrService } from "ngx-toastr";
 
 @Component({
-  selector: "app-display-stations",
-  templateUrl: "./display-stations.component.html",
-  styleUrls: ["./display-stations.component.css", "./general.scss"]
+  selector: "app-stations-map",
+  templateUrl: "./stations-map.component.html",
+  styleUrls: ["./stations-map.component.css", "../general.scss"]
 })
-export class DisplayStationsComponent implements OnInit {
+export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
+  @Input()
   stations: StationDTO[];
-  lines: LineDTO[];
-  searchStations: StationDTO[];
+  @Input()
   selectedStation: StationDTO;
-  selectedLine: LineDTO;
-
-  search = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      map(term =>
-        term.length < 2
-          ? []
-          : this.stations
-              .filter(
-                s =>
-                  s.name.toLowerCase().indexOf(term.toLowerCase()) > -1 &&
-                  this.displayType[s.type.toLowerCase()]
-              )
-              .slice(0, 20)
-      )
-    );
-
-  formatter = (result: StationDTO) => result.name;
-
-  searchByLine = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      map(term =>
-        term.length < 2
-          ? []
-          : this.lines
-              .filter(
-                s =>
-                  s.name.toLowerCase().indexOf(term.toLowerCase()) > -1 &&
-                  this.displayType[s.type.toLowerCase()]
-              )
-              .slice(0, 20)
-      )
-    );
-
-  formatterLine = (result: LineDTO) => result.name;
-
+  @Input()
   displayType = {
     bus: true,
     tram: false,
     metro: false
   };
 
-  newStation: StationDTO;
-  editStation: StationDTO;
+  @Output()
+  onSelectStation = new EventEmitter<StationDTO>();
+  @Output()
+  onMapClick = new EventEmitter<any>();
 
-  activeTabId: String;
+  displayTypeSub: any;
+  @Input() displayTypeObs: Observable<any>;
+  selectedStationSub: any;
+  @Input() selectedStationObs: Observable<any>;
 
   // Novi Sad coordinates
   latitude: number = 45.26060794;
@@ -96,30 +56,36 @@ export class DisplayStationsComponent implements OnInit {
   vectorSource = new VectorSource();
 
   constructor(
-    private stationService: StationServiceService,
-    private lineService: LineService,
-    private route: ActivatedRoute,
-    private sharedService: SharedService,
-    public toaster: ToastrService
+    private sharedService: SharedService
   ) {}
 
-  async ngOnInit() {
-    this.stations = [];
-    this.searchStations = [];
-    this.markerOnMap = "";
-    this.currentMarker = undefined;
-    this.newStation = new StationDTO();
-    this.newStation.type = "BUS";
-    this.editStation = undefined;
+  ngOnChanges(changes: SimpleChanges) {
+    //this.drawStations();
+  }
 
+  ngOnInit() {
     this.sharedService.stations.subscribe(
       stations => (this.stations = stations)
     );
-    this.sharedService.lines.subscribe(lines => (this.lines = lines));
 
-    if (this.stations.length === 0 && this.stations.length === 0) {
-      await this.getData();
+    this.selectedStation = undefined;
+
+    if(this.displayTypeObs) {
+      this.displayTypeSub = this.displayTypeObs.subscribe(data => {
+        this.displayType = data;
+        this.drawStations();
+      });
     }
+    
+    if(this.selectedStationObs) {
+      this.selectedStationSub = this.selectedStationObs.subscribe(data => {
+        this.selectedStation = data;
+        if (this.selectedStation) {
+          this.positionOnMap(this.selectedStation);
+        }
+      });
+    }
+    
 
     // Latitude - Y
     // Longitude - X
@@ -159,11 +125,17 @@ export class DisplayStationsComponent implements OnInit {
             vm.stations.find(s => s.name === name && s.type === type)
           )
         );
+
+        vm.onSelectStation.emit(vm.selectedStation);
       } else {
         // draw marker
-        vm.drawMarker(args.coordinate);
+
         var lonlat = transform(args.coordinate, "EPSG:3857", "EPSG:4326");
+        vm.drawMarker(args.coordinate, lonlat);
+
         vm.markerOnMap = lonlat;
+
+        vm.onMapClick.emit(vm.markerOnMap);
       }
     });
 
@@ -179,97 +151,17 @@ export class DisplayStationsComponent implements OnInit {
       }
     });
 
-    console.log("CRTAM " + this.stations.length + " STANICA");
-
     this.drawStations();
   }
 
-  async getData() {
-    await this.stationService.getAll().subscribe(data => {
-      this.stations = data;
-      this.searchStations = data;
-    });
-
-    await this.lineService.getAll().subscribe(data => {
-      this.lines = data;
-    });
-  }
-
-  async updateStation(station: StationDTO) {
-    station.xCoordinate = this.markerOnMap[0];
-    station.yCoordinate = this.markerOnMap[1];
-
-    await this.stationService.updateStation(station).subscribe(
-      data => {
-        this.toaster.success(data);
-
-        this.selectedStation = station;
-        this.editStation = undefined;
-        //this.getData();
-        //this.sharedService.updateAll();
-        //this.drawStations();
-      },
-      reason => {
-        this.toaster.error(reason.error);
-      }
-    );
-
-    await this.getData();
-    //await this.sharedService.updateAll();
-    this.drawStations();
-  }
-
-  async deleteStation(station: StationDTO) {
-    if (
-      confirm(`You are about to delete ${station.name} station.\nAre you sure?`)
-    ) {
-      await this.stationService.deleteStation(station.id).subscribe(
-        data => {
-          this.toaster.success(data);
-          this.selectedStation = undefined;
-          //this.getData();
-          //this.sharedService.updateAll();
-          //this.drawStations();
-        },
-        reason => {
-          this.toaster.error(reason.error);
-        }
-      );
-
-      await this.getData();
-      //await this.sharedService.updateAll();
-      this.drawStations();
+  ngOnDestroy() {
+    if (this.displayTypeSub) {
+      this.displayTypeSub.unsubscribe();
     }
-  }
 
-  async createStation(station: StationDTO) {
-    station.xCoordinate = this.markerOnMap[0];
-    station.yCoordinate = this.markerOnMap[1];
-    station.lines = [];
-
-    await this.stationService.createStation(station).subscribe(
-      data => {
-        this.toaster.success(data);
-        this.sharedService.updateAll();
-        //this.drawStations();
-
-        
-      },
-      reason => {
-        this.toaster.error(reason.error);
-      }
-    );
-    
-    
-    await this.getData();
-    this.drawStations();
-    this.activeTabId = "displayStationsTab";
-  }
-
-  selectStation(station: StationDTO) {
-    this.selectedStation = JSON.parse(JSON.stringify(station));
-    this.editStation = undefined;
-    this.positionOnMap(station);
+    if (this.selectedStationSub) {
+      this.selectedStationSub.unsubscribe();
+    }
   }
 
   positionOnMap(station: StationDTO) {
@@ -299,13 +191,8 @@ export class DisplayStationsComponent implements OnInit {
     });
   }
 
-  drawMarker(coordinates) {
-    if (
-      this.currentMarker &&
-      this.vectorSource.hasFeature(this.currentMarker)
-    ) {
-      this.vectorSource.removeFeature(this.currentMarker);
-    }
+  drawMarker(coordinates: any, coordAsList: any) {
+    this.removeMarkers();
 
     // define style for the marker
     let markerStyle = new Style({
@@ -316,6 +203,20 @@ export class DisplayStationsComponent implements OnInit {
         opacity: 1,
         src: "../../../assets/images/map-marker.png",
         scale: 0.1
+      }),
+      text: new Text({
+        text: coordAsList[0].toFixed(5) + " - " + coordAsList[1].toFixed(5),
+        stroke: new Stroke({
+          color: "#fff"
+        }),
+        fill: new Fill({
+          color: "#3366cc"
+        }),
+        font: "15px sans-serif",
+        offsetY: -62,
+        backgroundFill: new Fill({
+          color: "white"
+        })
       }),
       zIndex: 5
     });
@@ -382,19 +283,6 @@ export class DisplayStationsComponent implements OnInit {
   clearMap() {
     // remove features from layer
     this.vectorSource.clear();
-  }
-
-  redrawMap() {
-    this.clearMap();
-    this.drawStations();
-  }
-
-  updateDisplay() {}
-
-  tabChange() {
-    this.newStation = new StationDTO();
-    this.newStation.type = "BUS";
-    this.removeMarkers();
   }
 
   removeMarkers() {

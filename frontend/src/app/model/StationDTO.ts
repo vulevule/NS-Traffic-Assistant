@@ -8,15 +8,13 @@ export class StationDTO {
     yCoordinate: Number;
     lines: StationLineDTO[];
 
-    /* constructor() {
+    constructor() {
         this.id = 0;
         this.name = "";
-        this.type = "";
+        this.type = "BUS";
         this.xCoordinate = 0.0;
         this.yCoordinate = 0.0;
         this.lines = [];
-        this.addressName = "";
-        this.addressCity = "";
-        this.addressZip = 0;
-    } */
+        
+    }
 }

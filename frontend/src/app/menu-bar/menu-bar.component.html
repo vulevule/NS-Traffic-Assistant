@@ -1,43 +1,59 @@
 <div class="menu">
   <ul class="nav">
-
-    <li class="nav-item" id='stations'>
+    <li class="nav-item" id="stations">
       <a
         class="nav-link btn"
         id="stationsDropdown"
         (click)="
-          router.navigate([
-            '/main',
-            { outlets: { secondary: 'displaystations' } }
-          ])
+          router.navigate(['/main/stations'])
         "
-        >Stations</a>
+        >Stations</a
+      >
     </li>
 
-    <li class="nav-item" id='lines'>
+    <li class="nav-item" id="lines">
       <a
         class="nav-link btn"
         id="linesDropdown"
         (click)="
-          router.navigate(['/main', { outlets: { secondary: 'lines' } }])
+          router.navigate(['/main/lines'])
         "
         >Lines</a
       >
     </li>
 
-    <li  class="nav-item" id="tickets">
-      <a class="nav-link btn" id="ticketsDropdown" (click)="router.navigate(['/main', {outlets : {secondary: 'ticket'}}])">Tickets</a>
-      
+    <li class="nav-item" id="tickets">
+      <a
+        class="nav-link btn"
+        id="ticketsDropdown"
+        (click)="
+          router.navigate(['/main/ticket'])
+        "
+        >Tickets</a
+      >
     </li>
 
-    <li  class="nav-item" id='pricelist'>
-        <a class="nav-link btn" id="pricelistDropdown" (click)="router.navigate(['/main', {outlets : {secondary: 'pricelist'}}])">Price list</a>
-        
-      </li>
+    <li class="nav-item" id="pricelist">
+      <a
+        class="nav-link btn"
+        id="pricelistDropdown"
+        (click)="
+          router.navigate(['/main/pricelist'])
+        "
+        >Price list</a
+      >
+    </li>
 
-      <li class="nav-item" id='report'> 
-        <a class="nav-link btn" id="reportDropdown" (click)="router.navigate(['/main', {outlets : {secondary: 'report'}}])">Report</a>
-      </li>
+    <li class="nav-item" id="report">
+      <a
+        class="nav-link btn"
+        id="reportDropdown"
+        (click)="
+          router.navigate(['/main/report'])
+        "
+        >Report</a
+      >
+    </li>
   </ul>
 </div>
 

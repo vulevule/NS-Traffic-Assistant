@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { LineDTO } from "src/app/model/LineDTO";
 import { StationDTO } from "src/app/model/StationDTO";
 import { SharedService } from "src/app/services/sharedVars/shared.service";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: "app-lines",
@@ -23,7 +24,6 @@ export class LinesComponent implements OnInit {
     );
     this.sharedService.lines.subscribe(lines => (this.lines = lines));
     
-    //this.selectedLine = new LineDTO();
   }
 
   openEditor(line: LineDTO) {

@@ -19,13 +19,13 @@ export class SharedService {
   constructor(private stationService: StationServiceService, private lineService: LineService) { }
 
   updateStations() {
-    this.stationService.getAll().then(data => {
+    this.stationService.getAll().subscribe(data => {
       this.stationSource.next(data);     
     });
   }
 
   updateLines() {
-    this.lineService.getAll().then(data => {
+    this.lineService.getAll().subscribe(data => {
       this.lineSource.next(data);     
     });
   }

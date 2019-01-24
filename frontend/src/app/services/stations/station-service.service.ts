@@ -12,12 +12,9 @@ export class StationServiceService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Promise<StationDTO[]> {
+  getAll(): Observable<StationDTO[]> {
     return this.http
-      .get<StationDTO[]>(`${this.stationsUrl}/getAll`)
-      .toPromise()
-      .then(response => response as StationDTO[])
-      .catch(this.handleError);
+      .get<StationDTO[]>(`${this.stationsUrl}/getAll`);
   }
 
   getAllByType(type: String): Promise<StationDTO[]> {
@@ -52,21 +49,21 @@ export class StationServiceService {
       .catch(this.handleError);
   }
 
-  createStation(station: StationDTO): Observable<String> {
+  createStation(station: StationDTO): Observable<string> {
     return this.http.post(`${this.stationsUrl}/create`, station, {
       headers: this.headers,
       responseType: "text"
     });
   }
 
-  updateStation(station: StationDTO): Observable<String> {
+  updateStation(station: StationDTO): Observable<string> {
     return this.http.put(`${this.stationsUrl}/update`, station, {
       headers: this.headers,
       responseType: "text"
     });
   }
 
-  deleteStation(id: any): Observable<String> {
+  deleteStation(id: any): Observable<string> {
     return this.http.delete(`${this.stationsUrl}/delete/${id}`, {
       responseType: "text"
     });

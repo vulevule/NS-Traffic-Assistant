@@ -1,0 +1,76 @@
+<div class="row content">
+  <div class="col-12 col-md-4 sidebar-content">
+    <form #createForm="ngForm">
+      <label class="col-12 col-form-label"
+        >Choose type:
+
+        <div
+          class="btn-group btn-group-toggle"
+          ngbRadioGroup
+          name="radioBasic"
+          [(ngModel)]="newStation.type"
+        >
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="BUS" /> Bus
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="TRAM" /> Tram
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="METRO" /> Metro
+          </label>
+        </div>
+      </label>
+
+      <label for="stnameNew" class="col-12 col-form-label"
+        >Enter station name:
+      </label>
+      <div class="search-item ">
+        <input
+          #stnameNew
+          type="text"
+          id="stnameNew"
+          class="form-control"
+          name="stnameNew"
+          placeholder="Enter station name"
+          [(ngModel)]="newStation.name"
+        />
+      </div>
+
+      <label for="stlocNew" class="col-12 col-form-label"
+        >Choose location on map:
+      </label>
+      <div class="search-item ">
+        <input
+          #stlocNew
+          type="text"
+          id="stlocNew"
+          readonly
+          class="form-control"
+          name="stlocNew"
+          [(ngModel)]="markerOnMap"
+          placeholder="Choose location on map"
+        />
+      </div>
+      <hr />
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="createStation(newStation)"
+      >
+        Create
+      </button>
+    </form>
+    {{ newStation | json }}
+  </div>
+
+  <!-- Map component -->
+  <div class="col-12 col-md-8 map-content">
+    <app-stations-map
+      [stations]="stations"
+      [displayType]="newStation.type"
+      (onSelectStation)="handleStationClick($event)"
+      (onMapClick)="markerOnMap = $event"
+    ></app-stations-map>
+  </div>
+</div>
