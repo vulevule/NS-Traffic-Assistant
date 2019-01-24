@@ -36,52 +36,64 @@ public class LineController {
 	
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 	
-	@PostMapping(value="/line/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<LineDto> createLine(@RequestBody LineDto line){
+	@PostMapping(value="/line/create", produces = "text/plain", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> createLine(@RequestBody LineDto line){
 		logger.info(">> Creating line  " + line.getName());
-		logger.info("GLEDAJ VAMO: " + line);
 		
 		Line created = null;
+		String message;
 		try {
 			created = lineService.createLine(line);
 			logger.info("<< Creating line  " + line.getName());
-			
-			return new ResponseEntity<>(new LineDto(created), HttpStatus.CREATED);
+			message = "Line " + line.getName() + " successfully created";
+			return new ResponseEntity<>(message, HttpStatus.CREATED);
 		} catch (LineAlreadyExistsException e) {
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+			message = line.getType() + " line " + line.getMark() + " already exists!";
+			return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
 		} catch (StationNotFoundException e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			message = e.getMessage();
+			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
 		}
 		
 	}
 	
-	@PutMapping(value="/line/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<LineDto> updateLine(@RequestBody LineDto line){
+	@PutMapping(value="/line/update", produces = "text/plain", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> updateLine(@RequestBody LineDto line){
 		logger.info(">> Updating station  " + line.getName());
-
+		
 		Line updated = null;
+		String message;
 		try {
 			updated = lineService.updateLine(line);
 			logger.info("<< Updating station  " + line.getName());
-			return new ResponseEntity<>(new LineDto(updated), HttpStatus.CREATED);
+			logger.info("\nGLEDAJ VAMO: " + updated.getStations().size() + "\n");
+			message = "Line successfully updated!";
+			return new ResponseEntity<>(message, HttpStatus.CREATED);
 		} catch (LineNotFoundException e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			message = "Selected line does not exist!";
+			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
 		} catch (StationNotFoundException e) {
-			// TODO Auto-generated catch block
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			message = e.getMessage();
+			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+		} catch (LineAlreadyExistsException e) {
+			message = line.getType() + " line " + line.getMark() + " already exists!";
+			return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 	
-	@DeleteMapping(value="/line/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> deleteStation(@PathVariable Long id){
+	@DeleteMapping(value="/line/delete/{id}", produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> deleteStation(@PathVariable Long id){
 		logger.info(">> Deleting line  " + id);
 
+		String message;
 		try {
 			lineService.deleteLine(id);
 			logger.info("<< Deleting line  " + id);
-			return new ResponseEntity<>(HttpStatus.OK);
+			message = "Line successfully deleted!";
+			return new ResponseEntity<>(message, HttpStatus.OK);
 		} catch (LineNotFoundException e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			message = "Line does not exist!!";
+			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
 		}
 	}
 	
@@ -123,15 +135,15 @@ public class LineController {
 		}
 	}
 	
-	@GetMapping(value="/line/getByNameAndType/{name}/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<LineDto> getByNameAndType(@PathVariable("name") String name, @PathVariable("type") TrafficType type) throws UnsupportedEncodingException{
-		name = URLDecoder.decode(name, "UTF-8" );
+	@GetMapping(value="/line/getByMarkAndType/{mark}/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<LineDto> getByNameAndType(@PathVariable("mark") String mark, @PathVariable("type") TrafficType type) throws UnsupportedEncodingException{
+		mark = URLDecoder.decode(mark, "UTF-8" );
 		
-		logger.info(">> get " + type + " line by name " + name);
+		logger.info(">> get " + type + " line by mark " + mark);
 
-		Line found = lineService.getByNameAndType(name, type);
+		Line found = lineService.getByMarkAndType(mark, type);
 		
-		logger.info("<< get " + type + " line by name " + name);
+		logger.info("<< get " + type + " line by mark " + mark);
 		if(found == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {

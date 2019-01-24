@@ -8,5 +8,4 @@ export class Station {
     xCoordinate: Number;
     yCoordinate: Number;
     lines: LineDTO[];
-    address: Address
 }

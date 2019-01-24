@@ -11,25 +11,25 @@ public class StationLineDto {
 	private Long lineId;
 	private String stationName;
 	private String lineName;
+	private String lineMark;
 	
 	public StationLineDto() {}
 
 	public StationLineDto(int stationNum, int arrival, Long stationId, Long lineId, String stationName,
-			String lineName) {
-		super();
+			String lineName, String lineMark) {
+		this();
 		this.stationNum = stationNum;
 		this.arrival = arrival;
 		this.stationId = stationId;
 		this.lineId = lineId;
 		this.stationName = stationName;
 		this.lineName = lineName;
+		this.lineMark = lineMark;
 	}
 
-
-
 	public StationLineDto(Long id, int stationNum, int arrival, Long stationId, Long lineId, String stationName,
-			String lineName) {
-		super();
+			String lineName, String lineMark) {
+		this();
 		this.id = id;
 		this.stationNum = stationNum;
 		this.arrival = arrival;
@@ -37,9 +37,8 @@ public class StationLineDto {
 		this.lineId = lineId;
 		this.stationName = stationName;
 		this.lineName = lineName;
+		this.lineMark = lineMark;
 	}
-
-
 
 	public StationLineDto(StationLine sl) {
 		this.id = sl.getId();
@@ -49,6 +48,7 @@ public class StationLineDto {
 		this.lineId = sl.getLine().getId();
 		this.stationName = sl.getStation().getName();
 		this.lineName = sl.getLine().getName();
+		this.lineMark = sl.getLine().getMark();
 	}
 
 	public int getStationNum() {
@@ -91,12 +91,6 @@ public class StationLineDto {
 		this.id = id;
 	}
 
-	@Override
-	public String toString() {
-		return "StationLineDto [id=" + id + ", stationNum=" + stationNum + ", arrival=" + arrival + ", stationId="
-				+ stationId + ", lineId=" + lineId + "]";
-	}
-
 	public String getStationName() {
 		return stationName;
 	}
@@ -111,6 +105,21 @@ public class StationLineDto {
 
 	public void setLineName(String lineName) {
 		this.lineName = lineName;
+	}
+
+	public String getLineMark() {
+		return lineMark;
+	}
+
+	public void setLineMark(String lineMark) {
+		this.lineMark = lineMark;
+	}
+
+	@Override
+	public String toString() {
+		return "StationLineDto [id=" + id + ", stationNum=" + stationNum + ", arrival=" + arrival + ", stationId="
+				+ stationId + ", lineId=" + lineId + ", stationName=" + stationName + ", lineName=" + lineName
+				+ ", lineMark=" + lineMark + "]";
 	}
 	
 	

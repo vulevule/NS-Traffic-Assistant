@@ -52,31 +52,24 @@ export class StationServiceService {
       .catch(this.handleError);
   }
 
-  createStation(station: StationDTO): Promise<StationDTO> {
-    return this.http
-      .post<StationDTO>(`${this.stationsUrl}/create`, JSON.stringify(station), {
-        headers: this.headers
-      })
-      .toPromise()
-      .then(response => response as StationDTO)
-      .catch(this.handleError);
+  createStation(station: StationDTO): Observable<String> {
+    return this.http.post(`${this.stationsUrl}/create`, station, {
+      headers: this.headers,
+      responseType: "text"
+    });
   }
 
-  updateStation(station: StationDTO): Promise<StationDTO> {
-    return this.http
-      .put<StationDTO>(`${this.stationsUrl}/update`, JSON.stringify(station), {
-        headers: this.headers
-      })
-      .toPromise()
-      .then(response => response as StationDTO)
-      .catch(this.handleError);
+  updateStation(station: StationDTO): Observable<String> {
+    return this.http.put(`${this.stationsUrl}/update`, station, {
+      headers: this.headers,
+      responseType: "text"
+    });
   }
 
-  deleteStation(id: any): Promise<{}> {
-    return this.http
-      .delete(`${this.stationsUrl}/delete/${id}`)
-      .toPromise()
-      .catch(this.handleError);
+  deleteStation(id: any): Observable<String> {
+    return this.http.delete(`${this.stationsUrl}/delete/${id}`, {
+      responseType: "text"
+    });
   }
 
   handleError(error: any): Promise<any> {

@@ -33,9 +33,6 @@ public class Address implements Serializable{
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="address")
 	private Set<User> users;
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy ="address")
-	private Set<Station> stations;
 
 	public Address() {}
 	

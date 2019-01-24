@@ -17,7 +17,7 @@ public interface LineRepository extends JpaRepository<Line, Long>{
 	
 	List<Line> findByZone(TrafficZone zone);
 	
-	Line findByNameAndType(String name, TrafficType type);
+	Line findByMarkAndType(String mark, TrafficType type);
 	
 	Optional<Line> findById(Long id);
 }

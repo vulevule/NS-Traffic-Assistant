@@ -1,18 +1,38 @@
 <div class="linesContainer">
-  <ngb-tabset (tabChange)="tabChange()" [activeId]="activeTabId">
+  <ngb-tabset
+    #tabRef="ngbTabset"
+    [activeId]="activeTab"
+    (tabChange)="onTabChange($event)"
+  >
     <ngb-tab title="Display lines" id="displayLinesTab">
       <ng-template ngbTabContent>
         <app-lines-display
           [lines]="lines"
           [stations]="stations"
-          (onSelectLine)="onSelectLine($event)"
+          (editLineEmitter)="openEditor($event)"
         ></app-lines-display>
       </ng-template>
     </ngb-tab>
 
     <ngb-tab title="Create new" id="createLineTab">
       <ng-template ngbTabContent>
-        <app-lines-create [stations]="stations"></app-lines-create>
+        <app-lines-create-edit
+          [stations]="stations"
+          [actionType]="'CREATE'"
+          (buttonClick)="activeTab = $event; selectedLine = undefined"
+        ></app-lines-create-edit>
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab title="Edit" id="editLineTab" *ngIf="selectedLine">
+      <ng-template ngbTabContent>
+        <app-lines-create-edit
+          [stations]="stations"
+          [lines]="lines"
+          [actionType]="'EDIT'"
+          [newLine]="selectedLine"
+          (buttonClick)="activeTab = $event; selectedLine = undefined"
+        ></app-lines-create-edit>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
