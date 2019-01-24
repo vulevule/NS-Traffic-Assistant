@@ -18,8 +18,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FilterByTypePipe } from './stations/display-stations/pipes/filter-by-type.pipe';
 import { FilterByNamePipe } from './stations/display-stations/pipes/filter-by-name.pipe';
 import { LinesComponent } from './lines/lines/lines.component';
-import { LinesSidebarComponent } from './lines/lines-sidebar/lines-sidebar.component';
-import { LinesMapComponent } from './lines/lines-map/lines-map.component';
 import { LinesDisplayComponent } from './lines/lines-display/lines-display.component';
 import { LinesCreateComponent } from './lines/lines-create/lines-create.component';
 import { LineService } from './services/lines/line.service';
@@ -46,6 +44,17 @@ import { RegisterPageComponent } from './pages/register-page/register-page.compo
 import { MatchingPasswordDirective } from './pages/register-page/matching-password.directive';
 
 
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+import { timeout } from 'q';
+import { TicketServiceService } from './services/ticket/ticket-service.service';
+import { PriceListServiceService } from './services/pricelist/price-list-service.service';
+import { TimetableComponent } from './timetable/timetable/timetable.component';
+import { EditTimetableComponent } from './timetable/edit-timetable/edit-timetable.component';
+import { DisplayTimetableComponent } from './timetable/display-timetable/display-timetable.component';
+import { TimetableService } from './services/timetable/timetable.service';
+import { SearchTimetableComponent } from './timetable/search-timetable/search-timetable.component';
+
 
 const appRoutes: Routes = [
   { path: 'main',
@@ -56,7 +65,8 @@ const appRoutes: Routes = [
       { path: 'login', component: LoginPageComponent, outlet: "primary"},
       { path : 'ticket' , component : TicketComponent, outlet:"secondary"},
       { path : 'pricelist', component : PricelistComponent, outlet : "secondary"},
-      { path : 'report', component : ReportComponent, outlet : "secondary"}
+      { path : 'report', component : ReportComponent, outlet : "secondary"}, 
+      { path : 'timetable', component : TimetableComponent, outlet : "secondary"}
     ] 
   },
        
@@ -79,8 +89,6 @@ const appRoutes: Routes = [
     FilterByTypePipe,
     FilterByNamePipe,
     LinesComponent,
-    LinesSidebarComponent,
-    LinesMapComponent,
     LinesDisplayComponent,
     LinesCreateComponent,
     FilterByZonePipe,
@@ -100,8 +108,15 @@ const appRoutes: Routes = [
     FilterItemByTrafficTypePipe,
     FilterItemByZonePipe,
     FilterItemByTicketTimePipe,
+
     RegisterPageComponent,
     MatchingPasswordDirective,
+
+    TimetableComponent,
+    EditTimetableComponent,
+    DisplayTimetableComponent,
+    SearchTimetableComponent,
+
   ],
   imports: [
     NgbModule,
@@ -112,7 +127,9 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only
-    )
+    ), 
+    BrowserAnimationsModule,
+  
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true },
@@ -120,12 +137,18 @@ const appRoutes: Routes = [
     LoggedUserService,
     AuthenticationService,
     StationServiceService,
-    LineService
+
+    LineService,
     
+    TicketServiceService, 
+    PriceListServiceService, 
+    TimetableService
+
   ],
-  entryComponents: [
-    RegisterPageComponent
-],
-  bootstrap: [AppComponent]
+
+
+  bootstrap: [AppComponent],
+  entryComponents: [ UseCheckTicketComponent,RegisterPageComponent ]
+
 })
 export class AppModule { }

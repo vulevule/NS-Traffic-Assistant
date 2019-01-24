@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
+import com.team9.dto.TicketsAndSizeDto;
+import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.NotFoundActivePricelistException;
 import com.team9.exceptions.PriceItemNotFoundException;
 import com.team9.exceptions.TicketAlreadyUsedException;
@@ -49,33 +51,16 @@ public class TicketController {
 
 	
 	@GetMapping(value="/all", params={"page", "size"}, produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<TicketReaderDto>> getAll(@RequestParam("page")int page, @RequestParam("size") int size){
-		Collection<TicketReaderDto> result = this.ticketService.getAll(page, size);
-		return new ResponseEntity<Collection<TicketReaderDto>>(result, HttpStatus.OK);
-	}
-	
-	@GetMapping(value="/size", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Integer> getNumberOfTicket(HttpServletRequest request){
-		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		String authToken = httpRequest.getHeader("X-Auth-Token");
-		String username = this.tokenUtils.getUsernameFromToken(authToken);
-		int num;
-		try {
-			num = this.ticketService.getNumberOfTicket(username);
-			return new ResponseEntity<Integer>(num, HttpStatus.OK);
-
-		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<TicketsAndSizeDto> getAll(@RequestParam("page")int page, @RequestParam("size") int size){
+		TicketsAndSizeDto result = this.ticketService.getAll(page, size);
+		return new ResponseEntity<TicketsAndSizeDto>(result, HttpStatus.OK);
 	}
 	
 	/*
 	 * TREBA ZAMENITI DA VRACA PAGE OBJEKAT
 	 */
 	@GetMapping(value = "/myTicket", produces = MediaType.APPLICATION_JSON_VALUE, params={"page", "size"})
-	public ResponseEntity<Collection<TicketReaderDto>> getMyTicket(@RequestParam("page") int page, @RequestParam("size") int size,HttpServletRequest request) {
+	public ResponseEntity<TicketsAndSizeDto> getMyTicket(@RequestParam("page") int page, @RequestParam("size") int size,HttpServletRequest request) {
 		/*
 		 * korisnika uzimamo iz tokena
 		 */
@@ -86,16 +71,16 @@ public class TicketController {
 
 		
 		
-		Collection<TicketReaderDto> allTicket;
+		TicketsAndSizeDto allTicket;
 		try {
-			allTicket = ticketService.allTicket(username, page, size);
+			allTicket = ticketService.myTicket(username, page, size);
 			logger.info("<< get tickets by " + username);
-			return new ResponseEntity<Collection<TicketReaderDto>>(allTicket, HttpStatus.OK);
+			return new ResponseEntity<TicketsAndSizeDto>(allTicket, HttpStatus.OK);
 		} catch (UserNotFoundException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
 			logger.info("<< get ticket: not found user");
-			return new ResponseEntity<Collection<TicketReaderDto>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
 		
@@ -176,14 +161,14 @@ public class TicketController {
 
 	}
 
-	@PutMapping(value = "/useTicket", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> useTicket(@RequestParam("serialNo") String serialNo, @RequestParam("zone") String zone,  HttpServletRequest request) {
+	@GetMapping(value = "/useTicket", produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> useTicket(@RequestParam("serialNo") String serialNo, @RequestParam("line") Long line_id,  HttpServletRequest request) {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
-		logger.info(">> use ticket with serial number: " + serialNo + "; user:  " + username + "; zone: " + zone);
+		logger.info(">> use ticket with serial number: " + serialNo + "; user:  " + username + "; line: " + line_id);
 		try {
-			boolean use = this.ticketService.useTicket(serialNo, username, zone);
+			boolean use = this.ticketService.useTicket(serialNo, username, line_id);
 			if (use == true) {
 				logger.info("<< successful use ticket");
 				return new ResponseEntity<String>("The ticket was successfully used", HttpStatus.OK);
@@ -203,29 +188,29 @@ public class TicketController {
 			// e.printStackTrace();
 			logger.info("ticket is not a valid");
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (WrongTrafficZoneException e) {
-			logger.info("<< use ticket: invalid zone ");
-			// TODO Auto-generated catch block
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (ZonesDoNotMatchException e) {
 			// TODO Auto-generated catch block
 			logger.info("<< use ticket: zone do not match");
 			//e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		} catch (LineNotFoundException e) {
+			// TODO Auto-generated catch block
+			logger.info("line not found");
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		return null;
 	}
 
-	@PutMapping(value = "/checkTicket", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> checkTicket(@RequestParam("serialNo") String serialNo, @RequestParam("zone") String zone,
+	@GetMapping(value = "/checkTicket", produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> checkTicket(@RequestParam("serialNo") String serialNo, @RequestParam("line") Long line_id,
 			HttpServletRequest request) {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
-		logger.info(">> check ticket with serial number: " + serialNo + "; zone: " + zone + "; inspector:  " + username);
+		logger.info(">> check ticket with serial number: " + serialNo + "; line: " + line_id + "; inspector:  " + username);
 
 		try {
-			TicketReaderDto t = this.ticketService.checkTicket(serialNo, username, zone); 
+			TicketReaderDto t = this.ticketService.checkTicket(serialNo, username, line_id); 
 			logger.info("<< check ticket");
 			return new ResponseEntity<String>("The ticket was successfully checked", HttpStatus.OK);
 		} catch (TicketNotFound e) {
@@ -247,15 +232,15 @@ public class TicketController {
 			// TODO Auto-generated catch block
 			logger.info("<< check ticket : inspector not found");
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (WrongTrafficZoneException e) {
-			logger.info("<< check ticket: invalid zone ");
-			// TODO Auto-generated catch block
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (ZonesDoNotMatchException e) {
+		}  catch (ZonesDoNotMatchException e) {
 			// TODO Auto-generated catch block
 			logger.info("<< check ticket: zone do not match");
 			//e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		} catch (LineNotFoundException e) {
+			// TODO Auto-generated catch block
+			logger.info("<< check ticket: line not found");
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 

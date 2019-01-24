@@ -152,9 +152,9 @@ export class DisplayStationsComponent implements OnInit {
           .getText();
         var type = f.get("description");
 
-        vm.selectedStation = vm.stations.find(
+        vm.selectedStation = JSON.parse(JSON.stringify(vm.stations.find(
           s => s.name === name && s.type === type
-        );
+        )));
       } else {
         // draw marker
         vm.drawMarker(args.coordinate);
@@ -186,7 +186,7 @@ export class DisplayStationsComponent implements OnInit {
       this.searchStations = data;
     });
 
-    await this.lineService.getAll().then(data => {
+    await this.lineService.getAll().subscribe(data => {
       this.lines = data;
     });
   }
@@ -195,12 +195,12 @@ export class DisplayStationsComponent implements OnInit {
     station.xCoordinate = this.markerOnMap[0];
     station.yCoordinate = this.markerOnMap[1];
 
-    await this.stationService.updateStation(station).then(
+    await this.stationService.updateStation(station).subscribe(
       data => {
-        alert(`Station ${data.name} updated!`);
+        alert(data);
       },
       reason => {
-        alert("Station with this id does not exist!");
+        alert(reason.error);
       }
     );
 
@@ -215,12 +215,12 @@ export class DisplayStationsComponent implements OnInit {
     if (
       confirm(`You are about to delete ${station.name} station.\nAre you sure?`)
     ) {
-      await this.stationService.deleteStation(station.id).then(
+      await this.stationService.deleteStation(station.id).subscribe(
         data => {
-          alert(`Station deleted!`);
+          alert(data);
         },
         reason => {
-          alert("Station with this id is not found!");
+          alert(reason.error);
         }
       );
 
@@ -236,15 +236,15 @@ export class DisplayStationsComponent implements OnInit {
     station.yCoordinate = this.markerOnMap[1];
     station.lines = [];
 
-    await this.stationService.createStation(station).then(
+    await this.stationService.createStation(station).subscribe(
       data => {
-        alert(`Station ${data.name} created!`);
+        alert(data);
       },
       reason => {
-        alert("Station with this name and type already exists!");
+        alert(reason.error);
       }
     );
-
+ 
     await this.getData();
     this.sharedService.updateAll();
     this.drawStations();
@@ -253,7 +253,7 @@ export class DisplayStationsComponent implements OnInit {
   }
 
   selectStation(station: StationDTO) {
-    this.selectedStation = station;
+    this.selectedStation = JSON.parse(JSON.stringify(station));
     this.editStation = undefined;
     this.positionOnMap(station);
   }
@@ -385,6 +385,6 @@ export class DisplayStationsComponent implements OnInit {
     if (this.currentMarker) {
       this.vectorSource.removeFeature(this.currentMarker);
     }
-    this.currentMarker = undefined;
+    //this.currentMarker = undefined;
   }
 }

@@ -135,7 +135,7 @@ public class StationControllerIntegrationTest {
 		
 		int size = stationService.getAll().size();
 		
-		StationDTO station = new StationDTO("Bulevar", TrafficType.METRO, 24.0, 48.0, "Bulevar Vojvode Stepe", "Beograd", 11000, null);	
+		StationDTO station = new StationDTO("Bulevar", TrafficType.METRO, 24.0, 48.0, null);	
 		HttpEntity<StationDTO> httpEntity = new HttpEntity<StationDTO>(station, headers);
 		
 		ResponseEntity<StationDTO> responseEntity = restTemplate.exchange("/station/create", HttpMethod.POST, httpEntity, StationDTO.class);
@@ -145,9 +145,6 @@ public class StationControllerIntegrationTest {
 		assertNotNull(created);
 		assertEquals("Bulevar", created.getName());
 		assertEquals(TrafficType.METRO, created.getType());
-		assertEquals("Bulevar Vojvode Stepe", created.getAddressName());
-		assertEquals("Beograd", created.getAddressCity());
-		assertEquals(11000, created.getAddressZip());
 				
 //		List<Station> stations = stationService.getAll();
 //		assertEquals(size+1, stations.size());
@@ -168,7 +165,7 @@ public class StationControllerIntegrationTest {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token);
 		
-		StationDTO station = new StationDTO("Narodnog fronta", TrafficType.BUS, 24.0, 48.0, "Bulevar Vojvode Stepe", "Beograd", 11000, null);	
+		StationDTO station = new StationDTO("Narodnog fronta", TrafficType.BUS, 24.0, 48.0, null);	
 		HttpEntity<StationDTO> httpEntity = new HttpEntity<StationDTO>(station, headers);
 		
 		ResponseEntity<StationDTO> responseEntity = restTemplate.exchange("/station/create", HttpMethod.POST, httpEntity, StationDTO.class);

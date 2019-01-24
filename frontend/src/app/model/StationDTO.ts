@@ -7,9 +7,6 @@ export class StationDTO {
     xCoordinate: Number;
     yCoordinate: Number;
     lines: StationLineDTO[];
-    addressName: String;
-    addressCity: String;
-    addressZip: Number
 
     /* constructor() {
         this.id = 0;

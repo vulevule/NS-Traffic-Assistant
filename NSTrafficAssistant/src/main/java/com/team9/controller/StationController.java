@@ -109,32 +109,41 @@ public class StationController {
 	}
 	
 	@PostMapping(value="/station/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<StationDTO> createStation(@RequestBody StationDTO station){
+	public ResponseEntity<String> createStation(@RequestBody StationDTO station){
 		logger.info(">> Creating station  " + station.getName());
 		logger.info("GELDAJ VAMO: " + station.getType());
 		
 		Station created = null;
+		String message;
 		try {
 			created = stationService.createStation(station);
 			logger.info("<< Creating station  " + station.getName());
-			return new ResponseEntity<>(new StationDTO(created), HttpStatus.CREATED);
+			message = "Station " + station.getName() + " successfully created!";
+			return new ResponseEntity<>(message, HttpStatus.CREATED);
 		} catch (StationAlreadyExistsException e) {
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+			message = station.getType() + " station " + station.getName() + " already exists!";
+			return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
 	}
 	
 	@PutMapping(value="/station/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<StationDTO> updateStation(@RequestBody StationDTO station){
+	public ResponseEntity<String> updateStation(@RequestBody StationDTO station){
 		logger.info(">> Updating station  " + station.getName());
 
 		Station updated = null;
+		String message;
 		try {
 			updated = stationService.updateStation(station);
 			logger.info("<< Updating station  " + station.getName());
-			return new ResponseEntity<>(new StationDTO(updated), HttpStatus.CREATED);
+			message = "Station " + station.getName() + " successfully updated!";
+			return new ResponseEntity<>(message, HttpStatus.CREATED);
 		} catch (StationNotFoundException e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			message = "Station " + station.getName() + " not found";
+			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+		} catch (StationAlreadyExistsException e) {
+			message = station.getType() + " station " + station.getName() + " already exists!";
+			return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 	

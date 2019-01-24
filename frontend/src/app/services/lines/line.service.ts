@@ -1,9 +1,10 @@
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LineDTO } from 'src/app/model/LineDTO';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class LineService {
   private headers = new HttpHeaders({ "Content-Type": "application/json" });
@@ -11,12 +12,9 @@ export class LineService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Promise<LineDTO[]> {
+  getAll(): Observable<LineDTO[]> {
     return this.http
-      .get<LineDTO[]>(`${this.linesUrl}/getAll`)
-      .toPromise()
-      .then(response => response as LineDTO[])
-      .catch(this.handleError);
+      .get<LineDTO[]>(`${this.linesUrl}/getAll`);
   }
 
   getAllByType(type: String): Promise<LineDTO[]> {
@@ -51,35 +49,33 @@ export class LineService {
       .catch(this.handleError);
   }
 
-  createLine(line: LineDTO): Promise<LineDTO> {
-    return this.http
-      .post<LineDTO>(`${this.linesUrl}/create`, JSON.stringify(line), {
-        headers: this.headers
-      })
-      .toPromise()
-      .then(response => response as LineDTO)
-      .catch(this.handleError);
+  createLine(line: LineDTO): Observable<String> {
+    return this.http.post(`${this.linesUrl}/create`, line, {
+      headers: this.headers,
+      responseType: "text"
+    });
   }
 
-  updateLine(line: LineDTO): Promise<LineDTO> {
-    return this.http
-      .put<LineDTO>(`${this.linesUrl}/update`, JSON.stringify(line), {
-        headers: this.headers
-      })
-      .toPromise()
-      .then(response => response as LineDTO)
-      .catch(this.handleError);
+  updateLine(line: LineDTO): Observable<String> {
+    return this.http.put(`${this.linesUrl}/update`, line, {
+      headers: this.headers,
+      responseType: "text"
+    });
   }
 
-  deleteLine(id: any): Promise<{}> {
-    return this.http
-      .delete(`${this.linesUrl}/delete/${id}`)
-      .toPromise()
-      .catch(this.handleError);
+  deleteLine(id: any): Observable<String> {
+    return this.http.delete(`${this.linesUrl}/delete/${id}`, {
+      responseType: "text"
+    });
+  }
+
+
+  getAllByZoneAndTrafficType(zone : String, type : String):Observable<LineDTO[]>{
+    return this.http.get<LineDTO[]>(`${this.linesUrl}/getAllByZoneAndTrafficType?zone=${zone}&type=${type}`);
   }
 
   handleError(error: any): Promise<any> {
     console.error("Error... ", error);
-    return Promise.reject(error.message || error);
+    return Promise.reject(error.error);
   }
 }

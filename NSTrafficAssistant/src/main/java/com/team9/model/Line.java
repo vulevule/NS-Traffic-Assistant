@@ -17,80 +17,84 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="line")
-public class Line implements Serializable{
+@Table(name = "line")
+public class Line implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(nullable = false)
+	private String mark;
 	@Column(nullable = false)
 	private String name;
 	@Column(nullable = false)
 	private TrafficType type;
 	@Column(nullable = false)
 	private TrafficZone zone;
-	
-	//@Column(nullable = false)
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+
+	// @Column(nullable = false)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Location> route;
-	
-	@ManyToOne(fetch = FetchType.EAGER, optional = false, cascade=CascadeType.ALL)
-	private Timetable timeTable;
-	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="line", cascade=CascadeType.ALL)
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "line", cascade = CascadeType.ALL)
 	private List<StationLine> stations;
-	
-	public Line() {}
-	
-	public Line(String name, TrafficType type, TrafficZone zone, List<Location> route, Timetable timeTable,
+
+	public Line() {
+	}
+
+	public Line(String mark, String name, TrafficType type, TrafficZone zone, List<Location> route,
 			List<StationLine> stations) {
-		super();
+		this();
+		this.mark = mark;
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
 		this.route = route;
-		this.timeTable = timeTable;
 		this.stations = stations;
 	}
 
 
-
-	public Line(Long id, String name, TrafficType type, TrafficZone zone, List<Location> route, Timetable timeTable,
+	public Line(Long id, String mark, String name, TrafficType type, TrafficZone zone, List<Location> route,
 			List<StationLine> stations) {
-		super();
+		this();
 		this.id = id;
+		this.mark = mark;
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
 		this.route = route;
-		this.timeTable = timeTable;
 		this.stations = stations;
 	}
 
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public TrafficType getType() {
 		return type;
 	}
+
 	public void setType(TrafficType type) {
 		this.type = type;
 	}
+
 	public TrafficZone getZone() {
 		return zone;
 	}
+
 	public void setZone(TrafficZone zone) {
 		this.zone = zone;
 	}
-	
+
 	public List<StationLine> getStations() {
 		return stations;
 	}
@@ -98,32 +102,29 @@ public class Line implements Serializable{
 	public void setStations(List<StationLine> stations) {
 		this.stations = stations;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
-
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
 	public List<Location> getRoute() {
 		return route;
 	}
-
 
 	public void setRoute(List<Location> route) {
 		this.route = route;
 	}
 
-	public Timetable getTimeTable() {
-		return timeTable;
+	public String getMark() {
+		return mark;
 	}
 
-	public void setTimeTable(Timetable timeTable) {
-		this.timeTable = timeTable;
+	public void setMark(String mark) {
+		this.mark = mark;
 	}
-
+	
 }

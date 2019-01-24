@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LinesMapComponent } from './lines-map.component';
+import { SearchTimetableComponent } from './search-timetable.component';
 
-describe('LinesMapComponent', () => {
-  let component: LinesMapComponent;
-  let fixture: ComponentFixture<LinesMapComponent>;
+describe('SearchTimetableComponent', () => {
+  let component: SearchTimetableComponent;
+  let fixture: ComponentFixture<SearchTimetableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LinesMapComponent ]
+      declarations: [ SearchTimetableComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LinesMapComponent);
+    fixture = TestBed.createComponent(SearchTimetableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

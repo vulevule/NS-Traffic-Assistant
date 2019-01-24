@@ -20,6 +20,7 @@ import Text from "ol/style/Text";
 import View from "ol/View";
 import LineString from "ol/geom/LineString";
 import Overlay from "ol/Overlay";
+import { LineService } from 'src/app/services/lines/line.service';
 
 @Component({
   selector: "app-lines-display",
@@ -33,6 +34,9 @@ export class LinesDisplayComponent implements OnInit {
   @Input()
   lines: LineDTO[];
 
+  @Output()
+  editLineEmitter = new EventEmitter<LineDTO>();
+
   displayType = {
     bus: true,
     tram: false,
@@ -40,7 +44,7 @@ export class LinesDisplayComponent implements OnInit {
   };
 
   displayZone = {
-    first: false,
+    first: true,
     second: false
   };
 
@@ -100,7 +104,7 @@ export class LinesDisplayComponent implements OnInit {
   closer: any;
   overlay: any;
 
-  constructor(private sharedService: SharedService) {}
+  constructor(private sharedService: SharedService, private lineService: LineService) {}
 
   ngOnInit() {
     this.sharedService.stations.subscribe(
@@ -201,12 +205,21 @@ export class LinesDisplayComponent implements OnInit {
     this.drawStationsForLine(line);
   }
 
-  updateLine(line: LineDTO) {
-
-  }
-
   deleteLine(line: LineDTO) {
-    
+    if (
+      confirm(`You are about to delete ${line.mark} station.\nAre you sure?`)
+    ) {
+     this.lineService.deleteLine(line.id).subscribe(
+        data => {
+          alert(data);
+          this.selectedStation = undefined;
+          this.sharedService.updateAll();
+        },
+        reason => {
+          alert(reason.error);
+        }
+      );
+    }
   }
 
   drawStation(
