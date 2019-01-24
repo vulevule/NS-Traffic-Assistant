@@ -16,31 +16,28 @@ public class LineDto {
 	private TrafficType type;
 	private TrafficZone zone;
 	private List<StationLineDto> stations;	
-	private Long timeTable;
 	private List<LocationDto> route;
 	
 	public LineDto() {}
 	
-	public LineDto(String name, TrafficType type, TrafficZone zone, List<StationLineDto> stations, Long timeTable,
+	public LineDto(String name, TrafficType type, TrafficZone zone, List<StationLineDto> stations,
 			List<LocationDto> route) {
 		this();
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
 		this.stations = stations;
-		this.timeTable = timeTable;
 		this.route = route;
 	}
 
 	public LineDto(Long id, String name, TrafficType type, TrafficZone zone, List<StationLineDto> stations,
-			Long timeTable, List<LocationDto> route) {
+			List<LocationDto> route) {
 		this();
 		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.zone = zone;
 		this.stations = stations;
-		this.timeTable = timeTable;
 		this.route = route;
 	}
 
@@ -49,7 +46,6 @@ public class LineDto {
 		this.name = l.getName();
 		this.type = l.getType();
 		this.zone = l.getZone();
-		this.timeTable = l.getTimeTable().getId();
 		
 		this.route = new ArrayList<LocationDto>();
 		for(Location loc : l.getRoute()) {
@@ -102,13 +98,6 @@ public class LineDto {
 		this.stations = stations;
 	}
 
-	public Long getTimeTable() {
-		return timeTable;
-	}
-
-	public void setTimeTable(Long timeTable) {
-		this.timeTable = timeTable;
-	}
 
 	public List<LocationDto> getRoute() {
 		return route;
@@ -121,7 +110,7 @@ public class LineDto {
 	@Override
 	public String toString() {
 		return "LineDto [id=" + id + ", name=" + name + ", type=" + type + ", zone=" + zone + ", stations=" + stations
-				+ ", timeTable=" + timeTable + ", route=" + route + "]";
+				+  ", route=" + route + "]";
 	}
 	
 	

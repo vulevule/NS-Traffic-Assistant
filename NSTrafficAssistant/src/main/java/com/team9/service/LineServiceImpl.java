@@ -1,6 +1,7 @@
 package com.team9.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ import com.team9.dto.StationLineDto;
 import com.team9.exceptions.LineAlreadyExistsException;
 import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.StationNotFoundException;
+import com.team9.exceptions.WrongTrafficTypeException;
+import com.team9.exceptions.WrongTrafficZoneException;
 import com.team9.model.Line;
 import com.team9.model.Location;
 import com.team9.model.Station;
@@ -48,12 +51,12 @@ public class LineServiceImpl implements LineService{
 	public Line createLine(LineDto ldto) throws LineAlreadyExistsException, StationNotFoundException {
 		Line find = lineRepository.findByNameAndType(ldto.getName(), ldto.getType());
 		if (find == null) {
-			Line line = new Line(ldto.getName(), ldto.getType(), ldto.getZone(), null, null, null);
-			Timetable timetable = timeTableRepository.findByActivate(true);
-			if(timetable == null) {
-				timetable = new Timetable();
-			}
-			line.setTimeTable(timetable);
+			Line line = new Line(ldto.getName(), ldto.getType(), ldto.getZone(), null, null);
+//			Timetable timetable = timeTableRepository.findByActivate(true);
+//			if(timetable == null) {
+//				timetable = new Timetable();
+//			}
+//			line.setTimeTable(timetable);
 			
 			
 			line.setRoute(new ArrayList<Location>());
@@ -174,6 +177,8 @@ public class LineServiceImpl implements LineService{
 	public Line getByNameAndType(String name, TrafficType type) {
 		return lineRepository.findByNameAndType(name, type);
 	}
+
+	
 
 	
 

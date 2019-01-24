@@ -6,6 +6,8 @@ import java.util.Collection;
 import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
+import com.team9.dto.TicketsAndSizeDto;
+import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.NotFoundActivePricelistException;
 import com.team9.exceptions.PriceItemNotFoundException;
 import com.team9.exceptions.TicketAlreadyUsedException;
@@ -27,7 +29,7 @@ public interface TicketService {
 
 	TicketReaderDto buyTicket(TicketDto t, String username) throws WrongTrafficTypeException, UserNotFoundException, WrongTrafficZoneException, WrongTicketTimeException, PriceItemNotFoundException, NotFoundActivePricelistException;
 	
-	Collection<TicketReaderDto> allTicket( String username, int page, int size) throws UserNotFoundException;
+	TicketsAndSizeDto myTicket( String username, int page, int size) throws UserNotFoundException;
 	
 	double getTicketPrice(TicketDto t, String username) throws PriceItemNotFoundException, UserNotFoundException, NotFoundActivePricelistException, WrongTrafficTypeException, WrongTicketTimeException, WrongTrafficZoneException;
 
@@ -37,13 +39,15 @@ public interface TicketService {
 	String generateSerialNumber(TrafficType trafficType, TimeTicketType timeType, TrafficZone trafficZone,
 			UserTicketType ut);
 	
-	boolean useTicket(String serialNo, String username, String zone) throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException, WrongTrafficZoneException, ZonesDoNotMatchException;
+	boolean useTicket(String serialNo, String username, Long line_id) throws TicketNotFound, TicketAlreadyUsedException, TicketIsNotValidException,  ZonesDoNotMatchException, LineNotFoundException;
 	
-	TicketReaderDto checkTicket(String serialNo, String username, String zone) throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException, WrongTrafficZoneException, ZonesDoNotMatchException;
+	TicketReaderDto checkTicket(String serialNo, String username, Long line_id) throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException,  ZonesDoNotMatchException, LineNotFoundException;
 	
 	ReportDto getReport(int month, int year, String reportType) throws IllegalArgumentException, WrongReportTypeException;
 
-	Collection<TicketReaderDto> getAll(int page, int size);
+	TicketsAndSizeDto getAll(int page, int size);
 
 	int getNumberOfTicket(String username) throws UserNotFoundException;
+
+	int getNumberOfAllTickets();
 }

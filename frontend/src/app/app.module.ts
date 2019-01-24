@@ -43,6 +43,17 @@ import { FilterItemByZonePipe } from './pricelist/display-price-list/pipes/filte
 import { FilterItemByTicketTimePipe } from './pricelist/display-price-list/pipes/filter-item-by-ticket-time.pipe';
 
 
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr'
+import { timeout } from 'q';
+import { TicketServiceService } from './services/ticket/ticket-service.service';
+import { PriceListServiceService } from './services/pricelist/price-list-service.service';
+import { TimetableComponent } from './timetable/timetable/timetable.component';
+import { EditTimetableComponent } from './timetable/edit-timetable/edit-timetable.component';
+import { DisplayTimetableComponent } from './timetable/display-timetable/display-timetable.component';
+import { TimetableService } from './services/timetable/timetable.service';
+import { SearchTimetableComponent } from './timetable/search-timetable/search-timetable.component';
+
 
 const appRoutes: Routes = [
   { path: 'main',
@@ -53,7 +64,8 @@ const appRoutes: Routes = [
       { path: 'login', component: LoginPageComponent, outlet: "primary"},
       { path : 'ticket' , component : TicketComponent, outlet:"secondary"},
       { path : 'pricelist', component : PricelistComponent, outlet : "secondary"},
-      { path : 'report', component : ReportComponent, outlet : "secondary"}
+      { path : 'report', component : ReportComponent, outlet : "secondary"}, 
+      { path : 'timetable', component : TimetableComponent, outlet : "secondary"}
     ] 
   },
        
@@ -97,6 +109,10 @@ const appRoutes: Routes = [
     FilterItemByTrafficTypePipe,
     FilterItemByZonePipe,
     FilterItemByTicketTimePipe,
+    TimetableComponent,
+    EditTimetableComponent,
+    DisplayTimetableComponent,
+    SearchTimetableComponent,
   ],
   imports: [
     NgbModule,
@@ -106,6 +122,15 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only
+    ), 
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut : 5000, 
+      positionClass : 'toast-top-right',
+      preventDuplicates :  false,
+      toastComponent : BuyTicketFormComponent
+       
+    }
     )
   ],
   providers: [
@@ -113,8 +138,12 @@ const appRoutes: Routes = [
     LoggedUserService,
     AuthenticationService,
     StationServiceService,
-    LineService
+    LineService, 
+    TicketServiceService, 
+    PriceListServiceService, 
+    TimetableService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ UseCheckTicketComponent, ]
 })
 export class AppModule { }

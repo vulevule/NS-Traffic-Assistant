@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
       logout.hidden = false;
       edit.hidden = false;
       login.hidden = true;
-      if (this.loggedUser.role === 'INSPECTOR'){
+      if (this.loggedUser.role === 'ADMIN'){
         register.hidden = false;
       }else{
         register.hidden = true;

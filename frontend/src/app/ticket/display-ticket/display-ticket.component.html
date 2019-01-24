@@ -30,6 +30,8 @@
               <td>{{ticket.price}}</td>
             </tr>
           </table>
+          <button class="btn btn-outline-primary" *ngIf="role === 'PASSENGER'" (click)="openDialog()" > Use </button>
+          <button class="btn btn-outline-primary" *ngIf="role === 'INSPECTOR'" (click)="openDialog()"> Check </button>
           
     </div>
    

@@ -68,6 +68,10 @@
 
   <div class="col-12 col-md-9 map-content">
     <div id="map" class="map">
+      <!--ispisemo poruku ako treba-->
+      <div *ngIf="message !== ''">
+        <ngb-alert [type]="infoType" [dismissible]="false">{{ message }}</ngb-alert>
+      </div>
       <!--ovde cemo nacrtati tabelu-->
       <div *ngIf="pricelist !== undefined">
       <pre> Issue date: {{pricelist.issueDate | date:"dd.MM.yyyy."}} </pre>

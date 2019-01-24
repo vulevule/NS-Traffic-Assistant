@@ -186,7 +186,7 @@ export class DisplayStationsComponent implements OnInit {
       this.searchStations = data;
     });
 
-    await this.lineService.getAll().then(data => {
+    await this.lineService.getAll().subscribe(data => {
       this.lines = data;
     });
   }

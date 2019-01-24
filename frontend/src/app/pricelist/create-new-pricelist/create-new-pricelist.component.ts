@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Item } from 'src/app/model/PriceItem';
-import { forEach } from '@angular/router/src/utils/collection';
+import { ItemInterface } from 'src/app/model/PriceItem';
 import { PriceListInterface } from 'src/app/model/Pricelist';
 import { PriceListServiceService } from 'src/app/services/pricelist/price-list-service.service';
 
@@ -11,9 +10,12 @@ import { PriceListServiceService } from 'src/app/services/pricelist/price-list-s
 })
 export class CreateNewPricelistComponent implements OnInit {
 
-  items: Item[] = [];
+  items: ItemInterface[] = [];
 
   pricelist : PriceListInterface;
+
+  message : string = '';
+  infoType : string;
 
   type: string[] = ['BUS', 'METRO', 'TRAM'];
   zone: string[] = ['FIRST', 'SECOND'];
@@ -29,7 +31,7 @@ export class CreateNewPricelistComponent implements OnInit {
     this.type.forEach(type => {
       this.zone.forEach(zone => {
         this.time.forEach(time => {
-          var item = new Item({
+          var item = {
             trafficType: type,
             zone: zone,
             timeType: time,
@@ -37,7 +39,7 @@ export class CreateNewPricelistComponent implements OnInit {
             studentDiscount: 0,
             handycapDiscount: 0,
             seniorDiscount: 0
-          });
+          };
           this.items.push(item);
         });
       });
@@ -47,14 +49,20 @@ export class CreateNewPricelistComponent implements OnInit {
 
   async save() {
     //pozvati metodu iz servisa za kreiranje rasporeda
-    // var p = new PriceListInterface({ items: this.items });
+    var p = { items: this.items };
 
-    // this.items.forEach(element => {
-    //   alert(element.price);
-    // });
-  /*  await this.pricelistService.addPricelist(p)
-    .then(data => { this.pricelist = data });
-*/
+    this.pricelistService.addPricelist(p)
+      .subscribe(
+        data => {
+          this.message = data as string;
+          this.infoType = 'success';
+        }, 
+        error => {
+          this.message =error.error;
+          this.infoType = 'danger';
+        }
+      )
+
   }
 
 }

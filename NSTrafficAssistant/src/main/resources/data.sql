@@ -49,10 +49,12 @@ insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_
 traffic_zone, active, price,traffic_type, used, passenger_id ) 
 values (57, 'BMFS12121212024', '2019-01-03', '2019-01-18', 2, 3, 0, true, 95, 0,true, 6);
 --cenovnik
-insert into price_list(id,issue_date, activate) values (10, '2018-12-25', true);
+/*
+insert into price_list(id,issue_date, activate) values (10, '2018-12-25', true);*/
 
 --stavke cenovnika
 --bus
+/*
 insert into price_item(id, price, traffic_type, time_type, zone, student_discount, senior_discount, handycap_discount, pricelist_id)
 				values (11, 10000, 0,0,0, 10, 5, 5,10 );
 insert into price_item(id, price, traffic_type, time_type, zone, student_discount, senior_discount, handycap_discount,pricelist_id)
@@ -103,7 +105,7 @@ values (32, 100, 2,2,1, 10, 5, 5 ,10);
 insert into price_item(id, price, traffic_type, time_type, zone, student_discount, senior_discount, handycap_discount, pricelist_id)
 values (33, 100, 2,3,0, 10, 5, 5 ,10);
 insert into price_item(id, price, traffic_type, time_type, zone, student_discount, senior_discount, handycap_discount, pricelist_id)
-values (34, 100, 2,3,1, 10, 5, 5 ,10);
+values (34, 100, 2,3,1, 10, 5, 5 ,10);*/
 
 --stanice
 insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
@@ -118,3 +120,30 @@ insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
 values(5, 'Zeleznicka', 0, 19.839197158813473, 45.24794333819497, 2);
 insert into station(id, name, type, x_coordinate, y_coordinate, address_id)
 values(6, 'Balzakova', 1, 19.841394424962346, 45.243882414390214, 2);
+
+--red voznje
+insert into timetable (id, expiration_date, issue_date, activate)
+values (1, '2019-03-03', '2019-01-03', true);
+
+--linije
+insert into line(id, name, type, zone)
+values (1, 'PETROVARADIN - CENTAR - DETELINARA', 0, 0);
+insert into line(id, name, type, zone)
+values(2, 'LIMAN IV - ZELEZNICKA STANICA - CENTAR', 0, 0);
+insert into line(id, name, type, zone)
+values (3, 'NOVO NASELJE - ZELEZNICKA - LIMAN', 0, 0);
+insert into line(id, name, type, zone)
+values (4, 'SREMSKA KAMENICA - BOCKE', 0, 1);
+
+--stavke reda voznje
+
+insert into kts_nwt.timetable_item (id, start_time, type, line_id, timetable_id)
+values(1, "10:30", 0, 1, 1);
+insert into kts_nwt.timetable_item (id, start_time, type, line_id, timetable_id)
+values(2, "11:30", 0, 1, 1);
+insert into kts_nwt.timetable_item (id, start_time, type, line_id, timetable_id)
+values(3, "12:30", 0, 1, 1);
+insert into kts_nwt.timetable_item (id, start_time, type, line_id, timetable_id)
+values(4, "13:30", 0, 1, 1);
+insert into kts_nwt.timetable_item (id, start_time, type, line_id, timetable_id)
+values(5, "14:30", 0, 1, 1);

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Report } from 'src/app/model/Report';
+import { ReportInterface } from 'src/app/model/Report';
 
 
 @Component({
@@ -9,7 +9,7 @@ import { Report } from 'src/app/model/Report';
 })
 export class DisplayReportComponent implements OnInit {
 
-  @Input() report : Report;
+  @Input() report : ReportInterface;
 
   total : number = 0;
 
