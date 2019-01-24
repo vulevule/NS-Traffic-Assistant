@@ -31,4 +31,6 @@ public interface PricelistItemService {
 	public PriceItem getPriceItem(TrafficType type, TimeTicketType time, TrafficZone zone, PriceList p_id) throws PriceItemNotFoundException;
 
 	public Set<PriceItem> getPriceItemsByPricelist(PriceList savepl);
+
+	double calculateTicketPrice(double price, double discount);
 }

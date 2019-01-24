@@ -55,9 +55,20 @@ public class TicketController {
 	}
 	
 	@GetMapping(value="/size", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Integer> getNumberOfTicket(){
-		int num = this.ticketService.getNumberOfTicket();
-		return new ResponseEntity<Integer>(num, HttpStatus.OK);
+	public ResponseEntity<Integer> getNumberOfTicket(HttpServletRequest request){
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		String authToken = httpRequest.getHeader("X-Auth-Token");
+		String username = this.tokenUtils.getUsernameFromToken(authToken);
+		int num;
+		try {
+			num = this.ticketService.getNumberOfTicket(username);
+			return new ResponseEntity<Integer>(num, HttpStatus.OK);
+
+		} catch (UserNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	/*
@@ -73,6 +84,8 @@ public class TicketController {
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
 		logger.info(">> get tickets by " + username);
 
+		
+		
 		Collection<TicketReaderDto> allTicket;
 		try {
 			allTicket = ticketService.allTicket(username, page, size);
@@ -95,6 +108,7 @@ public class TicketController {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
+		
 		logger.info(zone + " " + time + " " + type + " " + username);
 		
 		TicketDto t = new TicketDto(time, zone, type, 0);
@@ -142,6 +156,7 @@ public class TicketController {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
+		
 		logger.info(">> buy ticket: " + t.getTrafficZone() + "; " + t.getTimeType() + "; " + t.getTrafficType() + "; "
 				+ t.getPrice() + "; " + username);
 		try {

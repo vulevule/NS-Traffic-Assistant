@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserDTO } from 'src/app/model/UserDTO';
+import { WebDriverLogger } from 'blocking-proxy/built/lib/webdriver_logger';
 
 @Component({
   selector: 'app-pricelist',
@@ -7,9 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PricelistComponent implements OnInit {
 
-  constructor() { }
+
+  loggedUser : UserDTO;
+  role : String;
+  
+
+  constructor() { 
+    this.loggedUser = JSON.parse(
+      localStorage.getItem('currentUser'));
+    this.role = this.loggedUser.role;
+  }
 
   ngOnInit() {
+    //dobavimo elemente na stranici
+    
+
   }
 
 }

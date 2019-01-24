@@ -10,31 +10,63 @@ import { LoginPageComponent } from '../pages/login-page/login-page.component';
 })
 export class HeaderComponent implements OnInit {
 
-  @Input()
   loggedUser: User;
 
+
   //moze da se user povuce iz storage-a; uloga i username, ne ceo user, jer se cuva token 
-  constructor(private modalService: NgbModal) {}
+  constructor(private modalService: NgbModal) { }
 
   ngOnInit() {
+    this.loggedUser = JSON.parse(
+      localStorage.getItem('currentUser'));
+
+    var login : HTMLElement =  document.getElementById('loginItem');
+    var logout: HTMLElement = document.getElementById('logoutItem');
+    var register : HTMLElement = document.getElementById('registerItem');
+    var edit: HTMLElement = document.getElementById('editItem');
+
+
+    if (this.loggedUser === null) {
+      alert('niko nije ulogovan');
+      login.hidden = false;
+      register.hidden = false;
+      logout.hidden = true;
+      edit.hidden = true;
+    } else {
+      logout.hidden = false;
+      edit.hidden = false;
+      login.hidden = true;
+      if (this.loggedUser.role === 'INSPECTOR'){
+        register.hidden = false;
+      }else{
+        register.hidden = true;
+      }
+
+    }
+
   }
 
   open() {
     const modalRef = this.modalService.open(LoginPageComponent);
     modalRef.componentInstance.name = 'Login';
   }
- 
+
+
+  logout(){
+    alert('logout');
+    localStorage.removeItem('currentUser');
+  }
 
 }
 export class NgbdModalContent implements OnInit {
 
-    @Input() title = `Information`;
-  
-    constructor(
-      public activeModal: NgbActiveModal
-    ) {}
-  
-    ngOnInit() {
-    }
+  @Input() title = `Information`;
 
+  constructor(
+    public activeModal: NgbActiveModal
+  ) { }
+
+  ngOnInit() {
   }
+
+}

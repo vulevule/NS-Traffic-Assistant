@@ -62,9 +62,11 @@
 
   <div class="col-12 col-md-9 map-content">
     <div id="map" class="map">
-      <div *ngFor="let t of tickets"> <app-display-ticket [ticket]="t"></app-display-ticket></div>
+      <div *ngFor="let t of tickets"> <app-display-ticket [ticket]="t"></app-display-ticket>
     
-      <ngb-pagination pageSize="4" [collectionSize]="numOfTicket" [(page)]="page"(pageChange)="changePage()" aria-label="Default pagination"></ngb-pagination>
+     
+      </div>
+      <ngb-pagination *ngIf="tickets !== undefined" pageSize="4" [collectionSize]="numOfTicket" [(page)]="page"(pageChange)="changePage()" aria-label="Default pagination"></ngb-pagination>
     </div>
 
   </div>

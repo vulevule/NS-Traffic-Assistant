@@ -5,17 +5,17 @@
     <form #directionsForm="ngForm">
       <label class="col-12 col-form-label">Traffic type:
 
-        <div class="btn-group btn-group-toggle" (click)=search()>
-          <label class="btn-primary" ngbButtonLabel>
-            <input type="checkbox" ngbButton name="displayBus" />
+        <div class="btn-group btn-group-toggle">
+          <label class="btn-primary" ngbButtonLabel >
+            <input type="checkbox" ngbButton name="displayBus" [(ngModel)]="displayType.bus" (change)="reload()" />
             Bus
           </label>
           <label class="btn-primary" ngbButtonLabel>
-            <input type="checkbox" ngbButton name="displayMetro" />
+            <input type="checkbox" ngbButton name="displayMetro" [(ngModel)]="displayType.metro" (change)="reload()"/>
             Metro
           </label>
           <label class="btn-primary" ngbButtonLabel>
-            <input type="checkbox" ngbButton name="displayTram" />
+            <input type="checkbox" ngbButton name="displayTram" [(ngModel)]="displayType.tram" (change)="reload()" />
             Tram
           </label>
         </div>
@@ -26,11 +26,11 @@
 
         <div class="btn-group btn-group-toggle">
           <label class="btn-primary" ngbButtonLabel>
-            <input type="checkbox" ngbButton name="displayFirst" />
+            <input type="checkbox" ngbButton name="displayFirst" [(ngModel)]="displayZone.first" />
             First
           </label>
           <label class="btn-primary" ngbButtonLabel>
-            <input type="checkbox" ngbButton name="displaySecond" />
+            <input type="checkbox" ngbButton name="displaySecond" [(ngModel)]="displayZone.second" />
             Second
           </label>
         </div>
@@ -40,25 +40,30 @@
 
         <div class="btn-group btn-group-toggle">
           <label class="btn-primary" ngbButtonLabel>
-            <input type="checkbox" ngbButton name="displayAnnual" />
+            <input type="checkbox" ngbButton name="displayAnnual" [(ngModel)]="displayTicketTime.annual" />
             Annual
           </label>
           <label class="btn-primary" ngbButtonLabel>
-            <input type="checkbox" ngbButton name="displayMonth" />
+            <input type="checkbox" ngbButton name="displayMonth" [(ngModel)]="displayTicketTime.month" />
             Month
           </label>
           <label class="btn-primary" ngbButtonLabel>
-            <input type="checkbox" ngbButton name="displaySingle" />
+            <input type="checkbox" ngbButton name="displaySingle" [(ngModel)]="displayTicketTime.single" />
             Single
           </label>
           <label class="btn-primary" ngbButtonLabel>
-            <input type="checkbox" ngbButton name="displayDaily" />
+            <input type="checkbox" ngbButton name="displayDaily" [(ngModel)]="displayTicketTime.daily"/>
             Daily
           </label>
         </div>
       </label>
 
+
     </form>
+    <hr>
+    <pre> type : {{displayType.bus}} {{displayType.metro}} {{displayType.tram}}</pre>
+    <pre> time : {{displayTicketTime.annual}} {{displayTicketTime.month}}</pre>
+    <pre> zone : {{displayZone.first}}</pre>
   </div>
 
   <div class="col-12 col-md-9 map-content">
@@ -76,7 +81,9 @@
           <th> Senior  </th>
           <th> Handicap </th>
         </tr> 
-        <tr *ngFor="let i of items">
+        <tr *ngFor="let i of (items |filterItemByTicketTime : displayTicketTime
+                                    | filterItemByZone : displayZone
+                                    |  filterItemByTrafficType : displayType)">
           <td> {{i.trafficType}}</td>
           <td> {{i.zone}}</td>
           <td> {{i.timeType}}</td>

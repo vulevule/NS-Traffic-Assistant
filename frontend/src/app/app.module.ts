@@ -36,6 +36,9 @@ import { CreateNewPricelistComponent } from './pricelist/create-new-pricelist/cr
 import { UseCheckTicketComponent } from './ticket/use-check-ticket/use-check-ticket.component';
 import { ReportComponent } from './report/report/report.component';
 import { DisplayReportComponent } from './report/display-report/display-report.component';
+import { FilterItemByTrafficTypePipe } from './pricelist/display-price-list/pipes/filter-item-by-traffic-type.pipe';
+import { FilterItemByZonePipe } from './pricelist/display-price-list/pipes/filter-item-by-zone.pipe';
+import { FilterItemByTicketTimePipe } from './pricelist/display-price-list/pipes/filter-item-by-ticket-time.pipe';
 
 
 
@@ -87,6 +90,9 @@ const appRoutes: Routes = [
     UseCheckTicketComponent,
     ReportComponent,
     DisplayReportComponent,
+    FilterItemByTrafficTypePipe,
+    FilterItemByZonePipe,
+    FilterItemByTicketTimePipe,
   ],
   imports: [
     NgbModule,

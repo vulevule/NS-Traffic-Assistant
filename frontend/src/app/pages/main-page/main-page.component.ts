@@ -16,7 +16,6 @@ import { UserDTO } from 'src/app/model/UserDTO';
 })
 export class MainPageComponent implements OnInit {
 
-  @Input()
   loggedUser: UserDTO;
 
   stations: StationDTO[];
@@ -33,29 +32,33 @@ export class MainPageComponent implements OnInit {
     
     this.loggedUser = JSON.parse(
       localStorage.getItem('currentUser'));
+
+    if(this.loggedUser === null){
+      alert('user je null');
+    }
     // Ubaciti proveru ako nije ulogovan (loggedUser je undefined) redirektovati na login stranicu
     // na logoutu postaviti loggedUser na undefined
 
-     if(!this.loggedUser) {
-      //alert("No logged user\nI will redirect you to login page in 3 seconds");
-      var router = this.router;
-      //setTimeout(function() {
-        var element=document.getElementById('tickets') as HTMLElement;
-        element.hidden=true;
-        var element1=document.getElementById('editItem') as HTMLElement;
-        element.hidden=true;
-        var element2=document.getElementById('loginItem') as HTMLElement;
-        element.hidden=false;
-        var element2=document.getElementById('registerItem') as HTMLElement;
-        element.hidden=false;
-        router.navigate(["/main"]);
-      //}, 3000, router);
-    } 
-    else{
-      var element=document.getElementById('tickets') as HTMLElement;
-      element.hidden=false;
+    //  if(!this.loggedUser) {
+    //   //alert("No logged user\nI will redirect you to login page in 3 seconds");
+    //   var router = this.router;
+    //   //setTimeout(function() {
+    //     var element=document.getElementById('tickets') as HTMLElement;
+    //     element.hidden=true;
+    //     var element1=document.getElementById('editItem') as HTMLElement;
+    //     element.hidden=true;
+    //     var element2=document.getElementById('loginItem') as HTMLElement;
+    //     element.hidden=false;
+    //     var element2=document.getElementById('registerItem') as HTMLElement;
+    //     element.hidden=false;
+    //     router.navigate(["/main"]);
+    //   //}, 3000, router);
+    // } 
+    // else{
+    //   var element=document.getElementById('tickets') as HTMLElement;
+    //   element.hidden=false;
 
-    }
+    // }
 
     
   }

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,17 +29,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.team9.dto.LoginDto;
+import com.team9.dto.LoginUserDto;
 import com.team9.dto.UpdateProfileDto;
 import com.team9.dto.UserDto;
 import com.team9.dto.ValidationDTO;
 import com.team9.exceptions.UserNotFoundException;
-
 import com.team9.model.Inspector;
 import com.team9.model.Passenger;
-
 import com.team9.model.User;
 import com.team9.security.TokenUtils;
-
 import com.team9.service.UserService;
 
 
@@ -96,8 +93,9 @@ catch(Exception ex) {
 	@RequestMapping(
 			value="/user/login",
 			method=RequestMethod.POST,
-			consumes="application/json")
-	public ResponseEntity<String> login(@RequestBody LoginDto log){
+			consumes="application/json",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<LoginUserDto> login(@RequestBody LoginDto log){
 		logger.info(">> login: username - " + log.getUsername() + " password - " + log.getPassword());
 		
 		try {
@@ -108,13 +106,35 @@ catch(Exception ex) {
 					log.getUsername(), log.getPassword());
             Authentication authentication = authenticationManager.authenticate(token);            
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
+            
+            HttpHeaders headers = new HttpHeaders();
+           
+            
             // Reload user details so we can generate token
             UserDetails details = userDetailsService.
             		loadUserByUsername(log.getUsername());
+            
+            String authToken = tokenUtils.generateToken(details);
+            headers.add("X-Auth-Token", authToken);
+            String userRole = "";
+            LoginUserDto lu = new LoginUserDto();
+            User user=userService.getUser(log.getUsername());
+            logger.info(user.getUsername() + ' ' + user.getPassword());
+    		if (user!=null){
+    			userRole = user.getRole().name();
+    			logger.info(userRole);
+    			lu.setRole(userRole);
+    			lu.setToken(authToken);
+    		}else{
+    			logger.info("not exists user");
+    			return new ResponseEntity<LoginUserDto>(lu,HttpStatus.BAD_REQUEST);
+    		}
+    			
+            
+            
+            
             logger.info("<< ok login");
-            return new ResponseEntity<String>(
-            		tokenUtils.generateToken(details), HttpStatus.OK);
+            return new ResponseEntity<LoginUserDto>(lu,headers,  HttpStatus.OK);
 			
 			
 		
@@ -127,7 +147,7 @@ catch(Exception ex) {
 		
 		}catch(Exception ex) {
 			logger.info("invalid login");
-			return new ResponseEntity<String>("Invalid login",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		}
 	

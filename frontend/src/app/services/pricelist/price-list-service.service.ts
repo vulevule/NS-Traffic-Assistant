@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { PriceListReaderDto, PriceList } from 'src/app/model/Pricelist';
+import {  PriceListInterface } from 'src/app/model/Pricelist';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -15,27 +16,13 @@ export class PriceListServiceService {
 
 
   //doabvanje cenovnika 
-  getPricelist():Promise<PriceListReaderDto>{
-    return this.http
-      .get<PriceListReaderDto>(`${this.pricelistUrl}/getPricelist`)
-      .toPromise()
-      .then(response => response as PriceListReaderDto)
-      .catch(this.handleError);
+  getPricelist():Observable<PriceListInterface>{
+    return this.http.get<PriceListInterface>(`${this.pricelistUrl}/getPricelist`);
   }
 
   //kreiranje novog rasporeda
-  addPricelist(p : PriceList) : Promise<PriceListReaderDto>{
-    return this.http
-      .post<PriceListReaderDto>(`${this.pricelistUrl}/addPricelist`, JSON.stringify(p),{
-        headers : this.headers})
-        .toPromise()
-        .then(response => response as PriceListReaderDto)
-        .catch(this.handleError);
-  }
-
-  handleError(error: any): Promise<any>{
-    console.error("Error...", error);
-    return Promise.reject(error.message || error);
+  addPricelist(p : PriceListInterface) : Observable<String>{
+      return this.http.post(`${this.pricelistUrl}/addPricelist`, p, {headers : this.headers, responseType : "text"});
   }
 
 

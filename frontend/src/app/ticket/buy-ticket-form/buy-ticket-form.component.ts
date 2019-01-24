@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { BuyTicket, Ticket } from 'src/app/model/Ticket';
 import { TicketServiceService } from 'src/app/services/ticket/ticket-service.service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-buy-ticket-form',
@@ -15,7 +16,7 @@ export class BuyTicketFormComponent implements OnInit {
 
 
 
-  constructor(private ticketService : TicketServiceService) { }
+  constructor(private ticketService : TicketServiceService, private auth : AuthenticationService) { }
 
   async ngOnInit() {
     this.buyTicket = {
@@ -24,18 +25,19 @@ export class BuyTicketFormComponent implements OnInit {
       trafficZone: 'FIRST',
       timeType: 'ANNUAL',
     }
-    this.message = '';
+    this.message = this.auth.getToken();
+
+    this.getPrice();
   }
 
 
   async getPrice() {
     //ovde cemo pozivati funkciju sa back-a za dobavljanje cene 
-    await this.ticketService.getPrice(this.buyTicket)
-    .then(data => {
-      alert(`Price is ${data}`);
+    this.ticketService.getPrice(this.buyTicket)
+    .subscribe(data => {
       this.buyTicket.price = data;
-    }, reason =>{
-      alert('Error');
+    }, error =>{
+      alert(error.message);
     })
   }
 
@@ -43,13 +45,13 @@ export class BuyTicketFormComponent implements OnInit {
   async buy() {
     //pozvatu metodu iz servisa za kupovinu karata
     //ovde samo pozovemo metodu za kupovinu karte
-    await this.ticketService.buyTicket(this.buyTicket)
-    .then(data => {
+    this.ticketService.buyTicket(this.buyTicket)
+    .subscribe(data => {
       this.message = "Ticket is buy!!";
       this.ticket = data;
     },
-      reason => {
-        this.message = "ERROR!!!";
+      error => {
+        this.message = error.message;
       } 
     );
     

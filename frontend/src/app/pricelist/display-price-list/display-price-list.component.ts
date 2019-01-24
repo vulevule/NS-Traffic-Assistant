@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PriceListReaderDto } from 'src/app/model/Pricelist';
+import { PriceListInterface } from 'src/app/model/Pricelist';
 import { PriceListServiceService } from 'src/app/services/pricelist/price-list-service.service';
 import { Item } from 'src/app/model/PriceItem';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-display-price-list',
@@ -9,15 +10,46 @@ import { Item } from 'src/app/model/PriceItem';
   styleUrls: ['./display-price-list.component.css', './general.scss']
 })
 export class DisplayPriceListComponent implements OnInit {
-  pricelist: PriceListReaderDto;
+  pricelist: PriceListInterface;
   items : Item[];
+  message : string;
+
+  displayType = {
+    bus: false,
+    tram: false,
+    metro: false
+  };
+
+  displayZone = {
+    first: false,
+    second: false
+  };
+
+  displayTicketTime = {
+    annual : false,
+    month : false,
+    single : false,
+    daily : false
+  }
 
   constructor(private pricelistService: PriceListServiceService) { }
 
-  async ngOnInit() {
-    // await this.pricelistService.getPricelist()
-    //   .then(data => { this.pricelist = data });
-    // this.items = this.pricelist.items;
+  ngOnInit() {
+    this.pricelistService.getPricelist()
+      .subscribe( (data : PriceListInterface) => {
+          this.pricelist = data;
+          this.items = this.pricelist.items;
+
+      },
+      err => {this.message = err.error;
+        alert(this.message);
+      }
+      );
+  }
+
+  reload(){
+    alert('reload');
+    this.items = this.pricelist.items;
   }
 
 }
