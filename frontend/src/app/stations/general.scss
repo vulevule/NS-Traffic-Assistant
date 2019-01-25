@@ -152,12 +152,20 @@ a {
 	border-bottom: 2px solid $bus-color;
 	text-align: center;
 	margin: 5px;
+	padding-bottom: 3px;
 }
-.legend-walking {
-	border-bottom: 2px dashed $walking-color;
+.legend-tram {
+	border-bottom: 2px dashed $tram-color;
 	text-align: center;
 	margin: 5px;
-}
+	padding-bottom: 3px;
+  }
+  .legend-metro {
+	border-bottom: 2px dotted $metro-color;
+	text-align: center;
+	margin: 5px;
+	padding-bottom: 3px;
+  }
 .legend-title {
 	font-weight: bold;
 }
