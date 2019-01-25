@@ -21,6 +21,7 @@ import View from "ol/View";
 import LineString from "ol/geom/LineString";
 import Overlay from "ol/Overlay";
 import { LineService } from "src/app/services/lines/line.service";
+import { colorPalette } from 'src/app/util/ColorPalette';
 
 @Component({
   selector: "app-lines-display",
@@ -51,6 +52,8 @@ export class LinesDisplayComponent implements OnInit {
   editLine: LineDTO;
   selectedLine: LineDTO;
   selectedStation: StationDTO;
+
+  linesOnMap: { line: LineDTO; color: String }[];
 
   search = (text$: Observable<string>) =>
     text$.pipe(
@@ -114,6 +117,8 @@ export class LinesDisplayComponent implements OnInit {
       stations => (this.stations = stations)
     );
     this.sharedService.lines.subscribe(lines => (this.lines = lines));
+
+    this.linesOnMap = [];
 
     this.container = document.getElementById("popup");
     this.content = document.getElementById("popup-content");
@@ -198,22 +203,32 @@ export class LinesDisplayComponent implements OnInit {
   }
 
   generatePopupContent(station: StationDTO) {
-    return (
+    var retVal: string =
       '<div><p><img src="../../../assets/images/' +
       station.type +
       '-icon.png" style="width: 40px"/>&nbsp; ' +
       station.name +
-      "</p><span>Lines: " +
-      station.lines.length +
-      "</span></div>"
-    );
+      "</p><span>Lines: ";
+
+    station.lines.forEach(line => {
+      retVal = retVal + line.lineMark + " ";
+    });
+
+    retVal = retVal + "</span></div>";
+
+    return retVal;
   }
 
   selectLine(line: LineDTO) {
     this.selectedLine = line;
+    //this.linesOnMap.push(JSON.parse(JSON.stringify(line)));
     //this.clearMap();
-    this.drawLine(line);
-    this.drawStationsForLine(line);
+    if (this.linesOnMap.find(l => l.line.id === line.id)) {
+      this.removeLineFromMap(line);
+    } else {
+      this.drawLine(line);
+      this.drawStationsForLine(line);
+    }
   }
 
   deleteLine(line: LineDTO) {
@@ -296,20 +311,26 @@ export class LinesDisplayComponent implements OnInit {
     });
   }
 
-  drawLine(line: LineDTO) {
-    var colors = ["red", "orange", "yellow", "green", "blue", "purple"];
+  drawLine(line: LineDTO) {  
+
+    var row = colorPalette[Math.round((colorPalette.length - 1) * Math.random())]
+    var color = row[Math.round((row.length - 1) * Math.random())]
+    
+    /* var colors = ["red", "orange", "yellow", "green", "blue", "purple"];
     var fill = colors[Math.round((colors.length - 1) * Math.random())];
     var fillNew = [
       Math.round(255 * Math.random()),
       Math.round(255 * Math.random()),
       Math.round(255 * Math.random()),
       1
-    ];
+    ]; */
+
+    this.linesOnMap.push({ line: line, color: color });
 
     for (let i = 0; i < line.route.length - 1; i++) {
       let start = fromLonLat([line.route[i].lon, line.route[i].lat]);
       let end = fromLonLat([line.route[i + 1].lon, line.route[i + 1].lat]);
-      this.drawLineBetweenLocations(start, end, line.type, fill, line.id);
+      this.drawLineBetweenLocations(start, end, line.type, color, line.id);
     }
   }
 
@@ -369,14 +390,16 @@ export class LinesDisplayComponent implements OnInit {
   }
 
   removeLineFromMap(line: LineDTO) {
+    var index = this.linesOnMap.findIndex(l => l.line.id === line.id);
+    this.linesOnMap.splice(index, 1);
+
     this.vectorSource.getFeatures().forEach((feature: Feature) => {
       if (feature.get("name") === "Line" && feature.get("label") === line.id) {
         this.vectorSource.removeFeature(feature);
-
       } else {
         var name = feature.get("label");
         var type = feature.get("description");
-        
+
         if (
           feature.get("name") === "Station" &&
           line.type === type &&
@@ -402,6 +425,7 @@ export class LinesDisplayComponent implements OnInit {
 
   clearMap() {
     // remove features from layer
+    this.linesOnMap = [];
     this.vectorSource.clear();
   }
 

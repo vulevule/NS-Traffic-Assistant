@@ -178,6 +178,16 @@
       <button type="button" class="btn btn-primary" (click)="clearMap()">
         Clear map
       </button>
+
+      <div class="lineMarkContainer" *ngFor="let item of linesOnMap">
+        <div
+          class="lineMarkCard"
+          [ngStyle]="{ 'background-color': item.color }"
+          (click)="removeLineFromMap(item.line)"
+        >
+          <div>{{ item.line.mark }}<span class="close">X</span></div>
+        </div>
+      </div>
     </div>
 
     <div class="legend">

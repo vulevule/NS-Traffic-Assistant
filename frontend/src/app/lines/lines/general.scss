@@ -26,7 +26,7 @@
   position: absolute;
   left: 10px;
   top: 10px;
-  background-color: white;
+  background-color: transparent;
   border-radius: 0.25rem;
   z-index: 1;
 }
@@ -149,6 +149,20 @@ a {
   border: 2px solid $main-color;
   background-color: white;
   color: $main-color;
+}
+
+.lineMarkCard {
+  margin-top: 5px;
+  padding: 5px 5px 5px 5px;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  background-color: $main-color
+}
+.lineMarkContainer :hover {
+  cursor: pointer;
+  
+  opacity: 0.9;
 }
 .legend {
   position: absolute;
