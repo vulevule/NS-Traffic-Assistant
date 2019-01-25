@@ -55,9 +55,9 @@ public class Line implements Serializable {
 		this.type = type;
 		this.zone = zone;
 		this.route = route;
-
 		this.stations = stations;
 	}
+
 
 	public Line(Long id, String mark, String name, TrafficType type, TrafficZone zone, List<Location> route,
 			List<StationLine> stations) {
@@ -68,7 +68,6 @@ public class Line implements Serializable {
 		this.type = type;
 		this.zone = zone;
 		this.route = route;
-
 		this.stations = stations;
 	}
 

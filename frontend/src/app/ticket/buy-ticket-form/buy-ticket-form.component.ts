@@ -1,7 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { BuyTicket, Ticket } from 'src/app/model/Ticket';
+import { TicketInterface } from 'src/app/model/Ticket';
 import { TicketServiceService } from 'src/app/services/ticket/ticket-service.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+
 
 @Component({
   selector: 'app-buy-ticket-form',
@@ -10,9 +11,12 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 })
 export class BuyTicketFormComponent implements OnInit {
 
-  public buyTicket: BuyTicket;
-  ticket: Ticket;
-  message : String;
+  public buyTicket: TicketInterface;
+  ticket: TicketInterface;
+  message : String = '';
+  infoType : String;
+
+
 
 
 
@@ -25,8 +29,6 @@ export class BuyTicketFormComponent implements OnInit {
       trafficZone: 'FIRST',
       timeType: 'ANNUAL',
     }
-    this.message = this.auth.getToken();
-
     this.getPrice();
   }
 
@@ -49,13 +51,17 @@ export class BuyTicketFormComponent implements OnInit {
     .subscribe(data => {
       this.message = "Ticket is buy!!";
       this.ticket = data;
+      this.infoType = 'success';
     },
       error => {
-        this.message = error.message;
+        this.message = error.error;
+        this.infoType = 'danger';
       } 
     );
     
   }
+
+
 
 
 }

@@ -1,0 +1,74 @@
+<div class="displayTicket row content">
+  <div class="col-12 col-md-3 sidebar-content">
+    <form #directionsForm="ngForm">
+      <label class="col-12 col-form-label">Traffic type:
+
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="trafficType">
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="BUS" /> Bus
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="TRAM" /> Tram
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="METRO" /> Metro
+          </label>
+        </div>
+      </label>
+
+      <label class="col-12 col-form-label">Traffic zone:
+
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="zone">
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="FIRST" /> First
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="SECOND" /> Second
+          </label>
+        </div>
+      </label>
+
+      <label class="col-12 col-form-label">Timetable type:
+
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="timetableType">
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="WORKDAY" /> Workday
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="SUNDAY" /> Sunday
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" value="SATURDAY" /> Saturday
+          </label>
+        </div>
+      </label>
+
+      <!-- linije koje ce se popunjavati kada se izabere tip i zona-->
+
+      <ng-template #rt let-r="result" let-t="term">
+        <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+      </ng-template>
+
+      <label for="typeahead-focus" class="col-12 col-form-label"> Line:
+        <input #line type="text" id="line" class="form-control" name="line" [(ngModel)]="selectLine" [ngbTypeahead]="search"
+          [resultTemplate]="rt" [inputFormatter]="formatter" />
+      </label>
+
+      <hr>
+      <button class="btn btn-outline-primary" type="submit" (click)="view()"> View </button>
+    </form>
+  </div>
+
+  <div class="col-12 col-md-9 map-content">
+    <div id="map" class="map">
+      <!--ovde cemo ispisati i neku poruku-->
+      <hr>
+      <div *ngIf="timetableItem !== undefined">
+      <app-display-timetable [times]="times" [line]="selectLine.name" [role]="role"></app-display-timetable>
+      </div>
+    </div>
+
+  </div>
+
+  
+</div>

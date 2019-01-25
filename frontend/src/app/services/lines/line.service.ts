@@ -1,7 +1,7 @@
-import { HttpHeaders, HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { LineDTO } from "src/app/model/LineDTO";
-import { Observable } from "rxjs";
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { LineDTO } from 'src/app/model/LineDTO';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: "root"
@@ -67,6 +67,11 @@ export class LineService {
     return this.http.delete(`${this.linesUrl}/delete/${id}`, {
       responseType: "text"
     });
+  }
+
+
+  getAllByZoneAndTrafficType(zone : String, type : String):Observable<LineDTO[]>{
+    return this.http.get<LineDTO[]>(`${this.linesUrl}/getAllByZoneAndTrafficType?zone=${zone}&type=${type}`);
   }
 
   handleError(error: any): Promise<any> {

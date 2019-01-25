@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import com.team9.dto.ReportDto;
 import com.team9.dto.TicketDto;
 import com.team9.dto.TicketReaderDto;
+import com.team9.dto.TicketsAndSizeDto;
+import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.NotFoundActivePricelistException;
 import com.team9.exceptions.PriceItemNotFoundException;
 import com.team9.exceptions.TicketAlreadyUsedException;
@@ -32,6 +34,7 @@ import com.team9.exceptions.WrongTrafficTypeException;
 import com.team9.exceptions.WrongTrafficZoneException;
 import com.team9.exceptions.ZonesDoNotMatchException;
 import com.team9.model.Inspector;
+import com.team9.model.Line;
 import com.team9.model.Passenger;
 import com.team9.model.PriceItem;
 import com.team9.model.PriceList;
@@ -40,6 +43,7 @@ import com.team9.model.TimeTicketType;
 import com.team9.model.TrafficType;
 import com.team9.model.TrafficZone;
 import com.team9.model.UserTicketType;
+import com.team9.repository.LineRepository;
 import com.team9.repository.TicketRepository;
 
 @Service
@@ -56,6 +60,9 @@ public class TicketServiceImpl implements TicketService {
 
 	@Autowired
 	private PricelistItemService priceItemService;
+	
+	@Autowired
+	private LineRepository lineRepository;
 
 	public Passenger getPassengerByUsername(String username) throws UserNotFoundException {
 
@@ -171,7 +178,7 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public Collection<TicketReaderDto> allTicket(String username, int page, int size) throws UserNotFoundException {
+	public TicketsAndSizeDto myTicket(String username, int page, int size) throws UserNotFoundException {
 		// return all tickets for one passenger
 		Passenger passenger = getPassengerByUsername(username);
 		Page<Ticket> allTicket = ticketRepository.findByPassenger(passenger, new PageRequest(page, size));
@@ -181,8 +188,12 @@ public class TicketServiceImpl implements TicketService {
 		for (Ticket t : allTicket) {
 			tickets.add(convertToTicketDto(t));
 		}
+		
+		int numOfTicket = getNumberOfTicket(username);
+		
+		TicketsAndSizeDto result = new TicketsAndSizeDto(tickets, numOfTicket);
 
-		return tickets;
+		return result;
 	}
 
 	@Override
@@ -254,15 +265,16 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public boolean useTicket(String serialNo, String username, String zone) throws TicketNotFound,
-			TicketAlreadyUsedException, TicketIsNotValidException, WrongTrafficZoneException, ZonesDoNotMatchException {
+	public boolean useTicket(String serialNo, String username, Long line_id) throws TicketNotFound,
+			TicketAlreadyUsedException, TicketIsNotValidException,  ZonesDoNotMatchException, LineNotFoundException {
 		// konvertujemo string u zone
-		TrafficZone z = ConverterService.convertStringToZone(zone);
+		Line l = this.lineRepository.findById(line_id).orElseThrow(() -> new LineNotFoundException("Line with id: " + line_id  + " does not exist!"));
+		
 		// 1. na osnovu serijskog broja pronadjemo kartu u bazi
 		Ticket foundTicket = this.ticketRepository.findBySerialNo(serialNo)
 				.orElseThrow(() -> new TicketNotFound("Ticket with serialNo: " + serialNo + " does not exist!"));
 		Date today = new Date(new java.util.Date().getTime());
-		if (foundTicket.getTrafficZone() == z) {
+		if (foundTicket.getTrafficZone() == l.getZone()) {
 			if (foundTicket.getIssueDate().before(today) && today.before(foundTicket.getExpirationDate())) {
 				// proverimo da li je karta single, ako jeste i ako je vec
 				// koriscena
@@ -295,12 +307,11 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public TicketReaderDto checkTicket(String serialNo, String username, String zone)
+	public TicketReaderDto checkTicket(String serialNo, String username, Long line_id)
 			throws TicketNotFound, TicketIsNotUseException, TicketIsNotValidException, UserNotFoundException,
-			WrongTrafficZoneException, ZonesDoNotMatchException {
-		// kontrola karte od strane inspektora
-		// da li je dobra zone prosledjena
-		TrafficZone z = ConverterService.convertStringToZone(zone);
+			 ZonesDoNotMatchException, LineNotFoundException {
+		
+		Line l = this.lineRepository.findById(line_id).orElseThrow(() -> new LineNotFoundException("Line with id: " + line_id  + " does not exist!"));
 
 		// 1. pronadjemo kartu na osnovu serijskog broja
 		Ticket foundTicket = this.ticketRepository.findBySerialNo(serialNo)
@@ -316,7 +327,7 @@ public class TicketServiceImpl implements TicketService {
 			throw new UserNotFoundException();
 		}
 		// prvo cemo proveriti da li je karta za odgovarajucu zonu
-		if (foundTicket.getTrafficZone() == z) {
+		if (foundTicket.getTrafficZone() == l.getZone()) {
 			// proverimo da li je karta jos uvek vazeca
 			if (foundTicket.getIssueDate().before(today) && today.before(foundTicket.getExpirationDate())) {
 				// karta je vazeca proverimo da li je single
@@ -473,15 +484,18 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public Collection<TicketReaderDto> getAll(int page, int size) {
+	public TicketsAndSizeDto getAll(int page, int size) {
 		// TODO Auto-generated method stub
 		Page<Ticket> result = this.ticketRepository.findAll(new PageRequest(page, size));
 		ArrayList<TicketReaderDto> res = new ArrayList<>();
 		for (Ticket t : result) {
 			res.add(convertToTicketDto(t));
 		}
+		
+		int numOfTickets = getNumberOfAllTickets();
+		TicketsAndSizeDto r = new TicketsAndSizeDto(res, numOfTickets);
 
-		return res;
+		return r;
 
 	}
 
@@ -490,6 +504,13 @@ public class TicketServiceImpl implements TicketService {
 		// TODO Auto-generated method stub
 		Passenger p = getPassengerByUsername(username);
 		ArrayList<Ticket> t = (ArrayList<Ticket>) this.ticketRepository.findByPassenger(p);
+		return t.size();
+	}
+
+	@Override
+	public int getNumberOfAllTickets() {
+		// TODO Auto-generated method stub
+		ArrayList<Ticket> t = (ArrayList<Ticket>)this.ticketRepository.findAll();
 		return t.size();
 	}
 

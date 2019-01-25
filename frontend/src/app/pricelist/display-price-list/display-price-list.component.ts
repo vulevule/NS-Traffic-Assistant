@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PriceListInterface } from 'src/app/model/Pricelist';
 import { PriceListServiceService } from 'src/app/services/pricelist/price-list-service.service';
-import { Item } from 'src/app/model/PriceItem';
-import { first } from 'rxjs/operators';
+import { ItemInterface } from 'src/app/model/PriceItem';
 
 @Component({
   selector: 'app-display-price-list',
@@ -11,8 +10,9 @@ import { first } from 'rxjs/operators';
 })
 export class DisplayPriceListComponent implements OnInit {
   pricelist: PriceListInterface;
-  items : Item[];
-  message : string;
+  items : ItemInterface[];
+  message : string = '';
+  infoType : string;
 
   displayType = {
     bus: false,
@@ -39,10 +39,10 @@ export class DisplayPriceListComponent implements OnInit {
       .subscribe( (data : PriceListInterface) => {
           this.pricelist = data;
           this.items = this.pricelist.items;
-
       },
-      err => {this.message = err.error;
-        alert(this.message);
+      error => {
+        this.message =  "There is no active price list!";
+        this.infoType = 'danger';
       }
       );
   }

@@ -1,6 +1,7 @@
 package com.team9.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ import com.team9.dto.StationLineDto;
 import com.team9.exceptions.LineAlreadyExistsException;
 import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.StationNotFoundException;
+import com.team9.exceptions.WrongTrafficTypeException;
+import com.team9.exceptions.WrongTrafficZoneException;
 import com.team9.model.Line;
 import com.team9.model.Location;
 import com.team9.model.Station;

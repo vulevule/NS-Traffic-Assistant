@@ -120,6 +120,7 @@ public class LineDto {
 
 	@Override
 	public String toString() {
+
 		return "LineDto [id=" + id + ", mark=" + mark + ", name=" + name + ", type=" + type + ", zone=" + zone
 				+ ", stations=" + stations + ", route=" + route + "]";
 	}

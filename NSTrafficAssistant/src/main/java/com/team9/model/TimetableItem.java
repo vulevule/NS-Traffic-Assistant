@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="timetableItem")
+@Table(name = "timetableItem")
 public class TimetableItem implements Serializable {
 	/**
 	 * 
@@ -27,16 +27,15 @@ public class TimetableItem implements Serializable {
 	private Time startTime;
 	@Column(nullable = false)
 	private TimeTableType type;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "line_id")
 	private Line line;
-	
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "timetable_id", nullable = false)
 	private Timetable timeTable;
-	
+
 	public TimetableItem(Time startTime, TimeTableType type, Line line) {
 		this();
 		this.startTime = startTime;
@@ -50,6 +49,14 @@ public class TimetableItem implements Serializable {
 		this.startTime = startTime;
 		this.type = type;
 		this.line = line;
+	}
+
+	public TimetableItem(Time startTime, TimeTableType type, Line line, Timetable timeTable) {
+		this();
+		this.startTime = startTime;
+		this.type = type;
+		this.line = line;
+		this.timeTable = timeTable;
 	}
 
 	public TimetableItem() {

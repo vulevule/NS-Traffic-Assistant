@@ -1,0 +1,12 @@
+<!--ovde cemo u vidu tabele prikazati polaske i ako je ulogovan admin on moze i da edituje taj red-->
+<table> 
+  <tr>
+    <th colspan="2"> {{line}}</th>
+  </tr>
+  <tr *ngFor="let i of times">
+    <td colspan="2"> {{i}}</td>
+  </tr>
+</table>
+
+<hr>
+<button class="btn btn-outline-primary" type="submit" *ngIf="role === 'ADMIN'"> Edit </button>
