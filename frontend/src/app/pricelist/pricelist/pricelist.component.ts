@@ -11,13 +11,15 @@ export class PricelistComponent implements OnInit {
 
 
   loggedUser : UserDTO;
-  role : String;
+  role : String = '';
   
 
   constructor() { 
     this.loggedUser = JSON.parse(
       localStorage.getItem('currentUser'));
-    this.role = this.loggedUser.role;
+    if(this.loggedUser !== null){
+      this.role = this.loggedUser.role;
+    }
   }
 
   ngOnInit() {
