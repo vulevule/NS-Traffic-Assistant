@@ -1,11 +1,10 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { debounceTime, distinctUntilChanged, map } from "rxjs/operators";
+import { Component, Input, OnInit } from "@angular/core";
 import { Observable, Subject } from "rxjs";
-import { StationDTO } from "src/app/model/StationDTO";
+import { debounceTime, distinctUntilChanged, map } from "rxjs/operators";
 import { LineDTO } from "src/app/model/LineDTO";
-import { StationServiceService } from "src/app/services/stations/station-service.service";
+import { StationDTO } from "src/app/model/StationDTO";
 import { SharedService } from "src/app/services/sharedVars/shared.service";
-import { ToastrService } from "ngx-toastr";
+import { StationServiceService } from "src/app/services/stations/station-service.service";
 
 @Component({
   selector: "app-stations-display",
@@ -82,6 +81,8 @@ export class StationsDisplayComponent implements OnInit {
       stations => this.stations = stations
     );
     this.sharedService.lines.subscribe(lines => this.lines = lines);
+
+    this.emitDisplayTypeToMap();
   }
 
   selectStation(station: StationDTO) {
@@ -90,11 +91,11 @@ export class StationsDisplayComponent implements OnInit {
     this.emitSelectedStationToMap();
   }
 
-  updateStation(station: StationDTO) {
+  async updateStation(station: StationDTO) {
     station.xCoordinate = this.markerOnMap[0];
     station.yCoordinate = this.markerOnMap[1];
 
-    this.stationService.updateStation(station).subscribe(
+    await this.stationService.updateStation(station).subscribe(
       data => {
         //this.toaster.success(data);
         alert(data);
@@ -111,6 +112,7 @@ export class StationsDisplayComponent implements OnInit {
         alert(reason.error);
       }
     );
+    
   }
 
   deleteStation(station: StationDTO) {
@@ -133,6 +135,7 @@ export class StationsDisplayComponent implements OnInit {
          alert(reason.error);
         }
       );
+      
     }
   }
 

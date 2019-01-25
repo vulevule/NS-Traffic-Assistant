@@ -3,19 +3,31 @@
     <ngb-tabset>
       <ngb-tab title="Tickets" id="displayStationsTab">
         <ng-template ngbTabContent>
-          <app-search-form [role]="role"></app-search-form>
+          <app-search-form></app-search-form>
         </ng-template>
+        
+
       </ngb-tab>
 
-      <ngb-tab
-        *ngIf="role === 'PASSENGER'"
-        title="Buy ticket"
-        id="createStationTab"
-      >
+
+      <ngb-tab title="Buy ticket" id="createStationTab">
         <ng-template ngbTabContent>
           <app-buy-ticket-form></app-buy-ticket-form>
         </ng-template>
       </ngb-tab>
+
+      <!-- u zavisnosti ko je ulogovan ce se ovde pojaviti da li use ili check tab -->
+      <ngb-tab title="Use ticket">
+        <ng-template ngbTabContent>
+          <app-use-check-ticket ></app-use-check-ticket>
+        </ng-template>
+      </ngb-tab>
+
     </ngb-tabset>
+
+
   </div>
+
+  
+
 </div>

@@ -1,9 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../model/User';
-import {AuthenticationService} from 'src/app/services/authentication.service';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginPageComponent } from '../pages/login-page/login-page.component';
-import { RegisterPageComponent } from '../pages/register-page/register-page.component';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +14,7 @@ export class HeaderComponent implements OnInit {
 
 
   //moze da se user povuce iz storage-a; uloga i username, ne ceo user, jer se cuva token 
-  constructor(private modalService: NgbModal, private AuthenticationService:AuthenticationService ) { }
+  constructor(private modalService: NgbModal) { }
 
   ngOnInit() {
     this.loggedUser = JSON.parse(
@@ -29,7 +27,7 @@ export class HeaderComponent implements OnInit {
 
 
     if (this.loggedUser === null) {
-      //this.toaster.info('niko nije ulogovan');
+      //alert('niko nije ulogovan');
       login.hidden = false;
       register.hidden = false;
       logout.hidden = true;
@@ -38,7 +36,7 @@ export class HeaderComponent implements OnInit {
       logout.hidden = false;
       edit.hidden = false;
       login.hidden = true;
-      if (this.loggedUser.role === 'ADMIN'){
+      if (this.loggedUser.role === 'INSPECTOR'){
         register.hidden = false;
       }else{
         register.hidden = true;
@@ -52,18 +50,23 @@ export class HeaderComponent implements OnInit {
     const modalRef = this.modalService.open(LoginPageComponent);
     modalRef.componentInstance.name = 'Login';
   }
- openReg(){
 
-  const modalRef = this.modalService.open(RegisterPageComponent);
-    //modalRef.componentInstance.name = 'Login';
- }
 
   logout(){
-    this.AuthenticationService.logout();
-    location.reload();
+    alert('logout');
+    localStorage.removeItem('currentUser');
   }
 
 }
+export class NgbdModalContent implements OnInit {
 
+  @Input() title = `Information`;
 
+  constructor(
+    public activeModal: NgbActiveModal
+  ) { }
 
+  ngOnInit() {
+  }
+
+}

@@ -52,7 +52,7 @@ public class UserRepositoryIntegrationTest {
 	@Test
 	public void test_findByUsernameAndPassword_Exist() {
 		
-		User user=userRepository.findByUsernameAndPassword("peraperic","$2a$10$nWigsJopzu.0AL5bO.79meRVJGcMhSOv5Yxh476nDL5ZZcIBotv7G");
+		User user=userRepository.findUserByUsernameAndPassword("peraperic","$2a$10$nWigsJopzu.0AL5bO.79meRVJGcMhSOv5Yxh476nDL5ZZcIBotv7G");
 		assertNotNull(user);
 		assertTrue(user.getId()==3);
 		assertTrue(user.getName().equals("Pera Peric"));
@@ -68,7 +68,7 @@ public class UserRepositoryIntegrationTest {
 	@Test
 	public void test_findByUsernameAndPassword_NotExist() {
 		
-		User user=userRepository.findByUsernameAndPassword("jelena12","ZcIBotv7G");
+		User user=userRepository.findUserByUsernameAndPassword("jelena12","ZcIBotv7G");
 		assertNull(user);
 		
 		

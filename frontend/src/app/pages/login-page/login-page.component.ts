@@ -6,7 +6,6 @@ import { first } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { LoginUserDtoInterface } from 'src/app/model/LoginUserDto';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-login-page',
@@ -20,12 +19,9 @@ export class LoginPageComponent implements OnInit{
   public wrongUsernameOrPass:boolean;
   public role;
   public loading : boolean;
-  public message : string = '';
-  public type : string;
 
   constructor(
-    private AuthenticationService:AuthenticationService,private router:Router,
-      public activeModal: NgbActiveModal)
+    private AuthenticationService:AuthenticationService,private router:Router)
   {
     this.user={};
     this.wrongUsernameOrPass=false;
@@ -46,21 +42,12 @@ async login(){
       let token = data.token;
       let role = data.role;
       localStorage.setItem('currentUser', JSON.stringify({ username: this.user.username, role:role, token: token }));
-      //this.loading = true;
-      this.message = 'Success login';
-      this.type  = 'success';
+      this.loading = true;
+      alert('Success login');
       //treba navigirati
-      location.reload();
-  
-
     }, error => {
-      //this.loading = false;
-      this.user.username='';
-      this.user.password='';
-      this.message = 'Wrong username or password';
-      this.type = 'danger';
-      //alert(this.wrongUsernameOrPass)
-      //alert(error.error);
+      this.loading = false;
+      alert("invalid login");
     }
     );
 

@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  SimpleChange
+} from "@angular/core";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import TileLayer from "ol/layer/Tile";
@@ -55,11 +65,14 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
   map: any;
   vectorSource = new VectorSource();
 
-  constructor(
-    private sharedService: SharedService
-  ) {}
+  constructor(private sharedService: SharedService) {}
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    if (changes["stations"]) {
+      if (changes["stations"].currentValue !== changes["stations"].previousValue) {
+        this.drawStations();
+      }
+    }
     //this.drawStations();
   }
 
@@ -70,14 +83,14 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
 
     this.selectedStation = undefined;
 
-    if(this.displayTypeObs) {
+    if (this.displayTypeObs) {
       this.displayTypeSub = this.displayTypeObs.subscribe(data => {
         this.displayType = data;
         this.drawStations();
       });
     }
-    
-    if(this.selectedStationObs) {
+
+    if (this.selectedStationObs) {
       this.selectedStationSub = this.selectedStationObs.subscribe(data => {
         this.selectedStation = data;
         if (this.selectedStation) {
@@ -85,7 +98,6 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
         }
       });
     }
-    
 
     // Latitude - Y
     // Longitude - X

@@ -2,6 +2,44 @@
   <div class="col-12 col-md-4 sidebar-content">
     <form #createForm="ngForm">
       <label class="col-12 col-form-label"
+        >Display:
+
+        <div class="btn-group btn-group-toggle">
+          <label class="btn-primary" ngbButtonLabel>
+            <input
+              type="checkbox"
+              ngbButton
+              [(ngModel)]="displayType.bus"
+              name="displayBus"
+              (change)="emitDisplayTypeToMap()"
+            />
+            Bus
+          </label>
+          <label class="btn-primary" ngbButtonLabel>
+            <input
+              type="checkbox"
+              ngbButton
+              [(ngModel)]="displayType.metro"
+              name="displayMetro"
+              (change)="emitDisplayTypeToMap()"
+            />
+            Metro
+          </label>
+
+          <label class="btn-primary" ngbButtonLabel>
+            <input
+              type="checkbox"
+              ngbButton
+              [(ngModel)]="displayType.tram"
+              name="displayTram"
+              (change)="emitDisplayTypeToMap()"
+            />
+            Tram
+          </label>
+        </div>
+      </label>
+
+      <label class="col-12 col-form-label"
         >Choose type:
 
         <div
@@ -34,6 +72,8 @@
           name="stnameNew"
           placeholder="Enter station name"
           [(ngModel)]="newStation.name"
+          required
+          minlength="2"
         />
       </div>
 
@@ -50,13 +90,15 @@
           name="stlocNew"
           [(ngModel)]="markerOnMap"
           placeholder="Choose location on map"
+          required
         />
       </div>
       <hr />
       <button
-        type="button"
+        type="submit"
         class="btn btn-outline-primary"
         (click)="createStation(newStation)"
+        [disabled]="!createForm.valid"
       >
         Create
       </button>
@@ -68,7 +110,7 @@
   <div class="col-12 col-md-8 map-content">
     <app-stations-map
       [stations]="stations"
-      [displayType]="newStation.type"
+      [displayTypeObs]="displayTypeSubject.asObservable()"
       (onSelectStation)="handleStationClick($event)"
       (onMapClick)="markerOnMap = $event"
     ></app-stations-map>

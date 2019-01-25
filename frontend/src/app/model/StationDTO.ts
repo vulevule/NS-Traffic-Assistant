@@ -15,6 +15,5 @@ export class StationDTO {
         this.xCoordinate = 0.0;
         this.yCoordinate = 0.0;
         this.lines = [];
-        
     }
 }

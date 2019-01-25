@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { StationDTO } from 'src/app/model/StationDTO';
-import { StationServiceService } from 'src/app/services/stations/station-service.service';
-import { ToastrService } from 'ngx-toastr';
 import { SharedService } from 'src/app/services/sharedVars/shared.service';
+import { StationServiceService } from 'src/app/services/stations/station-service.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-stations-create',
@@ -19,6 +19,14 @@ export class StationsCreateComponent implements OnInit {
 
   newStation: StationDTO;
   markerOnMap: any;
+
+  displayType = {
+    bus: true,
+    tram: false,
+    metro: false
+  };
+
+  private displayTypeSubject: Subject<any> = new Subject<any>();
 
   constructor(private stationService: StationServiceService, private sharedService: SharedService) { }
 
@@ -44,6 +52,10 @@ export class StationsCreateComponent implements OnInit {
         alert(reason.error);
       }
     );
+  }
+
+  emitDisplayTypeToMap() {
+    this.displayTypeSubject.next(this.displayType);
   }
 
   handleStationClick(station: StationDTO) {

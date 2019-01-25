@@ -1,7 +1,7 @@
-<div id="login" [hidden]="isHidden" >
+<div id="login" [hidden]="isHidden">
 <div class="modal-header">
     <h4 class="modal-title">Please sign in </h4>
-    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div> 
@@ -14,11 +14,8 @@
       <input type="password" id="inputPassword" class="form-control" name="password" [(ngModel)]="user.password" placeholder="Password" required>
       <button class="btn btn-primary btn-block" type="submit">Sign in</button>
     </form>
-    
-    <div *ngIf="message!==''">
-    <ngb-alert [type]="type" >{{message}}</ngb-alert>  
-    </div>
-
+    <pre> loading : {{loading}} </pre>
+    <div *ngIf=wrongUsernameorPass class="alert alert-warning box-msg" role="alert">Wrong username or password.</div>  
   </div> 
   
 </div>

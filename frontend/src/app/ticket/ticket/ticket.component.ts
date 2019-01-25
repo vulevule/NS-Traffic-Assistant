@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserDTO } from 'src/app/model/UserDTO';
+import { Ticket } from 'src/app/model/Ticket';
 
 
 
@@ -10,18 +10,9 @@ import { UserDTO } from 'src/app/model/UserDTO';
 })
 export class TicketComponent implements OnInit {
 
-  //ovde cemo uzeti role-u korisnika 
-  role : String ='';
+  ticket : Ticket; 
 
-  constructor() { 
-    let user : UserDTO = JSON.parse(
-      localStorage.getItem('currentUser'));
-
-    if(user !== null){
-      this.role = user.role;
-    }
-
-  }
+  constructor() { }
 
   ngOnInit() {
   }

@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
+import { LineDTO } from "src/app/model/LineDTO";
+import { StationDTO } from "src/app/model/StationDTO";
+import { LineService } from "src/app/services/lines/line.service";
 import Feature from "ol/Feature";
-import LineString from "ol/geom/LineString";
 import Point from "ol/geom/Point";
-import Draw from "ol/interaction/Draw";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
 import Map from "ol/Map";
@@ -15,14 +16,13 @@ import Stroke from "ol/style/Stroke";
 import Style from "ol/style/Style";
 import Text from "ol/style/Text";
 import View from "ol/View";
+import LineString from "ol/geom/LineString";
+import Draw from "ol/interaction/Draw";
+import { LocationDTO } from "src/app/model/LocationDTO";
+import { StationLineDTO } from "src/app/model/StationLineDTO";
+import { SharedService } from "src/app/services/sharedVars/shared.service";
 import { Observable } from "rxjs";
 import { debounceTime, distinctUntilChanged, map } from "rxjs/operators";
-import { LineDTO } from "src/app/model/LineDTO";
-import { LocationDTO } from "src/app/model/LocationDTO";
-import { StationDTO } from "src/app/model/StationDTO";
-import { StationLineDTO } from "src/app/model/StationLineDTO";
-import { LineService } from "src/app/services/lines/line.service";
-import { SharedService } from "src/app/services/sharedVars/shared.service";
 
 @Component({
   selector: "app-lines-create-edit",
@@ -81,19 +81,18 @@ export class LinesCreateComponent implements OnInit {
   constructor(
     private lineService: LineService,
     private sharedService: SharedService
-    
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
-
     this.sharedService.stations.subscribe(
       stations => (this.stations = stations)
     );
 
     if (this.actionType === "CREATE" || !this.newLine) {
       this.newLine = new LineDTO();
-    } 
+    } else {
+      console.log(this.newLine);
+    }
 
     this.markersOnMap = [];
     this.creatingRoute = false;
@@ -136,7 +135,6 @@ export class LinesCreateComponent implements OnInit {
         );
 
         if (vm.newLine.stations.find(s => s.stationId === station.id)) {
-          //this.toaster.warning("Same station can not be selected twice!");
           alert("Same station can not be selected twice!");
         } else {
           var sl = new StationLineDTO();
@@ -167,7 +165,6 @@ export class LinesCreateComponent implements OnInit {
     if (this.actionType === "EDIT") {
       this.drawLine(this.newLine);
     }
-
   }
 
   styleFunction(feature: any) {
@@ -372,13 +369,11 @@ export class LinesCreateComponent implements OnInit {
 
   createLine(line: LineDTO) {
     if (line.stations.length < 2) {
-      //this.toaster.warning("Line must containt at least 2 stations!");
       alert("Line must containt at least 2 stations!");
       return;
     }
 
     if (line.route.length < 2) {
-      //this.toaster.warning("You forgot to draw route on map :(");
       alert("You forgot to draw route on map :(");
       return;
     }
@@ -399,34 +394,29 @@ export class LinesCreateComponent implements OnInit {
 
     console.log(line);
 
-    if (this.actionType === "CREATE") {
+    if ((this.actionType === "CREATE")) {
       this.lineService.createLine(line).subscribe(
         data => {
-          //this.toaster.success(data.toString());
-          alert(data.toString());
+          alert(data);
           this.sharedService.updateAll();
           this.buttonClick.emit("displayLinesTab");
         },
         error => {
-          //this.toaster.error(error.error);
           alert(error.error);
         }
       );
-    } else if (this.actionType === "EDIT") {
+    } else if ((this.actionType === "EDIT")) {
       this.lineService.updateLine(line).subscribe(
         data => {
-          //this.toaster.success(data.toString());
-          alert(data.toString());
+          alert(data);
           this.sharedService.updateAll();
           this.buttonClick.emit("displayLinesTab");
         },
         error => {
-          //this.toaster.error(error.error);
           alert(error.error);
         }
       );
     } else {
-      //this.toaster.error("Unsupported value of action type: " + this.actionType);
       alert("Unsupported value of action type: " + this.actionType);
     }
   }

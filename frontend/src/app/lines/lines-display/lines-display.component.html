@@ -135,7 +135,7 @@
             <button
               type="button"
               class="btn btn-danger"
-              (click)="deleteLine(selectedLine)"
+              (click)="deleteLine(selectedLine); selectedStation = undefined"
             >
               Delete
             </button>
@@ -167,7 +167,7 @@
         </div>
 
         <div class="col-10 estimated-time">
-          <span>{{ line.name }}</span>
+          <span>{{ line.mark }} - {{ line.name }}</span>
         </div>
       </div>
     </div>

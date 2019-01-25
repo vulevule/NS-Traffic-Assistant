@@ -103,7 +103,7 @@
             &nbsp; {{ selectedStation.name }}
           </p>
           <span *ngIf="selectedStation.lines.length > 0"
-            >Lines: {{ selectedStation.lines.length }}</span
+            >Lines: <span *ngFor="let line of selectedStation.lines">{{line.lineMark}} </span></span
           >
           <span *ngIf="selectedStation.lines.length === 0"
             >No lines assigned yet</span
@@ -194,7 +194,7 @@
             <button
               type="button"
               class="btn btn-primary"
-              (click)="updateStation(editStation)"
+              (click)="updateStation(editStation);"
             >
               Save
             </button>
@@ -227,7 +227,7 @@
         <div class="col-10 estimated-time">
           <span>{{ station.name }}</span>
           <span *ngIf="station.lines.length > 0"
-            >Lines: {{ station.lines.length }}</span
+            >- <span *ngFor="let line of station.lines">{{line.lineMark}} -</span></span
           >
           <span *ngIf="station.lines.length === 0">No lines assigned yet</span>
         </div>

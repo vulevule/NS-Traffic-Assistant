@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
@@ -21,7 +21,6 @@ import { StationDTO } from "src/app/model/StationDTO";
 import { SharedService } from "src/app/services/sharedVars/shared.service";
 import { StationServiceService } from "src/app/services/stations/station-service.service";
 import { LineService } from "src/app/services/lines/line.service";
-import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-display-stations",
@@ -99,8 +98,7 @@ export class DisplayStationsComponent implements OnInit {
     private stationService: StationServiceService,
     private lineService: LineService,
     private route: ActivatedRoute,
-    private sharedService: SharedService,
-    public toaster: ToastrService
+    private sharedService: SharedService
   ) {}
 
   async ngOnInit() {
@@ -154,11 +152,9 @@ export class DisplayStationsComponent implements OnInit {
           .getText();
         var type = f.get("description");
 
-        vm.selectedStation = JSON.parse(
-          JSON.stringify(
-            vm.stations.find(s => s.name === name && s.type === type)
-          )
-        );
+        vm.selectedStation = JSON.parse(JSON.stringify(vm.stations.find(
+          s => s.name === name && s.type === type
+        )));
       } else {
         // draw marker
         vm.drawMarker(args.coordinate);
@@ -201,21 +197,17 @@ export class DisplayStationsComponent implements OnInit {
 
     await this.stationService.updateStation(station).subscribe(
       data => {
-        this.toaster.success(data);
-
-        this.selectedStation = station;
-        this.editStation = undefined;
-        //this.getData();
-        //this.sharedService.updateAll();
-        //this.drawStations();
+        alert(data);
       },
       reason => {
-        this.toaster.error(reason.error);
+        alert(reason.error);
       }
     );
 
+    this.selectedStation = station;
+    this.editStation = undefined;
     await this.getData();
-    //await this.sharedService.updateAll();
+    this.sharedService.updateAll();
     this.drawStations();
   }
 
@@ -225,19 +217,16 @@ export class DisplayStationsComponent implements OnInit {
     ) {
       await this.stationService.deleteStation(station.id).subscribe(
         data => {
-          this.toaster.success(data);
-          this.selectedStation = undefined;
-          //this.getData();
-          //this.sharedService.updateAll();
-          //this.drawStations();
+          alert(data);
         },
         reason => {
-          this.toaster.error(reason.error);
+          alert(reason.error);
         }
       );
 
+      this.selectedStation = undefined;
       await this.getData();
-      //await this.sharedService.updateAll();
+      this.sharedService.updateAll();
       this.drawStations();
     }
   }
@@ -249,20 +238,17 @@ export class DisplayStationsComponent implements OnInit {
 
     await this.stationService.createStation(station).subscribe(
       data => {
-        this.toaster.success(data);
-        this.sharedService.updateAll();
-        //this.drawStations();
-
-        
+        alert(data);
       },
       reason => {
-        this.toaster.error(reason.error);
+        alert(reason.error);
       }
     );
-    
-    
+ 
     await this.getData();
+    this.sharedService.updateAll();
     this.drawStations();
+
     this.activeTabId = "displayStationsTab";
   }
 
@@ -300,10 +286,7 @@ export class DisplayStationsComponent implements OnInit {
   }
 
   drawMarker(coordinates) {
-    if (
-      this.currentMarker &&
-      this.vectorSource.hasFeature(this.currentMarker)
-    ) {
+    if (this.currentMarker) {
       this.vectorSource.removeFeature(this.currentMarker);
     }
 
@@ -399,10 +382,7 @@ export class DisplayStationsComponent implements OnInit {
 
   removeMarkers() {
     this.markerOnMap = [];
-    if (
-      this.currentMarker &&
-      this.vectorSource.hasFeature(this.currentMarker)
-    ) {
+    if (this.currentMarker) {
       this.vectorSource.removeFeature(this.currentMarker);
     }
     //this.currentMarker = undefined;

@@ -93,12 +93,15 @@ public class PricelistServiceImpl implements PriceListService {
 	private PriceList convertDtoToPricelist(PricelistDto pricelist) throws ParseException {
 		// imam sledece atribute:
 		//pricelist : date issuedate, date expirationdate, activate 
-		//ISSUE DATE JE DANASNJI DAN 
+		//ISSUE DATE JE DANASNJI DAN + 1
 		java.sql.Date issueDate =  new java.sql.Date(new java.util.Date().getTime());
+		//i jos dodamo jedan dan na ovo
+		LocalDate date = issueDate.toLocalDate();
+		
+		date = date.plusDays(1);
 		
 		
-		
-		PriceList pl = new PriceList(issueDate,null, true);
+		PriceList pl = new PriceList(java.sql.Date.valueOf(date),null, true);
 		
 		return pl;
 	}

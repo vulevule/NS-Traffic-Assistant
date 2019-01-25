@@ -21,7 +21,7 @@
       </label>
 
       <!-- zone -->
-      <label class="col-12 col-form-label">Traffic zone:
+      <label class="col-12 col-form-label">Traffic:
 
         <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="buyTicket.trafficZone"
           (click)="getPrice()">
@@ -77,9 +77,8 @@
 
   <div class="col-12 col-md-9 map-content">
     <div id="map" class="map">
-      <div *ngIf="message !== ''">
-      <ngb-alert [type] = "infoType" class="btn btn-outline-primary" [dismissible]="false">{{message}}</ngb-alert> </div>
-      <div *ngIf= "ticket != undefined"> <app-display-ticket [role]="role" [ticket]="ticket"> </app-display-ticket></div>
+      <p> {{message}}</p>
+      <div *ngIf= "ticket != undefined"> <app-display-ticket  [ticket]="ticket"> </app-display-ticket></div>
     </div>
   </div>
 </div>

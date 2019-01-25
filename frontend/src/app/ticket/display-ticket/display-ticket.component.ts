@@ -1,7 +1,5 @@
 import { Component, OnInit , Input} from '@angular/core';
-import { TicketInterface } from 'src/app/model/Ticket';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UseCheckTicketComponent } from '../use-check-ticket/use-check-ticket.component';
+import { Ticket } from 'src/app/model/Ticket';
 
 @Component({
   selector: 'app-display-ticket',
@@ -10,23 +8,12 @@ import { UseCheckTicketComponent } from '../use-check-ticket/use-check-ticket.co
 })
 export class DisplayTicketComponent implements OnInit {
 
-  @Input() ticket : TicketInterface;
-
-  @Input()  role : string;
+  @Input() ticket : Ticket;
 
 
-
-  constructor(private modalService : NgbModal) { }
+  constructor() { }
 
   ngOnInit() {
   }
-
-
-  openDialog(){
-    const modalRef = this.modalService.open(UseCheckTicketComponent);
-    modalRef.componentInstance.role = this.role;
-    modalRef.componentInstance.ticket = this.ticket;
-  }
-
 
 }

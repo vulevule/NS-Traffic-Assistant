@@ -20,8 +20,7 @@ import Text from "ol/style/Text";
 import View from "ol/View";
 import LineString from "ol/geom/LineString";
 import Overlay from "ol/Overlay";
-import { LineService } from 'src/app/services/lines/line.service';
-import { ToastrService } from 'ngx-toastr';
+import { LineService } from "src/app/services/lines/line.service";
 
 @Component({
   selector: "app-lines-display",
@@ -105,7 +104,10 @@ export class LinesDisplayComponent implements OnInit {
   closer: any;
   overlay: any;
 
-  constructor(private sharedService: SharedService, private lineService: LineService) {}
+  constructor(
+    private sharedService: SharedService,
+    private lineService: LineService
+  ) {}
 
   ngOnInit() {
     this.sharedService.stations.subscribe(
@@ -161,7 +163,7 @@ export class LinesDisplayComponent implements OnInit {
 
         var station = vm.stations.find(s => s.name === name && s.type === type);
 
-        
+        //alert("Now should display " + station.name + " popup");
 
         vm.content.innerHTML = vm.generatePopupContent(station);
         vm.overlay.setPosition(args.coordinate);
@@ -196,7 +198,15 @@ export class LinesDisplayComponent implements OnInit {
   }
 
   generatePopupContent(station: StationDTO) {
-    return '<div><p><img src="../../../assets/images/' + station.type + '-icon.png" style="width: 40px"/>&nbsp; ' + station.name + '</p><span>Lines: ' + station.lines.length + '</span></div>'
+    return (
+      '<div><p><img src="../../../assets/images/' +
+      station.type +
+      '-icon.png" style="width: 40px"/>&nbsp; ' +
+      station.name +
+      "</p><span>Lines: " +
+      station.lines.length +
+      "</span></div>"
+    );
   }
 
   selectLine(line: LineDTO) {
@@ -210,27 +220,22 @@ export class LinesDisplayComponent implements OnInit {
     if (
       confirm(`You are about to delete ${line.mark} station.\nAre you sure?`)
     ) {
-     this.lineService.deleteLine(line.id).subscribe(
+      this.lineService.deleteLine(line.id).subscribe(
         data => {
-          //this.toaster.success(data.toString());
-          alert(data.toString());
-          this.selectedStation = undefined;
+          alert(data);
+          this.selectedLine = undefined;
           this.sharedService.updateAll();
+
+          this.removeLineFromMap(line);
         },
         reason => {
-          //this.toaster.error(reason.error);
-         alert(reason.error);
+          alert(reason.error);
         }
       );
     }
   }
 
-  drawStation(
-    lon: Number,
-    lat: Number,
-    stationName: String,
-    stationType: String
-  ) {
+  drawStation(station: StationDTO) {
     // create station feature and set style
     let busStationStyle = new Style({
       image: new Icon({
@@ -239,15 +244,15 @@ export class LinesDisplayComponent implements OnInit {
         anchorYUnits: "fraction",
         opacity: 1,
         src:
-          stationType === "BUS"
+          station.type === "BUS"
             ? "../../../assets/images/BUS-station.png"
-            : stationType === "METRO"
+            : station.type === "METRO"
             ? "../../../assets/images/METRO-station.png"
             : "../../../assets/images/TRAM-station.png",
         scale: 0.09
       }),
       text: new Text({
-        text: stationName,
+        text: station.name,
         stroke: new Stroke({
           color: "#fff"
         }),
@@ -263,9 +268,12 @@ export class LinesDisplayComponent implements OnInit {
     });
 
     let busStation = new Feature({
-      geometry: new Point(fromLonLat([lon, lat])),
+      geometry: new Point(
+        fromLonLat([station.xCoordinate, station.yCoordinate])
+      ),
       name: "Station",
-      description: stationType
+      description: station.type,
+      label: station.name
     });
 
     busStation.setStyle(busStationStyle);
@@ -276,12 +284,7 @@ export class LinesDisplayComponent implements OnInit {
   drawStationsForType(type: String) {
     this.stations.forEach(station => {
       if (station.type === type) {
-        this.drawStation(
-          station.xCoordinate,
-          station.yCoordinate,
-          station.name,
-          station.type
-        );
+        this.drawStation(station);
       }
     });
   }
@@ -289,13 +292,7 @@ export class LinesDisplayComponent implements OnInit {
   drawStationsForLine(line: LineDTO) {
     line.stations.forEach(stationLine => {
       var station = this.stations.find(i => i.id === stationLine.stationId);
-
-      this.drawStation(
-        station.xCoordinate,
-        station.yCoordinate,
-        station.name,
-        station.type
-      );
+      this.drawStation(station);
     });
   }
 
@@ -312,7 +309,7 @@ export class LinesDisplayComponent implements OnInit {
     for (let i = 0; i < line.route.length - 1; i++) {
       let start = fromLonLat([line.route[i].lon, line.route[i].lat]);
       let end = fromLonLat([line.route[i + 1].lon, line.route[i + 1].lat]);
-      this.drawLineBetweenLocations(start, end, line.type, fill);
+      this.drawLineBetweenLocations(start, end, line.type, fill, line.id);
     }
   }
 
@@ -320,7 +317,8 @@ export class LinesDisplayComponent implements OnInit {
     startPoint: any,
     endPoint: any,
     type: String,
-    color: any
+    color: any,
+    lineId: Number
   ) {
     var busColor = "#1434A0";
     var tramColor = "#0ed145";
@@ -355,7 +353,8 @@ export class LinesDisplayComponent implements OnInit {
     // create line feature and set appropriate style
     let line = new Feature({
       geometry: new LineString([startPoint, endPoint]),
-      name: "Line"
+      name: "Line",
+      label: lineId
     });
 
     line.setStyle(
@@ -367,6 +366,38 @@ export class LinesDisplayComponent implements OnInit {
     );
     // add line to the layer
     this.vectorSource.addFeature(line);
+  }
+
+  removeLineFromMap(line: LineDTO) {
+    this.vectorSource.getFeatures().forEach((feature: Feature) => {
+      if (feature.get("name") === "Line" && feature.get("label") === line.id) {
+        this.vectorSource.removeFeature(feature);
+
+      } else {
+        var name = feature.get("label");
+        var type = feature.get("description");
+        
+        if (
+          feature.get("name") === "Station" &&
+          line.type === type &&
+          this.lineHasStationByName(line, name) === true
+        ) {
+          this.vectorSource.removeFeature(feature);
+        }
+      }
+    });
+  }
+
+  lineHasStationByName(line: LineDTO, name: String): boolean {
+    var found: boolean = false;
+    line.stations.forEach(s => {
+      if (s.stationName === name) {
+        found = true;
+        return;
+      }
+    });
+
+    return found;
   }
 
   clearMap() {

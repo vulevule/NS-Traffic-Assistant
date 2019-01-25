@@ -15,16 +15,13 @@ export class PricelistComponent implements OnInit {
   
 
   constructor() { 
-    
+    this.loggedUser = JSON.parse(
+      localStorage.getItem('currentUser'));
+    this.role = this.loggedUser.role;
   }
 
   ngOnInit() {
     //dobavimo elemente na stranici
-    this.loggedUser = JSON.parse(
-      localStorage.getItem('currentUser'));
-    if(this.loggedUser !== null){
-      this.role = this.loggedUser.role;
-    }
     
 
   }

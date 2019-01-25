@@ -19,4 +19,5 @@ export class LineDTO {
         this.route = [];
         this.stations = []
     }
+
 }

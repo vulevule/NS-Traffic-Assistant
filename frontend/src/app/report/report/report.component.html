@@ -17,17 +17,19 @@
       </label>
 
 
-      <ng-template #rt let-r="result" let-t="term">
-        <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
-      </ng-template>
-
       <label for="typeahead-focus" class="col-12 col-form-label" *ngIf="type === 'MONTH'"> Month:
-        <input #month type="text" id="month" class="form-control" name="month" [(ngModel)]="model" [ngbTypeahead]="search"
-          [resultTemplate]="rt" [inputFormatter]="formatter" />
+        <input  #month
+        type="text"
+        id="month"
+        class="form-control"
+        name="month"
+        [(ngModel)]="model"
+        [ngbTypeahead]="search"
+           />
       </label>
 
-      <label class="col-12 col-form-label"> Year:
-        <input type="number" id="year" class="form-control" name="year" [(ngModel)]="year" />
+      <label class="col-12 col-form-label"> Year: 
+        <input #staddress type="text" id="staddress" class="form-control" name="staddress" [(ngModel)]="year" />
       </label>
 
 
@@ -36,6 +38,12 @@
       </button>
 
     </form>
+
+    <hr>
+    <pre> type : {{type}}</pre>
+    <pre> model : {{model}}</pre>
+    <pre> year : {{year}}</pre>
+
   </div>
   <div class="col-12 col-md-9 map-content">
     <div id="map" class="map">
@@ -44,9 +52,8 @@
       </p>
       <!--pozovemo komponentu za ispis izvestaja -->
       <div *ngIf="report !== undefined  && report.money !== 0">
-        <pre *ngIf="type === 'MONTH'"> Month report: {{model.name}} , {{year}} </pre>
+        <pre *ngIf="type === 'MONTH'"> Month report: {{model}} , {{year}} </pre>
         <pre *ngIf="type ==='YEAR'"> Year report: {{year}}</pre>
-        <hr>
         <app-display-report [report]="report"></app-display-report>
       </div>
 

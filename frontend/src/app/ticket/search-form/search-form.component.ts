@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { TicketInterface, TicketReaderInterface } from 'src/app/model/Ticket';
+import { Component, OnInit } from '@angular/core';
+import { Ticket } from 'src/app/model/Ticket';
 import { TicketServiceService } from 'src/app/services/ticket/ticket-service.service';
 
 @Component({
@@ -9,41 +9,42 @@ import { TicketServiceService } from 'src/app/services/ticket/ticket-service.ser
 })
 export class SearchFormComponent implements OnInit {
 
-  tickets: TicketInterface[];
-  page : number ;
+  tickets: Ticket[];
+  page : number;
   numOfTicket : number;
-  @Input() role : string;
 
 
   constructor(private ticketService: TicketServiceService) { }
 
   async ngOnInit() {
     this.page = 1;
-    this.changePage();
+    this.ticketService.getAll(this.page-1)
+      .subscribe(data => {
+        this.tickets = data;
+      }, 
+      error => {
+        alert(error.message);
+      }
+      )
+
+    this.ticketService.getNumOfTicket()
+    .subscribe( data => {
+      this.numOfTicket = data;
+    }, 
+      error => {
+        alert(error.message);
+      }
+      )
+
   }
 
   async changePage(){
-    if(this.role === 'INSPECTOR'){
-      this.ticketService.getAllTickets(this.page)
+    this.ticketService.getAll(this.page-1)
       .subscribe(data => {
-        this.tickets = data.tickets;
-        this.numOfTicket = data.numOfTickets;
+        this.tickets = data;
       }, error => {
-        alert (error.error);
+        alert (error.message);
       })
-    }else if (this.role === 'PASSENGER'){
-      this.ticketService.getMyTicket(this.page)
-      .subscribe(data => {
-        this.tickets = data.tickets;
-        this.numOfTicket = data.numOfTickets;
-      }, error => {
-        alert(error.error);
-      })
-     
-    }
-
-    
   }
-
 }
 

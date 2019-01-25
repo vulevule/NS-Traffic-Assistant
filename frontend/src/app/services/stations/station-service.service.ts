@@ -13,57 +13,46 @@ export class StationServiceService {
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<StationDTO[]> {
-    return this.http
-      .get<StationDTO[]>(`${this.stationsUrl}/getAll`);
+    return this.http.get<StationDTO[]>(`${this.stationsUrl}/getAll`);
   }
 
-  getAllByType(type: String): Promise<StationDTO[]> {
-    return this.http
-      .get<StationDTO[]>(`${this.stationsUrl}/getAllByType/${type}`)
-      .toPromise()
-      .then(response => response as StationDTO[])
-      .catch(this.handleError);
+  getAllByType(type: String): Observable<StationDTO[]> {
+    return this.http.get<StationDTO[]>(
+      `${this.stationsUrl}/getAllByType/${type}`
+    );
   }
 
-  getAllByLine(id: any): Promise<StationDTO[]> {
-    return this.http
-      .get<StationDTO[]>(`${this.stationsUrl}/getAllByLine/${id}`)
-      .toPromise()
-      .then(response => response as StationDTO[])
-      .catch(this.handleError);
+  getAllByLine(id: any): Observable<StationDTO[]> {
+    return this.http.get<StationDTO[]>(
+      `${this.stationsUrl}/getAllByLine/${id}`
+    );
   }
 
-  getByNameAndType(name: String, type: String): Promise<StationDTO> {
-    return this.http
-      .get<StationDTO>(`${this.stationsUrl}/getByNameAndType/${name}/${type}`)
-      .toPromise()
-      .then(response => response as StationDTO)
-      .catch(this.handleError);
+  getByNameAndType(name: String, type: String): Observable<StationDTO> {
+    return this.http.get<StationDTO>(
+      `${this.stationsUrl}/getByNameAndType/${name}/${type}`
+    );
   }
 
-  getById(id: any): Promise<StationDTO> {
-    return this.http
-      .get<StationDTO>(`${this.stationsUrl}/getById/${id}`)
-      .toPromise()
-      .then(response => response as StationDTO)
-      .catch(this.handleError);
+  getById(id: any): Observable<StationDTO> {
+    return this.http.get<StationDTO>(`${this.stationsUrl}/getById/${id}`);
   }
 
-  createStation(station: StationDTO): Observable<string> {
+  createStation(station: StationDTO): Observable<String> {
     return this.http.post(`${this.stationsUrl}/create`, station, {
       headers: this.headers,
       responseType: "text"
     });
   }
 
-  updateStation(station: StationDTO): Observable<string> {
+  updateStation(station: StationDTO): Observable<String> {
     return this.http.put(`${this.stationsUrl}/update`, station, {
       headers: this.headers,
       responseType: "text"
     });
   }
 
-  deleteStation(id: any): Observable<string> {
+  deleteStation(id: any): Observable<String> {
     return this.http.delete(`${this.stationsUrl}/delete/${id}`, {
       responseType: "text"
     });
