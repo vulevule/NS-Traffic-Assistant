@@ -1,22 +1,43 @@
-<div class="displayStationContainer row content">
-    <div class="col-12 col-md-3 sidebar-content">
-      <form #createForm="ngForm">
-        <label class="col-12 col-form-label"> SerialNo:
-          <input #staddress type="text" id="staddress" class="form-control" name="staddress" [(ngModel)]="serialNo" />
+<div id="useCheckTicket">
 
-          </label>
-          <label class="col-12 col-form-label"> Line: 
-
-          </label>
-          </form>
-
-    </div>
-  
-    <div class="col-12 col-md-9 map-content">
-      <div id="map" class="map">
-       <!--ovde cemo prikazati poruku koju smo dobili sa back-a --->
-      </div>
-  
-    </div>
-  
+  <div class="modal-header">
+    <h4 *ngIf="role === 'INSPECTOR'" class="modal-title">Check ticket</h4>
+    <h4 *ngIf="role === 'PASSENGER'" class="modal-title">Use ticket </h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
+
+
+  <ng-template #rt let-r="result" let-t="term">
+      <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+    </ng-template>
+    
+    
+
+  <div class="modal-body">
+    <form class="form">
+    <label class="col-12 col-form-label"> Serial NO: {{ticket.serialNo}} </label> 
+    <label for="typeahead-focus" class="col-12 col-form-label" > Line:
+        <input  #line
+        type="text"
+        id="line"
+        class="form-control"
+        name="line"
+        [(ngModel)] = "selectLine"
+        [ngbTypeahead] = "search"
+        [resultTemplate]="rt"
+        [inputFormatter]="formatter"
+           />
+      </label>
+
+      <hr>
+    <button class="btn btn-outline-primary" type="submit" (click)="ok()"> OK </button>
+    </form>
+    <hr>
+    <ngb-alert *ngIf="message !== ''" [type] = "alertType" [dismissible]="false">{{message}}</ngb-alert>
+
+
+
+  </div>
+</div> 

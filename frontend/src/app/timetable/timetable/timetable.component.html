@@ -1,0 +1,27 @@
+<div class="displayStationsContainer row content">
+  <div>
+    <ngb-tabset>
+      <ngb-tab title="View timetable" id="displayTimetable">
+        <ng-template ngbTabContent>
+          <app-search-timetable></app-search-timetable>
+        </ng-template>
+        
+
+      </ngb-tab>
+
+
+      <ngb-tab *ngIf="role === 'ADMIN'" title="Create timetable" id="createTimetable">
+        <ng-template ngbTabContent>
+            <app-create-timetable></app-create-timetable>
+        </ng-template>
+      </ngb-tab>
+
+
+    </ngb-tabset>
+
+
+  </div>
+
+  
+
+</div>

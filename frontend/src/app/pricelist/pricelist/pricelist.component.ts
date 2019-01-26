@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { UserDTO } from 'src/app/model/UserDTO';
-import { WebDriverLogger } from 'blocking-proxy/built/lib/webdriver_logger';
 
 @Component({
   selector: 'app-pricelist',
@@ -23,7 +22,6 @@ export class PricelistComponent implements OnInit {
   }
 
   ngOnInit() {
-    //dobavimo elemente na stranici
     
 
   }

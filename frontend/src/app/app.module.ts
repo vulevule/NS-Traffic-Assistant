@@ -43,6 +43,17 @@ import { StationsComponent } from './stations/stations/stations.component';
 import { StationsCreateComponent } from './stations/stations-create/stations-create.component';
 import { StationsDisplayComponent } from './stations/stations-display/stations-display.component';
 import { StationsMapComponent } from './stations/stations-map/stations-map.component';
+import { FilterTicketByZonePipe } from './ticket/pipes/filter-ticket-by-zone.pipe';
+import { FilterTicketByTicketTimePipe } from './ticket/pipes/filter-ticket-by-ticket-time.pipe';
+import { TimetableComponent } from './timetable/timetable/timetable.component';
+import { DisplayTimetableComponent } from './timetable/display-timetable/display-timetable.component';
+import { SearchTimetableComponent } from './timetable/search-timetable/search-timetable.component';
+import { TicketServiceService } from './services/ticket/ticket-service.service';
+import { PriceListServiceService } from './services/pricelist/price-list-service.service';
+import { TimetableService } from './services/timetable/timetable.service';
+import { NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
+import { CreateTimetableComponent } from './timetable/create-timetable/create-timetable.component';
+import { FilterTicketBySnoPipe } from './ticket/pipes/filter-ticket-by-sno.pipe';
 
 
 
@@ -55,7 +66,8 @@ const appRoutes: Routes = [
       { path: 'login', component: LoginPageComponent},
       { path : 'ticket' , component : TicketComponent},
       { path : 'pricelist', component : PricelistComponent},
-      { path : 'report', component : ReportComponent}
+      { path : 'report', component : ReportComponent}, 
+      { path : 'timetable', component : TimetableComponent}
     ] 
   },
        
@@ -101,6 +113,13 @@ const appRoutes: Routes = [
     StationsCreateComponent,
     StationsDisplayComponent,
     StationsMapComponent,
+    FilterTicketByZonePipe,
+    FilterTicketByTicketTimePipe,
+    TimetableComponent,
+    DisplayTimetableComponent,
+    SearchTimetableComponent,
+    CreateTimetableComponent,
+    FilterTicketBySnoPipe,
   ],
   imports: [
     NgbModule,
@@ -110,15 +129,20 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only
-    )
+    ),
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true },,
     LoggedUserService,
     AuthenticationService,
     StationServiceService,
-    LineService
+    LineService, 
+    TicketServiceService, 
+    PriceListServiceService, 
+    TimetableService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ UseCheckTicketComponent, ]
 })
 export class AppModule { }
