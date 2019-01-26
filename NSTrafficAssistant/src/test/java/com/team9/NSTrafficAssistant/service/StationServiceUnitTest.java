@@ -22,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.team9.dto.StationDTO;
+import com.team9.exceptions.InvalidInputFormatException;
 import com.team9.exceptions.StationAlreadyExistsException;
 import com.team9.exceptions.StationNotFoundException;
 import com.team9.model.Address;
@@ -54,8 +55,34 @@ public class StationServiceUnitTest {
 	}
 	
 	@Test(expected = StationNotFoundException.class)
-	public void testUpdateStation_notFound() throws StationNotFoundException, StationAlreadyExistsException {
-		StationDTO test = new StationDTO(6L, "Bulevar", TrafficType.METRO, 10.0, 15.0, null);
+	public void testUpdateStation_notFound() throws StationNotFoundException, StationAlreadyExistsException, InvalidInputFormatException {
+		StationDTO test = new StationDTO(7L, "Bulevar", TrafficType.METRO, 10.0, 15.0, null);
+
+		stationService.updateStation(test);
+		
+		verify(stationRepositoryMocked, times(1)).findById(test.getId());
+	}
+	
+	@Test(expected = StationAlreadyExistsException.class)
+	public void testUpdateStation_exists() throws StationNotFoundException, StationAlreadyExistsException, InvalidInputFormatException {
+		StationDTO test = new StationDTO(5L, "Balzakova", TrafficType.METRO, 10.0, 15.0, null);
+
+		stationService.updateStation(test);
+		
+		verify(stationRepositoryMocked, times(1)).findById(test.getId());
+		verify(stationRepositoryMocked, times(1)).findByNameAndType(test.getName(), test.getType());
+	}
+	
+	@Test(expected = InvalidInputFormatException.class)
+	public void testUpdateStation_invalidInputName() throws StationNotFoundException, StationAlreadyExistsException, InvalidInputFormatException {
+		StationDTO test = new StationDTO(5L, "", TrafficType.METRO, 10.0, 15.0, null);
+
+		stationService.updateStation(test);
+	}
+	
+	@Test(expected = InvalidInputFormatException.class)
+	public void testUpdateStation_invalidInputType() throws StationNotFoundException, StationAlreadyExistsException, InvalidInputFormatException {
+		StationDTO test = new StationDTO(5L, "Nova ulica", TrafficType.TRAM, 10.0, 15.0, null);
 
 		stationService.updateStation(test);
 		
@@ -63,9 +90,11 @@ public class StationServiceUnitTest {
 	}
 	
 	@Test
-	public void testUpdateStation_allFine() throws StationNotFoundException, StationAlreadyExistsException {
+	public void testUpdateStation_allFine() throws StationNotFoundException, StationAlreadyExistsException, InvalidInputFormatException {
 		StationDTO test = new StationDTO(5L, "Bulevar", TrafficType.METRO, 10.0, 15.0, null);
-
+		Station s6 = new Station(5L, "Bulevar", TrafficType.BUS, 10.0, 15.0, null);
+		Mockito.when(stationRepositoryMocked.save(s6)).thenReturn(s6);
+		
 		Station updated = stationService.updateStation(test);	
 
 		assertEquals("Bulevar", updated.getName());
@@ -76,16 +105,23 @@ public class StationServiceUnitTest {
 	}
 	
 	@Test(expected = StationAlreadyExistsException.class)
-	public void testCreateStation_exists() throws StationAlreadyExistsException {
+	public void testCreateStation_exists() throws StationAlreadyExistsException, InvalidInputFormatException {
 		StationDTO test = new StationDTO(0L, "Balzakova", TrafficType.METRO, 10.0, 15.0, null);
 		
 		stationService.createStation(test);
 	}
 	
-	@Test
-	public void testCreateStation_allFine() throws StationAlreadyExistsException {	
-		StationDTO test = new StationDTO(0L, "Bulevar", TrafficType.TRAM, 10.0, 15.0, null);
+	@Test(expected = InvalidInputFormatException.class)
+	public void testCreateStation_invalidInputName() throws StationAlreadyExistsException, InvalidInputFormatException {
+		StationDTO test = new StationDTO(0L, "", TrafficType.METRO, 10.0, 15.0, null);
 		
+		stationService.createStation(test);
+	}
+	
+	@Test
+	public void testCreateStation_allFine() throws StationAlreadyExistsException, InvalidInputFormatException {	
+		StationDTO test = new StationDTO(0L, "Bulevar", TrafficType.TRAM, 10.0, 15.0, null);
+
 		Station created = stationService.createStation(test);
 		
 		assertNull(created); // Null because save method is not mocked, but if it reached save method it means all works.

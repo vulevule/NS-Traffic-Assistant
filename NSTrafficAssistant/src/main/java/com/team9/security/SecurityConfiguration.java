@@ -94,6 +94,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/user/login").permitAll()
 				.antMatchers("/user/create").permitAll()
+				.antMatchers("/station/getAll").permitAll()
+				.antMatchers("/line/getAll").permitAll()
 				.antMatchers("/pricelist/addPricelist").hasAuthority(Role.ADMIN.name())
 				.antMatchers("/ticket/buyTicket").hasAuthority(Role.PASSENGER.name())
 				.antMatchers("/ticket/myTicket").hasAuthority(Role.PASSENGER.name())
@@ -101,10 +103,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/ticket/useTicket").hasAuthority(Role.PASSENGER.name())
 				.antMatchers("/ticket/price").hasAuthority(Role.PASSENGER.name())
 				.antMatchers("/ticket/checkTicket").hasAuthority(Role.INSPECTOR.name())
-				.antMatchers("/ticket/monthReport").hasAuthority(Role.ADMIN.name());
-//				.antMatchers("/station/create").hasAuthority(Role.ADMIN.name())
-//				.antMatchers("/station/update").hasAuthority(Role.ADMIN.name())
-//				.antMatchers("/station/delete/{id}").hasAuthority(Role.ADMIN.name());
+				.antMatchers("/ticket/monthReport").hasAuthority(Role.ADMIN.name())
+				//.antMatchers("/station/create").hasAuthority(Role.ADMIN.name())
+				.antMatchers("/station/update").hasAuthority(Role.ADMIN.name())
+				//.antMatchers("/station/delete/{id}").hasAuthority(Role.ADMIN.name())
+				.antMatchers("/line/create").hasAuthority(Role.ADMIN.name())
+				.antMatchers("/line/update").hasAuthority(Role.ADMIN.name())
+				.antMatchers("/line/delete/{id}").hasAuthority(Role.ADMIN.name());
 
 				//.anyRequest().authenticated();
 

@@ -18,6 +18,7 @@ import com.team9.dto.LineDto;
 import com.team9.dto.LocationDto;
 import com.team9.dto.StationDTO;
 import com.team9.dto.StationLineDto;
+import com.team9.exceptions.InvalidInputFormatException;
 import com.team9.exceptions.LineAlreadyExistsException;
 import com.team9.exceptions.StationAlreadyExistsException;
 import com.team9.exceptions.StationNotFoundException;
@@ -77,7 +78,7 @@ public class LoadDataController {
 					StationDTO statDto = new StationDTO(temp.getName(), TrafficType.values()[type], temp.getLon(),
 							temp.getLat(), new ArrayList<StationLineDto>());
 
-					Station created;
+					Station created = new Station();
 					StationLineDto sl;
 					try {
 						created = stationService.createStation(statDto);
@@ -104,6 +105,9 @@ public class LoadDataController {
 						// exists!";
 						// return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
 						// }
+					} catch (InvalidInputFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 
 					sl = new StationLineDto(index, entry.getValue().intValue(), created.getId(), 0L, created.getName(),

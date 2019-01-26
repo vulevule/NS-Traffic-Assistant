@@ -43,6 +43,7 @@ import { StationsComponent } from './stations/stations/stations.component';
 import { StationsCreateComponent } from './stations/stations-create/stations-create.component';
 import { StationsDisplayComponent } from './stations/stations-display/stations-display.component';
 import { StationsMapComponent } from './stations/stations-map/stations-map.component';
+import { SharedService } from './services/sharedVars/shared.service';
 
 
 
@@ -117,6 +118,7 @@ const appRoutes: Routes = [
     LoggedUserService,
     AuthenticationService,
     StationServiceService,
+    SharedService,
     LineService
   ],
   bootstrap: [AppComponent]
