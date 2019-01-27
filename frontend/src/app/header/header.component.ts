@@ -4,6 +4,7 @@ import {AuthenticationService} from 'src/app/services/authentication.service';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginPageComponent } from '../pages/login-page/login-page.component';
 import { RegisterPageComponent } from '../pages/register-page/register-page.component';
+import { EditProfileComponent } from '../user/edit-profile/edit-profile.component';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +14,7 @@ import { RegisterPageComponent } from '../pages/register-page/register-page.comp
 export class HeaderComponent implements OnInit {
 
   loggedUser: User;
+  username:string;
 
 
   //moze da se user povuce iz storage-a; uloga i username, ne ceo user, jer se cuva token 
@@ -24,20 +26,27 @@ export class HeaderComponent implements OnInit {
 
     var login : HTMLElement =  document.getElementById('loginItem');
     var logout: HTMLElement = document.getElementById('logoutItem');
-    var register : HTMLElement = document.getElementById('registerItem');
+    var register : HTMLElement = document.getElementById('registerButton');
     var edit: HTMLElement = document.getElementById('editItem');
+    var notRegistrated:HTMLElement = document.getElementById('notRegistrated');
+    var registrated:HTMLElement = document.getElementById('registrated');
 
 
     if (this.loggedUser === null) {
-      alert('niko nije ulogovan');
-      login.hidden = false;
-      register.hidden = false;
-      logout.hidden = true;
-      edit.hidden = true;
+      //alert('niko nije ulogovan');
+      //login.hidden = false;
+      //register.hidden = false;
+      //logout.hidden = true;
+      //edit.hidden = true;
+      notRegistrated.hidden=false;
+      registrated.hidden=true;
     } else {
-      logout.hidden = false;
-      edit.hidden = false;
-      login.hidden = true;
+      //logout.hidden = false;
+      //edit.hidden = false;
+      //login.hidden = true;
+      this.username=this.loggedUser.username;
+      notRegistrated.hidden=true;
+      registrated.hidden=false;
       if (this.loggedUser.role === 'ADMIN'){
         register.hidden = false;
       }else{
@@ -56,6 +65,10 @@ export class HeaderComponent implements OnInit {
 
   const modalRef = this.modalService.open(RegisterPageComponent);
     //modalRef.componentInstance.name = 'Login';
+ }
+
+ edit(){
+  const modalRef = this.modalService.open(EditProfileComponent);
  }
 
   logout(){

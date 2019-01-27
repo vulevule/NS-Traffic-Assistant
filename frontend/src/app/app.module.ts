@@ -54,6 +54,10 @@ import { EditTimetableComponent } from './timetable/edit-timetable/edit-timetabl
 import { DisplayTimetableComponent } from './timetable/display-timetable/display-timetable.component';
 import { TimetableService } from './services/timetable/timetable.service';
 import { SearchTimetableComponent } from './timetable/search-timetable/search-timetable.component';
+import { DialogComponent } from './user/dialog/dialog.component';
+import { ValidationDialogComponent } from './user/validation-dialog/validation-dialog.component';
+import { EditProfileComponent } from './user/edit-profile/edit-profile.component';
+import { ValidateUserComponent } from './user/validate-user/validate-user.component';
 
 
 const appRoutes: Routes = [
@@ -116,6 +120,10 @@ const appRoutes: Routes = [
     EditTimetableComponent,
     DisplayTimetableComponent,
     SearchTimetableComponent,
+    DialogComponent,
+    ValidationDialogComponent,
+    EditProfileComponent,
+    ValidateUserComponent,
 
   ],
   imports: [
@@ -148,7 +156,7 @@ const appRoutes: Routes = [
 
 
   bootstrap: [AppComponent],
-  entryComponents: [ UseCheckTicketComponent,RegisterPageComponent ]
+  entryComponents: [ UseCheckTicketComponent,RegisterPageComponent,DialogComponent,ValidationDialogComponent,EditProfileComponent ]
 
 })
 export class AppModule { }

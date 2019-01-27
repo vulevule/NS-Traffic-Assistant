@@ -1,18 +1,18 @@
-<div id="register"  >
+<div id="edit"  >
   <div class="modal-header">
-      <h4 class="modal-title">Please register to our application </h4>
+      <h4 class="modal-title">Please enter chages </h4>
       <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div> 
     <div class="modal-body">   
-      <form #registerForm="ngForm" appMatchingPassword class="form-register" (ngSubmit)="register()">
+      <form #editForm="ngForm" appMatchingPassword class="form-register" (ngSubmit)="register()">
         <div>
 
         
             <div class="form-group" >
             <label for="name" class="sr-only">Full name</label>
-          <input type="text" id="name" name="name" class="form-control" [(ngModel)]="u.name" #name="ngModel"  placeholder="Full Name" required autofocus>
+          <input type="text" id="name" name="name" class="form-control" [(ngModel)]="user.name" #name="ngModel" value="{{user.name}}" placeholder="Full Name" required autofocus>
           <div *ngIf="name.invalid && (name.dirty || name.touched)"
           class="alert alert-danger">
                <div *ngIf="name.errors.required">
@@ -20,23 +20,10 @@
                </div>
           </div>
           </div>
-          <div class="form-group" >
-          <label for="personalNo" class="sr-only" >Personal number</label>
-          <input type="number" id="personalNo" name="personalNo" class="form-control" [(ngModel)]="u.personalNo" #personalNo="ngModel" pattern="[0-9]{13,13}"  placeholder="Personal number" required >
-          <div *ngIf="personalNo.invalid && (personalNo.dirty || personalNo.touched)"
-          class="alert alert-danger">
-               <div *ngIf="personalNo.errors.required">
-              Personal number is required!
-               </div>
-              <div *ngIf="personalNo.errors.pattern">
-               Personal number must contain 13 characters
-              </div>
-              
-          </div>
-          </div>
+          
           <div class="form-group" >
           <label for="email" class="sr-only">Email</label>
-          <input type="text" id="email" name="email" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" [(ngModel)]="u.email" #email="ngModel"  placeholder="Email" required >
+          <input type="text" id="email" name="email" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" [(ngModel)]="user.email" #email="ngModel" value="{{user.email}}" placeholder="Email" required >
           <div *ngIf="email.invalid && (email.dirty || email.touched)"
           class="alert alert-danger">
                <div *ngIf="email.errors.required">
@@ -52,7 +39,7 @@
           </p>
           <div class="form-group" >
           <label for="city" class="sr-only"></label>
-          <input type="text" id="city" name="city" class="form-control" [(ngModel)]="u.address.city" #city="ngModel"  placeholder="City" required >
+          <input type="text" id="city" name="city" class="form-control" [(ngModel)]="user.address.city" #city="ngModel" value="{{user.address.city}}"  placeholder="City" required >
           <div *ngIf="city.invalid && (city.dirty || city.touched)"
           class="alert alert-danger">
                <div *ngIf="city.errors.required">
@@ -63,7 +50,7 @@
           </div>
           <div class="form-group" >
           <label for="street" class="sr-only"></label>
-          <input type="text" id="street" name="street" class="form-control"  [(ngModel)]="u.address.street" #street="ngModel" placeholder="Street" required >
+          <input type="text" id="street" name="street" class="form-control"  [(ngModel)]="user.address.street" #street="ngModel" value="{{user.address.street}}" placeholder="Street" required >
           <div *ngIf="street.invalid && (street.dirty || street.touched)"
           class="alert alert-danger">
                <div *ngIf="street.errors.required">
@@ -73,7 +60,7 @@
         </div>
           <div class="form-group" >
           <label for="zip" class="sr-only"></label>
-          <input type="number" id="zip" name="zip"  class="form-control" [(ngModel)]="u.address.zip" #zip="ngModel" pattern="^\s*?\d{5}(?:[-\s]\d{4})?\s*?$"  placeholder="ZIP" required  >
+          <input type="number" id="zip" name="zip"  class="form-control" [(ngModel)]="user.address.zip" value="{{user.address.zip}}" #zip="ngModel" pattern="^\s*?\d{5}(?:[-\s]\d{4})?\s*?$"  placeholder="ZIP" required  >
           <div *ngIf="zip.invalid && (zip.dirty || zip.touched)"
           class="alert alert-danger">
                <div *ngIf="zip.errors.required">
@@ -87,27 +74,12 @@
           <p class="divider-text">
               <span class="bg-light"></span>
           </p>
-          <div class="form-group" >
-          <label for="username" class="sr-only">Username</label>
-          <input type="text" id="username" name="username" class="form-control" [(ngModel)]="u.username" #username="ngModel"  placeholder="Username" required minlength="4" >
-          <div *ngIf="username.invalid && (username.dirty || username.touched)"
-          class="alert alert-danger">
-               <div *ngIf="username.errors.required">
-              Username is required!
-               </div>
-              <div *ngIf="username.errors.minlength">
-               Username must contain more than 4 characters
-              </div>
-          </div>
-          <div *ngIf="message!==''">
-            <ngb-alert [type]="type" >{{message}}</ngb-alert>  
-            </div>
-        </div>
+          
         <div class="cross-validation" [class.cross-validation-error]="registerForm.errors?.matchingPassword && (registerForm.touched || registerForm.dirty)"> 
           <div class="form-group" >
           <label for="inputPassword" class="sr-only">Password</label>
         
-          <input type="password" id="inputPassword" name="inputPassword" class="form-control" [(ngModel)]="u.password" #inputPassword="ngModel"  placeholder="Password" required minlength="4">
+          <input type="password" id="inputPassword" name="inputPassword" class="form-control" [(ngModel)]="user.password" #inputPassword="ngModel" value="{{user.password}}" placeholder="new Password" required minlength="4">
           <div *ngIf="inputPassword.invalid && (inputPassword.dirty || inputPassword.touched)"
           class="alert alert-danger">
                <div *ngIf="inputPassword.errors.required">
@@ -121,18 +93,22 @@
         <div class="form-group">
           <label for="repeatPassword" class="sr-only">Repeat Password</label>
           <input type="password" id="repeatPassword" name="repeatPassword" class="form-control" FormControlName="repeatPassword" #repeatPassword="ngModel"
-          [(ngModel)]="user.repeatPassword"
+          [(ngModel)]="u.repeatPassword"
           [ngModelOptions]="{ updateOn: 'blur' }" placeholder="Repeat Password" required>
           <div *ngIf="repeatPassword.pending">Validating...</div>
         </div>
-          <div *ngIf="registerForm.errors?.matchingPassword && (registerForm.touched || registerForm.dirty)" class="cross-validation-error-message alert alert-danger">
+          <div *ngIf="editForm.errors?.matchingPassword && (editForm.touched || editForm.dirty)" class="cross-validation-error-message alert alert-danger">
             Passwords must match.
         </div>
       </div>
+      <div *ngIf="message!==''">
+        <ngb-alert [type]="type" >{{message}}</ngb-alert>  
+        </div>
+    </div>
       
            
        
-          <button class="btn btn-primary btn-block" type="submit" [disabled]="registerForm.invalid" >Register</button>
+          <button class="btn btn-primary btn-block" type="submit" [disabled]="editForm.invalid" >Register</button>
     </div>
         </form>
         

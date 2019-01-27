@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -66,7 +67,8 @@ public class UserController {
 	@RequestMapping(
 			value = "/user/create", 
 			method=RequestMethod.POST, 
-			consumes="application/json")
+			consumes="application/json",
+			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addUser(@RequestBody UserDto user){
 		try {
 		
@@ -212,44 +214,32 @@ catch(Exception ex) {
 	
 	
 	
-	@RequestMapping(value="/user/validateProfile",method=RequestMethod.POST, consumes="multipart/form-data")
-	public ResponseEntity<?> validateProfile(@RequestParam("file") MultipartFile file,HttpServletRequest request)  {
-		
+	@RequestMapping(value="/user/validateProfile",method=RequestMethod.POST)
+	public ResponseEntity<?> validateProfile(@RequestParam("file") MultipartFile file,HttpServletRequest request) throws IOException  {
+		System.out.println("Tuuu");
 		
 	
 		   if (!file.isEmpty())
 		     { String path="";
-		      try {
-		    	  String orgName = file.getOriginalFilename();
-		          // this line to retreive just file name 
-		          
-		       String name=orgName.substring(orgName.lastIndexOf("\\")+1,orgName.length());
-		       path= request.getServletContext().getRealPath("/images/");
-		       if(! new File(path).exists())
-               {
-                   new File(path).mkdir();
-               }
-		     
-		      // path ="/static/images/";
-		       System.out.println(path);
-		       User user=getLoggedUser(request);
-		       File upl = new File(path+user.getUsername()+"-"+name);
-		       upl.createNewFile();
-		       FileOutputStream fout = new FileOutputStream(upl);
-		       fout.write(file.getBytes());
-		       fout.close();
+		      String orgName = file.getOriginalFilename();
+			  // this line to retreive just file name 
+			  
+      String name=orgName.substring(orgName.lastIndexOf("\\")+1,orgName.length());
+      path= request.getServletContext().getRealPath("/images/");
+      if(! new File(path).exists())
+            {
+			   new File(path).mkdir();
+            }
+    
+     // path ="/static/images/";
+      System.out.println(path);
+      User user=getLoggedUser(request);
+      userService.store(file);
 
-		  		user.setImagePath(user.getUsername()+"-"+name);
-		  		userService.SaveUpdated(user);
-		  		
-		  		return new ResponseEntity<>(HttpStatus.CREATED);
-
-		     
-		         } catch (IOException e) {
-		                                    e.printStackTrace();
-		                                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		                                    
-		                                  }
+			user.setImagePath(file.getOriginalFilename());
+			userService.SaveUpdated(user);
+			
+			return new ResponseEntity<>(HttpStatus.CREATED);
 		      
 		      
 		        
@@ -267,8 +257,7 @@ catch(Exception ex) {
 	}
 	
 	
-	@RequestMapping(value = "/user/NotValidated", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+	@GetMapping(value="/user/notValidated", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ArrayList<Passenger>> getNotValidatedUsers() {
 		return new ResponseEntity<ArrayList<Passenger>>(userService.readyToValidate(),HttpStatus.OK);	
 	
@@ -284,4 +273,11 @@ catch(Exception ex) {
 		
 	}
 	
+	@GetMapping(value="/user/getUser", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<User> getUser(HttpServletRequest http) {
+		User u=getLoggedUser(http);
+		return new ResponseEntity<User>(u,HttpStatus.OK);
+		
+		
+	}
 }

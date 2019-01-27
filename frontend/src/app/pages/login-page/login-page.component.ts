@@ -24,7 +24,7 @@ export class LoginPageComponent implements OnInit{
   public type : string;
 
   constructor(
-    private AuthenticationService:AuthenticationService,private router:Router,
+    private AuthenticationService:AuthenticationService,/*private router:Router,*/
       public activeModal: NgbActiveModal)
   {
     this.user={};
@@ -47,7 +47,7 @@ async login(){
       let role = data.role;
       localStorage.setItem('currentUser', JSON.stringify({ username: this.user.username, role:role, token: token }));
       //this.loading = true;
-      this.message = 'Success login';
+     this.message = 'Success login';
       this.type  = 'success';
       //treba navigirati
       location.reload();
