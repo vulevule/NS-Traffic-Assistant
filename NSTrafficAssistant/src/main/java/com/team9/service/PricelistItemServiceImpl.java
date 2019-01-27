@@ -54,7 +54,7 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 						p.getTrafficType(), p.getTimeType(), p.getZone(), list);
 				if (pi.isPresent() == true) {
 					// znaci da vec postoji u bazi pa bacamo exception
-					throw new PriceItemAlreadyExistsException("The price list must not contain the same items ");
+					throw new PriceItemAlreadyExistsException("The price list must not contain the same items!");
 				}
 				// sad unesemo stavku u cenovnik
 				PriceItem saveItem = this.repository.save(p);
@@ -75,7 +75,7 @@ public class PricelistItemServiceImpl implements PricelistItemService {
 		if ((handycapDiscont < 0 || handycapDiscont > 100) || (seniorDiscount < 0 || handycapDiscont > 100)
 				|| (studentDiscount < 0 || studentDiscount > 100)) {
 			// bacimo izuzetak
-			throw new WrongDiscountException("The discount must be between 0 and 100");
+			throw new WrongDiscountException("The discount must be between 0 and 100!");
 		}
 
 	}

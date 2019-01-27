@@ -101,7 +101,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/ticket/useTicket").hasAuthority(Role.PASSENGER.name())
 				.antMatchers("/ticket/price").hasAuthority(Role.PASSENGER.name())
 				.antMatchers("/ticket/checkTicket").hasAuthority(Role.INSPECTOR.name())
-				.antMatchers("/ticket/monthReport").hasAuthority(Role.ADMIN.name())
+				.antMatchers("/ticket/report").hasAuthority(Role.ADMIN.name())
 				.antMatchers("/timetable/addTimetable").hasAuthority(Role.ADMIN.name());
 //				.antMatchers("/station/create").hasAuthority(Role.ADMIN.name())
 //				.antMatchers("/station/update").hasAuthority(Role.ADMIN.name())

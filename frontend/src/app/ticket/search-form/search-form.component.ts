@@ -37,15 +37,6 @@ export class SearchFormComponent implements OnInit {
   constructor(private ticketService: TicketServiceService) { }
 
 
-  // search = (text$: Observable<String>) =>
-  //   text$.pipe(
-  //     debounceTime(200),
-  //     map(term => term === '' ? []
-  //       : this.tickets.filter(v => v.serialNo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0.10)
-  //     )
-  //   )
-
-  // formatter = (x: { serialNo: String }) => x.serialNo;
 
   ngOnInit() {
     this.getTickets();

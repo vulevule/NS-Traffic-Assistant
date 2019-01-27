@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.sql.Date;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -164,10 +165,10 @@ public class PricelistServiceIntegrationTest {
 		assertNotNull(result);
 		assertTrue(result.getItems().size() == 24);
 		assertTrue(result.getActivate());
-		// vazi od danas+1
-		LocalDate ld = new Date(new java.util.Date().getTime()).toLocalDate().plusDays(1);
-		Date issue = Date.valueOf(ld);
-		assertTrue(result.getIssueDate().equals(issue));
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+		Date issue = new Date(new java.util.Date().getTime());
+		assertTrue(fmt.format(result.getIssueDate()).equals(fmt.format(issue)));
+
 
 		// mozemo i da povucemo sve cenovnike i da vidimo da u bazi imamo 2
 		List<PriceList> found = this.repository.findAll();

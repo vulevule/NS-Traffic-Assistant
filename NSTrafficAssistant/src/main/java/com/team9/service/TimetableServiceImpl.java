@@ -103,6 +103,7 @@ public class TimetableServiceImpl implements TimetableService {
 			// ako nije null, setujemo mu vreme
 			t.setExpirationDate(new java.sql.Date(new java.util.Date().getTime()));
 			// sacuvamo ga u bazi
+			t.setActivate(false);
 			this.timetableRepository.save(t);
 		}
 		

@@ -27,7 +27,7 @@ export class SearchTimetableComponent implements OnInit {
 
 
 
-  message: String;
+  message: String = '';
   infoType: String;
 
 
@@ -96,9 +96,7 @@ export class SearchTimetableComponent implements OnInit {
      
    });
    this.makeDisplayItems();
-   this.items.forEach(element => {
-     alert(element.mark + " " + element.name + " " + this.timetableType);
-   });
+   
  }
 
  makeDisplayItems(){
@@ -106,16 +104,23 @@ export class SearchTimetableComponent implements OnInit {
   this.items = [];
   this.displayItems.forEach(element => {
     if(this.timetableType === 'WORKDAY'){
+      if(element.workdayTimes.length !== 0){
       let d_times: Time[] = this.makeDisplayString(element.workdayTimes);
       this.items.push({mark : element.line_mark, name : element.line_name, times : d_times});
+      }else{
+        this.message = 'The line ' + element.line_mark + ' ' + element.line_name+' does not have a timetable for working days'
+        this.infoType = 'info';
+      }
     }else if(this.timetableType === 'SUNDAY'){
+      
       let s_times: Time[] = this.makeDisplayString(element.sundayTimes);
       this.items.push({mark : element.line_mark, name : element.line_name, times :s_times});
-
+      
     }else if(this.timetableType === 'SATURDAY'){
+      
       let sa_times: Time[] = this.makeDisplayString(element.saturdayTimes);
       this.items.push({mark : element.line_mark, name : element.line_name, times : sa_times});
-
+      
     }
   });
 }

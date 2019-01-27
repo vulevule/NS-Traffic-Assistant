@@ -1,10 +1,13 @@
 package com.team9.NSTrafficAssistant.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,5 +52,15 @@ public class PricelistItemServiceIntegrationTest {
 		PriceList p = new PriceList(new Long(13), issue, null, true);
 		PriceItem found = this.service.getPriceItem(TrafficType.METRO, TimeTicketType.ANNUAL, TrafficZone.FIRST, p);
 		
+	}
+	
+	//kada vracamo sve stavke od jednog cenovnika
+	@Test
+	public void test_getAllPriceItemByPricelist() {
+		Date issue = new java.sql.Date(new GregorianCalendar(2018, Calendar.DECEMBER, 25).getTime().getTime());
+		PriceList p = new PriceList(new Long(10), issue, null, true);
+		Set<PriceItem> result = this.service.getPriceItemsByPricelist(p);
+		assertNotNull(result);
+		assertTrue(result.size() == 24);
 	}
 }

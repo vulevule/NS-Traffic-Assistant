@@ -79,7 +79,7 @@ public class PricelistItemServiceUnitTest {
 	}
 	
 	/*
-	 * 5. kada nam je jedan od popusta manji od 0 ili veci od 100
+	 * 5. kada nam je jedan od popusta manji od 0 
 	 */
 	
 	@Test(expected = WrongDiscountException.class)
