@@ -40,6 +40,7 @@ export class HeaderComponent implements OnInit {
       //edit.hidden = true;
       notRegistrated.hidden=false;
       registrated.hidden=true;
+      
     } else {
       //logout.hidden = false;
       //edit.hidden = false;
