@@ -63,6 +63,8 @@ import{UserServiceService} from './services/user/user-service.service'
 import { NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 import { CreateTimetableComponent } from './timetable/create-timetable/create-timetable.component';
 import { FilterTicketBySnoPipe } from './ticket/pipes/filter-ticket-by-sno.pipe';
+import { MatchingPasswordDirective } from './pages/register-page/matching-password.directive';
+
 
 
 
@@ -134,9 +136,10 @@ const appRoutes: Routes = [
     EditProfileComponent,
     ValidateUserComponent,
 
-
+    MatchingPasswordDirective,
     CreateTimetableComponent,
     FilterTicketBySnoPipe,
+    RegisterPageComponent,
 
   ],
   imports: [
