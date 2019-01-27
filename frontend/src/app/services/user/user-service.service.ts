@@ -29,8 +29,8 @@ export class UserServiceService {
   })
 
   }
-  getUser():Observable<User>{
-    return this.http.get<User>(`${this.Url}/getUser`,{
+  getUser():Observable<EditDtoInterface>{
+    return this.http.get<EditDtoInterface>(`${this.Url}/getUser`,{
       headers: this.headers
     })
   }
