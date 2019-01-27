@@ -249,6 +249,7 @@ public boolean SaveUpdated(User u) {
 		return false;
 	}
 	try {
+  u.setPassword(passwordEncoder.encode(u.getPassword()));	
 	userRepository.save(u);
 	return true;
 }catch(Exception e){

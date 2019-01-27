@@ -58,6 +58,7 @@ import { DialogComponent } from './user/dialog/dialog.component';
 import { ValidationDialogComponent } from './user/validation-dialog/validation-dialog.component';
 import { EditProfileComponent } from './user/edit-profile/edit-profile.component';
 import { ValidateUserComponent } from './user/validate-user/validate-user.component';
+import{UserServiceService} from './services/user/user-service.service'
 
 
 const appRoutes: Routes = [
@@ -145,7 +146,7 @@ const appRoutes: Routes = [
     LoggedUserService,
     AuthenticationService,
     StationServiceService,
-
+    UserServiceService,
     LineService,
     
     TicketServiceService, 

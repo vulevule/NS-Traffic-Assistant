@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.team9.dto.AddressDto;
+import com.team9.dto.EditDto;
 import com.team9.dto.LoginDto;
 import com.team9.dto.LoginUserDto;
 import com.team9.dto.UpdateProfileDto;
@@ -274,9 +276,26 @@ catch(Exception ex) {
 	}
 	
 	@GetMapping(value="/user/getUser", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<User> getUser(HttpServletRequest http) {
+	public ResponseEntity<EditDto> getUser(HttpServletRequest http) {
 		User u=getLoggedUser(http);
-		return new ResponseEntity<User>(u,HttpStatus.OK);
+		System.out.println(u.getName());
+		EditDto user=new EditDto();
+		user.setUsername(u.getUsername());
+		user.setEmail(u.getEmail());
+		user.setName(u.getName());
+		user.setPassword(u.getPassword());
+		AddressDto add=new AddressDto();
+		add.setStreet(u.getAddress().getStreet());
+		add.setCity(u.getAddress().getCity());
+		add.setZip(u.getAddress().getZip());
+		user.setAddress(add);
+		
+		
+		
+		
+		
+		
+		return new ResponseEntity<EditDto>(user,HttpStatus.OK);
 		
 		
 	}
