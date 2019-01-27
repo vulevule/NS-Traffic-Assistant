@@ -125,11 +125,9 @@ export class LinesCreateComponent implements OnInit {
       });
 
       if (f && f.get("name") === "Station") {
-        var name = f
-          .getStyle()
-          .getText()
-          .getText();
+        var name = f.get("label");
         var type = vm.newLine.type;
+        
         var station = vm.stations.find(
           (s: StationDTO) => s.name === name && s.type === type
         );
@@ -263,12 +261,7 @@ export class LinesCreateComponent implements OnInit {
     });
   }
 
-  drawStation(
-    lon: Number,
-    lat: Number,
-    stationName: String,
-    stationType: String
-  ) {
+  drawStation(station: StationDTO) {
     // create station feature and set style
     let busStationStyle = new Style({
       image: new Icon({
@@ -277,23 +270,23 @@ export class LinesCreateComponent implements OnInit {
         anchorYUnits: "fraction",
         opacity: 1,
         src:
-          stationType === "BUS"
+          station.type === "BUS"
             ? "../../../assets/images/BUS-station.png"
-            : stationType === "METRO"
+            : station.type === "METRO"
             ? "../../../assets/images/METRO-station.png"
             : "../../../assets/images/TRAM-station.png",
         scale: 0.09
       }),
       text: new Text({
-        text: stationName,
+        text: station.name + (station.lines.length > 0 ? "" : "\n- Unassigned -"),
         stroke: new Stroke({
           color: "#fff"
         }),
         fill: new Fill({
-          color: "#3366cc"
+          color: station.lines.length > 0 ? "#3366cc" : "green"
         }),
         font: "15px sans-serif",
-        offsetY: -62,
+        offsetY: station.lines.length > 0 ? -62 : -72,
         backgroundFill: new Fill({
           color: "white"
         })
@@ -301,8 +294,11 @@ export class LinesCreateComponent implements OnInit {
     });
 
     let busStation = new Feature({
-      geometry: new Point(fromLonLat([lon, lat])),
-      name: "Station"
+      geometry: new Point(
+        fromLonLat([station.xCoordinate, station.yCoordinate])
+      ),
+      name: "Station",
+      label: station.name
     });
 
     busStation.setStyle(busStationStyle);
@@ -313,12 +309,7 @@ export class LinesCreateComponent implements OnInit {
   drawStationsForType(type: String) {
     this.stations.forEach(station => {
       if (station.type === type) {
-        this.drawStation(
-          station.xCoordinate,
-          station.yCoordinate,
-          station.name,
-          station.type
-        );
+        this.drawStation(station);
       }
     });
   }
@@ -394,7 +385,7 @@ export class LinesCreateComponent implements OnInit {
 
     console.log(line);
 
-    if ((this.actionType === "CREATE")) {
+    if (this.actionType === "CREATE") {
       this.lineService.createLine(line).subscribe(
         data => {
           alert(data);
@@ -405,7 +396,7 @@ export class LinesCreateComponent implements OnInit {
           alert(error.error);
         }
       );
-    } else if ((this.actionType === "EDIT")) {
+    } else if (this.actionType === "EDIT") {
       this.lineService.updateLine(line).subscribe(
         data => {
           alert(data);

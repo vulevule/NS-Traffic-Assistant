@@ -3,7 +3,7 @@
     <form #directionsForm="ngForm">
       <label class="col-12 col-form-label">Traffic type:
 
-        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="trafficType">
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="trafficType" (change)="getAllTimetablesByTypeAndZone()">
           <label ngbButtonLabel class="btn-primary">
             <input ngbButton type="radio" value="BUS" /> Bus
           </label>
@@ -14,11 +14,12 @@
             <input ngbButton type="radio" value="METRO" /> Metro
           </label>
         </div>
+        Bus is default.
       </label>
 
       <label class="col-12 col-form-label">Traffic zone:
 
-        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="zone">
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="zone" (change)="getAllTimetablesByTypeAndZone()">
           <label ngbButtonLabel class="btn-primary">
             <input ngbButton type="radio" value="FIRST" /> First
           </label>
@@ -26,6 +27,7 @@
             <input ngbButton type="radio" value="SECOND" /> Second
           </label>
         </div>
+        First zone is default.
       </label>
 
       <label class="col-12 col-form-label">Timetable type:
@@ -41,34 +43,40 @@
             <input ngbButton type="radio" value="SATURDAY" /> Saturday
           </label>
         </div>
+        Workday is default.
       </label>
 
       <!-- linije koje ce se popunjavati kada se izabere tip i zona-->
 
-      <ng-template #rt let-r="result" let-t="term">
-        <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
-      </ng-template>
-
       <label for="typeahead-focus" class="col-12 col-form-label"> Line:
-        <input #line type="text" id="line" class="form-control" name="line" [(ngModel)]="selectLine" [ngbTypeahead]="search"
-          [resultTemplate]="rt" [inputFormatter]="formatter" />
+        <ng-multiselect-dropdown [placeholder]="'custom placeholder'" [data]="allTimetables" [ngModelOptions]="{standalone: true}"
+          [(ngModel)]="selected" [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)">
+        </ng-multiselect-dropdown>
       </label>
 
       <hr>
       <button class="btn btn-outline-primary" type="submit" (click)="view()"> View </button>
     </form>
+
+
+
   </div>
+
+
 
   <div class="col-12 col-md-9 map-content">
     <div id="map" class="map">
       <!--ovde cemo ispisati i neku poruku-->
-      <hr>
-      <div *ngIf="timetableItem !== undefined">
-      <app-display-timetable [times]="times" [line]="selectLine.name" [role]="role"></app-display-timetable>
+      <div *ngIf="message !== '' && items.length === 0">
+        <ngb-alert [type]="infoType" class="btn btn-outline-primary" [dismissible]="false">{{message}}</ngb-alert>
       </div>
+      <hr>
+        <div *ngIf="items !== undefined">
+          <app-display-timetable [displayItems]="items"></app-display-timetable>
+        </div>
     </div>
 
   </div>
 
-  
+
 </div>

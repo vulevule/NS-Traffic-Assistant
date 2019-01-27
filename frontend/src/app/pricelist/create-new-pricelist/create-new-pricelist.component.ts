@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ItemInterface } from 'src/app/model/PriceItem';
+import { forEach } from '@angular/router/src/utils/collection';
 import { PriceListInterface } from 'src/app/model/Pricelist';
 import { PriceListServiceService } from 'src/app/services/pricelist/price-list-service.service';
 
@@ -47,22 +48,19 @@ export class CreateNewPricelistComponent implements OnInit {
 
   }
 
-  async save() {
-    //pozvati metodu iz servisa za kreiranje rasporeda
-    var p = { items: this.items };
-
-    this.pricelistService.addPricelist(p)
+  save() {
+    this.pricelist = {items : this.items};
+    this.pricelistService.addPricelist(this.pricelist)
       .subscribe(
         data => {
           this.message = data as string;
           this.infoType = 'success';
         }, 
         error => {
-          this.message =error.error;
+          this.message =  error.error;
           this.infoType = 'danger';
         }
       )
-
   }
 
 }

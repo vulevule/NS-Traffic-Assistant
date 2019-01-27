@@ -12,44 +12,30 @@ export class StationServiceService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Promise<StationDTO[]> {
-    return this.http
-      .get<StationDTO[]>(`${this.stationsUrl}/getAll`)
-      .toPromise()
-      .then(response => response as StationDTO[])
-      .catch(this.handleError);
+  getAll(): Observable<StationDTO[]> {
+    return this.http.get<StationDTO[]>(`${this.stationsUrl}/getAll`);
   }
 
-  getAllByType(type: String): Promise<StationDTO[]> {
-    return this.http
-      .get<StationDTO[]>(`${this.stationsUrl}/getAllByType/${type}`)
-      .toPromise()
-      .then(response => response as StationDTO[])
-      .catch(this.handleError);
+  getAllByType(type: String): Observable<StationDTO[]> {
+    return this.http.get<StationDTO[]>(
+      `${this.stationsUrl}/getAllByType/${type}`
+    );
   }
 
-  getAllByLine(id: any): Promise<StationDTO[]> {
-    return this.http
-      .get<StationDTO[]>(`${this.stationsUrl}/getAllByLine/${id}`)
-      .toPromise()
-      .then(response => response as StationDTO[])
-      .catch(this.handleError);
+  getAllByLine(id: any): Observable<StationDTO[]> {
+    return this.http.get<StationDTO[]>(
+      `${this.stationsUrl}/getAllByLine/${id}`
+    );
   }
 
-  getByNameAndType(name: String, type: String): Promise<StationDTO> {
-    return this.http
-      .get<StationDTO>(`${this.stationsUrl}/getByNameAndType/${name}/${type}`)
-      .toPromise()
-      .then(response => response as StationDTO)
-      .catch(this.handleError);
+  getByNameAndType(name: String, type: String): Observable<StationDTO> {
+    return this.http.get<StationDTO>(
+      `${this.stationsUrl}/getByNameAndType/${name}/${type}`
+    );
   }
 
-  getById(id: any): Promise<StationDTO> {
-    return this.http
-      .get<StationDTO>(`${this.stationsUrl}/getById/${id}`)
-      .toPromise()
-      .then(response => response as StationDTO)
-      .catch(this.handleError);
+  getById(id: any): Observable<StationDTO> {
+    return this.http.get<StationDTO>(`${this.stationsUrl}/getById/${id}`);
   }
 
   createStation(station: StationDTO): Observable<String> {

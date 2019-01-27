@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'filterItemByZone'
+  name: 'filterItemByZone',
+  pure : false
 })
 export class FilterItemByZonePipe implements PipeTransform {
 

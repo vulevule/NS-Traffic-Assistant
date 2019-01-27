@@ -1,0 +1,64 @@
+<!-- napravimo tabelu -->
+
+  
+  <div *ngIf="message !== ''">
+      <ngb-alert [type]="infoType" [dismissible]="false">{{ message }}</ngb-alert>
+    </div>
+  <div *ngIf="message === ''">
+    <form #createTimetable="ngForm">
+  <table *ngIf="items !== undefined">
+    <tr>
+      <th> Line mark</th>
+      <th> Line name</th>
+      <th> Workday times</th>
+      <th> Saturday times </th>
+      <th> Sunday times </th>
+    </tr>
+    <tr *ngFor="let i of items">
+      <td> {{i.line_mark}}</td>
+      <td> {{i.line_name}}</td>
+      <td> 
+        <input type="text" class="form-control" placeholder="e.g. 10:30,10:45,15:16" [(ngModel)]="i.workdayTimes" name="wTimes" id="wt" #wt="ngModel" pattern="^((20|21|22|23|[01]\d|\d)((:[0-5]\d){1,2})(,?))+" required autofocus>
+        <div *ngIf="wt.invalid && (wt.dirty || wt.touched)" class="alert alert-danger" >
+          <div *ngIf="wt.errors.required">
+              Times are required!
+          </div>
+          <div *ngIf="wt.errors.pattern">
+              Invalid format!
+            </div>
+        </div>
+      </td>
+      
+      
+      <td> 
+        <input type="text" class="form-control" placeholder="e.g. 10:30,10:45,15:16" [(ngModel)]="i.sundayTimes" name="sunTimes" id="sunt" #sunt="ngModel" pattern="^((20|21|22|23|[01]\d|\d)((:[0-5]\d){1,2})(,?))+" required autofocus>
+        <div *ngIf="sunt.invalid && (sunt.dirty || sunt.touched)" class="alert alert-danger" >
+            <div *ngIf="sunt.errors.required">
+                Times are required!
+            </div>
+            <div *ngIf="sunt.errors.pattern">
+              Invalid format!
+            </div>
+          </div>
+      </td>
+      <td> <input type="text" class="form-control" placeholder="e.g. 10:30,10:45,15:16" [(ngModel)]="i.saturdayTimes" name="satTimes" id="satt" #satt="ngModel" pattern="^((20|21|22|23|[01]\d|\d)((:[0-5]\d){1,2})(,?))+" required autofocus>
+        <div *ngIf="satt.invalid && (satt.dirty || satt.touched)" class="alert alert-danger" >
+            <div *ngIf="satt.errors.required">
+                Times are required!
+            </div>
+            <div *ngIf="satt.errors.pattern">
+                Invalid format!
+              </div>
+          </div>
+      </td>
+  
+    </tr>
+  </table>
+  <div *ngIf="items !== undefined">
+      <button type="submit" class="btn btn-outline-primary" (click)="save()" [disabled]="createTimetable.invalid">
+        Save
+        </button>
+    
+  </div>
+  </form>
+  </div>

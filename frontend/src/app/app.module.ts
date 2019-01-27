@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -15,14 +14,14 @@ import { StationServiceService } from './services/stations/station-service.servi
 import {AuthenticationService} from './services/authentication.service';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FilterByTypePipe } from './stations/display-stations/pipes/filter-by-type.pipe';
-import { FilterByNamePipe } from './stations/display-stations/pipes/filter-by-name.pipe';
+import { FilterByTypePipe } from './stations/pipes/filter-by-type.pipe';
+import { FilterByNamePipe } from './stations/pipes/filter-by-name.pipe';
 import { LinesComponent } from './lines/lines/lines.component';
 import { LinesDisplayComponent } from './lines/lines-display/lines-display.component';
 import { LinesCreateComponent } from './lines/lines-create/lines-create.component';
 import { LineService } from './services/lines/line.service';
 import { FilterByZonePipe } from './lines/lines-display/pipes/filter-by-zone.pipe';
-import { FilterByLinePipe } from './stations/display-stations/pipes/filter-by-line.pipe';
+import { FilterByLinePipe } from './stations/pipes/filter-by-line.pipe';
 import { FilterByStationPipe } from './lines/lines-display/pipes/filter-by-station.pipe';
 import { TicketComponent } from './ticket/ticket/ticket.component';
 import { BuyTicketFormComponent } from './ticket/buy-ticket-form/buy-ticket-form.component';
@@ -40,38 +39,45 @@ import { DisplayReportComponent } from './report/display-report/display-report.c
 import { FilterItemByTrafficTypePipe } from './pricelist/display-price-list/pipes/filter-item-by-traffic-type.pipe';
 import { FilterItemByZonePipe } from './pricelist/display-price-list/pipes/filter-item-by-zone.pipe';
 import { FilterItemByTicketTimePipe } from './pricelist/display-price-list/pipes/filter-item-by-ticket-time.pipe';
-import { RegisterPageComponent } from './pages/register-page/register-page.component';
-import { MatchingPasswordDirective } from './pages/register-page/matching-password.directive';
-
-
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
-import { timeout } from 'q';
+import { StationsComponent } from './stations/stations/stations.component';
+import { StationsCreateComponent } from './stations/stations-create/stations-create.component';
+import { StationsDisplayComponent } from './stations/stations-display/stations-display.component';
+import { StationsMapComponent } from './stations/stations-map/stations-map.component';
+import { FilterTicketByZonePipe } from './ticket/pipes/filter-ticket-by-zone.pipe';
+import { FilterTicketByTicketTimePipe } from './ticket/pipes/filter-ticket-by-ticket-time.pipe';
+import { TimetableComponent } from './timetable/timetable/timetable.component';
+import { DisplayTimetableComponent } from './timetable/display-timetable/display-timetable.component';
+import { SearchTimetableComponent } from './timetable/search-timetable/search-timetable.component';
 import { TicketServiceService } from './services/ticket/ticket-service.service';
 import { PriceListServiceService } from './services/pricelist/price-list-service.service';
-import { TimetableComponent } from './timetable/timetable/timetable.component';
-import { EditTimetableComponent } from './timetable/edit-timetable/edit-timetable.component';
-import { DisplayTimetableComponent } from './timetable/display-timetable/display-timetable.component';
 import { TimetableService } from './services/timetable/timetable.service';
-import { SearchTimetableComponent } from './timetable/search-timetable/search-timetable.component';
+
+
 import { DialogComponent } from './user/dialog/dialog.component';
+import{RegisterPageComponent} from'./pages/register-page/register-page.component'
 import { ValidationDialogComponent } from './user/validation-dialog/validation-dialog.component';
 import { EditProfileComponent } from './user/edit-profile/edit-profile.component';
 import { ValidateUserComponent } from './user/validate-user/validate-user.component';
 import{UserServiceService} from './services/user/user-service.service'
+
+import { NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
+import { CreateTimetableComponent } from './timetable/create-timetable/create-timetable.component';
+import { FilterTicketBySnoPipe } from './ticket/pipes/filter-ticket-by-sno.pipe';
+
+
 
 
 const appRoutes: Routes = [
   { path: 'main',
     component: MainPageComponent,
     children: [
-      { path: 'displaystations', component: DisplayStationsComponent, outlet: "secondary"},
-      { path: 'lines', component: LinesComponent, outlet: "secondary"},
-      { path: 'login', component: LoginPageComponent, outlet: "primary"},
-      { path : 'ticket' , component : TicketComponent, outlet:"secondary"},
-      { path : 'pricelist', component : PricelistComponent, outlet : "secondary"},
-      { path : 'report', component : ReportComponent, outlet : "secondary"}, 
-      { path : 'timetable', component : TimetableComponent, outlet : "secondary"}
+      { path: 'stations', component: StationsComponent},
+      { path: 'lines', component: LinesComponent},
+      { path: 'login', component: LoginPageComponent},
+      { path : 'ticket' , component : TicketComponent},
+      { path : 'pricelist', component : PricelistComponent},
+      { path : 'report', component : ReportComponent}, 
+      { path : 'timetable', component : TimetableComponent}
     ] 
   },
        
@@ -113,18 +119,24 @@ const appRoutes: Routes = [
     FilterItemByTrafficTypePipe,
     FilterItemByZonePipe,
     FilterItemByTicketTimePipe,
-
-    RegisterPageComponent,
-    MatchingPasswordDirective,
-
+    StationsComponent,
+    StationsCreateComponent,
+    StationsDisplayComponent,
+    StationsMapComponent,
+    FilterTicketByZonePipe,
+    FilterTicketByTicketTimePipe,
     TimetableComponent,
-    EditTimetableComponent,
     DisplayTimetableComponent,
     SearchTimetableComponent,
+
     DialogComponent,
     ValidationDialogComponent,
     EditProfileComponent,
     ValidateUserComponent,
+
+
+    CreateTimetableComponent,
+    FilterTicketBySnoPipe,
 
   ],
   imports: [
@@ -132,32 +144,33 @@ const appRoutes: Routes = [
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only
-    ), 
-    BrowserAnimationsModule,
-  
+    ),
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true },
-    
     LoggedUserService,
     AuthenticationService,
     StationServiceService,
+
     UserServiceService,
-    LineService,
     
+    
+
+    LineService, 
+
     TicketServiceService, 
     PriceListServiceService, 
     TimetableService
-
   ],
-
-
   bootstrap: [AppComponent],
+
   entryComponents: [ UseCheckTicketComponent,RegisterPageComponent,DialogComponent,ValidationDialogComponent,EditProfileComponent ]
 
+
+  
 })
 export class AppModule { }

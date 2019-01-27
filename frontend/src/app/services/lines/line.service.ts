@@ -1,7 +1,7 @@
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { LineDTO } from 'src/app/model/LineDTO';
-import { Observable } from 'rxjs';
+import { HttpHeaders, HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { LineDTO } from "src/app/model/LineDTO";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -13,40 +13,25 @@ export class LineService {
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<LineDTO[]> {
-    return this.http
-      .get<LineDTO[]>(`${this.linesUrl}/getAll`);
+    return this.http.get<LineDTO[]>(`${this.linesUrl}/getAll`);
   }
 
-  getAllByType(type: String): Promise<LineDTO[]> {
-    return this.http
-      .get<LineDTO[]>(`${this.linesUrl}/getAllByType/${type}`)
-      .toPromise()
-      .then(response => response as LineDTO[])
-      .catch(this.handleError);
+  getAllByType(type: String): Observable<LineDTO[]> {
+    return this.http.get<LineDTO[]>(`${this.linesUrl}/getAllByType/${type}`);
   }
 
-  getAllByStation(id: any): Promise<LineDTO[]> {
-    return this.http
-      .get<LineDTO[]>(`${this.linesUrl}/getAllByStation/${id}`)
-      .toPromise()
-      .then(response => response as LineDTO[])
-      .catch(this.handleError);
+  getAllByStation(id: any): Observable<LineDTO[]> {
+    return this.http.get<LineDTO[]>(`${this.linesUrl}/getAllByStation/${id}`);
   }
 
-  getByNameAndType(name: String, type: String): Promise<LineDTO> {
-    return this.http
-      .get<LineDTO>(`${this.linesUrl}/getByNameAndType/${name}/${type}`)
-      .toPromise()
-      .then(response => response as LineDTO)
-      .catch(this.handleError);
+  getByNameAndType(name: String, type: String): Observable<LineDTO> {
+    return this.http.get<LineDTO>(
+      `${this.linesUrl}/getByNameAndType/${name}/${type}`
+    );
   }
 
-  getById(id: any): Promise<LineDTO> {
-    return this.http
-      .get<LineDTO>(`${this.linesUrl}/getById/${id}`)
-      .toPromise()
-      .then(response => response as LineDTO)
-      .catch(this.handleError);
+  getById(id: any): Observable<LineDTO> {
+    return this.http.get<LineDTO>(`${this.linesUrl}/getById/${id}`);
   }
 
   createLine(line: LineDTO): Observable<String> {
@@ -67,11 +52,6 @@ export class LineService {
     return this.http.delete(`${this.linesUrl}/delete/${id}`, {
       responseType: "text"
     });
-  }
-
-
-  getAllByZoneAndTrafficType(zone : String, type : String):Observable<LineDTO[]>{
-    return this.http.get<LineDTO[]>(`${this.linesUrl}/getAllByZoneAndTrafficType?zone=${zone}&type=${type}`);
   }
 
   handleError(error: any): Promise<any> {

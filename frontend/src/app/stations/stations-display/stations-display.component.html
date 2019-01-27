@@ -1,0 +1,248 @@
+<div class="row content">
+  <div class="col-12 col-md-4 sidebar-content">
+    <label class="col-12 col-form-label">
+      Currently we have {{ stations.length }} stations in total.
+    </label>
+
+    <ng-template #rt let-r="result" let-t="term">
+      <img
+        [src]="'../../../assets/images/' + r.type + '-icon.png'"
+        class="mr-1"
+        style="width: 20px"
+      />
+      <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+    </ng-template>
+
+    <form #directionsForm="ngForm">
+      <label class="col-12 col-form-label"
+        >Display:
+
+        <div class="btn-group btn-group-toggle">
+          <label class="btn-primary" ngbButtonLabel>
+            <input
+              type="checkbox"
+              ngbButton
+              [(ngModel)]="displayType.bus"
+              name="displayBus"
+              (change)="emitDisplayTypeToMap()"
+            />
+            Bus
+          </label>
+          <label class="btn-primary" ngbButtonLabel>
+            <input
+              type="checkbox"
+              ngbButton
+              [(ngModel)]="displayType.metro"
+              name="displayMetro"
+              (change)="emitDisplayTypeToMap()"
+            />
+            Metro
+          </label>
+
+          <label class="btn-primary" ngbButtonLabel>
+            <input
+              type="checkbox"
+              ngbButton
+              [(ngModel)]="displayType.tram"
+              name="displayTram"
+              (change)="emitDisplayTypeToMap()"
+            />
+            Tram
+          </label>
+        </div>
+      </label>
+
+      <div class="search-item ">
+        <input
+          #stname
+          type="text"
+          id="stname"
+          class="form-control"
+          name="stname"
+          placeholder="Search by name"
+          [ngbTypeahead]="search"
+          [resultTemplate]="rt"
+          [inputFormatter]="formatter"
+        />
+      </div>
+      <!-- [(ngModel)]="selectedStation"
+            [ngbTypeahead]="search"
+            [resultTemplate]="rt"
+            [inputFormatter]="formatter" -->
+      <div class="search-item">
+        <input
+          #stline
+          type="text"
+          id="stline"
+          class="form-control"
+          name="stline"
+          placeholder="Search by line"
+          [(ngModel)]="selectedLine"
+          [ngbTypeahead]="searchByLine"
+          [resultTemplate]="rt"
+          [inputFormatter]="formatterLine"
+        />
+      </div>
+    </form>
+
+    <div
+      id="stationCollapseArea"
+      *ngIf="selectedStation && !editStation && selectedStation.name"
+    >
+      <label>Selected station: </label>
+      <button class="close" title="Close" (click)="selectedStation = undefined">
+        x
+      </button>
+      <div class="card">
+        <div class="card-body">
+          <p>
+            <img
+              src="../../../assets/images/{{ selectedStation.type }}-icon.png"
+              style="width: 40px"
+            />
+            &nbsp; {{ selectedStation.name }}
+          </p>
+          <span *ngIf="selectedStation.lines.length > 0"
+            >Lines: <span *ngFor="let line of selectedStation.lines">{{line.lineMark}} </span></span
+          >
+          <span *ngIf="selectedStation.lines.length === 0"
+            >No lines assigned yet</span
+          >
+        </div>
+
+        <div>
+          <div class="btn-group btnFloatRight">
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              (click)="
+                editStation = selectedStation;
+                markerOnMap = [editStation.xCoordinate, editStation.yCoordinate]
+              "
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="deleteStation(selectedStation)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="stationCollapseArea" *ngIf="editStation">
+      <label>Edit station: </label>
+      <button
+        class="close"
+        title="Close"
+        (click)="editStation = undefined; removeMarkers()"
+      >
+        x
+      </button>
+      <div class="card">
+        <div class="card-body">
+          <table class="tableContent">
+            <tr>
+              <td>
+                <img
+                  src="../../../assets/images/{{ editStation.type }}-icon.png"
+                  style="width: 40px; height: 40px"
+                />
+              </td>
+              <td>
+                <input
+                  #stnameEdit
+                  type="text"
+                  id="stnameEdit"
+                  class="form-control"
+                  name="stnameEdit"
+                  placeholder="Enter station name"
+                  [(ngModel)]="editStation.name"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Location:</td>
+              <td>
+                <input
+                  #stlocEdit
+                  type="text"
+                  id="stlocEdit"
+                  readonly
+                  class="form-control"
+                  name="stlocEdit"
+                  [(ngModel)]="markerOnMap"
+                  placeholder="Choose location on map"
+                />
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <div class="btn-group btnFloatRight">
+            <button
+              type="button"
+              class="btn"
+              (click)="editStation = undefined; removeMarkers()"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="updateStation(editStation);"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+    <label>Stations:</label>
+
+    <div id="routes">
+      <div
+        *ngFor="
+          let station of (stations
+            | filterByType: displayType
+            | filterByLine: selectedLine:stline.value
+            | filterByName: stname.value)
+        "
+        class="row route"
+        (click)="selectStation(station)"
+      >
+        <div class="col-2 estimated-time">
+          <img
+            src="../../../assets/images/{{ station.type }}-icon.png"
+            style="width: 40px"
+          />
+        </div>
+
+        <div class="col-10 estimated-time">
+          <span>{{ station.name }}</span>
+          <span *ngIf="station.lines.length > 0"
+            >- <span *ngFor="let line of station.lines">{{line.lineMark}} -</span></span
+          >
+          <span *ngIf="station.lines.length === 0">No lines assigned yet</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Map component -->
+  <div class="col-12 col-md-8 map-content">
+    <app-stations-map
+      [stations]="stations"     
+      [selectedStationObs]="selectedStationSubject.asObservable()"
+      [displayTypeObs]="displayTypeSubject.asObservable()"
+      (onSelectStation)="selectedStation = $event"
+      (onMapClick)="markerOnMap = $event"
+    ></app-stations-map>
+  </div>
+</div>

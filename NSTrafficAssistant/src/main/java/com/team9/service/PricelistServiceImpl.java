@@ -1,7 +1,6 @@
 package com.team9.service;
 
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -95,8 +94,6 @@ public class PricelistServiceImpl implements PriceListService {
 		//pricelist : date issuedate, date expirationdate, activate 
 		//ISSUE DATE JE DANASNJI DAN 
 		java.sql.Date issueDate =  new java.sql.Date(new java.util.Date().getTime());
-		
-		
 		
 		PriceList pl = new PriceList(issueDate,null, true);
 		

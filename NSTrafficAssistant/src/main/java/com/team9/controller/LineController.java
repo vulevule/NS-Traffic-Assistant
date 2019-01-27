@@ -3,7 +3,6 @@ package com.team9.controller;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,16 +16,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team9.dto.LineDto;
+import com.team9.dto.StationDTO;
 import com.team9.exceptions.LineAlreadyExistsException;
 import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.StationNotFoundException;
-import com.team9.exceptions.WrongTrafficTypeException;
-import com.team9.exceptions.WrongTrafficZoneException;
 import com.team9.model.Line;
+import com.team9.model.Station;
 import com.team9.model.TrafficType;
 import com.team9.service.LineService;
 
@@ -174,7 +172,4 @@ public class LineController {
 		return retVal;
 	}
 
-	
-	
-	
 }

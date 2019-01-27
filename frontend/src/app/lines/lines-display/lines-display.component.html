@@ -135,7 +135,7 @@
             <button
               type="button"
               class="btn btn-danger"
-              (click)="deleteLine(selectedLine)"
+              (click)="deleteLine(selectedLine); selectedStation = undefined"
             >
               Delete
             </button>
@@ -167,7 +167,7 @@
         </div>
 
         <div class="col-10 estimated-time">
-          <span>{{ line.name }}</span>
+          <span>{{ line.mark }} - {{ line.name }}</span>
         </div>
       </div>
     </div>
@@ -178,11 +178,38 @@
       <button type="button" class="btn btn-primary" (click)="clearMap()">
         Clear map
       </button>
+
+      <div class="lineMarkContainer" *ngFor="let item of linesOnMap">
+        <div
+          class="lineMarkCard"
+          [ngStyle]="{ 'background-color': item.color }"
+          (click)="removeLineFromMap(item.line)"
+        >
+          <div>{{ item.line.mark }}<span class="close">X</span></div>
+        </div>
+      </div>
     </div>
 
     <div class="legend">
       <div class="legend-title"><span>Legend:</span></div>
-      <div class="legend-bus"><span>Bus</span></div>
+      <div class="legend-bus">
+        <img
+          src="../../../assets/images/BUS-icon.png"
+          style="width: 20px"
+        /><span> Bus</span>
+      </div>
+      <div class="legend-tram">
+        <img
+          src="../../../assets/images/TRAM-icon.png"
+          style="width: 20px"
+        /><span> Tram</span>
+      </div>
+      <div class="legend-metro">
+        <img
+          src="../../../assets/images/METRO-icon.png"
+          style="width: 20px"
+        /><span> Metro</span>
+      </div>
     </div>
 
     <div id="map" class="map"></div>

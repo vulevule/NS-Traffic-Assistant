@@ -4,20 +4,21 @@
   <form #directionsForm="ngForm">
     <label class="col-12 col-form-label">Traffic type:
 
-      <div class="btn-group btn-group-toggle" (click)=search()>
+      <div class="btn-group btn-group-toggle">
         <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" ngbButton name="displayBus" />
+          <input type="checkbox" ngbButton name="displayBus" [(ngModel)]="displayType.bus" />
           Bus
         </label>
         <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" ngbButton name="displayMetro" />
+          <input type="checkbox" ngbButton name="displayMetro" [(ngModel)]="displayType.metro"/>
           Metro
         </label>
         <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" ngbButton name="displayTram" />
+          <input type="checkbox" ngbButton name="displayTram" [(ngModel)]="displayType.tram"/>
           Tram
         </label>
       </div>
+      Bus is default.
     </label>
 
 
@@ -25,36 +26,38 @@
 
       <div class="btn-group btn-group-toggle">
         <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" ngbButton name="displayFirst" />
+          <input type="checkbox" ngbButton name="displayFirst" [(ngModel)]="displayZone.first"/>
           First
         </label>
         <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" ngbButton name="displaySecond" />
+          <input type="checkbox" ngbButton name="displaySecond" [(ngModel)]="displayZone.second"/>
           Second
         </label>
       </div>
+      First zone is default.
     </label>
 
     <label class="col-12 col-form-label">Ticket time:
 
       <div class="btn-group btn-group-toggle">
         <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" ngbButton name="displayAnnual" />
+          <input type="checkbox" ngbButton name="displayAnnual" [(ngModel)]="displayTime.annual" />
           Annual
         </label>
         <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" ngbButton name="displayMonth" />
+          <input type="checkbox" ngbButton name="displayMonth" [(ngModel)]="displayTime.month"/>
           Month
         </label>
         <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" ngbButton name="displaySingle" />
+          <input type="checkbox" ngbButton name="displaySingle" [(ngModel)]="displayTime.single" />
           Single
         </label>
         <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" ngbButton name="displayDaily" />
+          <input type="checkbox" ngbButton name="displayDaily" [(ngModel)]="displayTime.daily" />
           Daily
         </label>
       </div>
+      Annual is default.
     </label>
 
   </form>
@@ -62,11 +65,15 @@
 
   <div class="col-12 col-md-9 map-content">
     <div id="map" class="map">
-      <div *ngFor="let t of tickets"> <app-display-ticket [role]="role" [ticket]="t"></app-display-ticket>
+      <div *ngFor="let t of (tickets
+                            | filterTicketByTicketTime : displayTime
+                            | filterByTrafficType : displayType
+                            | filterTicketByZone : displayZone)
+      
+      "> <app-display-ticket [role]="role" [ticket]="t"></app-display-ticket>
     
      
       </div>
-      <ngb-pagination *ngIf="tickets !== undefined" pageSize="4" [collectionSize]="numOfTicket" [(page)]="page"(pageChange)="changePage()" aria-label="Default pagination"></ngb-pagination>
     </div>
 
   </div>

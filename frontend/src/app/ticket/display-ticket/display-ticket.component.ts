@@ -11,9 +11,7 @@ import { UseCheckTicketComponent } from '../use-check-ticket/use-check-ticket.co
 export class DisplayTicketComponent implements OnInit {
 
   @Input() ticket : TicketInterface;
-
-  @Input()  role : string;
-
+  @Input() role : String;
 
 
   constructor(private modalService : NgbModal) { }
@@ -21,12 +19,10 @@ export class DisplayTicketComponent implements OnInit {
   ngOnInit() {
   }
 
-
   openDialog(){
     const modalRef = this.modalService.open(UseCheckTicketComponent);
     modalRef.componentInstance.role = this.role;
     modalRef.componentInstance.ticket = this.ticket;
   }
-
 
 }

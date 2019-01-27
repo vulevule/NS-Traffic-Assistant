@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.team9.NSTrafficAssistant.constants.PriceItemConstants;
 import com.team9.dto.LoginDto;
+import com.team9.dto.LoginUserDto;
 import com.team9.dto.PricelistDto;
 import com.team9.dto.PricelistReaderDto;
 
@@ -37,8 +38,8 @@ public class PricelistControllerIntegrationTest {
 	
 	@Before
 	public void login(){
-		ResponseEntity<String> result = restTemplate.postForEntity("/user/login", new LoginDto("laralukic", "7777"), String.class);
-		token = result.getBody();
+		ResponseEntity<LoginUserDto> result = restTemplate.postForEntity("/user/login", new LoginDto("laralukic", "7777"), LoginUserDto.class);
+		token = result.getBody().getToken();
 	}
 
 	
@@ -79,7 +80,7 @@ public class PricelistControllerIntegrationTest {
 				HttpMethod.POST, httpEntity, String.class);
 		
 		assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
-		assertTrue(result.getBody().equals("The price list must not contain the same items "));
+		assertTrue(result.getBody().equals("The price list must not contain the same items!"));
 	}
 	
 	//3. kada je pogresan tip prevoza 
@@ -169,7 +170,7 @@ public class PricelistControllerIntegrationTest {
 				HttpMethod.POST, httpEntity, String.class);
 		
 		assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
-		assertTrue(result.getBody().equals("The discount must be between 0 and 100"));
+		assertTrue(result.getBody().equals("The discount must be between 0 and 100!"));
 	}
 	
 	//kada je sve ok
@@ -183,11 +184,11 @@ public class PricelistControllerIntegrationTest {
 		PricelistDto p = new PricelistDto(PriceItemConstants.items_normal);
 		HttpEntity<PricelistDto> httpEntity = new HttpEntity<PricelistDto>(p, headers);
 		
-		ResponseEntity<PricelistReaderDto> result = restTemplate.exchange("/pricelist/addPricelist",
-				HttpMethod.POST, httpEntity, PricelistReaderDto.class);
+		ResponseEntity<String> result = restTemplate.exchange("/pricelist/addPricelist",
+				HttpMethod.POST, httpEntity, String.class);
 		
 		assertEquals(result.getStatusCode(), HttpStatus.CREATED);
-		assertNotNull(result.getBody());
+		assertEquals(result.getBody(), "The price list has been successfully added!");
 		
 	}
 	

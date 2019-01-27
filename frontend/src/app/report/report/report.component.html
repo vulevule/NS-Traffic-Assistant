@@ -16,7 +16,6 @@
         </div>
       </label>
 
-
       <ng-template #rt let-r="result" let-t="term">
         <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
       </ng-template>
@@ -26,8 +25,8 @@
           [resultTemplate]="rt" [inputFormatter]="formatter" />
       </label>
 
-      <label class="col-12 col-form-label"> Year:
-        <input type="number" id="year" class="form-control" name="year" [(ngModel)]="year" />
+      <label class="col-12 col-form-label"> Year: 
+        <input #staddress type="number" id="staddress" class="form-control" name="staddress" [(ngModel)]="year" />
       </label>
 
 
@@ -36,6 +35,9 @@
       </button>
 
     </form>
+
+    <hr>
+
   </div>
   <div class="col-12 col-md-9 map-content">
     <div id="map" class="map">
@@ -46,7 +48,6 @@
       <div *ngIf="report !== undefined  && report.money !== 0">
         <pre *ngIf="type === 'MONTH'"> Month report: {{model.name}} , {{year}} </pre>
         <pre *ngIf="type ==='YEAR'"> Year report: {{year}}</pre>
-        <hr>
         <app-display-report [report]="report"></app-display-report>
       </div>
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
-import { TicketInterface, TicketReaderInterface } from 'src/app/model/Ticket';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { TicketReaderInterface, TicketInterface } from 'src/app/model/Ticket';
 import { ReportInterface } from 'src/app/model/Report';
 import { Observable } from 'rxjs';
 
@@ -11,29 +11,21 @@ export class TicketServiceService {
 
   private headers = new HttpHeaders({ "Content-Type": "application/json" });
   private ticketUrl = "/api/ticket";
-  size: number;
+
 
   constructor(private http: HttpClient) { }
 
 
-  /*
-  treba nam zbog stranicenja podataka 
-  */
-  getNumOfTicket(): Observable<number> {
+  
+  getMyTicket(): Observable<TicketInterface[]> {
     return this.http
-      .get<number>(`${this.ticketUrl}/size`);
-  }
-  getMyTicket(page: number): Observable<TicketReaderInterface> {
-    this.size = 4;
-    return this.http
-      .get<TicketReaderInterface>(`${this.ticketUrl}/myTicket?page=${page - 1}&size=${this.size}`);
+      .get<TicketInterface[]>(`${this.ticketUrl}/myTicket`);
   }
 
 
   //da bi prikazali inspektoru da bi mogao da izabere kartu za cekiranje
-  getAllTickets(page: number): Observable<TicketReaderInterface> {
-    this.size = 4;
-    return this.http.get<TicketReaderInterface>(`${this.ticketUrl}/all?page=${page - 1}&size=${this.size}`);
+  getAllTickets(): Observable<TicketInterface[]> {
+     return this.http.get<TicketInterface[]>(`${this.ticketUrl}/all`);
   }
 
 
@@ -62,9 +54,9 @@ export class TicketServiceService {
 
   //dobavljanje cene karte 
 
-  getPrice(t: TicketInterface): Observable<number> {
+  getPrice(t: TicketInterface): Observable<String> {
     return this.http
-      .get<number>(`${this.ticketUrl}/price?type=${t.trafficType}&zone=${t.trafficZone}&time=${t.timeType}`);
+      .get(`${this.ticketUrl}/price?type=${t.trafficType}&zone=${t.trafficZone}&time=${t.timeType}`, {responseType: 'text' });
   }
 
 
@@ -75,9 +67,6 @@ export class TicketServiceService {
      
   }
 
-
-
- 
 
 
 

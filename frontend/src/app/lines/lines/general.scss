@@ -26,7 +26,7 @@
   position: absolute;
   left: 10px;
   top: 10px;
-  background-color: white;
+  background-color: transparent;
   border-radius: 0.25rem;
   z-index: 1;
 }
@@ -150,6 +150,20 @@ a {
   background-color: white;
   color: $main-color;
 }
+
+.lineMarkCard {
+  margin-top: 5px;
+  padding: 5px 5px 5px 5px;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  background-color: $main-color
+}
+.lineMarkContainer :hover {
+  cursor: pointer;
+  
+  opacity: 0.9;
+}
 .legend {
   position: absolute;
   right: 0;
@@ -165,11 +179,19 @@ a {
   border-bottom: 2px solid $bus-color;
   text-align: center;
   margin: 5px;
+  padding-bottom: 3px;
 }
-.legend-walking {
-  border-bottom: 2px dashed $walking-color;
+.legend-tram {
+  border-bottom: 2px dashed $tram-color;
   text-align: center;
   margin: 5px;
+  padding-bottom: 3px;
+}
+.legend-metro {
+  border-bottom: 2px dotted $metro-color;
+  text-align: center;
+  margin: 5px;
+  padding-bottom: 3px;
 }
 .legend-title {
   font-weight: bold;

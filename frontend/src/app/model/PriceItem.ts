@@ -1,5 +1,4 @@
 
-
 export interface ItemInterface{
     price : number;
     trafficType : string;

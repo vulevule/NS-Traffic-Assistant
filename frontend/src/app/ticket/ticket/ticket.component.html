@@ -12,7 +12,7 @@
 
       <ngb-tab *ngIf="role === 'PASSENGER'" title="Buy ticket" id="createStationTab">
         <ng-template ngbTabContent>
-          <app-buy-ticket-form></app-buy-ticket-form>
+          <app-buy-ticket-form [role]="role"></app-buy-ticket-form>
         </ng-template>
       </ngb-tab>
 

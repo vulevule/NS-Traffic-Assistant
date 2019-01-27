@@ -6,6 +6,7 @@ export class StationLineDTO {
     lineId: Number;
     stationName: String;
     lineName: String;
+    lineMark: String;
 
     constructor() {
         this.id = 0;
@@ -15,5 +16,6 @@ export class StationLineDTO {
         this.lineId = 0;
         this.stationName = "";
         this.lineName = "";
+        this.lineMark = ""
     }
 }

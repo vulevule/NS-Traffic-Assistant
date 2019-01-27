@@ -34,7 +34,7 @@ export class MainPageComponent implements OnInit {
       localStorage.getItem('currentUser'));
 
     if(this.loggedUser === null){
-      alert('user je null');
+      //alert('user je null');
     }
     // Ubaciti proveru ako nije ulogovan (loggedUser je undefined) redirektovati na login stranicu
     // na logoutu postaviti loggedUser na undefined

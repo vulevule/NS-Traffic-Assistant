@@ -3,7 +3,7 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Observable, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { TicketServiceService } from 'src/app/services/ticket/ticket-service.service';
-import { ReportInterface } from 'src/app/model/Report';
+import {  ReportInterface } from 'src/app/model/Report';
 
 const months : {id: number, name : String}[]= [
   {id : 1, name : 'January'},
@@ -58,7 +58,7 @@ export class ReportComponent implements OnInit {
   ngOnInit() {
   }
 
-  async getReport() {
+  getReport() {
     //treba proveriti i godinu koja je unsena da li je u odgovarajucem formatu 
     if (this.year > 2019 || this.year < 2000) {
       this.report = undefined;
@@ -100,7 +100,5 @@ export class ReportComponent implements OnInit {
         )
     }
   }
-
-  
 
 }

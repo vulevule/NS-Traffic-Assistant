@@ -55,7 +55,6 @@ getUsername():string{
 
     logout(): void {
         localStorage.removeItem('currentUser');
-       
 
     }
 

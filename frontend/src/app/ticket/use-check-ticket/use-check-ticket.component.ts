@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TicketInterface } from 'src/app/model/Ticket';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
-import { map, debounceTime } from 'rxjs/operators';
 import { LineDTO } from 'src/app/model/LineDTO';
+import { Observable } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { LineService } from 'src/app/services/lines/line.service';
 import { TicketServiceService } from 'src/app/services/ticket/ticket-service.service';
 
@@ -11,9 +11,7 @@ import { TicketServiceService } from 'src/app/services/ticket/ticket-service.ser
 @Component({
   selector: 'app-use-check-ticket',
   templateUrl: './use-check-ticket.component.html',
-  styleUrls: ['./use-check-ticket.component.css', './general.scss'],
-  encapsulation: ViewEncapsulation.None
-
+  styleUrls: ['./use-check-ticket.component.css', './general.scss']
 })
 export class UseCheckTicketComponent implements OnInit {
   @Input() ticket: TicketInterface;

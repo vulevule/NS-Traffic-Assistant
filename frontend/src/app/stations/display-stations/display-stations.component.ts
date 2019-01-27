@@ -181,7 +181,7 @@ export class DisplayStationsComponent implements OnInit {
   }
 
   async getData() {
-    await this.stationService.getAll().then(data => {
+    await this.stationService.getAll().subscribe(data => {
       this.stations = data;
       this.searchStations = data;
     });

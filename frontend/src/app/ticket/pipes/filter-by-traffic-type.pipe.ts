@@ -1,14 +1,17 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { TicketInterface } from 'src/app/model/Ticket';
-import { tick } from '@angular/core/testing';
 
 @Pipe({
-  name: 'filterByTrafficType'
+  name: 'filterByTrafficType',
+  pure : false
 })
 export class FilterByTrafficTypePipe implements PipeTransform {
 //ovde cemo filtrirati karte po tipu prevoza, bus, metro ili tram 
   transform(tickets: TicketInterface[], type?: {bus:boolean, tram:boolean, metro:boolean}): TicketInterface[] {
     if(tickets){
+      if(!type.bus && !type.metro && !type.tram) {
+        return tickets;
+      }
       return tickets.filter((ticket:TicketInterface)=> this.applyFilter(ticket, type));
     }
   }

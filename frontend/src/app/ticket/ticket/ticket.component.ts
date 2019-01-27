@@ -10,8 +10,7 @@ import { UserDTO } from 'src/app/model/UserDTO';
 })
 export class TicketComponent implements OnInit {
 
-  //ovde cemo uzeti role-u korisnika 
-  role : String ='';
+  role : String = '';
 
   constructor() { 
     let user : UserDTO = JSON.parse(

@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { User } from '../model/User';
 import { Router } from '@angular/router';
 import { UserDTO } from '../model/UserDTO';
+import { LoadDataService } from '../services/load-data.service';
+import { SharedService } from '../services/sharedVars/shared.service';
 
 
 @Component({
@@ -13,7 +15,7 @@ export class MenuBarComponent implements OnInit {
 
   loggedUser: UserDTO; //ovde nam je bitna samo uloga da bi mu prikazali odredjene funkcionalnosti 
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private loadDataService: LoadDataService, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.loggedUser = JSON.parse(
@@ -54,6 +56,15 @@ export class MenuBarComponent implements OnInit {
         station.hidden = false;
     }
 
+  }
+
+  loadDataFromFile() {
+    var message = this.loadDataService.loadData("1").subscribe(success => {
+      alert(success);
+      this.sharedService.updateAll();
+    }, error => {
+      alert(error.error);
+    });
   }
 
 }

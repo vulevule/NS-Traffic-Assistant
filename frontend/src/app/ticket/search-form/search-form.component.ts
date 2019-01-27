@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TicketInterface, TicketReaderInterface } from 'src/app/model/Ticket';
+import { TicketInterface } from 'src/app/model/Ticket';
 import { TicketServiceService } from 'src/app/services/ticket/ticket-service.service';
+import { first, debounceTime, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-search-form',
@@ -10,40 +12,53 @@ import { TicketServiceService } from 'src/app/services/ticket/ticket-service.ser
 export class SearchFormComponent implements OnInit {
 
   tickets: TicketInterface[];
-  page : number ;
-  numOfTicket : number;
-  @Input() role : string;
+  @Input() role : String;
 
+  //selectSNO : any ;
+
+  displayType = {
+    bus : true,
+    metro : false,
+    tram : false
+  }
+
+  displayZone = {
+    first : true,
+    second : false
+  }
+
+  displayTime = {
+    annual : true, 
+    month : false, 
+    daily : false, 
+    single : false
+  }
 
   constructor(private ticketService: TicketServiceService) { }
 
-  async ngOnInit() {
-    this.page = 1;
-    this.changePage();
+
+
+  ngOnInit() {
+    this.getTickets();
   }
 
-  async changePage(){
+  getTickets(){
     if(this.role === 'INSPECTOR'){
-      this.ticketService.getAllTickets(this.page)
+      this.ticketService.getAllTickets()
       .subscribe(data => {
-        this.tickets = data.tickets;
-        this.numOfTicket = data.numOfTickets;
+        this.tickets = data;
       }, error => {
         alert (error.error);
       })
     }else if (this.role === 'PASSENGER'){
-      this.ticketService.getMyTicket(this.page)
+      this.ticketService.getMyTicket()
       .subscribe(data => {
-        this.tickets = data.tickets;
-        this.numOfTicket = data.numOfTickets;
+        this.tickets = data;
       }, error => {
         alert(error.error);
       })
      
     }
-
-    
   }
-
 }
 

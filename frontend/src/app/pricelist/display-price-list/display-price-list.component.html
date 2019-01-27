@@ -7,15 +7,15 @@
 
         <div class="btn-group btn-group-toggle">
           <label class="btn-primary" ngbButtonLabel >
-            <input type="checkbox" ngbButton name="displayBus" [(ngModel)]="displayType.bus" (change)="reload()" />
+            <input type="checkbox" ngbButton name="displayBus" [(ngModel)]="displayType.bus"  />
             Bus
           </label>
           <label class="btn-primary" ngbButtonLabel>
-            <input type="checkbox" ngbButton name="displayMetro" [(ngModel)]="displayType.metro" (change)="reload()"/>
+            <input type="checkbox" ngbButton name="displayMetro" [(ngModel)]="displayType.metro" />
             Metro
           </label>
           <label class="btn-primary" ngbButtonLabel>
-            <input type="checkbox" ngbButton name="displayTram" [(ngModel)]="displayType.tram" (change)="reload()" />
+            <input type="checkbox" ngbButton name="displayTram" [(ngModel)]="displayType.tram"/>
             Tram
           </label>
         </div>
@@ -60,18 +60,10 @@
 
 
     </form>
-    <hr>
-    <pre> type : {{displayType.bus}} {{displayType.metro}} {{displayType.tram}}</pre>
-    <pre> time : {{displayTicketTime.annual}} {{displayTicketTime.month}}</pre>
-    <pre> zone : {{displayZone.first}}</pre>
   </div>
 
   <div class="col-12 col-md-9 map-content">
     <div id="map" class="map">
-      <!--ispisemo poruku ako treba-->
-      <div *ngIf="message !== ''">
-        <ngb-alert [type]="infoType" [dismissible]="false">{{ message }}</ngb-alert>
-      </div>
       <!--ovde cemo nacrtati tabelu-->
       <div *ngIf="pricelist !== undefined">
       <pre> Issue date: {{pricelist.issueDate | date:"dd.MM.yyyy."}} </pre>
