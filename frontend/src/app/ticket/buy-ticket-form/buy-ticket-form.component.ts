@@ -22,7 +22,7 @@ export class BuyTicketFormComponent implements OnInit {
 
 
 
-  constructor(private ticketService : TicketServiceService, private auth : AuthenticationService) { }
+  constructor(private ticketService : TicketServiceService) { }
 
   ngOnInit() {
     this.buyTicket = {
