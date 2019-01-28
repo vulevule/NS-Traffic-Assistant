@@ -15,33 +15,40 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   selector: 'app-display-ticket',
   template: '<p>Mock Display Ticket Component</p>'
 })
-class MockDisplayTicket {
-  @Input() role : String;
-  @Input() ticket : TicketInterface;
+class MockDisplayTicketCompnent {
+  @Input() role: String;
+  @Input() ticket: TicketInterface;
 }
 
 describe('BuyTicketFormComponent', () => {
   let component: BuyTicketFormComponent;
   let fixture: ComponentFixture<BuyTicketFormComponent>;
-  let ticketService : any;
+  let ticketService: any;
 
   beforeEach(() => {
-    let ticketServiceMock = {
-      getPrice : jasmine.createSpy('getPrice')
+    const ticketServiceMock = {
+      getPrice: jasmine.createSpy('getPrice')
         .and.returnValue(of("12000")),
-      buyTicket : jasmine.createSpy('buyTicket')
-        .and.returnValue(of({ id: 4, trafficType: 'BUS', timeType: 'DAILY', trafficZone: 'SECOND', price: 100, userType: 'HANDICAP', serialNo: 'BMMS1231558565'}))
+      buyTicket: jasmine.createSpy('buyTicket')
+        .and.returnValue(of({
+          id: 4,
+          trafficType: 'BUS', 
+          timeType: 'DAILY', trafficZone: 'SECOND', price: 100,
+          userType: 'HANDICAP', serialNo: 'BMMS1231558565'
+        }))
     };
 
-  
+
 
     TestBed.configureTestingModule({
-      declarations: [ BuyTicketFormComponent, MockDisplayTicket ], 
+      declarations: [BuyTicketFormComponent, MockDisplayTicketCompnent],
       imports: [
         BrowserModule, FormsModule, NgbModule
       ],
-      providers : [ { provide : TicketServiceService, 
-                  useValue : ticketServiceMock}]
+      providers: [{
+        provide: TicketServiceService,
+        useValue: ticketServiceMock
+      }]
     });
 
     fixture = TestBed.createComponent(BuyTicketFormComponent);
@@ -53,11 +60,11 @@ describe('BuyTicketFormComponent', () => {
   });
 
 
-  it('should create', () => {
+  it('should be create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should fetch the price on init', async (() => {
+  it('should be fetch the price on init', async(() => {
     component.ngOnInit();
     expect(ticketService.getPrice).toHaveBeenCalled();
     expect(component.time).toBe('ANNUAL');
@@ -68,7 +75,7 @@ describe('BuyTicketFormComponent', () => {
   }
   ));
 
-  it('should fetch data in ticket when buy ticket', () => {
+  it('should be fetch data in ticket when buy ticket', () => {
     component.buy();
     expect(ticketService.buyTicket).toHaveBeenCalled();
     expect(component.ticket.serialNo).toBe("BMMS1231558565");

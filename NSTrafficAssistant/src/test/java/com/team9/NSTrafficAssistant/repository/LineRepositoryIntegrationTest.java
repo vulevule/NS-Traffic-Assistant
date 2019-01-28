@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +30,12 @@ public class LineRepositoryIntegrationTest {
 	@Test
 	public void testGetAll() {
 		List<Line> lines = lineRepository.findAll();
-		assertEquals(2, lines.size());
+		assertEquals(3, lines.size());
 		
 	}
 	
 	@Test
+	@Transactional
 	public void testFindByName_found() {
 		List<Line> lines = lineRepository.findByName("ZELEZNICKA - FUTOSKA PIJACA - ZELZENICKA");
 
@@ -52,10 +55,11 @@ public class LineRepositoryIntegrationTest {
 	}
 
 	@Test
+	@Transactional
 	public void testFindByType_found() {
 		List<Line> lines = lineRepository.findByType(TrafficType.BUS);
 
-		assertEquals(1, lines.size());
+		assertEquals(2, lines.size());
 		assertEquals("ZELEZNICKA - FUTOSKA PIJACA - ZELZENICKA", lines.get(0).getName());
 		assertEquals("1A", lines.get(0).getMark());
 		assertEquals(TrafficType.BUS, lines.get(0).getType());
@@ -75,6 +79,7 @@ public class LineRepositoryIntegrationTest {
 	}
 
 	@Test
+	@Transactional
 	public void testFindByZone_found() {
 		List<Line> lines = lineRepository.findByZone(TrafficZone.FIRST);
 		
@@ -88,6 +93,7 @@ public class LineRepositoryIntegrationTest {
 	}
 
 	@Test
+	@Transactional
 	public void testFindByMarkAndType_found() {
 		Line line = lineRepository.findByMarkAndType("1A", TrafficType.BUS);
 		
@@ -117,6 +123,7 @@ public class LineRepositoryIntegrationTest {
 	}
 
 	@Test
+	@Transactional
 	public void testFindById_found() {
 		Line line = lineRepository.findById(1L).orElse(null);
 		
@@ -136,6 +143,7 @@ public class LineRepositoryIntegrationTest {
 	}
 
 	@Test
+	@Transactional
 	public void testFindByTypeAndZone_found() {
 		List<Line> lines = lineRepository.findByTypeAndZone(TrafficType.TRAM, TrafficZone.FIRST);
 		

@@ -4,7 +4,7 @@
       Currently we have {{ lines.length }} lines in total.
     </label>
 
-    <ng-template #rt let-r="result" let-t="term">
+    <ng-template #rtstation let-r="result" let-t="term">
       <img
         [src]="'../../../assets/images/' + r.type + '-icon.png'"
         class="mr-1"
@@ -13,35 +13,47 @@
       <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
     </ng-template>
 
+    <ng-template #rtline let-r="result" let-t="term">
+      <img
+        [src]="'../../../assets/images/' + r.type + '-icon.png'"
+        class="mr-1"
+        style="width: 20px"
+      />
+      <ngb-highlight [result]="r.mark + ' - ' + r.name" [term]="t"></ngb-highlight>
+    </ng-template>
+
     <form #directionsForm="ngForm">
       <label class="col-12 col-form-label"
         >Display:
 
         <div class="btn-group btn-group-toggle">
-          <label class="btn-primary" ngbButtonLabel>
+          <label class="btn-primary" ngbButtonLabel id="displayBus">
             <input
               type="checkbox"
               ngbButton
               [(ngModel)]="displayType.bus"
               name="displayBus"
+              
             />
             Bus
           </label>
-          <label class="btn-primary" ngbButtonLabel>
+          <label class="btn-primary" ngbButtonLabel id="displayMetro">
             <input
               type="checkbox"
               ngbButton
               [(ngModel)]="displayType.metro"
               name="displayMetro"
+              
             />
             Metro
           </label>
-          <label class="btn-primary" ngbButtonLabel>
+          <label class="btn-primary" ngbButtonLabel id="displayTram">
             <input
               type="checkbox"
               ngbButton
               [(ngModel)]="displayType.tram"
               name="displayTram"
+              
             />
             Tram
           </label>
@@ -52,21 +64,23 @@
         >Display:
 
         <div class="btn-group btn-group-toggle">
-          <label class="btn-primary" ngbButtonLabel>
+          <label class="btn-primary" ngbButtonLabel id="displayFirstZone">
             <input
               type="checkbox"
               ngbButton
               [(ngModel)]="displayZone.first"
               name="displayFirstZone"
+              
             />
             First
           </label>
-          <label class="btn-primary" ngbButtonLabel>
+          <label class="btn-primary" ngbButtonLabel id="displaySecondZone">
             <input
               type="checkbox"
               ngbButton
               [(ngModel)]="displayZone.second"
               name="displaySecondZone"
+              
             />
             Second
           </label>
@@ -82,7 +96,7 @@
           name="linename"
           placeholder="Search by name"
           [ngbTypeahead]="search"
-          [resultTemplate]="rt"
+          [resultTemplate]="rtline"
           [inputFormatter]="formatter"
         />
       </div>
@@ -97,7 +111,7 @@
           placeholder="Search by station"
           [(ngModel)]="selectedStation"
           [ngbTypeahead]="searchByStation"
-          [resultTemplate]="rt"
+          [resultTemplate]="rtstation"
           [inputFormatter]="formatterStation"
         />
       </div>
@@ -126,6 +140,7 @@
         <div *ngIf="loggedUser && loggedUser.role === 'ADMIN'">
           <div class="btn-group btnFloatRight">
             <button
+              id="editLineButton"
               type="button"
               class="btn btn-outline-primary"
               (click)="editLineEmitter.emit(selectedLine)"
@@ -133,6 +148,7 @@
               Edit
             </button>
             <button
+              id="deleteLineButton"
               type="button"
               class="btn btn-danger"
               (click)="deleteLine(selectedLine); selectedStation = undefined"

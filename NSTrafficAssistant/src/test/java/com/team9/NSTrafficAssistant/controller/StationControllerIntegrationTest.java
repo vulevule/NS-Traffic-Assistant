@@ -306,7 +306,7 @@ public class StationControllerIntegrationTest {
 
 		String message = responseEntity.getBody();
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-		assertEquals("Station " + station.getName() + " successfully updated", message);
+		assertEquals("Station updated", message);
 
 		ResponseEntity<StationDTO> createdEntity = restTemplate.exchange("/station/getById/" + station.getId(), HttpMethod.GET,
 				httpEntity, StationDTO.class);

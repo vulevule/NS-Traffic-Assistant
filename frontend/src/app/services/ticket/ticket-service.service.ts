@@ -16,7 +16,7 @@ export class TicketServiceService {
   constructor(private http: HttpClient) { }
 
 
-  
+
   getMyTicket(): Observable<TicketInterface[]> {
     return this.http
       .get<TicketInterface[]>(`${this.ticketUrl}/myTicket`);
@@ -25,7 +25,7 @@ export class TicketServiceService {
 
   //da bi prikazali inspektoru da bi mogao da izabere kartu za cekiranje
   getAllTickets(): Observable<TicketInterface[]> {
-     return this.http.get<TicketInterface[]>(`${this.ticketUrl}/all`);
+    return this.http.get<TicketInterface[]>(`${this.ticketUrl}/all`);
   }
 
 
@@ -48,7 +48,7 @@ export class TicketServiceService {
 
   //upotreba karte od strane putnika
   useTicket(sno: string, line_id: Number): Observable<string> {
-    return this.http.get(`${this.ticketUrl}/useTicket?serialNo=${sno}&line=${line_id}`,{responseType: 'text' });
+    return this.http.get(`${this.ticketUrl}/useTicket?serialNo=${sno}&line=${line_id}`, { responseType: 'text' });
   }
 
 
@@ -56,7 +56,7 @@ export class TicketServiceService {
 
   getPrice(t: TicketInterface): Observable<String> {
     return this.http
-      .get(`${this.ticketUrl}/price?type=${t.trafficType}&zone=${t.trafficZone}&time=${t.timeType}`, {responseType: 'text' });
+      .get(`${this.ticketUrl}/price?type=${t.trafficType}&zone=${t.trafficZone}&time=${t.timeType}`, { responseType: 'text' });
   }
 
 
@@ -64,7 +64,7 @@ export class TicketServiceService {
   getReport(month: number, year: number, type: string): Observable<ReportInterface> {
     return this.http
       .get<ReportInterface>(`${this.ticketUrl}/report?month=${month}&year=${year}&type=${type}`)
-     
+
   }
 
 

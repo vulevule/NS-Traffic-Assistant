@@ -5,6 +5,7 @@ import { LineDTO } from "src/app/model/LineDTO";
 import { StationDTO } from "src/app/model/StationDTO";
 import { SharedService } from "src/app/services/sharedVars/shared.service";
 import { StationServiceService } from "src/app/services/stations/station-service.service";
+import { UserDTO } from 'src/app/model/UserDTO';
 
 @Component({
   selector: "app-stations-display",
@@ -12,6 +13,8 @@ import { StationServiceService } from "src/app/services/stations/station-service
   styleUrls: ["./stations-display.component.css", '../general.scss']
 })
 export class StationsDisplayComponent implements OnInit {
+  loggedUser: UserDTO;
+  
   @Input()
   stations: StationDTO[];
   @Input()
@@ -21,6 +24,19 @@ export class StationsDisplayComponent implements OnInit {
 
   selectedStation: StationDTO;
   selectedLine: LineDTO;
+
+  formatterLine = (result: LineDTO) => (result.mark + " - " + result.name);
+
+  displayType = {
+    bus: true,
+    tram: false,
+    metro: false
+  };
+
+  private displayTypeSubject: Subject<any> = new Subject<any>();
+  private selectedStationSubject: Subject<StationDTO> = new Subject<StationDTO>();
+
+  markerOnMap: any;
 
   search = (text$: Observable<string>) =>
     text$.pipe(
@@ -32,7 +48,7 @@ export class StationsDisplayComponent implements OnInit {
           : this.stations
               .filter(
                 s =>
-                  s.name.toLowerCase().indexOf(term.toLowerCase()) > -1 &&
+                  s.name.toLowerCase().indexOf(term.toLowerCase()) > -1  && 
                   this.displayType[s.type.toLowerCase()]
               )
               .slice(0, 20)
@@ -51,25 +67,12 @@ export class StationsDisplayComponent implements OnInit {
           : this.lines
               .filter(
                 s =>
-                  s.name.toLowerCase().indexOf(term.toLowerCase()) > -1 &&
+                  (s.name.toLowerCase().indexOf(term.toLowerCase()) > -1 || s.mark.toLowerCase().indexOf(term.toLowerCase()) > -1) &&
                   this.displayType[s.type.toLowerCase()]
               )
               .slice(0, 20)
       )
     );
-
-  formatterLine = (result: LineDTO) => result.name;
-
-  displayType = {
-    bus: true,
-    tram: false,
-    metro: false
-  };
-
-  private displayTypeSubject: Subject<any> = new Subject<any>();
-  private selectedStationSubject: Subject<StationDTO> = new Subject<StationDTO>();
-
-  markerOnMap: any;
 
   constructor(
     private stationService: StationServiceService,
@@ -77,6 +80,8 @@ export class StationsDisplayComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loggedUser = JSON.parse(localStorage.getItem("currentUser"));
+
     this.sharedService.stations.subscribe(
       stations => this.stations = stations
     );
@@ -97,7 +102,7 @@ export class StationsDisplayComponent implements OnInit {
 
     await this.stationService.updateStation(station).subscribe(
       data => {
-        //this.toaster.success(data);
+        // this.toaster.success(data);
         alert(data);
 
         this.selectedStation = station;
@@ -108,11 +113,10 @@ export class StationsDisplayComponent implements OnInit {
         this.emitDisplayTypeToMap();
       },
       reason => {
-        //this.toaster.error(reason.error);
+        // this.toaster.error(reason.error);
         alert(reason.error);
       }
-    );
-    
+    );    
   }
 
   deleteStation(station: StationDTO) {
@@ -121,7 +125,7 @@ export class StationsDisplayComponent implements OnInit {
     ) {
       this.stationService.deleteStation(station.id).subscribe(
         data => {
-          //this.toaster.success(data);
+          // this.toaster.success(data);
           alert(data);
 
           this.selectedStation = undefined;
@@ -131,11 +135,10 @@ export class StationsDisplayComponent implements OnInit {
           this.emitDisplayTypeToMap();
         },
         reason => {
-          //this.toaster.error(reason.error);
+          // this.toaster.error(reason.error);
          alert(reason.error);
         }
-      );
-      
+      );      
     }
   }
 

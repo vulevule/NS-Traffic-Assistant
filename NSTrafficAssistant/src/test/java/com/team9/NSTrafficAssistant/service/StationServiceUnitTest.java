@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -130,21 +132,10 @@ public class StationServiceUnitTest {
 	}
 	
 	@Test(expected = StationNotFoundException.class)
-	public void testDeleteStation_notFound() throws StationNotFoundException {
+	public void testDeleteStation_notFound() throws StationNotFoundException, InvalidInputFormatException {
 		stationService.deleteStation(6L);
 		
 		verify(stationRepositoryMocked, times(1)).findById(6L);
 	}
-	
-	@Test
-	public void testDeleteStation_allFine() throws StationNotFoundException {
-		boolean result = stationService.deleteStation(5L);
-		
-		verify(stationRepositoryMocked, times(1)).findById(5L);
-		assertTrue(result);
-	}
-	
-	
-	
 	
 }

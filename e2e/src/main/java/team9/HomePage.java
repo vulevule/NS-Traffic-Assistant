@@ -83,7 +83,7 @@ public class HomePage extends LoadableComponent<HomePage> {
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
 	}
-
+	
 	@Override
 	protected void isLoaded() throws Error {
 		// TODO Auto-generated method stub

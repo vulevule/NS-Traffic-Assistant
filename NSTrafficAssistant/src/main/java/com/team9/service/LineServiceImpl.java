@@ -123,9 +123,9 @@ public class LineServiceImpl implements LineService {
 
 			line.setMark(ldto.getMark());
 
-			// for (Location loc : line.getRoute()) {
-			// locationRepository.delete(loc);
-			// }
+			 for (Location loc : line.getRoute()) {
+				 locationRepository.delete(loc);
+			 }
 
 			line.getRoute().clear();
 

@@ -9,9 +9,9 @@ describe('DisplayReportComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DisplayReportComponent ]
+      declarations: [DisplayReportComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -56,7 +56,7 @@ describe('DisplayReportComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should assert that data is present in table', ()=>{
+  it('should assert that data is present in table', () => {
     const tables = fixture.debugElement.queryAll(By.css('table'));
     expect(tables.length).toBe(2);
     expect(tables[0].nativeElement.rows.length).toBe(6);

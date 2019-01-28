@@ -48,11 +48,15 @@ public class StationServiceImpl implements StationService {
 	}
 
 	@Override
-	public boolean deleteStation(Long id) throws StationNotFoundException {
+	public boolean deleteStation(Long id) throws StationNotFoundException, InvalidInputFormatException {
 		Optional<Station> find = stationRepository.findById(id);
 		if (!find.isPresent()) {
 			throw new StationNotFoundException();
 		} else {
+			if(find.get().getLines().size() == 2) {
+				throw new InvalidInputFormatException("Station can not be deleted now, check lines first!");
+			}
+			
 			stationRepository.deleteById(find.get().getId());
 			return true;
 		}

@@ -9,7 +9,6 @@ import { MainPageComponent } from "./pages/main-page/main-page.component";
 import { NotFoundPageComponent } from "./pages/not-found-page/not-found-page.component";
 import { LoggedUserService } from "./services/loggedUserService";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-import { DisplayStationsComponent } from "./stations/display-stations/display-stations.component";
 import { StationServiceService } from "./services/stations/station-service.service";
 import { AuthenticationService } from "./services/authentication.service";
 import { FormsModule } from "@angular/forms";
@@ -100,7 +99,6 @@ const appRoutes: Routes = [
     NotFoundPageComponent,
     HeaderComponent,
     MenuBarComponent,
-    DisplayStationsComponent,
     FilterByTypePipe,
     FilterByNamePipe,
     LinesComponent,

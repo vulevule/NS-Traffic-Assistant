@@ -18,7 +18,7 @@ export class LinesComponent implements OnInit {
 
   loggedUser: UserDTO;
 
-  constructor(private sharedService: SharedService) {}
+  constructor(private sharedService: SharedService) { }
 
   ngOnInit() {
     this.loggedUser = JSON.parse(localStorage.getItem("currentUser"));

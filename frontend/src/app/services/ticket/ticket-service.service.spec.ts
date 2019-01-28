@@ -53,10 +53,22 @@ describe('TicketServiceService', () => {
   describe('#myTicket', () => {
     it('should be return an Observable<TicketInterface[]>', () => {
       const dummyTickets = [
-        { id: 1, trafficType: 'BUS', timeType: 'MONTH', trafficZone: 'FIRST', price: 900, userType: 'STUDENT', serialNo: 'BMMS1231555' },
-        { id: 2, trafficType: 'METRO', timeType: 'ANNUAL', trafficZone: 'SECOND', price: 1000, userType: 'REGULAR', serialNo: 'BMMS12315565' },
-        { id: 3, trafficType: 'TRAM', timeType: 'SINGLE', trafficZone: 'FIRST', price: 120, userType: 'SENIOR', serialNo: 'BMMS1231554555' },
-        { id: 4, trafficType: 'BUS', timeType: 'DAILY', trafficZone: 'SECOND', price: 100, userType: 'HANDICAP', serialNo: 'BMMS1231558565' }
+        {
+          id: 1, trafficType: 'BUS', timeType: 'MONTH', trafficZone: 'FIRST',
+          price: 900, userType: 'STUDENT', serialNo: 'BMMS1231555'
+        },
+        {
+          id: 2, trafficType: 'METRO', timeType: 'ANNUAL', trafficZone: 'SECOND',
+          price: 1000, userType: 'REGULAR', serialNo: 'BMMS12315565'
+        },
+        {
+          id: 3, trafficType: 'TRAM', timeType: 'SINGLE', trafficZone: 'FIRST',
+          price: 120, userType: 'SENIOR', serialNo: 'BMMS1231554555'
+        },
+        {
+          id: 4, trafficType: 'BUS', timeType: 'DAILY', trafficZone: 'SECOND',
+          price: 100, userType: 'HANDICAP', serialNo: 'BMMS1231558565'
+        }
       ];
 
       service.getMyTicket().subscribe(
@@ -74,7 +86,10 @@ describe('TicketServiceService', () => {
 
   describe('#buyTicket', () => {
     it('should be return an Observable<TicketInterface>', () => {
-      const dummyTicket = { id: 1, trafficType: 'BUS', timeType: 'MONTH', trafficZone: 'FIRST', price: 900, userType: 'STUDENT', serialNo: 'BMMS1231555' };
+      const dummyTicket = {
+        id: 1, trafficType: 'BUS', timeType: 'MONTH', trafficZone: 'FIRST',
+        price: 900, userType: 'STUDENT', serialNo: 'BMMS1231555'
+      };
       let t = { trafficType: 'BUS', timeType: 'ANNUAL', trafficZone: 'FIRST' };
       service.buyTicket(t).subscribe(
         data => {

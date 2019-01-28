@@ -112,7 +112,6 @@ public class StationController {
 	@PostMapping(value="/station/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> createStation(@RequestBody StationDTO station) {
 		logger.info(">> Creating station  " + station.getName());
-		logger.info("GELDAJ VAMO: " + station.getType());
 		
 		Station created = null;
 		String message;
@@ -140,7 +139,7 @@ public class StationController {
 		try {
 			updated = stationService.updateStation(station);
 			logger.info("<< Updating station  " + station.getName());
-			message = "Station " + station.getName() + " successfully updated";
+			message = "Station updated";
 			return new ResponseEntity<>(message, HttpStatus.CREATED);
 		} catch (StationNotFoundException e) {
 			message = "Station " + station.getName() + " not found!";
@@ -167,6 +166,9 @@ public class StationController {
 		} catch (StationNotFoundException e) {
 			message = "Station not found!";
 			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+		} catch (InvalidInputFormatException e) {
+			message = e.getMessage();
+			return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 	

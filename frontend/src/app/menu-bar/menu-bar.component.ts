@@ -34,11 +34,11 @@ export class MenuBarComponent implements OnInit {
         pricelist.hidden = false;
         report.hidden = true;
         lines.hidden = false;
-        loadData.hidden=true;
+        loadData.hidden = true;
         station.hidden = false;
       } else if (this.loggedUser.role === 'INSPECTOR') {
         tickets.hidden = false;
-        loadData.hidden=true;
+        loadData.hidden = true;
         pricelist.hidden = false;
         report.hidden = true;
         lines.hidden = false;
@@ -51,25 +51,16 @@ export class MenuBarComponent implements OnInit {
         station.hidden = false;
 
       }
-    }else{
-        tickets.hidden = true;
-        loadData.hidden=true;
-        //createStationTab.hidden=true;
-        pricelist.hidden = false;
-        report.hidden = true;
-        lines.hidden = false;
-        station.hidden = false;
+    } else {
+      tickets.hidden = true;
+      loadData.hidden = true;
+      //createStationTab.hidden=true;
+      pricelist.hidden = false;
+      report.hidden = true;
+      lines.hidden = false;
+      station.hidden = false;
     }
 
-  }
-
-  loadDataFromFile() {
-    var message = this.loadDataService.loadData("1").subscribe(success => {
-      alert(success);
-      this.sharedService.updateAll();
-    }, error => {
-      alert(error.error);
-    });
   }
 
 }

@@ -10,7 +10,7 @@ export class StationServiceService {
   private headers = new HttpHeaders({ "Content-Type": "application/json" });
   private stationsUrl = "/api/station";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAll(): Observable<StationDTO[]> {
     return this.http.get<StationDTO[]>(`${this.stationsUrl}/getAll`);

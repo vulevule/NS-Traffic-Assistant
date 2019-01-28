@@ -11,50 +11,50 @@ import { TimetableService } from 'src/app/services/timetable/timetable.service';
 })
 export class CreateTimetableComponent implements OnInit {
 
-  lines : LineDTO[];
-  timetable : TimetableDtoInterface;
-  items : CreateTimetableItemInterface[];
+  lines: LineDTO[];
+  timetable: TimetableDtoInterface;
+  items: CreateTimetableItemInterface[];
 
-  message : String = '';
-  infoType : String;
+  message: String = '';
+  infoType: String;
 
-  constructor(private lineService : LineService, private timetableService : TimetableService) { }
+  constructor(private lineService: LineService, private timetableService: TimetableService) { }
 
   ngOnInit() {
     this.items = [];
     this.lineService.getAll()
-    .subscribe(data => {
-      this.lines = data;
-      this.lines.forEach(element => {
-        let i : CreateTimetableItemInterface= {
-          line_mark : element.mark,
-          line_name : element.name,
-          line_type : element.type,
-          workdayTimes : '',
-          sundayTimes : '',
-          saturdayTimes : ''
-        }
-        this.items.push(i);
-      });
-    })
+      .subscribe(data => {
+        this.lines = data;
+        this.lines.forEach(element => {
+          let i: CreateTimetableItemInterface = {
+            line_mark: element.mark,
+            line_name: element.name,
+            line_type: element.type,
+            workdayTimes: '',
+            sundayTimes: '',
+            saturdayTimes: ''
+          }
+          this.items.push(i);
+        });
+      })
   }
 
-  save(){
+  save() {
     this.timetable = {
-      timetables : this.items
+      timetables: this.items
     }
 
     this.timetableService.createTimetable(this.timetable)
-    .subscribe(
-      data => {
-        this.message = data;
-        this.infoType = 'success';
-      },
-      error => {
-        this.message = error.error;
-        this.infoType = 'danger';
-      }
-    )
+      .subscribe(
+        data => {
+          this.message = data;
+          this.infoType = 'success';
+        },
+        error => {
+          this.message = error.error;
+          this.infoType = 'danger';
+        }
+      )
   }
 
 }

@@ -44,7 +44,7 @@ export class UseCheckTicketComponent implements OnInit {
       })
   }
 
-  async ok() {
+  ok() {
     if (this.selectLine === undefined) {
       this.message = 'Please choose a line.';
       this.alertType = 'info';
