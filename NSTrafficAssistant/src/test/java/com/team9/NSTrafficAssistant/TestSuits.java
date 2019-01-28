@@ -10,7 +10,7 @@ import com.team9.NSTrafficAssistant.repository.PricelistRepositoryIntegrationTes
 import com.team9.NSTrafficAssistant.repository.TicketRepositoryIntegrationTest;
 import com.team9.NSTrafficAssistant.service.PricelistItemServiceUnitTest;
 import com.team9.NSTrafficAssistant.service.PricelistServiceIntegrationTest;
-import com.team9.NSTrafficAssistant.service.TicketServiceIntegrationTest;
+//import com.team9.NSTrafficAssistant.service.TicketServiceIntegrationTest;
 import com.team9.NSTrafficAssistant.service.TicketServiceUnitTest;
 import com.team9.NSTrafficAssistant.service.UserServiceUnitTest;
 
@@ -18,7 +18,7 @@ import com.team9.NSTrafficAssistant.service.UserServiceUnitTest;
 @SuiteClasses({
 	PricelistItemServiceUnitTest.class, TicketServiceUnitTest.class,
 	PricelistRepositoryIntegrationTest.class, PricelistItemRepositoryIntegrationTest.class, TicketRepositoryIntegrationTest.class,
-	PricelistServiceIntegrationTest.class, TicketServiceIntegrationTest.class, TicketControllerIntegrationTest.class,
+	PricelistServiceIntegrationTest.class, /*TicketServiceIntegrationTest.class,*/ TicketControllerIntegrationTest.class,
 	UserServiceUnitTest.class
 })
 public class TestSuits {

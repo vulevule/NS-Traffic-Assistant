@@ -54,9 +54,9 @@ export class TicketServiceService {
 
   //dobavljanje cene karte 
 
-  getPrice(t: TicketInterface): Observable<number> {
+  getPrice(t: TicketInterface): Observable<String> {
     return this.http
-      .get<number>(`${this.ticketUrl}/price?type=${t.trafficType}&zone=${t.trafficZone}&time=${t.timeType}`);
+      .get(`${this.ticketUrl}/price?type=${t.trafficType}&zone=${t.trafficZone}&time=${t.timeType}`, {responseType: 'text' });
   }
 
 

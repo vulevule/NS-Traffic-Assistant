@@ -3,7 +3,7 @@ package com.team9.service;
 import java.util.ArrayList;
 
 import org.springframework.mail.MailException;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import com.team9.dto.UpdateProfileDto;
 import com.team9.dto.UserDto;
@@ -23,4 +23,6 @@ public interface UserService {
 	ArrayList<Passenger> readyToValidate();
 	Passenger validationProcess(ValidationDTO val) throws UserNotFoundException;
 	boolean SaveUpdated(User u);
+	void init();
+	void store(MultipartFile file);
 }

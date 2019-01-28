@@ -54,9 +54,7 @@ public class TicketController {
 		return new ResponseEntity<Collection<TicketReaderDto>>(result, HttpStatus.OK);
 	}
 
-	/*
-	 * TREBA ZAMENITI DA VRACA PAGE OBJEKAT
-	 */
+	
 	@GetMapping(value = "/myTicket", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Collection<TicketReaderDto>> getMyTicket(HttpServletRequest request) {
 		/*
@@ -81,8 +79,8 @@ public class TicketController {
 
 	}
 
-	@GetMapping(value = "/price", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Double> getTicketPrice(@RequestParam("type") String type, @RequestParam("zone") String zone,
+	@GetMapping(value = "/price", produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> getTicketPrice(@RequestParam("type") String type, @RequestParam("zone") String zone,
 			@RequestParam("time") String time, HttpServletRequest request) {
 		// trazimo cenu za izabrane parametre i treba mu jos proslediti i
 		// korisnika da bi znali za koji tip korisnika trazimo kartu
@@ -100,34 +98,35 @@ public class TicketController {
 		try {
 			try {
 				price = ticketService.getTicketPrice(t, username);
+
+				logger.info("<< get ticket price: " + price);
+				return new ResponseEntity<String>(Double.toString(price), HttpStatus.OK);
 			} catch (UserNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				logger.info("user with usrername: " + username + " does not exist");
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
 			} catch (NotFoundActivePricelistException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				logger.info("pricelist does not exists");
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
 			} catch (WrongTrafficTypeException e) {
 				// TODO Auto-generated catch block
 				logger.info("wrong trafic type");
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
 			} catch (WrongTicketTimeException e) {
 				logger.info("wrong ticket time");
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
 			} catch (WrongTrafficZoneException e) {
 				logger.info("wrong trafic zone");
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
 			}
-			logger.info("<< get ticket price: " + price);
-			return new ResponseEntity<Double>(price, HttpStatus.OK);
 		} catch (PriceItemNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			logger.info("price item does not exist");
-			return new ResponseEntity<Double>((double) 0, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
 
 	}

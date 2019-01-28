@@ -45,7 +45,12 @@ export class AuthenticationService {
         var token = currentUser && currentUser.token;
         return token ? token : "";
     }
-
+getUsername():string{
+    var currentUser = JSON.parse(
+        localStorage.getItem('currentUser'));
+        var username=currentUser && currentUser.username;
+        return username ? username : "";
+}
 
 
     logout(): void {

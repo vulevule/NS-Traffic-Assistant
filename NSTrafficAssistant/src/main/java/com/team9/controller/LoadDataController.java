@@ -130,7 +130,7 @@ public class LoadDataController {
 					message = e.getMessage();
 					return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
 				} catch (InvalidInputFormatException e) {
-					message = "Invalid input format!";
+					message = e.getMessage();
 					return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
 				}
 

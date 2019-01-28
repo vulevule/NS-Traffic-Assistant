@@ -47,9 +47,10 @@ export class BuyTicketFormComponent implements OnInit {
    
     this.ticketService.getPrice(this.buyTicket)
     .subscribe(data => {
-      this.buyTicket.price = data;
+      this.buyTicket.price = +data;
     }, error =>{
-      alert(error.message);
+      this.message = error.error;
+      this.infoType = 'danger';
     })
   }
 

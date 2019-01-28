@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.team9.dto.AddressDto;
+import com.team9.dto.EditDto;
 import com.team9.dto.LoginDto;
 import com.team9.dto.LoginUserDto;
 import com.team9.dto.UpdateProfileDto;
@@ -57,7 +60,7 @@ public class UserController {
 	@Autowired
 	TokenUtils tokenUtils;
 
-	@RequestMapping(value = "/user/create", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/user/create", method = RequestMethod.POST, consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addUser(@RequestBody UserDto user) {
 		try {
 
@@ -176,40 +179,31 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@RequestMapping(value = "/user/validateProfile", method = RequestMethod.POST, consumes = "multipart/form-data")
-	public ResponseEntity<?> validateProfile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+	@RequestMapping(value = "/user/validateProfile", method = RequestMethod.POST)
+	public ResponseEntity<?> validateProfile(@RequestParam("file") MultipartFile file, HttpServletRequest request)
+			throws IOException {
+		System.out.println("Tuuu");
 
 		if (!file.isEmpty()) {
 			String path = "";
-			try {
-				String orgName = file.getOriginalFilename();
-				// this line to retreive just file name
+			String orgName = file.getOriginalFilename();
+			// this line to retreive just file name
 
-				String name = orgName.substring(orgName.lastIndexOf("\\") + 1, orgName.length());
-				path = request.getServletContext().getRealPath("/images/");
-				if (!new File(path).exists()) {
-					new File(path).mkdir();
-				}
-
-				// path ="/static/images/";
-				System.out.println(path);
-				User user = getLoggedUser(request);
-				File upl = new File(path + user.getUsername() + "-" + name);
-				upl.createNewFile();
-				FileOutputStream fout = new FileOutputStream(upl);
-				fout.write(file.getBytes());
-				fout.close();
-
-				user.setImagePath(user.getUsername() + "-" + name);
-				userService.SaveUpdated(user);
-
-				return new ResponseEntity<>(HttpStatus.CREATED);
-
-			} catch (IOException e) {
-				e.printStackTrace();
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
+			String name = orgName.substring(orgName.lastIndexOf("\\") + 1, orgName.length());
+			path = request.getServletContext().getRealPath("/images/");
+			if (!new File(path).exists()) {
+				new File(path).mkdir();
 			}
+
+			// path ="/static/images/";
+			System.out.println(path);
+			User user = getLoggedUser(request);
+			userService.store(file);
+
+			user.setImagePath(file.getOriginalFilename());
+			userService.SaveUpdated(user);
+
+			return new ResponseEntity<>(HttpStatus.CREATED);
 
 		} else {
 
@@ -218,8 +212,7 @@ public class UserController {
 
 	}
 
-	@RequestMapping(value = "/user/NotValidated", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+	@GetMapping(value = "/user/notValidated", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ArrayList<Passenger>> getNotValidatedUsers() {
 		return new ResponseEntity<ArrayList<Passenger>>(userService.readyToValidate(), HttpStatus.OK);
 
@@ -234,4 +227,22 @@ public class UserController {
 
 	}
 
+	@GetMapping(value = "/user/getUser", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<EditDto> getUser(HttpServletRequest http) {
+		User u = getLoggedUser(http);
+		System.out.println(u.getName());
+		EditDto user = new EditDto();
+		user.setUsername(u.getUsername());
+		user.setEmail(u.getEmail());
+		user.setName(u.getName());
+		user.setPassword(u.getPassword());
+		AddressDto add = new AddressDto();
+		add.setStreet(u.getAddress().getStreet());
+		add.setCity(u.getAddress().getCity());
+		add.setZip(u.getAddress().getZip());
+		user.setAddress(add);
+
+		return new ResponseEntity<EditDto>(user, HttpStatus.OK);
+
+	}
 }

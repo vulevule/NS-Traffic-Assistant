@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "timetable")
 public class Timetable implements Serializable {
-	
+
 	/**
 	 * 
 	 */
@@ -27,19 +27,19 @@ public class Timetable implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column
-	private Date expirationDate; 
+	private Date expirationDate;
 	@Column(nullable = false)
 	private Date issueDate;
-	//ima vise item-a, a item ima jedan timetable 
+	// ima vise item-a, a item ima jedan timetable
 	@OneToMany(fetch = FetchType.EAGER)
 	private Set<TimetableItem> items;
-	
-	@Column (nullable = false)
+
+	@Column(nullable = false)
 	private boolean activate;
-	
+
 	public Timetable() {
 	}
-	
+
 	public Timetable(Long id, Date expirationDate, Date issueDate, Set<TimetableItem> items) {
 		this();
 		this.id = id;
@@ -47,19 +47,15 @@ public class Timetable implements Serializable {
 		this.issueDate = issueDate;
 		this.items = items;
 	}
-	
+
 	public Timetable(Date expirationDate, Date issueDate, Set<TimetableItem> items) {
 		this();
 		this.expirationDate = expirationDate;
 		this.issueDate = issueDate;
 		this.items = items;
-		
-	}
-	
-	
 
-	
-	
+	}
+
 	public Timetable(Date expirationDate, Date issueDate, boolean activate) {
 		this();
 		this.expirationDate = expirationDate;
@@ -70,18 +66,23 @@ public class Timetable implements Serializable {
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public Date getExpirationDate() {
 		return expirationDate;
 	}
+
 	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
 	}
+
 	public Date getIssueDate() {
 		return issueDate;
 	}
+
 	public void setIssueDate(Date issueDate) {
 		this.issueDate = issueDate;
 	}
@@ -93,8 +94,13 @@ public class Timetable implements Serializable {
 	public void setItems(Set<TimetableItem> items) {
 		this.items = items;
 	}
-	
-	
-	
-	
+
+	public boolean isActivate() {
+		return activate;
+	}
+
+	public void setActivate(boolean activate) {
+		this.activate = activate;
+	}
+
 }

@@ -110,7 +110,7 @@
           >
         </div>
 
-        <div>
+        <div *ngIf="loggedUser && loggedUser.role === 'ADMIN'">
           <div class="btn-group btnFloatRight">
             <button
               type="button"
@@ -227,7 +227,7 @@
         <div class="col-10 estimated-time">
           <span>{{ station.name }}</span>
           <span *ngIf="station.lines.length > 0"
-            >- <span *ngFor="let line of station.lines">{{line.lineMark}} -</span></span
+            >-<span *ngFor="let line of station.lines"> {{line.lineMark}} -</span></span
           >
           <span *ngIf="station.lines.length === 0">No lines assigned yet</span>
         </div>

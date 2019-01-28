@@ -22,9 +22,6 @@ import org.springframework.web.filter.CorsFilter;
 
 import com.team9.model.Role;
 
-
-
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -123,4 +120,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		httpSecurity.csrf().disable();
 	} 
 	
-}		
+}

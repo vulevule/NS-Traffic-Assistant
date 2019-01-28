@@ -14,6 +14,7 @@ import com.team9.model.TrafficZone;
 
 public class PriceItemConstants {
 	
+	//ovo je za testiranje pricelistItemServisa
 	public static final PriceItemDto pi1 = new PriceItemDto(1000, "bus", "month", "first", 10, 5, 5);
 	public static final PriceItemDto pi2 = new PriceItemDto(1000, "bus", "month", "second", 10, 5, 5);
 	public static final PriceItemDto pi3 = new PriceItemDto(10000, "bus", "annual", "first", 10, 5, 5);

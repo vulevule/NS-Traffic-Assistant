@@ -30,24 +30,29 @@ insert into authority (id, name,user_id) values (7, 'PASSENGER', 7);
 --karte
 insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_type, 
 traffic_zone, active, price,traffic_type, used, passenger_id ) 
-values (8, 'BMFS12121212000', '2018-12-27', '2019-01-27', 0, 1, 0, true, 900, 0, false, 3);
+values (1, 'BMFS12121212000', '2019-01-05', '2019-02-05', 0, 1, 0, true, 900, 0, false, 3);
 
 insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_type, 
 traffic_zone, active, price,traffic_type, used, passenger_id ) 
-values (9, 'BMFS12121212001', '2018-12-27', '2019-01-27', 1, 1, 0, true, 950, 0, false, 4);
+values (2, 'BMFS12121212001', '2019-01-15', '2019-02-15', 1, 1, 0, true, 950, 0, false, 4);
 
 -- karta koja nije koriscena, single karta
 insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_type, 
 traffic_zone, active, price,traffic_type, used, passenger_id ) 
-values (55, 'BMFS12121212023', '2019-01-04', '2019-01-19', 2, 3, 0, true, 95, 0,false, 6);
+values (3, 'BMFS12121212023', '2019-01-18', '2019-02-02', 2, 3, 0, true, 95, 0,false, 6);
 -- karta kojoj je isteklo vreme trajanja, dnevna karta
 insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_type, 
 traffic_zone, active, price,traffic_type, used, passenger_id ) 
-values (56, 'BMFS12121212025', '2019-01-01', '2019-01-02', 2, 2, 0, true, 95, 0,false, 6);
+values (4, 'BMFS12121212025', '2019-01-01', '2019-01-02', 2, 2, 0, true, 95, 0,false, 6);
 -- karta koje je koriscena, single karta
 insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_type, 
 traffic_zone, active, price,traffic_type, used, passenger_id ) 
-values (57, 'BMFS12121212024', '2019-01-03', '2019-01-18', 2, 3, 0, true, 95, 0,true, 6);
+values (5, 'BMFS12121212024', '2019-01-18', '2019-02-02', 2, 3, 0, true, 95, 0,true, 6);
+--karta iz druge zone
+
+insert into ticket (id, serial_no, issue_date, expiration_date, user_type, time_type, 
+traffic_zone, active, price,traffic_type, used, passenger_id ) 
+values (6, 'BMFS12121212003', '2019-01-05', '2019-02-05', 1, 1, 1, true, 950, 0, false, 4);
 --cenovnik
 insert into price_list(id,issue_date, activate) values (10, '2018-12-25', true);
 
@@ -237,3 +242,41 @@ insert into line_route ( line_id, route_id)
 values ( 3, 14);
 insert into line_route ( line_id, route_id)
 values ( 3, 15);
+
+--red voznje
+insert into timetable (id, issue_date, activate)
+values (1, '2019-01-03', true);
+
+--stavke reda voznje
+
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(1, "10:30", 0, 1, 1);
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(2, "11:30", 0, 1, 1);
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(3, "12:30", 0, 1, 1);
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(4, "13:30", 0, 1, 1);
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(5, "14:30", 0, 1, 1);
+
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(6, "10:30", 1, 1, 1);
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(7, "12:30", 1, 1, 1);
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(8, "13:30", 1, 1, 1);
+
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(9, "15:30", 1, 1, 1);
+
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(10, "10:30", 2, 1, 1);
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(11, "11:30", 2, 1, 1);
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(12, "12:30", 2, 1, 1);
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(13, "13:30", 2, 1, 1);
+insert into timetable_item (id, start_time, type, line_id, timetable_id)
+values(14, "14:30", 2, 1, 1);

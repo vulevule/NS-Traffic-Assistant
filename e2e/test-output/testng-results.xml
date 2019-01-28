@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="1" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="13706" started-at="2019-01-28T07:21:33Z" finished-at="2019-01-28T07:21:47Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="13706" started-at="2019-01-28T07:21:33Z" finished-at="2019-01-28T07:21:47Z">
+      <class name="team9.LoginTest">
+        <test-method status="PASS" signature="setUp()[pri:0, instance:team9.LoginTest@6f7fd0e6]" name="setUp" is-config="true" duration-ms="8252" started-at="2019-01-28T08:21:33Z" finished-at="2019-01-28T08:21:41Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="testLogin_success()[pri:0, instance:team9.LoginTest@6f7fd0e6]" name="testLogin_success" duration-ms="4339" started-at="2019-01-28T08:21:41Z" finished-at="2019-01-28T08:21:46Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLogin_success -->
+        <test-method status="PASS" signature="closeSelenium()[pri:0, instance:team9.LoginTest@6f7fd0e6]" name="closeSelenium" is-config="true" duration-ms="1100" started-at="2019-01-28T08:21:46Z" finished-at="2019-01-28T08:21:47Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- closeSelenium -->
+      </class> <!-- team9.LoginTest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

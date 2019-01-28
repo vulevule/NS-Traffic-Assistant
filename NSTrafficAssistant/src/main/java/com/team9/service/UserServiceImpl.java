@@ -2,18 +2,24 @@ package com.team9.service;
 
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import com.team9.dto.UpdateProfileDto;
 import com.team9.dto.UserDto;
@@ -51,7 +57,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	
+	private final Path rootLocation=Paths.get("upload-dir");
 	
 	@Override
 	public User getUser(String username) {
@@ -243,9 +249,30 @@ public boolean SaveUpdated(User u) {
 		return false;
 	}
 	try {
+  u.setPassword(passwordEncoder.encode(u.getPassword()));	
 	userRepository.save(u);
 	return true;
 }catch(Exception e){
 	return false;}
+}
+
+@Override
+@EventListener(ApplicationReadyEvent.class)
+public void init() {
+	try {Files.createDirectories(rootLocation);}catch(IOException e){
+		throw new RuntimeException("Couldn't initial storage");
+		
+		
+	}
+	
+	
+}
+public void store(MultipartFile file) {
+	try {
+		Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
+	}catch(Exception e) {
+		throw new RuntimeException("Fail");
+		
+	}
 }
 }

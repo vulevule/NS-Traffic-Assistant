@@ -22,6 +22,7 @@ import LineString from "ol/geom/LineString";
 import Overlay from "ol/Overlay";
 import { LineService } from "src/app/services/lines/line.service";
 import { colorPalette } from 'src/app/util/ColorPalette';
+import { UserDTO } from 'src/app/model/UserDTO';
 
 @Component({
   selector: "app-lines-display",
@@ -29,6 +30,8 @@ import { colorPalette } from 'src/app/util/ColorPalette';
   styleUrls: ["./lines-display.component.css", "../lines/general.scss"]
 })
 export class LinesDisplayComponent implements OnInit {
+  loggedUser: UserDTO;
+  
   @Input()
   stations: StationDTO[];
 
@@ -113,6 +116,8 @@ export class LinesDisplayComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loggedUser = JSON.parse(localStorage.getItem("currentUser"));
+
     this.sharedService.stations.subscribe(
       stations => (this.stations = stations)
     );
