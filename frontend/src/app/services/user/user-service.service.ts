@@ -11,7 +11,7 @@ import { EditDtoInterface } from 'src/app/model/EditProfileDto';
 export class UserServiceService {
 
   private headers = new HttpHeaders({ "Content-Type": "application/json" });
-  private Url = "api/user";
+  readonly Url = "api/user";
 
   constructor(private http: HttpClient) { }
 
