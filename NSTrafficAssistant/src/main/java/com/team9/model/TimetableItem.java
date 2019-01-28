@@ -107,3 +107,4 @@ public class TimetableItem implements Serializable {
 	}
 
 }
+

@@ -127,3 +127,4 @@ public class PricelistItemServiceUnitTest {
 		assertTrue(price == 900);
 	}
 }
+

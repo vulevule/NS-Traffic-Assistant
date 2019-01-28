@@ -377,3 +377,4 @@ public class TicketServiceIntegrationTest {
 			assertTrue(d3 == 1000);
 		}
 }
+

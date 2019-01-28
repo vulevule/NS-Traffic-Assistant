@@ -14,7 +14,7 @@
       </ng-template>
     </ngb-tab>
 
-    <ngb-tab title="Create new" id="createLineTab">
+    <ngb-tab title="Create new" id="createLineTab" *ngIf="loggedUser && loggedUser.role === 'ADMIN'">
       <ng-template ngbTabContent>
         <app-lines-create-edit
           [stations]="stations"
@@ -24,7 +24,7 @@
       </ng-template>
     </ngb-tab>
 
-    <ngb-tab title="Edit" id="editLineTab" *ngIf="selectedLine">
+    <ngb-tab title="Edit" id="editLineTab" *ngIf="loggedUser && loggedUser.role === 'ADMIN' && selectedLine">
       <ng-template ngbTabContent>
         <app-lines-create-edit
           [stations]="stations"

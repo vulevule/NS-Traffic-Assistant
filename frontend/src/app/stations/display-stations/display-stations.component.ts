@@ -21,6 +21,7 @@ import { StationDTO } from "src/app/model/StationDTO";
 import { SharedService } from "src/app/services/sharedVars/shared.service";
 import { StationServiceService } from "src/app/services/stations/station-service.service";
 import { LineService } from "src/app/services/lines/line.service";
+import { UserDTO } from 'src/app/model/UserDTO';
 
 @Component({
   selector: "app-display-stations",
@@ -98,10 +99,15 @@ export class DisplayStationsComponent implements OnInit {
     private stationService: StationServiceService,
     private lineService: LineService,
     private route: ActivatedRoute,
+    //private loggedUser: UserDTO,
     private sharedService: SharedService
   ) {}
 
   async ngOnInit() {
+    
+
+
+
     this.stations = [];
     this.searchStations = [];
     this.markerOnMap = "";

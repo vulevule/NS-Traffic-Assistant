@@ -3,6 +3,7 @@ package com.team9.service;
 import java.util.List;
 
 import com.team9.dto.LineDto;
+import com.team9.exceptions.InvalidInputFormatException;
 import com.team9.exceptions.LineAlreadyExistsException;
 import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.StationNotFoundException;
@@ -12,9 +13,9 @@ import com.team9.model.TrafficZone;
 
 public interface LineService {
 
-	Line createLine(LineDto l) throws LineAlreadyExistsException, StationNotFoundException;
+	Line createLine(LineDto l) throws LineAlreadyExistsException, StationNotFoundException, InvalidInputFormatException;
 	
-	Line updateLine(LineDto l) throws LineNotFoundException, StationNotFoundException, LineAlreadyExistsException;
+	Line updateLine(LineDto l) throws LineNotFoundException, StationNotFoundException, LineAlreadyExistsException, InvalidInputFormatException;
 	
 	boolean deleteLine(Long id) throws LineNotFoundException;
 	

@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "stationLine")
 public class StationLine implements Serializable{
@@ -27,10 +30,12 @@ public class StationLine implements Serializable{
 	private int arrival;
 	
 	// Jedna stanica moze imati vise StationLine a jedan StationLine se odnosi samo na jednu stanicu
-	@ManyToOne(optional=true)
+	@ManyToOne(optional=false)
 	private Station station;
 	
-	@ManyToOne(optional=true)
+	@ManyToOne(optional=false)
+//	@JoinColumn(name = "line_id", nullable = false)
+//	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Line line;
 	
 	public StationLine(int stationNum, int arrival, Station station, Line line) {
@@ -95,7 +100,7 @@ public class StationLine implements Serializable{
 	
 	@Override
 	public boolean equals(Object obj) {
-		return this.id.equals(((StationLine) obj).id);
+		return this.id == (((StationLine) obj).id);
 	}
 	
 	

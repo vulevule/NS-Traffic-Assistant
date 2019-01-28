@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team9.dto.LineDto;
 import com.team9.dto.StationDTO;
+import com.team9.exceptions.InvalidInputFormatException;
 import com.team9.exceptions.LineAlreadyExistsException;
 import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.StationNotFoundException;
 import com.team9.model.Line;
 import com.team9.model.Station;
 import com.team9.model.TrafficType;
+import com.team9.model.TrafficZone;
 import com.team9.service.LineService;
 
 @RestController
@@ -45,7 +47,7 @@ public class LineController {
 		try {
 			created = lineService.createLine(line);
 			logger.info("<< Creating line  " + line.getName());
-			message = "Line " + line.getName() + " successfully created";
+			message = "Line " + line.getMark() + " successfully created";
 			return new ResponseEntity<>(message, HttpStatus.CREATED);
 		} catch (LineAlreadyExistsException e) {
 			message = line.getType() + " line " + line.getMark() + " already exists!";
@@ -53,6 +55,8 @@ public class LineController {
 		} catch (StationNotFoundException e) {
 			message = e.getMessage();
 			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+		} catch (InvalidInputFormatException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
 		}
 		
 	}
@@ -66,17 +70,19 @@ public class LineController {
 		try {
 			updated = lineService.updateLine(line);
 			logger.info("<< Updating station  " + line.getName());
-			logger.info("\nGLEDAJ VAMO: " + updated.getStations().size() + "\n");
-			message = "Line successfully updated!";
+			message = "Line successfully updated";
 			return new ResponseEntity<>(message, HttpStatus.CREATED);
 		} catch (LineNotFoundException e) {
-			message = "Selected line does not exist!";
+			message = e.getMessage();
 			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
 		} catch (StationNotFoundException e) {
 			message = e.getMessage();
 			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
 		} catch (LineAlreadyExistsException e) {
 			message = line.getType() + " line " + line.getMark() + " already exists!";
+			return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
+		} catch (InvalidInputFormatException e) {
+			message = e.getMessage();
 			return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
@@ -89,10 +95,10 @@ public class LineController {
 		try {
 			lineService.deleteLine(id);
 			logger.info("<< Deleting line  " + id);
-			message = "Line successfully deleted!";
+			message = "Line deleted";
 			return new ResponseEntity<>(message, HttpStatus.OK);
 		} catch (LineNotFoundException e) {
-			message = "Line does not exist!!";
+			message = e.getMessage();
 			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
 		}
 	}
@@ -106,6 +112,18 @@ public class LineController {
 		List<LineDto> retVal = convertLinesToDTO(lines);
 		
 		logger.info("<< get lines by type " + type);
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/line/getAllByZone/{zone}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<LineDto>> getAllByZone(@PathVariable TrafficZone zone){
+		logger.info(">> get lines by zone " + zone);
+		
+		List<Line> lines = lineService.getAllByTrafficZone(zone);
+		
+		List<LineDto> retVal = convertLinesToDTO(lines);
+		
+		logger.info("<< get lines by zone " + zone);
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
 	
@@ -136,7 +154,7 @@ public class LineController {
 	}
 	
 	@GetMapping(value="/line/getByMarkAndType/{mark}/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<LineDto> getByNameAndType(@PathVariable("mark") String mark, @PathVariable("type") TrafficType type) throws UnsupportedEncodingException{
+	public ResponseEntity<LineDto> getByMarkAndType(@PathVariable("mark") String mark, @PathVariable("type") TrafficType type) throws UnsupportedEncodingException{
 		mark = URLDecoder.decode(mark, "UTF-8" );
 		
 		logger.info(">> get " + type + " line by mark " + mark);
@@ -156,6 +174,9 @@ public class LineController {
 		logger.info(">> get stations by station " + stationId);
 		
 		List<Line> lines = lineService.getAllByStation(stationId);
+		if(lines.size() == 0) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		
 		List<LineDto> retVal = convertLinesToDTO(lines);
 
