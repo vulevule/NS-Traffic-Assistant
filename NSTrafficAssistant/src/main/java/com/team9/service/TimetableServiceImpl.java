@@ -96,7 +96,7 @@ public class TimetableServiceImpl implements TimetableService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Boolean addTimetable(TimetableDto newTimetable) throws LineNotFoundException, ParseException {
+	public Boolean addTimetable(TimetableDto newTimetable) throws LineNotFoundException, ParseException, WrongTrafficTypeException {
 		// TODO Auto-generated method stub
 		Timetable t = this.timetableRepository.findByActivate(true).orElse(null);
 		if (t != null) {
@@ -121,9 +121,13 @@ public class TimetableServiceImpl implements TimetableService {
 		List<TimetableItem> allItems = new ArrayList<>();
 		
 		for(TimetableItemCreateDto i_dto : newTimetable.getTimetables()){
-			Line foundLine = this.lineRepository.findByNameAndMark( i_dto.getLine_name(), i_dto.getLine_mark())
-					.orElseThrow(() -> new LineNotFoundException(
-							"Line with mark: " + i_dto.getLine_mark() + " does not exist!"));
+			Line foundLine = this.lineRepository.findByMarkAndType(i_dto.getLine_mark(), ConverterService.convertStringToTrafficType(i_dto.getLine_type()));
+			
+			if(foundLine == null){
+				throw new LineNotFoundException(
+						"Line with mark: " + i_dto.getLine_mark() + " does not exist!");
+			}
+					
 
 			//iz parsiramo sva vremena
 			List<Time> workdayTimes = parseAndConvertString(i_dto.getWorkdayTimes());
@@ -143,12 +147,10 @@ public class TimetableServiceImpl implements TimetableService {
 		// 1. string isparsiramo po zarezu
 
 		List<String> stringTimes = Stream.of(times.split(",")).map(String::trim).collect(Collectors.toList());
-		
+
 		DateFormat formatter = new SimpleDateFormat("HH:mm");
 
-		
-		for(String s : stringTimes)
-		{
+		for (String s : stringTimes) {
 			System.out.println(s);
 		}
 		// jos da prodjemo kroz listu stringova i da ih pretvorimo u vreme

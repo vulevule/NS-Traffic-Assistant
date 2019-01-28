@@ -29,6 +29,7 @@ export class CreateTimetableComponent implements OnInit {
         let i : CreateTimetableItemInterface= {
           line_mark : element.mark,
           line_name : element.name,
+          line_type : element.type,
           workdayTimes : '',
           sundayTimes : '',
           saturdayTimes : ''

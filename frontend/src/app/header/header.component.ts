@@ -24,9 +24,9 @@ export class HeaderComponent implements OnInit {
     this.loggedUser = JSON.parse(
       localStorage.getItem('currentUser'));
 
-    var login : HTMLElement =  document.getElementById('loginItem');
+    var login : HTMLElement =  document.getElementById('loginButton');
     var logout: HTMLElement = document.getElementById('logoutItem');
-    var register : HTMLElement = document.getElementById('registerButton');
+    var register : HTMLElement = document.getElementById('registerItem');
     var edit: HTMLElement = document.getElementById('editItem');
     var notRegistrated:HTMLElement = document.getElementById('notRegistrated');
     var registrated:HTMLElement = document.getElementById('registrated');
@@ -49,9 +49,12 @@ export class HeaderComponent implements OnInit {
       notRegistrated.hidden=true;
       registrated.hidden=false;
       if (this.loggedUser.role === 'ADMIN'){
+        notRegistrated.hidden=true;
+        login.hidden=true;
         register.hidden = false;
       }else{
         register.hidden = true;
+        login.hidden=true;
       }
 
     }

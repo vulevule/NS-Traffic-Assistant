@@ -26,7 +26,7 @@ export class MenuBarComponent implements OnInit {
     var tickets: HTMLElement = document.getElementById('tickets');
     var pricelist: HTMLElement = document.getElementById('pricelist');
     var report: HTMLElement = document.getElementById('report');
-    //var createStationTab: HTMLElement = document.getElementById('createStationTab');
+    var loadData: HTMLElement = document.getElementById('loadData');
 
     if (this.loggedUser !== null) {
       if (this.loggedUser.role === 'PASSENGER') {
@@ -34,10 +34,11 @@ export class MenuBarComponent implements OnInit {
         pricelist.hidden = false;
         report.hidden = true;
         lines.hidden = false;
-        //createStationTab.hidden=true;
+        loadData.hidden=true;
         station.hidden = false;
       } else if (this.loggedUser.role === 'INSPECTOR') {
         tickets.hidden = false;
+        loadData.hidden=true;
         pricelist.hidden = false;
         report.hidden = true;
         lines.hidden = false;
@@ -52,6 +53,7 @@ export class MenuBarComponent implements OnInit {
       }
     }else{
         tickets.hidden = true;
+        loadData.hidden=true;
         //createStationTab.hidden=true;
         pricelist.hidden = false;
         report.hidden = true;

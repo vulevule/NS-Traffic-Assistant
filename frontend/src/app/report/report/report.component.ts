@@ -59,6 +59,7 @@ export class ReportComponent implements OnInit {
   }
 
   getReport() {
+    this.message = '';
     //treba proveriti i godinu koja je unsena da li je u odgovarajucem formatu 
     if (this.year > 2019 || this.year < 2000) {
       this.report = undefined;
@@ -68,13 +69,14 @@ export class ReportComponent implements OnInit {
       this.report = undefined;
       this.message = "The month must be selected!"
       this.errorType = 'warning';
-    } 
+    }
     else {
       var id : number;
       if(this.type !== 'MONTH'){
         id = 1;
       }else{
         id = this.model.id;
+        
       }
       this.ticketService.getReport(id, this.year, this.type )
         .subscribe(

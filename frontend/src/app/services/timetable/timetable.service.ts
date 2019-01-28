@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class TimetableService {
 
   private headers = new HttpHeaders({ "Content-Type": "application/json" });
-  timetableUrl : String = "/api/timetable";
+  readonly timetableUrl : String = "/api/timetable";
 
   constructor(private http : HttpClient) { }
 

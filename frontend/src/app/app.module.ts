@@ -58,24 +58,32 @@ import { EditProfileComponent } from "./user/edit-profile/edit-profile.component
 import { ValidateUserComponent } from "./user/validate-user/validate-user.component";
 import { UserServiceService } from "./services/user/user-service.service";
 
-import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
-import { CreateTimetableComponent } from "./timetable/create-timetable/create-timetable.component";
-import { FilterTicketBySnoPipe } from "./ticket/pipes/filter-ticket-by-sno.pipe";
-import { MatchingPasswordDirective } from "./pages/register-page/matching-password.directive";
+import { NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
+import { CreateTimetableComponent } from './timetable/create-timetable/create-timetable.component';
+import { FilterTicketBySnoPipe } from './ticket/pipes/filter-ticket-by-sno.pipe';
+import { MatchingPasswordDirective } from './pages/register-page/matching-password.directive';
+import { AuthGuard } from './guard/auth.guard';
+
+
+
+
+
 
 const appRoutes: Routes = [
   {
     path: "main",
     component: MainPageComponent,
     children: [
-      { path: "stations", component: StationsComponent },
-      { path: "lines", component: LinesComponent },
-      { path: "login", component: LoginPageComponent },
-      { path: "ticket", component: TicketComponent },
-      { path: "pricelist", component: PricelistComponent },
-      { path: "report", component: ReportComponent },
-      { path: "timetable", component: TimetableComponent }
-    ]
+
+      { path: 'stations', component: StationsComponent},
+      { path: 'lines', component: LinesComponent},
+      { path: 'login', component: LoginPageComponent},
+      { path : 'ticket' , component : TicketComponent,canActivate:[AuthGuard]},
+      { path : 'pricelist', component : PricelistComponent},
+      { path : 'report', component : ReportComponent,canActivate:[AuthGuard]}, 
+      { path : 'timetable', component : TimetableComponent}
+    ] 
+
   },
 
   { path: "login", component: LoginPageComponent },

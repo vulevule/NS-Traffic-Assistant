@@ -1,5 +1,6 @@
 package team9;
 
+import static org.junit.Assert.assertTrue;
 import static org.testng.Assert.assertEquals;
 
 import org.openqa.selenium.WebDriver;
@@ -30,6 +31,7 @@ public class LoginTest {
 		homePage.ensureLoginButton_IsClickable();
 		homePage.getLoginButton().click();
 		
+		
 		homePage.ensureUsernameBox_IsVisible();
 		homePage.ensurePasswordBox_IsVisible();
 		homePage.setUsernameInput("laralukic");
@@ -41,6 +43,45 @@ public class LoginTest {
 		
 		homePage.ensureUserDropdown_IsVisible();
 		assertEquals(homePage.getUserDropdown().getText(), "laralukic");
+	}
+	
+	@Test
+	public void testLogin_wrongUsernameOrPassword() {
+		homePage.ensureLoginButton_IsVisible();
+		homePage.ensureLoginButton_IsClickable();
+		homePage.getLoginButton().click();
+		
+		homePage.ensureUsernameBox_IsVisible();
+		homePage.ensurePasswordBox_IsVisible();
+		homePage.setUsernameInput("lara");
+		homePage.setPasswordInput("7777");
+		
+		homePage.ensureSubmitLoginButton_IsVisible();
+		homePage.ensureSubmitLoginButton_IsClickable();
+		homePage.getSubmitLoginButton().click();
+		
+		homePage.ensureAlertLogin_IsVisible();
+		assertTrue(homePage.getAlert().getText().contains("Wrong username or password"));
+	}
+	@Test
+	public void testLogout() {
+		homePage.ensureLoginButton_IsVisible();
+		homePage.ensureLoginButton_IsClickable();
+		homePage.getLoginButton().click();
+		
+		homePage.ensureUsernameBox_IsVisible();
+		homePage.ensurePasswordBox_IsVisible();
+		homePage.setUsernameInput("laralukic");
+		homePage.setPasswordInput("7777");
+		
+		homePage.ensureSubmitLoginButton_IsVisible();
+		homePage.ensureSubmitLoginButton_IsClickable();
+		homePage.getSubmitLoginButton().click();
+		
+		homePage.ensureUserDropdown_IsVisible();
+		homePage.getUserDropdown().click();
+		homePage.ensureLogout_IsVisible();
+		homePage.getLogoutItem().click();
 	}
 	
 	@AfterMethod

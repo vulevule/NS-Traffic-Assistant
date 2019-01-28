@@ -79,6 +79,9 @@ public class TimetableController {
 			// e.printStackTrace();
 			return new ResponseEntity<>("Invalid input data!", HttpStatus.BAD_REQUEST);
 
+		} catch (WrongTrafficTypeException e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 

@@ -79,12 +79,10 @@
           <div class="form-group" >
           <label for="inputPassword" class="sr-only">Password</label>
         
-          <input type="password" id="inputPassword" name="inputPassword" class="form-control" [(ngModel)]="user.password" #inputPassword="ngModel"  placeholder="new Password" required minlength="4">
+          <input type="password" id="inputPassword" name="inputPassword" class="form-control" [(ngModel)]="user.password" #inputPassword="ngModel"  placeholder="new Password"  minlength="4">
           <div *ngIf="inputPassword.invalid && (inputPassword.dirty || inputPassword.touched)"
           class="alert alert-danger">
-               <div *ngIf="inputPassword.errors.required">
-              Password is required!
-               </div>
+               
               <div *ngIf="inputPassword.errors.minlength">
                Password must contain more than 4 characters
               </div>
@@ -94,7 +92,7 @@
           <label for="repeatPassword" class="sr-only">Repeat Password</label>
           <input type="password" id="repeatPassword" name="repeatPassword" class="form-control" FormControlName="repeatPassword" #repeatPassword="ngModel"
           [(ngModel)]="u.repeatPassword"
-          [ngModelOptions]="{ updateOn: 'blur' }" placeholder="Repeat Password" required>
+          [ngModelOptions]="{ updateOn: 'blur' }" placeholder="Repeat Password" >
           <div *ngIf="repeatPassword.pending">Validating...</div>
         </div>
           <div *ngIf="editForm.errors?.matchingPassword && (editForm.touched || editForm.dirty)" class="cross-validation-error-message alert alert-danger">
@@ -108,7 +106,7 @@
       
            
        
-          <button class="btn btn-primary btn-block" type="submit" [disabled]="editForm.invalid" >Save</button>
+          <button id="save" class="btn btn-primary btn-block" type="submit" [disabled]="editForm.invalid" >Save</button>
     
         </form>
         

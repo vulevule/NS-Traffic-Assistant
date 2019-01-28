@@ -16,7 +16,7 @@ public interface TimetableService {
 	
 	Collection<TimetableItemDto> getTimeTableItemByZoneAndType(String zone, String type) throws WrongTrafficZoneException, WrongTrafficTypeException, NotFoundActivateTimetable;
 
-	Boolean addTimetable(TimetableDto newTimetable) throws LineNotFoundException, ParseException;
+	Boolean addTimetable(TimetableDto newTimetable) throws LineNotFoundException, ParseException, WrongTrafficTypeException;
 
 	
 	

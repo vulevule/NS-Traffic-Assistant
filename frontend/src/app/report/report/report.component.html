@@ -22,15 +22,17 @@
 
       <label for="typeahead-focus" class="col-12 col-form-label" *ngIf="type === 'MONTH'"> Month:
         <input #month type="text" id="month" class="form-control" name="month" [(ngModel)]="model" [ngbTypeahead]="search"
-          [resultTemplate]="rt" [inputFormatter]="formatter" />
+          [resultTemplate]="rt" [inputFormatter]="formatter" placeholder="January" 
+          />
+         
       </label>
 
       <label class="col-12 col-form-label"> Year: 
-        <input #staddress type="number" id="staddress" class="form-control" name="staddress" [(ngModel)]="year" />
+        <input #staddress type="number" id="year" class="form-control" name="year" [(ngModel)]="year" />
       </label>
 
 
-      <button type="button" class="btn btn-outline-primary" (click)="getReport()">
+      <button type="button" class="btn btn-outline-primary" (click)="getReport()" >
         OK
       </button>
 
@@ -50,7 +52,6 @@
         <pre *ngIf="type ==='YEAR'"> Year report: {{year}}</pre>
         <app-display-report [report]="report"></app-display-report>
       </div>
-
       <!--ako postoji izvestaj a cena je 0, onda prikazemo div da ne postoji izvestaj za trazeni period-->
     </div>
   </div>

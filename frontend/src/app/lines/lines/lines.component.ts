@@ -44,3 +44,4 @@ export class LinesComponent implements OnInit {
     this.activeTab = $event.nextId;
   }
 }
+

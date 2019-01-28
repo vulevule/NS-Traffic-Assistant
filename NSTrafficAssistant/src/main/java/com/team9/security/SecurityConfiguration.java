@@ -107,7 +107,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/line/create").hasAuthority(Role.ADMIN.name())
 				.antMatchers("/line/update").hasAuthority(Role.ADMIN.name())
 				.antMatchers("/line/delete/{id}").hasAuthority(Role.ADMIN.name())
-				.antMatchers("/timetable/addTimetable").hasAuthority(Role.ADMIN.name());
+				.antMatchers("/timetable/addTimetable").hasAuthority(Role.ADMIN.name())
+		        .antMatchers("/user/getUser").authenticated()
+		        .antMatchers("/user/notValidated").hasAuthority(Role.INSPECTOR.name())
+		        .antMatchers("/user/validateProfile").hasAuthority(Role.PASSENGER.name())
+		        .antMatchers("/user/profileValidated").hasAuthority(Role.INSPECTOR.name())
+		        .antMatchers("/user/profileUpdate").authenticated();
+		        
 
 				//.anyRequest().authenticated();
 
