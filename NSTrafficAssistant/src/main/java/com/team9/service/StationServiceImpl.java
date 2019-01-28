@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.team9.dto.StationDTO;
+import com.team9.exceptions.InvalidInputFormatException;
 import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.StationAlreadyExistsException;
 import com.team9.exceptions.StationNotFoundException;
@@ -29,11 +30,12 @@ public class StationServiceImpl implements StationService {
 	@Autowired
 	private LineRepository lineRepository;
 	
-	@Autowired
-	private AddressRepository addressRepository;
-	
 	@Override
-	public Station createStation(StationDTO s) throws StationAlreadyExistsException {
+	public Station createStation(StationDTO s) throws StationAlreadyExistsException, InvalidInputFormatException {
+		if(s.getName() == "" || s.getName().length() < 2 || s.getType() == null || s.getxCoordinate() == 0 || s.getyCoordinate() == 0) {
+			throw new InvalidInputFormatException();
+		}
+		
 		Station find = stationRepository.findByNameAndType(s.getName(), s.getType());
 		if (find == null) {
 			Station station = new Station(s.getName(), s.getType(), s.getxCoordinate(), s.getyCoordinate(), null);
@@ -51,16 +53,24 @@ public class StationServiceImpl implements StationService {
 		if (!find.isPresent()) {
 			throw new StationNotFoundException();
 		} else {
-			stationRepository.delete(find.get());
+			stationRepository.deleteById(find.get().getId());
 			return true;
 		}
 	}
 
 	@Override
-	public Station updateStation(StationDTO s) throws StationNotFoundException, StationAlreadyExistsException {
+	public Station updateStation(StationDTO s) throws StationNotFoundException, StationAlreadyExistsException, InvalidInputFormatException {
+		if(s.getName() == "" || s.getName().length() < 2 || s.getType() == null || s.getxCoordinate() == 0 || s.getyCoordinate() == 0) {
+			throw new InvalidInputFormatException();
+		}
+		
 		Optional<Station> find = stationRepository.findById(s.getId());
 		if (find.isPresent()) {
 			Station station = find.get();
+			
+			if(station.getType() != s.getType()) {
+				throw new InvalidInputFormatException();
+			}
 			
 			Station temp = stationRepository.findByNameAndType(s.getName(), s.getType());
 			if(temp != null && temp.getId() != station.getId()) {

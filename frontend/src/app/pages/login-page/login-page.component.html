@@ -12,7 +12,7 @@
         <input type="text" id="username" class="form-control" name="username" [(ngModel)]="user.username" placeholder="Username" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" id="inputPassword" class="form-control" name="password" [(ngModel)]="user.password" placeholder="Password" required>
-        <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-primary btn-block" type="submit" id="submitLoginButton">Sign in</button>
       </form>
       
       <div *ngIf="message!==''">

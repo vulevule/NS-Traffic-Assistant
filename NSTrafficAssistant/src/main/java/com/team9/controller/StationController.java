@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team9.dto.StationDTO;
+import com.team9.exceptions.InvalidInputFormatException;
 import com.team9.exceptions.LineNotFoundException;
 import com.team9.exceptions.StationAlreadyExistsException;
 import com.team9.exceptions.StationNotFoundException;
@@ -109,7 +110,7 @@ public class StationController {
 	}
 	
 	@PostMapping(value="/station/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> createStation(@RequestBody StationDTO station){
+	public ResponseEntity<String> createStation(@RequestBody StationDTO station) {
 		logger.info(">> Creating station  " + station.getName());
 		logger.info("GELDAJ VAMO: " + station.getType());
 		
@@ -118,10 +119,13 @@ public class StationController {
 		try {
 			created = stationService.createStation(station);
 			logger.info("<< Creating station  " + station.getName());
-			message = "Station " + station.getName() + " successfully created!";
+			message = "Station " + station.getName() + " successfully created";
 			return new ResponseEntity<>(message, HttpStatus.CREATED);
 		} catch (StationAlreadyExistsException e) {
 			message = station.getType() + " station " + station.getName() + " already exists!";
+			return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
+		} catch (InvalidInputFormatException e) {
+			message = "Invalid input format!";
 			return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
@@ -136,27 +140,33 @@ public class StationController {
 		try {
 			updated = stationService.updateStation(station);
 			logger.info("<< Updating station  " + station.getName());
-			message = "Station " + station.getName() + " successfully updated!";
+			message = "Station " + station.getName() + " successfully updated";
 			return new ResponseEntity<>(message, HttpStatus.CREATED);
 		} catch (StationNotFoundException e) {
-			message = "Station " + station.getName() + " not found";
+			message = "Station " + station.getName() + " not found!";
 			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
 		} catch (StationAlreadyExistsException e) {
 			message = station.getType() + " station " + station.getName() + " already exists!";
+			return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
+		} catch (InvalidInputFormatException e) {
+			message = "Invalid input format!";
 			return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 	
 	@DeleteMapping(value="/station/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> deleteStation(@PathVariable Long id){
+	public ResponseEntity<String> deleteStation(@PathVariable Long id){
 		logger.info(">> Deleting station  " + id);
 
+		String message;
 		try {
 			stationService.deleteStation(id);
 			logger.info("<< Deleting station  " + id);
-			return new ResponseEntity<>(HttpStatus.OK);
+			message = "Station deleted";
+			return new ResponseEntity<>(message, HttpStatus.OK);
 		} catch (StationNotFoundException e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			message = "Station not found!";
+			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
 		}
 	}
 	

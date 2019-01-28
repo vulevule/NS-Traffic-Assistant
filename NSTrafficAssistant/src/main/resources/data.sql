@@ -111,7 +111,6 @@ insert into price_item(id, price, traffic_type, time_type, zone, student_discoun
 values (34, 100, 2,3,1, 10, 5, 5 ,10);
 
 --stanice
-
 insert into station(id, name, type, x_coordinate, y_coordinate)
 values(1, 'Bazar', 0, 19.830287933873482, 45.26408747364272);
 insert into station(id, name, type, x_coordinate, y_coordinate)
@@ -132,20 +131,29 @@ insert into line (id, mark, name, type, zone)
 values(1, '1A', 'ZELEZNICKA - FUTOSKA PIJACA - ZELZENICKA', 0, 0);
 
 insert into line (id, mark, name, type, zone)
-values(2, '1T', 'BULEVAR J.T. - BAZAR - BULEVAR J.T.', 2, 0);
+values(2, '2A', 'Test linija', 0, 1);
+
+insert into line (id, mark, name, type, zone)
+values(3, '1T', 'BULEVAR J.T. - BAZAR - BULEVAR J.T.', 2, 0);
 
 --station-line
-insert into station_line(id, arrival, station_num, line_id, station_id)--line 1
+--line 1
+insert into station_line(id, arrival, station_num, line_id, station_id)
 values (1, 0, 1, 1, 1);
 insert into station_line(id, arrival, station_num, line_id, station_id)
 values (2, 5, 2, 1, 4);
-insert into station_line(id, arrival, station_num, line_id, station_id)
-values (3, 10, 3, 1, 6);
 --line 2
 insert into station_line(id, arrival, station_num, line_id, station_id)
-values (4, 0, 1, 2, 7);
+values (3, 0, 1, 2, 1);
 insert into station_line(id, arrival, station_num, line_id, station_id)
-values (5, 10, 2, 2, 2);
+values (4, 5, 2, 2, 4);
+insert into station_line(id, arrival, station_num, line_id, station_id)
+values (5, 10, 3, 2, 5);
+--line 3
+insert into station_line(id, arrival, station_num, line_id, station_id)
+values (6, 0, 1, 3, 7);
+insert into station_line(id, arrival, station_num, line_id, station_id)
+values (7, 10, 2, 3, 2);
 
 --location
 --1. linija
@@ -161,7 +169,7 @@ values (4,19.830292760743752,  45.26413093570861 );
 insert into location(id, lon, lat)
 values (5,19.829472600686127, 45.264761892239505  );
 
---2. linija
+--3. linija
  insert into location(id, lon, lat)
 values (6, 19.8238649959967,  45.26392956524123 );
 insert into location(id, lon, lat)
@@ -183,6 +191,17 @@ values (14, 19.822053014504487,  45.264010113667524 );
 insert into location(id, lon, lat)
 values (15,19.823903142823834,  45.2639564150366 ) ;
 
+--2. linija
+insert into location(id, lon, lat)
+values (16, 19.843186438956764, 45.24886502908012 );
+
+insert into location(id, lon, lat)
+values (17,  19.839238225977166, 45.2479921840457 );
+insert into location(id, lon, lat)
+values (18, 19.837025702145183,45.25202058846409 );
+insert into location(id, lon, lat)
+values (19,19.830292760743752,  45.26413093570861 );
+
 --rute
 -- prva
 insert into line_route (line_id, route_id)
@@ -196,25 +215,33 @@ values (1, 4);
 insert into line_route ( line_id, route_id)
 values (1, 5);
 --druga
-insert into line_route ( line_id, route_id)
-values ( 2, 6);
 insert into line_route (line_id, route_id)
-values ( 2, 7);
+values (2, 16);
+insert into line_route ( line_id, route_id)
+values ( 2, 17);
+insert into line_route ( line_id, route_id)
+values ( 2, 18);
 insert into line_route (line_id, route_id)
-values ( 2, 8);
+values (2, 19);
+--treca
+insert into line_route ( line_id, route_id)
+values ( 3, 6);
 insert into line_route (line_id, route_id)
-values ( 2, 9);
+values ( 3, 7);
+insert into line_route (line_id, route_id)
+values ( 3, 8);
+insert into line_route (line_id, route_id)
+values ( 3, 9);
 insert into line_route ( line_id, route_id)
-values ( 2, 10);
+values ( 3, 10);
 insert into line_route ( line_id, route_id)
-values (2, 12);
+values (3, 12);
 insert into line_route ( line_id, route_id)
-values (2, 13);
+values (3, 13);
 insert into line_route ( line_id, route_id)
-values ( 2, 14);
+values ( 3, 14);
 insert into line_route ( line_id, route_id)
-values ( 2, 15);
-
+values ( 3, 15);
 
 --red voznje
 insert into timetable (id, issue_date, activate)
@@ -253,4 +280,3 @@ insert into timetable_item (id, start_time, type, line_id, timetable_id)
 values(13, "13:30", 2, 1, 1);
 insert into timetable_item (id, start_time, type, line_id, timetable_id)
 values(14, "14:30", 2, 1, 1);
-

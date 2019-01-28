@@ -34,7 +34,7 @@ public class Station implements Serializable{
 	private double yCoordinate;
 	
 	//stanica moze da pripada vise linija, linija sadrzi vise stanica 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="station", cascade=CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="station", cascade=CascadeType.ALL)
 	private List<StationLine> stationLines;
 	
 	public Station() {}

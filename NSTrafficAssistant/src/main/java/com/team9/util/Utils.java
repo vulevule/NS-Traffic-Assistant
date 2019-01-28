@@ -1,9 +1,15 @@
 package com.team9.util;
 
+//import com.mysql.jdbc.util.VersionFSHierarchyMaker;
+
 public class Utils {
+	 
 	
 	public static double timeForBus(UtilLocation l1, UtilLocation l2) {
-		return distance(l1, l2) / 40.0;
+		double vehicleSpeed = 20.0; // in kmph
+		double value = distance(l1, l2) / vehicleSpeed;
+		value = Math.round(value * 60 * 100) / 100.0;
+		return value;
 	}
 	
 	public static double distance(UtilLocation l1, UtilLocation l2) {
