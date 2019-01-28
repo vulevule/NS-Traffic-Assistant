@@ -9,7 +9,7 @@ import { LineService } from '../lines/line.service';
   providedIn: 'root'
 })
 export class SharedService {
-  
+
   private stationSource = new BehaviorSubject<StationDTO[]>([]);
   private lineSource = new BehaviorSubject<LineDTO[]>([]);
 
@@ -20,13 +20,13 @@ export class SharedService {
 
   updateStations() {
     this.stationService.getAll().subscribe(data => {
-      this.stationSource.next(data);     
+      this.stationSource.next(data);
     });
   }
 
   updateLines() {
     this.lineService.getAll().subscribe(data => {
-      this.lineSource.next(data);     
+      this.lineSource.next(data);
     });
   }
 

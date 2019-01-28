@@ -10,7 +10,7 @@ export class LineService {
   private headers = new HttpHeaders({ "Content-Type": "application/json" });
   private linesUrl = "/api/line";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAll(): Observable<LineDTO[]> {
     return this.http.get<LineDTO[]>(`${this.linesUrl}/getAll`);

@@ -8,16 +8,16 @@ describe('DisplayTimetableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DisplayTimetableComponent ]
+      declarations: [DisplayTimetableComponent]
     })
-    .compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(DisplayTimetableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+    component.displayItems = [{
+      mark: '1A', name: 'linija test', times: []
+    }]
+  }));
+
 
   it('should create', () => {
     expect(component).toBeTruthy();

@@ -5,14 +5,14 @@ import { HttpTestingController, HttpClientTestingModule } from '@angular/common/
 import { PriceListInterface } from 'src/app/model/Pricelist';
 
 describe('PriceListServiceService', () => {
-  let injector : TestBed;
-  let service : PriceListServiceService;
-  let httpMock : HttpTestingController;
+  let injector: TestBed;
+  let service: PriceListServiceService;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports : [HttpClientTestingModule],
-      providers : [PriceListServiceService]
+      imports: [HttpClientTestingModule],
+      providers: [PriceListServiceService]
     });
 
     injector = getTestBed();
@@ -28,10 +28,16 @@ describe('PriceListServiceService', () => {
 
   describe('#getPricelist', () => {
     it('shoould be return an Observable<PricelistInterface>', () => {
-      const dummyPricelist : PriceListInterface = {
-        items : [
-          {price : 100, trafficType : 'bus', timeType : 'single', zone : 'second', studentDiscount : 0, handycapDiscount : 0, seniorDiscount : 0},
-          {price : 12000, trafficType : 'metro', timeType : 'annual', zone : 'first', studentDiscount : 10, handycapDiscount : 5, seniorDiscount : 5}
+      const dummyPricelist: PriceListInterface = {
+        items: [
+          {
+            price: 100, trafficType: 'bus', timeType: 'single', zone: 'second',
+            studentDiscount: 0, handycapDiscount: 0, seniorDiscount: 0
+          },
+          {
+            price: 12000, trafficType: 'metro', timeType: 'annual', zone: 'first',
+            studentDiscount: 10, handycapDiscount: 5, seniorDiscount: 5
+          }
         ]
       };
 
@@ -50,10 +56,16 @@ describe('PriceListServiceService', () => {
   describe('#addPricelist', () => {
     it('should be return an Observable<String>', () => {
       const dummyMessage = "The price list has been successfully added!";
-      let p : PriceListInterface = {
-        items : [
-          {price : 100, trafficType : 'bus', timeType : 'single', zone : 'second', studentDiscount : 0, handycapDiscount : 0, seniorDiscount : 0},
-          {price : 12000, trafficType : 'metro', timeType : 'annual', zone : 'first', studentDiscount : 10, handycapDiscount : 5, seniorDiscount : 5}
+      let p: PriceListInterface = {
+        items: [
+          {
+            price: 100, trafficType: 'bus', timeType: 'single', zone: 'second', studentDiscount: 0,
+            handycapDiscount: 0, seniorDiscount: 0
+          },
+          {
+            price: 12000, trafficType: 'metro', timeType: 'annual', zone: 'first', studentDiscount: 10,
+            handycapDiscount: 5, seniorDiscount: 5
+          }
         ]
       };
 

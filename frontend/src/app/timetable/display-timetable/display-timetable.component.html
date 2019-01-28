@@ -1,8 +1,8 @@
 <table *ngFor="let i of displayItems">
-  <tr> 
+  <tr>
     <th colspan="4"> {{i.mark}} {{i.name}}</th>
   </tr>
-  <tr *ngFor="let t of i.times"> 
+  <tr *ngFor="let t of i.times">
     <td *ngFor="let m of t">
       {{m}}
     </td>

@@ -31,7 +31,7 @@ import { UserDTO } from 'src/app/model/UserDTO';
 })
 export class LinesDisplayComponent implements OnInit {
   loggedUser: UserDTO;
-  
+
   @Input()
   stations: StationDTO[];
 
@@ -66,10 +66,10 @@ export class LinesDisplayComponent implements OnInit {
         term.length < 2
           ? []
           : this.lines
-              .filter(
-                s => s.name.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 20)
+            .filter(
+              s => s.name.toLowerCase().indexOf(term.toLowerCase()) > -1
+            )
+            .slice(0, 20)
       )
     );
 
@@ -83,12 +83,12 @@ export class LinesDisplayComponent implements OnInit {
         term.length < 2
           ? []
           : this.stations
-              .filter(
-                s =>
-                  s.name.toLowerCase().indexOf(term.toLowerCase()) > -1 &&
-                  this.displayType[s.type.toLowerCase()]
-              )
-              .slice(0, 20)
+            .filter(
+              s =>
+                s.name.toLowerCase().indexOf(term.toLowerCase()) > -1 &&
+                this.displayType[s.type.toLowerCase()]
+            )
+            .slice(0, 20)
       )
     );
 
@@ -113,7 +113,7 @@ export class LinesDisplayComponent implements OnInit {
   constructor(
     private sharedService: SharedService,
     private lineService: LineService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loggedUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -159,7 +159,7 @@ export class LinesDisplayComponent implements OnInit {
       })
     });
 
-    vm.map.on("click", function(args) {
+    vm.map.on("click", function (args) {
       var f = vm.map.forEachFeatureAtPixel(args.pixel, (ft, layer) => {
         return ft;
       });
@@ -200,7 +200,7 @@ export class LinesDisplayComponent implements OnInit {
       }
     });
 
-    vm.closer.onclick = function() {
+    vm.closer.onclick = function () {
       vm.overlay.setPosition(undefined);
       vm.closer.blur();
       return false;
@@ -267,8 +267,8 @@ export class LinesDisplayComponent implements OnInit {
           station.type === "BUS"
             ? "../../../assets/images/BUS-station.png"
             : station.type === "METRO"
-            ? "../../../assets/images/METRO-station.png"
-            : "../../../assets/images/TRAM-station.png",
+              ? "../../../assets/images/METRO-station.png"
+              : "../../../assets/images/TRAM-station.png",
         scale: 0.09
       }),
       text: new Text({
@@ -316,11 +316,11 @@ export class LinesDisplayComponent implements OnInit {
     });
   }
 
-  drawLine(line: LineDTO) {  
+  drawLine(line: LineDTO) {
 
     var row = colorPalette[Math.round((colorPalette.length - 1) * Math.random())]
     var color = row[Math.round((row.length - 1) * Math.random())]
-    
+
     /* var colors = ["red", "orange", "yellow", "green", "blue", "purple"];
     var fill = colors[Math.round((colors.length - 1) * Math.random())];
     var fillNew = [
@@ -387,8 +387,8 @@ export class LinesDisplayComponent implements OnInit {
       type === "BUS"
         ? busLineStyle
         : type === "TRAM"
-        ? tramLineStyle
-        : metroLineStyle
+          ? tramLineStyle
+          : metroLineStyle
     );
     // add line to the layer
     this.vectorSource.addFeature(line);

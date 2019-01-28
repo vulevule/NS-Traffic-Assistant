@@ -11,8 +11,8 @@ import { first } from 'rxjs/operators';
 })
 export class DisplayPriceListComponent implements OnInit {
   pricelist: PriceListInterface;
-  items : ItemInterface[];
-  message : string;
+  items: ItemInterface[];
+  message: string;
 
   displayType = {
     bus: false,
@@ -26,23 +26,24 @@ export class DisplayPriceListComponent implements OnInit {
   };
 
   displayTicketTime = {
-    annual : false,
-    month : false,
-    single : false,
-    daily : false
+    annual: false,
+    month: false,
+    single: false,
+    daily: false
   }
 
   constructor(private pricelistService: PriceListServiceService) { }
 
   ngOnInit() {
     this.pricelistService.getPricelist()
-      .subscribe( (data : PriceListInterface) => {
-          this.pricelist = data;
-          this.items = this.pricelist.items;
+      .subscribe((data: PriceListInterface) => {
+        this.pricelist = data;
+        this.items = this.pricelist.items;
 
       },
-      err => {this.message = err.error;
-      }
+        err => {
+          this.message = err.error;
+        }
       );
   }
 

@@ -18,8 +18,14 @@ describe('DisplayPriceListComponent', () => {
 
   beforeEach(async(() => {
     let p: PriceListInterface = {
-      items: [{ price: 100, trafficType: 'bus', timeType: 'single', zone: 'second', studentDiscount: 0, handycapDiscount: 0, seniorDiscount: 0 },
-      { price: 12000, trafficType: 'metro', timeType: 'annual', zone: 'first', studentDiscount: 10, handycapDiscount: 5, seniorDiscount: 5 }
+      items: [{
+        price: 100, trafficType: 'bus', timeType: 'single', zone: 'second',
+        studentDiscount: 0, handycapDiscount: 0, seniorDiscount: 0
+      },
+      {
+        price: 12000, trafficType: 'metro', timeType: 'annual', zone: 'first',
+        studentDiscount: 10, handycapDiscount: 5, seniorDiscount: 5
+      }
       ]
     }
     let priceListServiceMocked = {

@@ -10,13 +10,13 @@ import { UserDTO } from 'src/app/model/UserDTO';
 })
 export class TicketComponent implements OnInit {
 
-  role : String = '';
+  role: String = '';
 
-  constructor() { 
-    let user : UserDTO = JSON.parse(
+  constructor() {
+    let user: UserDTO = JSON.parse(
       localStorage.getItem('currentUser'));
 
-    if(user !== null){
+    if (user !== null) {
       this.role = user.role;
     }
 
