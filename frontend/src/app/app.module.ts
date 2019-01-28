@@ -64,6 +64,7 @@ import { NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 import { CreateTimetableComponent } from './timetable/create-timetable/create-timetable.component';
 import { FilterTicketBySnoPipe } from './ticket/pipes/filter-ticket-by-sno.pipe';
 import { MatchingPasswordDirective } from './pages/register-page/matching-password.directive';
+import { AuthGuard } from './guard/auth.guard';
 
 
 
@@ -76,9 +77,9 @@ const appRoutes: Routes = [
       { path: 'stations', component: StationsComponent},
       { path: 'lines', component: LinesComponent},
       { path: 'login', component: LoginPageComponent},
-      { path : 'ticket' , component : TicketComponent},
+      { path : 'ticket' , component : TicketComponent,canActivate:[AuthGuard]},
       { path : 'pricelist', component : PricelistComponent},
-      { path : 'report', component : ReportComponent}, 
+      { path : 'report', component : ReportComponent,canActivate:[AuthGuard]}, 
       { path : 'timetable', component : TimetableComponent}
     ] 
   },

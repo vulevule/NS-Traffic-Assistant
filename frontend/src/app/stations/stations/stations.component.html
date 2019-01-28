@@ -7,7 +7,7 @@
       </ng-template>
     </ngb-tab>
 
-    <ngb-tab title="Create new" id="createStationTab">
+    <ngb-tab *ngIf="role === 'ADMIN'" title="Create new" id="createStationTab">
       <ng-template ngbTabContent>
         <!-- Create station component -->
         <app-stations-create [stations]="stations" (onCreation)="activeTab = $event"></app-stations-create>
