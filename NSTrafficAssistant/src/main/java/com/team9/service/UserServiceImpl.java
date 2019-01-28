@@ -174,8 +174,14 @@ public User UpdateDtoToUser(UpdateProfileDto update) {
 	}
 	
 	if(user.getPassword()!=update.getPassword() || update.getPassword()!="") {
-		user.setPassword(update.getPassword());
+		if(update.getPassword()=="") {
+			user.setPassword(user.getPassword());
+		}
+		else {
+		user.setPassword(update.getPassword());}
 	}
+	
+	
 	
 	
 	Address a = addressRepository.findByStreetAndCityAndZip(update.getAddress().getStreet(), update.getAddress().getCity(), update.getAddress().getZip());

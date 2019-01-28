@@ -11,6 +11,11 @@ public class UpdateProfileDto {
 		this.password = password;
 		this.address = address;
 	}
+	
+	public UpdateProfileDto() {
+		super();
+	}
+
 	private String username;
 	private String name;
 	private String email;

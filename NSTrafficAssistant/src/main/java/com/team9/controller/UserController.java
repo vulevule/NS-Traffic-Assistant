@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,7 +63,10 @@ public class UserController {
 	private UserDetailsService userDetailsService;
 	
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
-
+    
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Autowired
 	TokenUtils tokenUtils;
 	

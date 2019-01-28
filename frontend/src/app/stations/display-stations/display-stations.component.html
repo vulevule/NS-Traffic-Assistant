@@ -252,7 +252,7 @@
         </ng-template>
       </ngb-tab>
 
-      <ngb-tab title="Create new" id="createStationTab">
+      <ngb-tab *ngIf="role === 'ADMIN'" title="Create new" id="createStationTab">
         <ng-template ngbTabContent>
           <form #createForm="ngForm">
             <label class="col-12 col-form-label"

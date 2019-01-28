@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { LineDTO } from "src/app/model/LineDTO";
 import { StationDTO } from "src/app/model/StationDTO";
+import {UserDTO} from "src/app/model/UserDTO";
 import { SharedService } from "src/app/services/sharedVars/shared.service";
 
 @Component({
@@ -11,11 +12,19 @@ import { SharedService } from "src/app/services/sharedVars/shared.service";
 export class LinesComponent implements OnInit {
   lines: LineDTO[];
   stations: StationDTO[];
+  loggedUser : UserDTO;
+  role : String = '';
 
   activeTab: String;
   selectedLine: LineDTO;
 
-  constructor(private sharedService: SharedService) {}
+  constructor(private sharedService: SharedService) {
+    this.loggedUser = JSON.parse(
+      localStorage.getItem('currentUser'));
+    if(this.loggedUser !== null){
+      this.role = this.loggedUser.role;
+    }
+  }
 
   ngOnInit() {
     this.sharedService.stations.subscribe(
