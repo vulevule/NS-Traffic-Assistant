@@ -236,6 +236,7 @@ public class LineServiceIntegrationTest {
 	}
 
 	@Test(expected = InvalidInputFormatException.class)
+	@Transactional
 	public void testUpdateLine_invalidInputDuplicateCoords() throws LineAlreadyExistsException,
 			StationNotFoundException, InvalidInputFormatException, LineNotFoundException {
 		StationLineDto sl1 = new StationLineDto(1, 0, 1L, 0L, "Nebitno", "Nebitno", "Takodje nebitno");
@@ -266,6 +267,7 @@ public class LineServiceIntegrationTest {
 	}
 
 	@Test(expected = InvalidInputFormatException.class)
+	@Transactional
 	public void testUpdateLine_invalidInputStationTypeMissmatch() throws LineAlreadyExistsException,
 			StationNotFoundException, InvalidInputFormatException, LineNotFoundException {
 		StationLineDto sl1 = new StationLineDto(1, 0, 7L, 0L, "Nebitno", "Nebitno", "Takodje nebitno");
@@ -281,6 +283,7 @@ public class LineServiceIntegrationTest {
 	}
 
 	@Test(expected = StationNotFoundException.class)
+	@Transactional
 	public void testUpdateLine_stationNotFound() throws LineAlreadyExistsException, StationNotFoundException,
 			InvalidInputFormatException, LineNotFoundException {
 		StationLineDto sl1 = new StationLineDto(1, 0, 1L, 0L, "Nebitno", "Nebitno", "Takodje nebitno");
@@ -334,6 +337,7 @@ public class LineServiceIntegrationTest {
 	}
 
 	@Test
+	@Transactional
 	public void testFindByName_found() {
 		List<Line> lines = lineService.getAllByName("ZELEZNICKA - FUTOSKA PIJACA - ZELZENICKA");
 
@@ -353,6 +357,7 @@ public class LineServiceIntegrationTest {
 	}
 
 	@Test
+	@Transactional
 	public void testFindByType_found() {
 		List<Line> lines = lineService.getAllByTrafficType(TrafficType.BUS);
 
@@ -376,6 +381,7 @@ public class LineServiceIntegrationTest {
 	}
 
 	@Test
+	@Transactional
 	public void testFindByZone_found() {
 		List<Line> lines = lineService.getAllByTrafficZone(TrafficZone.FIRST);
 
@@ -389,6 +395,7 @@ public class LineServiceIntegrationTest {
 	}
 
 	@Test
+	@Transactional
 	public void testFindByMarkAndType_found() {
 		Line line = lineService.getByMarkAndType("1A", TrafficType.BUS);
 
@@ -418,6 +425,7 @@ public class LineServiceIntegrationTest {
 	}
 
 	@Test
+	@Transactional
 	public void testFindById_found() {
 		Line line = lineService.getById(1L);
 
@@ -437,6 +445,7 @@ public class LineServiceIntegrationTest {
 	}
 
 	@Test
+	@Transactional
 	public void testGetByStation_found() {
 		List<Line> lines = lineService.getAllByStation(1L);
 
@@ -460,6 +469,7 @@ public class LineServiceIntegrationTest {
 	}
 
 	@Test
+	@Transactional
 	public void testGetByStation_notFound() {
 		List<Line> lines = lineService.getAllByStation(10L);
 

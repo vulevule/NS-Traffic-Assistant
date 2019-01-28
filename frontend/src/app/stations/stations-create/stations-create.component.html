@@ -95,6 +95,7 @@
       </div>
       <hr />
       <button
+        id="saveStationButton"
         type="submit"
         class="btn btn-outline-primary"
         (click)="createStation(newStation)"
@@ -103,7 +104,6 @@
         Create
       </button>
     </form>
-    {{ newStation | json }}
   </div>
 
   <!-- Map component -->

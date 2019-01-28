@@ -30,10 +30,10 @@ public class StationLine implements Serializable{
 	private int arrival;
 	
 	// Jedna stanica moze imati vise StationLine a jedan StationLine se odnosi samo na jednu stanicu
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=true)
 	private Station station;
 	
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=true)
 //	@JoinColumn(name = "line_id", nullable = false)
 //	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Line line;

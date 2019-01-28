@@ -40,12 +40,12 @@ public class Line implements Serializable {
 	@Column(nullable = false)
 	private TrafficZone zone;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@Fetch(FetchMode.SELECT)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@Fetch(FetchMode.SELECT)
 	private List<Location> route;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "line", cascade = CascadeType.ALL)
-	@Fetch(FetchMode.SELECT)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "line", cascade = CascadeType.ALL)
+	//@Fetch(FetchMode.SELECT)
 	private List<StationLine> stations;
 
 	public Line() {

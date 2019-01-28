@@ -55,9 +55,9 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
   @Input() selectedStationObs: Observable<any>;
 
   // Novi Sad coordinates
-  latitude: number = 45.26060794;
-  longitude: number = 19.83221305;
-  zoomSize: number = 16;
+  latitude = 45.26060794;
+  longitude = 19.83221305;
+  zoomSize = 16;
 
   markerOnMap: any;
   currentMarker: any;
@@ -73,7 +73,7 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
         this.drawStations();
       }
     }
-    //this.drawStations();
+    // this.drawStations();
   }
 
   ngOnInit() {
@@ -121,16 +121,16 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     vm.map.on("click", function(args) {
-      var f = vm.map.forEachFeatureAtPixel(args.pixel, (ft, layer) => {
+      const f = vm.map.forEachFeatureAtPixel(args.pixel, (ft, layer) => {
         return ft;
       });
 
       if (f && f.get("name") === "Station") {
-        var name = f
+        const name = f
           .getStyle()
           .getText()
           .getText();
-        var type = f.get("description");
+        const type = f.get("description");
 
         vm.selectedStation = JSON.parse(
           JSON.stringify(
@@ -142,7 +142,7 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
       } else {
         // draw marker
 
-        var lonlat = transform(args.coordinate, "EPSG:3857", "EPSG:4326");
+        const lonlat = transform(args.coordinate, "EPSG:3857", "EPSG:4326");
         vm.drawMarker(args.coordinate, lonlat);
 
         vm.markerOnMap = lonlat;
@@ -152,7 +152,7 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     vm.map.on("pointermove", args => {
-      var f = vm.map.forEachFeatureAtPixel(args.pixel, (ft, layer) => {
+      let f = vm.map.forEachFeatureAtPixel(args.pixel, (ft, layer) => {
         return ft;
       });
 
@@ -207,7 +207,7 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
     this.removeMarkers();
 
     // define style for the marker
-    let markerStyle = new Style({
+    const markerStyle = new Style({
       image: new Icon({
         anchor: [0.5, 1],
         anchorXUnits: "fraction",
@@ -233,7 +233,7 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
       zIndex: 5
     });
     // create marker feature and set style
-    let marker = new Feature({
+    const marker = new Feature({
       geometry: new Point(coordinates),
       name: "Marker"
     });
@@ -251,7 +251,7 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
     stationType: String
   ) {
     // create station feature and set style
-    let busStationStyle = new Style({
+    const busStationStyle = new Style({
       image: new Icon({
         anchor: [0.5, 1],
         anchorXUnits: "fraction",
@@ -281,7 +281,7 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
       })
     });
 
-    let busStation = new Feature({
+    const busStation = new Feature({
       geometry: new Point(fromLonLat([lon, lat])),
       name: "Station",
       description: stationType
@@ -305,6 +305,6 @@ export class StationsMapComponent implements OnInit, OnChanges, OnDestroy {
     ) {
       this.vectorSource.removeFeature(this.currentMarker);
     }
-    //this.currentMarker = undefined;
+    // this.currentMarker = undefined;
   }
 }

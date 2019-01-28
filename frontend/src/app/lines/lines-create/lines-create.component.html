@@ -10,13 +10,13 @@
           [(ngModel)]="newLine.type"
           (change)="updateMap()"
         >
-          <label ngbButtonLabel class="btn-primary">
+          <label ngbButtonLabel class="btn-primary" id="busTypeButton">
             <input ngbButton type="radio" value="BUS" /> Bus
           </label>
-          <label ngbButtonLabel class="btn-primary">
+          <label ngbButtonLabel class="btn-primary" id="tramTypeButton">
             <input ngbButton type="radio" value="TRAM" /> Tram
           </label>
-          <label ngbButtonLabel class="btn-primary">
+          <label ngbButtonLabel class="btn-primary" id="metroTypeButton">
             <input ngbButton type="radio" value="METRO" /> Metro
           </label>
         </div>
@@ -32,10 +32,10 @@
           name="radioZone"
           [(ngModel)]="newLine.zone"
         >
-          <label ngbButtonLabel class="btn-primary">
+          <label ngbButtonLabel class="btn-primary" id="firstZoneButton">
             <input ngbButton type="radio" value="FIRST" /> First
           </label>
-          <label ngbButtonLabel class="btn-primary">
+          <label ngbButtonLabel class="btn-primary" id="secondZoneButton">
             <input ngbButton type="radio" value="SECOND" /> Second
           </label>
         </div>
@@ -115,6 +115,7 @@
         <div class="btn-group btnFloatRight">
           <button
             type="button"
+            id="cancelButton"
             class="btn"
             (click)="buttonClick.emit('displayLinesTab')"
           >
@@ -122,6 +123,7 @@
           </button>
           <button
             type="submit"
+            id="saveLineButton"
             class="btn btn-outline-primary"
             (click)="createLine(newLine)"
             [disabled]="!createForm.valid"
@@ -132,12 +134,13 @@
       </div>
     </form>
     <br />
-    New line: {{ newLine | json }}
+    <!-- New line: {{ newLine | json }} -->
   </div>
 
   <div class="col-12 col-md-8 map-content">
     <div class="mapButton">
       <button
+        id="createRouteButton"
         type="button"
         class="btn btn-primary"
         (click)="startCreatingRoute()"
@@ -147,6 +150,7 @@
       </button>
 
       <button
+        id="stopCreatingRouteButton"
         type="button"
         class="btn btn-danger"
         (click)="stopCreatingRoute()"

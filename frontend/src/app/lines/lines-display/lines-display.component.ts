@@ -21,8 +21,8 @@ import View from "ol/View";
 import LineString from "ol/geom/LineString";
 import Overlay from "ol/Overlay";
 import { LineService } from "src/app/services/lines/line.service";
-import { colorPalette } from 'src/app/util/ColorPalette';
-import { UserDTO } from 'src/app/model/UserDTO';
+import { colorPalette } from "src/app/util/ColorPalette";
+import { UserDTO } from "src/app/model/UserDTO";
 
 @Component({
   selector: "app-lines-display",
@@ -31,7 +31,7 @@ import { UserDTO } from 'src/app/model/UserDTO';
 })
 export class LinesDisplayComponent implements OnInit {
   loggedUser: UserDTO;
-  
+
   @Input()
   stations: StationDTO[];
 
@@ -67,7 +67,10 @@ export class LinesDisplayComponent implements OnInit {
           ? []
           : this.lines
               .filter(
-                s => s.name.toLowerCase().indexOf(term.toLowerCase()) > -1
+                s =>
+                  (s.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    s.mark.toLowerCase().indexOf(term.toLowerCase()) > -1) &&
+                  this.displayType[s.type.toLowerCase()]
               )
               .slice(0, 20)
       )
@@ -140,7 +143,7 @@ export class LinesDisplayComponent implements OnInit {
     // Latitude - Y
     // Longitude - X
 
-    let vm = this;
+    const vm = this;
     // create map and set initial layers
     vm.map = new Map({
       target: "map",
@@ -160,20 +163,20 @@ export class LinesDisplayComponent implements OnInit {
     });
 
     vm.map.on("click", function(args) {
-      var f = vm.map.forEachFeatureAtPixel(args.pixel, (ft, layer) => {
+      let f = vm.map.forEachFeatureAtPixel(args.pixel, (ft, layer) => {
         return ft;
       });
 
       if (f && f.get("name") === "Station") {
-        var name = f
+        let name = f
           .getStyle()
           .getText()
           .getText();
-        var type = f.get("description");
+        let type = f.get("description");
 
-        var station = vm.stations.find(s => s.name === name && s.type === type);
+        let station = vm.stations.find(s => s.name === name && s.type === type);
 
-        //alert("Now should display " + station.name + " popup");
+        // alert("Now should display " + station.name + " popup");
 
         vm.content.innerHTML = vm.generatePopupContent(station);
         vm.overlay.setPosition(args.coordinate);
@@ -189,7 +192,7 @@ export class LinesDisplayComponent implements OnInit {
     });
 
     vm.map.on("pointermove", args => {
-      var f = vm.map.forEachFeatureAtPixel(args.pixel, (ft, layer) => {
+      let f = vm.map.forEachFeatureAtPixel(args.pixel, (ft, layer) => {
         return ft;
       });
 
@@ -226,8 +229,8 @@ export class LinesDisplayComponent implements OnInit {
 
   selectLine(line: LineDTO) {
     this.selectedLine = line;
-    //this.linesOnMap.push(JSON.parse(JSON.stringify(line)));
-    //this.clearMap();
+    // this.linesOnMap.push(JSON.parse(JSON.stringify(line)));
+    // this.clearMap();
     if (this.linesOnMap.find(l => l.line.id === line.id)) {
       this.removeLineFromMap(line);
     } else {
@@ -311,16 +314,16 @@ export class LinesDisplayComponent implements OnInit {
 
   drawStationsForLine(line: LineDTO) {
     line.stations.forEach(stationLine => {
-      var station = this.stations.find(i => i.id === stationLine.stationId);
+      let station = this.stations.find(i => i.id === stationLine.stationId);
       this.drawStation(station);
     });
   }
 
-  drawLine(line: LineDTO) {  
+  drawLine(line: LineDTO) {
+    let row =
+      colorPalette[Math.round((colorPalette.length - 1) * Math.random())];
+    let color = row[Math.round((row.length - 1) * Math.random())];
 
-    var row = colorPalette[Math.round((colorPalette.length - 1) * Math.random())]
-    var color = row[Math.round((row.length - 1) * Math.random())]
-    
     /* var colors = ["red", "orange", "yellow", "green", "blue", "purple"];
     var fill = colors[Math.round((colors.length - 1) * Math.random())];
     var fillNew = [

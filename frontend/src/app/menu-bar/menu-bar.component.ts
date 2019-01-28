@@ -61,13 +61,4 @@ export class MenuBarComponent implements OnInit {
 
   }
 
-  loadDataFromFile() {
-    var message = this.loadDataService.loadData("1").subscribe(success => {
-      alert(success);
-      this.sharedService.updateAll();
-    }, error => {
-      alert(error.error);
-    });
-  }
-
 }

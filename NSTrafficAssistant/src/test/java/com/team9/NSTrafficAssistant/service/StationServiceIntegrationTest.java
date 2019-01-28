@@ -110,7 +110,7 @@ public class StationServiceIntegrationTest {
 	}
 	
 	@Test(expected = StationNotFoundException.class)
-	public void testDeleteStation_notFound() throws StationNotFoundException {
+	public void testDeleteStation_notFound() throws StationNotFoundException, InvalidInputFormatException {
 		stationService.deleteStation(8L);
 		
 	}
@@ -118,7 +118,7 @@ public class StationServiceIntegrationTest {
 	@Test
 	@Transactional
 	@Rollback(true)
-	public void testDeleteStation_allFine() throws StationNotFoundException {
+	public void testDeleteStation_allFine() throws StationNotFoundException, InvalidInputFormatException {
 		boolean result = stationService.deleteStation(5L);
 		
 		assertTrue(result);
@@ -187,7 +187,7 @@ public class StationServiceIntegrationTest {
 
 		stations = stationService.getAllByType(TrafficType.TRAM);
 
-		assertEquals(1, stations.size());
+		assertEquals(2, stations.size());
 
 		assertEquals("Bazar", stations.get(0).getName());
 		assertEquals(TrafficType.TRAM, stations.get(0).getType());
@@ -214,7 +214,7 @@ public class StationServiceIntegrationTest {
 	public void testGetAll() {
 		List<Station> stations = stationService.getAll();
 
-		assertEquals(stations.size(), 6);
+		assertEquals(stations.size(), 7);
 	}
 
 	@Test

@@ -13,7 +13,7 @@ import com.team9.model.TrafficType;
 public interface StationService {
 	Station createStation(StationDTO s) throws StationAlreadyExistsException, InvalidInputFormatException;
 	
-	boolean deleteStation(Long id) throws StationNotFoundException;
+	boolean deleteStation(Long id) throws StationNotFoundException, InvalidInputFormatException;
 	
 	Station updateStation(StationDTO s) throws StationNotFoundException, StationAlreadyExistsException, InvalidInputFormatException;
 	
