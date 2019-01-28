@@ -17,18 +17,18 @@ export class SearchFormComponent implements OnInit {
   //selectSNO : any ;
 
   displayType = {
-    bus : true,
+    bus : false,
     metro : false,
     tram : false
   }
 
   displayZone = {
-    first : true,
+    first : false,
     second : false
   }
 
   displayTime = {
-    annual : true, 
+    annual : false, 
     month : false, 
     daily : false, 
     single : false

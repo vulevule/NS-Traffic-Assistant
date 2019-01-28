@@ -45,29 +45,34 @@ export class UseCheckTicketComponent implements OnInit {
   }
 
   async ok() {
-    if (this.role === 'INSPECTOR') {
-      //pozivamo check metodu
-      this.ticketService.checkTicket(this.ticket.serialNo, this.selectLine.id)
-        .subscribe(data => {
-          this.message = data;
-          this.alertType = 'success';
-        },
-          error => {
-            this.message = error.error;
-            this.alertType = 'danger';
-          }
-        )
+    if (this.selectLine === undefined) {
+      this.message = 'Please choose a line.';
+      this.alertType = 'info';
     } else {
-      //putnik pozivamo use metodu
-      this.ticketService.useTicket(this.ticket.serialNo, this.selectLine.id)
-        .subscribe(data => {
-          this.message = data;
-          this.alertType = 'success';
-        },
-          error => {
-            this.message = error.error;
-            this.alertType = 'danger';
-          })
+      if (this.role === 'INSPECTOR') {
+        //pozivamo check metodu
+        this.ticketService.checkTicket(this.ticket.serialNo, this.selectLine.id)
+          .subscribe(data => {
+            this.message = data;
+            this.alertType = 'success';
+          },
+            error => {
+              this.message = error.error;
+              this.alertType = 'danger';
+            }
+          )
+      } else {
+        //putnik pozivamo use metodu
+        this.ticketService.useTicket(this.ticket.serialNo, this.selectLine.id)
+          .subscribe(data => {
+            this.message = data;
+            this.alertType = 'success';
+          },
+            error => {
+              this.message = error.error;
+              this.alertType = 'danger';
+            })
+      }
     }
   }
 

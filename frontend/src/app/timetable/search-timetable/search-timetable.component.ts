@@ -84,6 +84,7 @@ export class SearchTimetableComponent implements OnInit {
 
 
  view(){
+  
    this.displayItems = [];
 
 
@@ -96,7 +97,7 @@ export class SearchTimetableComponent implements OnInit {
      
    });
    this.makeDisplayItems();
-   
+  
  }
 
  makeDisplayItems(){

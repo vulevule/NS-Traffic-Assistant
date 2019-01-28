@@ -65,7 +65,7 @@ export class BuyTicketFormComponent implements OnInit {
     }
     this.ticketService.buyTicket(this.buyTicket)
     .subscribe(data => {
-      this.message = "Ticket is buy!!";
+      this.message = "Ticket is bought!!";
       this.infoType = 'success';
       this.ticket = data;
     },

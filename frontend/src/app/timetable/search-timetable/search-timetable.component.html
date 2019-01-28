@@ -49,7 +49,7 @@
       <!-- linije koje ce se popunjavati kada se izabere tip i zona-->
 
       <label for="typeahead-focus" class="col-12 col-form-label"> Line:
-        <ng-multiselect-dropdown [placeholder]="'custom placeholder'" [data]="allTimetables" [ngModelOptions]="{standalone: true}"
+        <ng-multiselect-dropdown [placeholder]="'Please select line'" [data]="allTimetables" [ngModelOptions]="{standalone: true}"
           [(ngModel)]="selected" [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)">
         </ng-multiselect-dropdown>
       </label>
