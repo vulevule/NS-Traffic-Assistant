@@ -3,7 +3,19 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test verbose="2" name="Default test">
     <classes>
-      <class name="team9.EditUserTest"/>
+      <class name="team9.RegisterTest"/>
     </classes>
   </test> <!-- Default test -->
+  <test name="Default test(failed)">
+    <classes>
+      <class name="team9.RegisterTest">
+        <methods>
+          <include name="testRegister_ExistUsername"/>
+          <include name="setUp"/>
+          <include name="closeSelenium"/>
+          <include name="testRegister_success"/>
+        </methods>
+      </class> <!-- team9.RegisterTest -->
+    </classes>
+  </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

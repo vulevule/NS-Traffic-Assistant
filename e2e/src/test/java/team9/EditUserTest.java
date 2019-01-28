@@ -66,6 +66,33 @@ public class EditUserTest {
 	public void test_EditError() {
 		
 		
+		
+		homePage.ensureLoginButton_IsVisible();
+		homePage.ensureLoginButton_IsClickable();
+		homePage.getLoginButton().click();
+		
+		homePage.ensureUsernameBox_IsVisible();
+		homePage.ensurePasswordBox_IsVisible();
+		homePage.setUsernameInput("laralukic");
+		homePage.setPasswordInput("7777");
+		
+		homePage.ensureSubmitLoginButton_IsVisible();
+		homePage.ensureSubmitLoginButton_IsClickable();
+		homePage.getSubmitLoginButton().click();
+		
+		homePage.ensureUserDropdown_IsVisible();
+		homePage.getUserDropdown().click();
+		
+		homePage.ensureEditItem_IsVisible();
+		homePage.getEditItem().click();
+		homePage.setEmailBox("laralara@gmail.com");
+		homePage.setZipBox("215");
+		
+		
+		homePage.ensurealertZip_IsVisible();
+		
+		
+		
 	}
 	
 	
