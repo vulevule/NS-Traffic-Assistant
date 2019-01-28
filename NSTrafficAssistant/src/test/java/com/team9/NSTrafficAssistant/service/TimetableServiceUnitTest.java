@@ -57,8 +57,8 @@ public class TimetableServiceUnitTest {
 	
 	//3. dodavanje timetable-a, kada ne postoji linija
 	@Test(expected = LineNotFoundException.class)
-	public void addTimetable_whenLineNotFound() throws LineNotFoundException, ParseException{
-		TimetableItemCreateDto t = new TimetableItemCreateDto("1W", "ZELEZNICKA - BOCKE", "10:30, 14:15, 14:30", "10:30, 14:15, 14:30", "10:30, 14:15, 14:30");
+	public void addTimetable_whenLineNotFound() throws LineNotFoundException, ParseException, WrongTrafficTypeException{
+		TimetableItemCreateDto t = new TimetableItemCreateDto("1W", "ZELEZNICKA - BOCKE", "10:30, 14:15, 14:30", "10:30, 14:15, 14:30", "10:30, 14:15, 14:30", "bus");
 		List<TimetableItemCreateDto> timetables = new ArrayList<>();
 		timetables.add(t);
 		TimetableDto t_dto = new TimetableDto(timetables);

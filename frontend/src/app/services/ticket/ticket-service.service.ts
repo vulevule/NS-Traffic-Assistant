@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class TicketServiceService {
 
   private headers = new HttpHeaders({ "Content-Type": "application/json" });
-  private ticketUrl = "/api/ticket";
+  readonly ticketUrl = "/api/ticket";
 
 
   constructor(private http: HttpClient) { }

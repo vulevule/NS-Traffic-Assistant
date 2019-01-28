@@ -18,7 +18,7 @@
         <td> {{i.zone}}</td>
         <td> {{i.timeType}}</td>
         <td> <input type='number' min='1' class="form-control" [(ngModel)]="i.price" id="price" #price="ngModel"
-            required autofocus [ngModelOptions]="{standalone: true}"  pattern="^[1-9]+" />
+            required autofocus [ngModelOptions]="{standalone: true}"  pattern="^[1-9][0-9]*" />
           <div *ngIf="price.invalid && (price.dirty || price.touched)" class="alert alert-danger">
             <div *ngIf="price.errors.required">
               Price is required!

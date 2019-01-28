@@ -13,7 +13,8 @@ export interface TimetableItemInterface{
 
 export interface CreateTimetableItemInterface{
     line_mark : String;
-	line_name : String;
+    line_name : String;
+    line_type : String;
 	workdayTimes : String;
 	sundayTimes : String;
 	saturdayTimes : String;

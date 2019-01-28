@@ -14,19 +14,29 @@ public class TimetableItemCreateDto implements Serializable {
 	private String workdayTimes;
 	private String sundayTimes;
 	private String saturdayTimes;
+	private String line_type;
 
 	public TimetableItemCreateDto() {
 
 	}
 
 	public TimetableItemCreateDto(String line_mark, String line_name, String workdayTimes, String sundayTimes,
-			String saturdayTimes) {
+			String saturdayTimes, String line_type) {
 		this();
 		this.line_mark = line_mark;
 		this.line_name = line_name;
 		this.workdayTimes = workdayTimes;
 		this.sundayTimes = sundayTimes;
 		this.saturdayTimes = saturdayTimes;
+		this.line_type = line_type;
+	}
+
+	public String getLine_type() {
+		return line_type;
+	}
+
+	public void setLine_type(String line_type) {
+		this.line_type = line_type;
 	}
 
 	public String getLine_mark() {

@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class PriceListServiceService {
 
   private headers = new HttpHeaders({ "Content-Type": "application/json" });
-  private pricelistUrl = "/api/pricelist";
+  readonly pricelistUrl = "/api/pricelist";
 
   constructor(private http: HttpClient) { }
 

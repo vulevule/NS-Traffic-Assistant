@@ -75,9 +75,9 @@ public class TimetableServiceIntegrationTest {
 	@Test(expected = LineNotFoundException.class)
 	@Transactional
 	@Rollback(true)
-	public void addTimetable_lineNotFound() throws LineNotFoundException, ParseException {
+	public void addTimetable_lineNotFound() throws LineNotFoundException, ParseException, WrongTrafficTypeException {
 		TimetableItemCreateDto t = new TimetableItemCreateDto("1W", "ZELEZNICKA - BOCKE", "10:30, 14:15, 14:30",
-				"10:30, 14:15, 14:30", "10:30, 14:15, 14:30");
+				"10:30, 14:15, 14:30", "10:30, 14:15, 14:30", "bus");
 		List<TimetableItemCreateDto> timetables = new ArrayList<>();
 		timetables.add(t);
 		TimetableDto t_dto = new TimetableDto(timetables);
@@ -88,9 +88,9 @@ public class TimetableServiceIntegrationTest {
 	@Test
 	@Transactional
 	@Rollback(true)
-	public void addTimetable_ok() throws LineNotFoundException, ParseException {
+	public void addTimetable_ok() throws LineNotFoundException, ParseException, WrongTrafficTypeException {
 		TimetableItemCreateDto t = new TimetableItemCreateDto("1A", "ZELEZNICKA - FUTOSKA PIJACA - ZELZENICKA",
-				"10:30, 14:15, 14:30", "10:30, 14:15, 14:30", "10:30, 14:15, 14:30");
+				"10:30, 14:15, 14:30", "10:30, 14:15, 14:30", "10:30, 14:15, 14:30", "bus");
 		List<TimetableItemCreateDto> timetables = new ArrayList<>();
 		timetables.add(t);
 		TimetableDto t_dto = new TimetableDto(timetables);

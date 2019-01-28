@@ -2,36 +2,32 @@
 <testng-results skipped="0" failed="2" total="2" passed="0">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="132843" started-at="2019-01-28T20:33:03Z" finished-at="2019-01-28T20:35:16Z">
+  <suite name="Default suite" duration-ms="128254" started-at="2019-01-28T20:53:08Z" finished-at="2019-01-28T20:55:16Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="132843" started-at="2019-01-28T20:33:03Z" finished-at="2019-01-28T20:35:16Z">
-      <class name="team9.EditUserTest">
-        <test-method status="PASS" signature="setUp()[pri:0, instance:team9.EditUserTest@523884b2]" name="setUp" is-config="true" duration-ms="62129" started-at="2019-01-28T21:33:03Z" finished-at="2019-01-28T21:34:05Z">
+    <test name="Default test" duration-ms="128254" started-at="2019-01-28T20:53:08Z" finished-at="2019-01-28T20:55:16Z">
+      <class name="team9.RegisterTest">
+        <test-method status="PASS" signature="setUp()[pri:0, instance:team9.RegisterTest@523884b2]" name="setUp" is-config="true" duration-ms="80251" started-at="2019-01-28T21:53:08Z" finished-at="2019-01-28T21:54:28Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method status="FAIL" signature="test_EditError()[pri:0, instance:team9.EditUserTest@523884b2]" name="test_EditError" duration-ms="17937" started-at="2019-01-28T21:34:05Z" finished-at="2019-01-28T21:34:23Z">
-          <exception class="org.openqa.selenium.TimeoutException">
-            <message>
-              <![CDATA[Expected condition failed: waiting for visibility of [[ChromeDriver: chrome on XP (e5261add32c604ab2b443fea2247dbf3)] -> id: userDropdown] (tried for 10 second(s) with 500 MILLISECONDS interval)
-Build info: version: 'unknown', revision: 'c7b525d', time: '2016-09-01 14:57:44 -0700'
-System info: host: 'DESKTOP-H8OLTV7', ip: '192.168.0.28', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:63289}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.45.615291 (ec3682e3c9061c10f26ea9e5cdcf3c53f3f74387), userDataDir=C:\Users\jelen\AppData\Local\Temp\scoped_dir6584_2477}, takesHeapSnapshot=true, pageLoadStrategy=normal, strictFileInteractability=false, databaseEnabled=false, handlesAlerts=true, version=71.0.3578.98, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: e5261add32c604ab2b443fea2247dbf3]]>
-            </message>
+        <test-method status="FAIL" signature="testRegister_ExistUsername()[pri:0, instance:team9.RegisterTest@523884b2]" name="testRegister_ExistUsername" duration-ms="3316" started-at="2019-01-28T21:54:28Z" finished-at="2019-01-28T21:54:31Z">
+          <exception class="java.lang.NullPointerException">
             <full-stacktrace>
-              <![CDATA[org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of [[ChromeDriver: chrome on XP (e5261add32c604ab2b443fea2247dbf3)] -> id: userDropdown] (tried for 10 second(s) with 500 MILLISECONDS interval)
-Build info: version: 'unknown', revision: 'c7b525d', time: '2016-09-01 14:57:44 -0700'
-System info: host: 'DESKTOP-H8OLTV7', ip: '192.168.0.28', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:63289}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.45.615291 (ec3682e3c9061c10f26ea9e5cdcf3c53f3f74387), userDataDir=C:\Users\jelen\AppData\Local\Temp\scoped_dir6584_2477}, takesHeapSnapshot=true, pageLoadStrategy=normal, strictFileInteractability=false, databaseEnabled=false, handlesAlerts=true, version=71.0.3578.98, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: e5261add32c604ab2b443fea2247dbf3
-	at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:80)
-	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:260)
-	at team9.HomePage.ensureUserDropdown_IsVisible(HomePage.java:235)
-	at team9.EditUserTest.test_EditError(EditUserTest.java:83)
+              <![CDATA[java.lang.NullPointerException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler.invoke(LocatingElementHandler.java:51)
+	at com.sun.proxy.$Proxy7.isDisplayed(Unknown Source)
+	at org.openqa.selenium.support.ui.ExpectedConditions.elementIfVisible(ExpectedConditions.java:302)
+	at org.openqa.selenium.support.ui.ExpectedConditions.access$100(ExpectedConditions.java:41)
+	at org.openqa.selenium.support.ui.ExpectedConditions$10.apply(ExpectedConditions.java:288)
+	at org.openqa.selenium.support.ui.ExpectedConditions$10.apply(ExpectedConditions.java:285)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:238)
+	at team9.HomePage.ensureRegisterButton_IsVisible(HomePage.java:165)
+	at team9.RegisterTest.testRegister_ExistUsername(RegisterTest.java:65)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -58,39 +54,64 @@ Session ID: e5261add32c604ab2b443fea2247dbf3
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
 ]]>
             </full-stacktrace>
-          </exception> <!-- org.openqa.selenium.TimeoutException -->
+          </exception> <!-- java.lang.NullPointerException -->
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- test_EditError -->
-        <test-method status="PASS" signature="closeSelenium()[pri:0, instance:team9.EditUserTest@523884b2]" name="closeSelenium" is-config="true" duration-ms="16820" started-at="2019-01-28T21:34:24Z" finished-at="2019-01-28T21:34:41Z">
+        </test-method> <!-- testRegister_ExistUsername -->
+        <test-method status="PASS" signature="closeSelenium()[pri:0, instance:team9.RegisterTest@523884b2]" name="closeSelenium" is-config="true" duration-ms="12726" started-at="2019-01-28T21:54:31Z" finished-at="2019-01-28T21:54:44Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- closeSelenium -->
-        <test-method status="PASS" signature="setUp()[pri:0, instance:team9.EditUserTest@523884b2]" name="setUp" is-config="true" duration-ms="19518" started-at="2019-01-28T21:34:41Z" finished-at="2019-01-28T21:35:01Z">
+        <test-method status="PASS" signature="setUp()[pri:0, instance:team9.RegisterTest@523884b2]" name="setUp" is-config="true" duration-ms="19450" started-at="2019-01-28T21:54:44Z" finished-at="2019-01-28T21:55:04Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method status="FAIL" signature="test_EditSuccess()[pri:0, instance:team9.EditUserTest@523884b2]" name="test_EditSuccess" duration-ms="13607" started-at="2019-01-28T21:35:01Z" finished-at="2019-01-28T21:35:14Z">
-          <exception class="org.openqa.selenium.TimeoutException">
+        <test-method status="FAIL" signature="testRegister_success()[pri:0, instance:team9.RegisterTest@523884b2]" name="testRegister_success" duration-ms="11398" started-at="2019-01-28T21:55:04Z" finished-at="2019-01-28T21:55:15Z">
+          <exception class="org.openqa.selenium.WebDriverException">
             <message>
-              <![CDATA[Expected condition failed: waiting for visibility of [[ChromeDriver: chrome on XP (2236b3201799faa659f9bbdeaa0720a4)] -> id: userDropdown] (tried for 10 second(s) with 500 MILLISECONDS interval)
+              <![CDATA[chrome not reachable
+  (Session info: chrome=71.0.3578.98)
+  (Driver info: chromedriver=2.45.615291 (ec3682e3c9061c10f26ea9e5cdcf3c53f3f74387),platform=Windows NT 10.0.17763 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 6.02 seconds
 Build info: version: 'unknown', revision: 'c7b525d', time: '2016-09-01 14:57:44 -0700'
 System info: host: 'DESKTOP-H8OLTV7', ip: '192.168.0.28', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
 Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:64419}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.45.615291 (ec3682e3c9061c10f26ea9e5cdcf3c53f3f74387), userDataDir=C:\Users\jelen\AppData\Local\Temp\scoped_dir11460_7176}, takesHeapSnapshot=true, pageLoadStrategy=normal, strictFileInteractability=false, databaseEnabled=false, handlesAlerts=true, version=71.0.3578.98, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: 2236b3201799faa659f9bbdeaa0720a4]]>
+Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:63267}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.45.615291 (ec3682e3c9061c10f26ea9e5cdcf3c53f3f74387), userDataDir=C:\Users\jelen\AppData\Local\Temp\scoped_dir14696_22715}, takesHeapSnapshot=true, pageLoadStrategy=normal, strictFileInteractability=false, databaseEnabled=false, handlesAlerts=true, version=71.0.3578.98, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: 7e624fff76316f039c23196a486d8451
+*** Element info: {Using=id, value=registerButton}]]>
             </message>
             <full-stacktrace>
-              <![CDATA[org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of [[ChromeDriver: chrome on XP (2236b3201799faa659f9bbdeaa0720a4)] -> id: userDropdown] (tried for 10 second(s) with 500 MILLISECONDS interval)
+              <![CDATA[org.openqa.selenium.WebDriverException: chrome not reachable
+  (Session info: chrome=71.0.3578.98)
+  (Driver info: chromedriver=2.45.615291 (ec3682e3c9061c10f26ea9e5cdcf3c53f3f74387),platform=Windows NT 10.0.17763 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 6.02 seconds
 Build info: version: 'unknown', revision: 'c7b525d', time: '2016-09-01 14:57:44 -0700'
 System info: host: 'DESKTOP-H8OLTV7', ip: '192.168.0.28', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
 Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:64419}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.45.615291 (ec3682e3c9061c10f26ea9e5cdcf3c53f3f74387), userDataDir=C:\Users\jelen\AppData\Local\Temp\scoped_dir11460_7176}, takesHeapSnapshot=true, pageLoadStrategy=normal, strictFileInteractability=false, databaseEnabled=false, handlesAlerts=true, version=71.0.3578.98, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
-Session ID: 2236b3201799faa659f9bbdeaa0720a4
-	at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:80)
-	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:260)
-	at team9.HomePage.ensureUserDropdown_IsVisible(HomePage.java:235)
-	at team9.EditUserTest.test_EditSuccess(EditUserTest.java:42)
+Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0, pageLoad=300000, script=30000}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:63267}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.45.615291 (ec3682e3c9061c10f26ea9e5cdcf3c53f3f74387), userDataDir=C:\Users\jelen\AppData\Local\Temp\scoped_dir14696_22715}, takesHeapSnapshot=true, pageLoadStrategy=normal, strictFileInteractability=false, databaseEnabled=false, handlesAlerts=true, version=71.0.3578.98, browserConnectionEnabled=false, proxy={}, nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: 7e624fff76316f039c23196a486d8451
+*** Element info: {Using=id, value=registerButton}
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:631)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:369)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementById(RemoteWebDriver.java:418)
+	at org.openqa.selenium.By$ById.findElement(By.java:218)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:361)
+	at org.openqa.selenium.support.pagefactory.DefaultElementLocator.findElement(DefaultElementLocator.java:69)
+	at org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler.invoke(LocatingElementHandler.java:38)
+	at com.sun.proxy.$Proxy7.isDisplayed(Unknown Source)
+	at org.openqa.selenium.support.ui.ExpectedConditions.elementIfVisible(ExpectedConditions.java:302)
+	at org.openqa.selenium.support.ui.ExpectedConditions.access$100(ExpectedConditions.java:41)
+	at org.openqa.selenium.support.ui.ExpectedConditions$10.apply(ExpectedConditions.java:288)
+	at org.openqa.selenium.support.ui.ExpectedConditions$10.apply(ExpectedConditions.java:285)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:238)
+	at team9.HomePage.ensureRegisterButton_IsVisible(HomePage.java:165)
+	at team9.RegisterTest.testRegister_success(RegisterTest.java:32)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -117,15 +138,15 @@ Session ID: 2236b3201799faa659f9bbdeaa0720a4
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
 ]]>
             </full-stacktrace>
-          </exception> <!-- org.openqa.selenium.TimeoutException -->
+          </exception> <!-- org.openqa.selenium.WebDriverException -->
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- test_EditSuccess -->
-        <test-method status="PASS" signature="closeSelenium()[pri:0, instance:team9.EditUserTest@523884b2]" name="closeSelenium" is-config="true" duration-ms="1912" started-at="2019-01-28T21:35:14Z" finished-at="2019-01-28T21:35:16Z">
+        </test-method> <!-- testRegister_success -->
+        <test-method status="PASS" signature="closeSelenium()[pri:0, instance:team9.RegisterTest@523884b2]" name="closeSelenium" is-config="true" duration-ms="805" started-at="2019-01-28T21:55:15Z" finished-at="2019-01-28T21:55:16Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- closeSelenium -->
-      </class> <!-- team9.EditUserTest -->
+      </class> <!-- team9.RegisterTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

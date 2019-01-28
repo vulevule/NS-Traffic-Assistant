@@ -42,7 +42,6 @@ export class DisplayPriceListComponent implements OnInit {
 
       },
       err => {this.message = err.error;
-        alert(this.message);
       }
       );
   }
