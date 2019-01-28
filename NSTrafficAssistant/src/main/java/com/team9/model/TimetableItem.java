@@ -51,6 +51,25 @@ public class TimetableItem implements Serializable {
 		this.type = type;
 		this.line = line;
 	}
+	
+	
+
+	public TimetableItem(Long id, Time startTime, TimeTableType type, Line line, Timetable timeTable) {
+		this();
+		this.id = id;
+		this.startTime = startTime;
+		this.type = type;
+		this.line = line;
+		this.timeTable = timeTable;
+	}
+
+	public TimetableItem(Time startTime, TimeTableType type, Line line, Timetable timeTable) {
+		this();
+		this.startTime = startTime;
+		this.type = type;
+		this.line = line;
+		this.timeTable = timeTable;
+	}
 
 	public TimetableItem() {
 	}

@@ -3,10 +3,21 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Observable, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { TicketServiceService } from 'src/app/services/ticket/ticket-service.service';
-import { Report } from 'src/app/model/Report';
+import {  ReportInterface } from 'src/app/model/Report';
 
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'Jule', 'August', 'September',
-  'October', 'November', 'December'];
+const months : {id: number, name : String}[]= [
+  {id : 1, name : 'January'},
+  {id : 2, name : 'February'},
+  {id : 3, name:  'March'},
+  {id : 4, name : 'April'},
+  {id : 5, name :  'May'},
+  {id : 6, name :  'June'},
+  {id : 7, name :  'Jule'},
+  {id : 8, name :  'August'},
+  {id : 9, name : 'September'},
+  {id : 10, name :  'October'},
+  {id : 11, name : 'November'},
+  {id : 12, name :  'December'}];
 
 @Component({
   selector: 'app-report',
@@ -15,13 +26,13 @@ const months = ['January', 'February', 'March', 'April', 'May', 'June', 'Jule', 
 })
 export class ReportComponent implements OnInit {
 
-  report: Report;
+  report: ReportInterface;
 
   public type: string = 'MONTH';
 
-  year: number = 0;
+  year: number = 2019;
 
-  model: string;
+  model: any;
 
   message: string = '';
 
@@ -31,16 +42,15 @@ export class ReportComponent implements OnInit {
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
 
-  search = (text$: Observable<string>) => {
-    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
-    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
-    const inputFocus$ = this.focus$;
-
-    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-      map(term => (term === '' ? months : months.filter(m => m.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
-
+  search = (text$: Observable<String>) =>
+    text$.pipe(
+      debounceTime(200),
+      map(term => term === '' ? []
+        : months.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0.10)
+      )
     )
-  }
+
+  formatter = (x: { name: String }) => x.name;
 
 
   constructor(private ticketService: TicketServiceService) { }
@@ -48,67 +58,47 @@ export class ReportComponent implements OnInit {
   ngOnInit() {
   }
 
-  async getReport() {
+  getReport() {
     //treba proveriti i godinu koja je unsena da li je u odgovarajucem formatu 
-    if (this.year > 2020 || this.year < 2000) {
+    if (this.year > 2019 || this.year < 2000) {
       this.report = undefined;
-      this.message = "The year must be between 2000 and 2020!";
+      this.message = "The year must be between 2000 and 2019!";
       this.errorType = 'warning';
-    }else if (this.type === 'MONTH' && this.model === ''){
+    }else if (this.type === 'MONTH' && this.model === undefined){
       this.report = undefined;
       this.message = "The month must be selected!"
       this.errorType = 'warning';
     } 
     else {
-      this.message = 'Success';
-      this.errorType = 'success';
-      // await this.ticketService.getReport(this.model, this.year, this.type)
-      //   .then(data => {
-      //     this.report = data
-      //   },
-      //     reason => {
-      //       alert('ERROR');
-      //     }
-      //   )
-      //test napravicemo jedan report i vratiti
-      this.report = this.makeReport();
+      var id : number;
+      if(this.type !== 'MONTH'){
+        id = 1;
+      }else{
+        id = this.model.id;
+      }
+      this.ticketService.getReport(id, this.year, this.type )
+        .subscribe(
+          data => {
+            this.report = data;
+            if (this.report.money === 0){
+              this.message = 'There is no report for the requested period! '
+              this.errorType = 'info';
+            }else{
+              this.message = '';
+              this.errorType = 'success';
+            }
+          }, 
+          error =>{
+            if(error.error === ''){
+              this.message = 'Invalid month or year';
+            }else {
+              this.message = error.error;
+            }
+           
+            this.errorType = 'danger';
+          }
+        )
     }
-  }
-
-  makeReport() : Report{
-    var r : Report = {
-      numOfStudentMonthTicket : 2,
-    numOfHandycapMonthTicket : 2,
-    numOfSeniorMonthTicket : 1,
-    numOfRegularMonthTicket : 0,
-
-    // godisnje
-    numOfStudentYearTicket: 2,
-    numOfHandycapYearTicket: 3,
-    numOfSeniorYearTicket: 0,
-    numOfRegularYearTicket: 0,
-
-    // single
-    numOfStudentSingleTicket: 0,
-    numOfHandycapSingleTicket: 0,
-    numOfSeniorSingleTicket: 0,
-    numOfRegularSingleTicket: 0,
-
-    // dnevne
-    numOfStudentDailyTicket: 0,
-    numOfHandycapDailyTicket: 0,
-    numOfSeniorDailyTicket: 0,
-    numOfRegularDailyTicket: 0,
-
-    // broj kupljenih karti za odredjeni prevoz
-    numOfBusTicket: 1,
-    numOfMetroTicket: 8,
-    numOfTramTicket: 1,
-
-    // zarada
-    money: 1200,
-    }
-    return r;
   }
 
 }

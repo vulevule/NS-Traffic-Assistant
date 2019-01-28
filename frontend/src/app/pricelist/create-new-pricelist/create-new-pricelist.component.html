@@ -1,27 +1,64 @@
-<div>
-<table style="width:100%">
-  <tr> 
-    <th> Traffic type </th>
-    <th> Traffic zone </th>
-    <th> Ticket time </th>
-    <th> Price </th>
-    <th> Student discount </th>
-    <th> Senior discount </th>
-    <th> Handicap discount </th>
-  </tr> 
-  <tr *ngFor="let i of items"> 
-      <td> {{i.trafficType}}</td>
-      <td> {{i.zone}}</td>
-      <td> {{i.timeType}}</td>
-      <td> <input type='text' [(ngModel)]="i.price"/></td>
-      <td> <input type='text' [(ngModel)]="i.studentDiscount"/></td>
-      <td> <input type='text' [(ngModel)]="i.seniorDiscount"/></td>
-      <td> <input type='text' [(ngModel)]="i.handycapDiscount"></td> 
-  </tr>
+<div *ngIf="message !== ''">
+  <ngb-alert [type]="infoType" [dismissible]="false">{{ message }}</ngb-alert>
+</div>
+<form  #createPricelist="ngForm">
+  <div *ngIf="message === ''">
+    <table style="width:100%">
+      <tr>
+        <th> Traffic type </th>
+        <th> Traffic zone </th>
+        <th> Ticket time </th>
+        <th> Price </th>
+        <th> Student discount </th>
+        <th> Senior discount </th>
+        <th> Handicap discount </th>
+      </tr>
+      <tr *ngFor="let i of items">
+        <td> {{i.trafficType}}</td>
+        <td> {{i.zone}}</td>
+        <td> {{i.timeType}}</td>
+        <td> <input type='number' min='1' class="form-control" [(ngModel)]="i.price" id="price" #price="ngModel"
+            required autofocus [ngModelOptions]="{standalone: true}"  pattern="^[1-9]+" />
+          <div *ngIf="price.invalid && (price.dirty || price.touched)" class="alert alert-danger">
+            <div *ngIf="price.errors.required">
+              Price is required!
+            </div>
+            <div *ngIf="price.errors.pattern">
+              The price must be greater than 0!
+            </div>
+          </div>
+        </td>
+        <td> <input type='number' min='0' max="100" class="form-control" [(ngModel)]="i.studentDiscount" id="stD" #stD="ngModel"
+            autofocus  [ngModelOptions]="{standalone: true}" pattern="^(100|([0-9]){1,2})"/>
+          <div *ngIf="stD.invalid && (stD.dirty || stD.touched)" class="alert alert-danger">
+            <div *ngIf="stD.errors.pattern">
+              The discount must be between 0 and 100!
+            </div>
+          </div>
+        </td>
+        <td> <input type='number' min='0' max="100" class="form-control" [(ngModel)]="i.seniorDiscount" id="senD" #senD="ngModel"
+            autofocus [ngModelOptions]="{standalone: true}" pattern="^(100|([0-9]){1,2})" />
+          <div *ngIf="senD.invalid && (senD.dirty || senD.touched)" class="alert alert-danger">
+            <div *ngIf="senD.errors.pattern">
+              The discount must be between 0 and 100!
+            </div>
+          </div>
+        </td>
 
-</table>
+        <td> <input type='number' min='0' max='100' class="form-control" [(ngModel)]="i.handycapDiscount" id="hanD"
+            #hanD="ngModel" [ngModelOptions]="{standalone: true}"  autofocus pattern="^(100|([0-9]){1,2})">
+          <div *ngIf="hanD.invalid && (hanD.dirty || hanD.touched)" class="alert alert-danger">
+            <div *ngIf="hanD.errors.pattern">
+              The discount must be between 0 and 100!
+            </div>
+          </div>
+        </td>
+      </tr>
 
-<button type="button" class="btn btn-outline-primary" (click)="save()">
-    Save
-  </button>
-<div>
+    </table>
+
+    <button type="submit" class="btn btn-outline-primary" (click)="save()" [disabled]="createPricelist.invalid">
+      Save
+    </button>
+  </div>
+</form>

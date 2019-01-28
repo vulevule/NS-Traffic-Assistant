@@ -1,9 +1,7 @@
 package com.team9.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,9 +10,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "line")
@@ -37,11 +40,12 @@ public class Line implements Serializable {
 	@Column(nullable = false)
 	private TrafficZone zone;
 
-	// @Column(nullable = false)
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@Fetch(FetchMode.SELECT)
 	private List<Location> route;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "line", cascade = CascadeType.ALL)
+	@Fetch(FetchMode.SELECT)
 	private List<StationLine> stations;
 
 	public Line() {

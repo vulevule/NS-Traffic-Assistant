@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'filterItemByTicketTime'
+  name: 'filterItemByTicketTime',
+  pure : false
 })
 export class FilterItemByTicketTimePipe implements PipeTransform {
 

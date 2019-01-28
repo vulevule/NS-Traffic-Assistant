@@ -57,6 +57,20 @@ public class Location  implements Serializable{
 	public void setLon(Double lon) {
 		this.lon = lon;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Location) {
+			Location loc = (Location) obj;
+			if(loc.getLat() == this.lat && loc.getLon() == this.lon) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 	
 	
 

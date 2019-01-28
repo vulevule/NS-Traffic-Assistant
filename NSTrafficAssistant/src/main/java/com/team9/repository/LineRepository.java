@@ -20,4 +20,8 @@ public interface LineRepository extends JpaRepository<Line, Long>{
 	Line findByMarkAndType(String mark, TrafficType type);
 	
 	Optional<Line> findById(Long id);
+
+	List<Line> findByTypeAndZone(TrafficType t, TrafficZone z);
+
+	Optional<Line> findByNameAndMark(String line_mark, String line_name);
 }

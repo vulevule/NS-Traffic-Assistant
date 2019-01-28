@@ -129,6 +129,9 @@ public class LoadDataController {
 				} catch (StationNotFoundException e) {
 					message = e.getMessage();
 					return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+				} catch (InvalidInputFormatException e) {
+					message = "Invalid input format!";
+					return new ResponseEntity<>(message, HttpStatus.NOT_ACCEPTABLE);
 				}
 
 			}

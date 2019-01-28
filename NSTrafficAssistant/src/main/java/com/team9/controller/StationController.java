@@ -140,10 +140,10 @@ public class StationController {
 		try {
 			updated = stationService.updateStation(station);
 			logger.info("<< Updating station  " + station.getName());
-			message = "Station " + station.getName() + " successfully updated!";
+			message = "Station " + station.getName() + " successfully updated";
 			return new ResponseEntity<>(message, HttpStatus.CREATED);
 		} catch (StationNotFoundException e) {
-			message = "Station " + station.getName() + " not found";
+			message = "Station " + station.getName() + " not found!";
 			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
 		} catch (StationAlreadyExistsException e) {
 			message = station.getType() + " station " + station.getName() + " already exists!";

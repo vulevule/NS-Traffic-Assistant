@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Ticket } from 'src/app/model/Ticket';
+import { Component, OnInit, Input } from '@angular/core';
+import { TicketInterface } from 'src/app/model/Ticket';
 import { TicketServiceService } from 'src/app/services/ticket/ticket-service.service';
+import { first, debounceTime, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-search-form',
@@ -9,42 +11,63 @@ import { TicketServiceService } from 'src/app/services/ticket/ticket-service.ser
 })
 export class SearchFormComponent implements OnInit {
 
-  tickets: Ticket[];
-  page : number;
-  numOfTicket : number;
+  tickets: TicketInterface[];
+  @Input() role : String;
 
+  //selectSNO : any ;
+
+  displayType = {
+    bus : true,
+    metro : false,
+    tram : false
+  }
+
+  displayZone = {
+    first : true,
+    second : false
+  }
+
+  displayTime = {
+    annual : true, 
+    month : false, 
+    daily : false, 
+    single : false
+  }
 
   constructor(private ticketService: TicketServiceService) { }
 
-  async ngOnInit() {
-    this.page = 1;
-    this.ticketService.getAll(this.page-1)
-      .subscribe(data => {
-        this.tickets = data;
-      }, 
-      error => {
-        alert(error.message);
-      }
-      )
 
-    this.ticketService.getNumOfTicket()
-    .subscribe( data => {
-      this.numOfTicket = data;
-    }, 
-      error => {
-        alert(error.message);
-      }
-      )
+  // search = (text$: Observable<String>) =>
+  //   text$.pipe(
+  //     debounceTime(200),
+  //     map(term => term === '' ? []
+  //       : this.tickets.filter(v => v.serialNo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0.10)
+  //     )
+  //   )
 
+  // formatter = (x: { serialNo: String }) => x.serialNo;
+
+  ngOnInit() {
+    this.getTickets();
   }
 
-  async changePage(){
-    this.ticketService.getAll(this.page-1)
+  getTickets(){
+    if(this.role === 'INSPECTOR'){
+      this.ticketService.getAllTickets()
       .subscribe(data => {
         this.tickets = data;
       }, error => {
-        alert (error.message);
+        alert (error.error);
       })
+    }else if (this.role === 'PASSENGER'){
+      this.ticketService.getMyTicket()
+      .subscribe(data => {
+        this.tickets = data;
+      }, error => {
+        alert(error.error);
+      })
+     
+    }
   }
 }
 

@@ -6,7 +6,7 @@
       <!-- traffic type -->
       <label class="col-12 col-form-label">Traffic type:
 
-        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="buyTicket.trafficType"
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="type"
           (click)="getPrice()">
           <label ngbButtonLabel class="btn-primary">
             <input ngbButton type="radio" value="BUS" /> Bus
@@ -18,12 +18,13 @@
             <input ngbButton type="radio" value="METRO" /> Metro
           </label>
         </div>
+        Bus is default!
       </label>
 
       <!-- zone -->
       <label class="col-12 col-form-label">Traffic:
 
-        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="buyTicket.trafficZone"
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="zone"
           (click)="getPrice()">
           <label ngbButtonLabel class="btn-primary">
             <input ngbButton type="radio" value="FIRST" /> First
@@ -32,12 +33,13 @@
             <input ngbButton type="radio" value="SECOND" /> Second
           </label>
         </div>
+        First zone is default!
       </label>
 
       <!-- time -->
       <label class="col-12 col-form-label">Ticket time:
 
-        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="buyTicket.timeType"
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="time"
           (click)="getPrice()">
           <label ngbButtonLabel class="btn-primary">
             <input ngbButton type="radio" value="ANNUAL" /> Annual
@@ -52,6 +54,7 @@
             <input ngbButton type="radio" value="DAILY" /> Daily
           </label>
         </div>
+        Annual is default!
       </label>
 
       <!-- price -->
@@ -66,19 +69,16 @@
         Buy
       </button>
     </form>
-
-
-    <p> Selected is: traffic type: {{buyTicket.trafficType}}
-      traffic zone : {{buyTicket.trafficZone}}
-      ticket time : {{ buyTicket.timeType}}
-    </p>
-
   </div>
 
   <div class="col-12 col-md-9 map-content">
     <div id="map" class="map">
-      <p> {{message}}</p>
-      <div *ngIf= "ticket != undefined"> <app-display-ticket  [ticket]="ticket"> </app-display-ticket></div>
+      <div *ngIf="message !== ''">
+        <ngb-alert [type]="infoType" class="btn btn-outline-primary" [dismissible]="false">{{message}}</ngb-alert>
+      </div>
+      <div *ngIf="ticket !== undefined">
+        <app-display-ticket [role]="role" [ticket]="ticket"> </app-display-ticket>
+      </div>
     </div>
   </div>
 </div>

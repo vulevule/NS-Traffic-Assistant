@@ -109,12 +109,131 @@ values (34, 100, 2,3,1, 10, 5, 5 ,10);
 insert into station(id, name, type, x_coordinate, y_coordinate)
 values(1, 'Bazar', 0, 19.830287933873482, 45.26408747364272);
 insert into station(id, name, type, x_coordinate, y_coordinate)
-values(2, 'Bazar', 2, 19.83210754551692, 45.26066810367371);
+values(2, 'Bazar', 2, 19.83210754551692, 45.26066810367371); --tram
 insert into station(id, name, type, x_coordinate, y_coordinate)
-values(3, 'Bazar-Pothodnik', 1, 19.835214616439767, 45.255242602344424);
+values(3, 'Bazar-Podhodnik', 1, 19.835214616439767, 45.255242602344424);
 insert into station(id, name, type, x_coordinate, y_coordinate)
 values(4, 'Narodnog Fronta', 0, 19.837051391077697, 45.25194354772586);
 insert into station(id, name, type, x_coordinate, y_coordinate)
 values(5, 'Zeleznicka', 0, 19.839197158813473, 45.24794333819497);
 insert into station(id, name, type, x_coordinate, y_coordinate)
 values(6, 'Balzakova', 1, 19.841394424962346, 45.243882414390214);
+insert into station(id, name, type, x_coordinate, y_coordinate)
+values(7, 'Bulevar Jase Tomica', 2, 19.823949634301243, 45.26394299011491); --tram
+
+--linije
+insert into line (id, mark, name, type, zone)
+values(1, '1A', 'ZELEZNICKA - FUTOSKA PIJACA - ZELZENICKA', 0, 0);
+
+insert into line (id, mark, name, type, zone)
+values(2, '2A', 'Test linija', 0, 1);
+
+insert into line (id, mark, name, type, zone)
+values(3, '1T', 'BULEVAR J.T. - BAZAR - BULEVAR J.T.', 2, 0);
+
+--station-line
+--line 1
+insert into station_line(id, arrival, station_num, line_id, station_id)
+values (1, 0, 1, 1, 1);
+insert into station_line(id, arrival, station_num, line_id, station_id)
+values (2, 5, 2, 1, 4);
+--line 2
+insert into station_line(id, arrival, station_num, line_id, station_id)
+values (3, 0, 1, 2, 1);
+insert into station_line(id, arrival, station_num, line_id, station_id)
+values (4, 5, 2, 2, 4);
+insert into station_line(id, arrival, station_num, line_id, station_id)
+values (5, 10, 3, 2, 5);
+--line 3
+insert into station_line(id, arrival, station_num, line_id, station_id)
+values (6, 0, 1, 3, 7);
+insert into station_line(id, arrival, station_num, line_id, station_id)
+values (7, 10, 2, 3, 2);
+
+--location
+--1. linija
+insert into location(id, lon, lat)
+values (1, 19.843186438956764, 45.24886502908012 );
+
+insert into location(id, lon, lat)
+values (2,  19.839238225977166, 45.2479921840457 );
+insert into location(id, lon, lat)
+values (3, 19.837025702145183,45.25202058846409 );
+insert into location(id, lon, lat)
+values (4,19.830292760743752,  45.26413093570861 );
+insert into location(id, lon, lat)
+values (5,19.829472600686127, 45.264761892239505  );
+
+--3. linija
+ insert into location(id, lon, lat)
+values (6, 19.8238649959967,  45.26392956524123 );
+insert into location(id, lon, lat)
+values (7, 19.82764154759934,  45.263701344924385 );
+insert into location(id, lon, lat)
+values (8, 19.830273687839508,  45.2641040866103 );
+insert into location(id, lon, lat)
+values (9, 19.832181037054397,  45.26064041372618 );
+insert into location(id, lon, lat)
+values (10,19.828614293655846,  45.25963349203437 ) ;
+insert into location(id, lon, lat)
+values (11,  19.823102056834614,  45.259015903418685 );
+insert into location(id, lon, lat)
+values (12, 19.818581640138287,  45.26282872744534 );
+insert into location(id, lon, lat)
+values (13, 19.820794165279946,  45.26388929121569 );
+insert into location(id, lon, lat)
+values (14, 19.822053014504487,  45.264010113667524 );
+insert into location(id, lon, lat)
+values (15,19.823903142823834,  45.2639564150366 ) ;
+
+--2. linija
+insert into location(id, lon, lat)
+values (16, 19.843186438956764, 45.24886502908012 );
+
+insert into location(id, lon, lat)
+values (17,  19.839238225977166, 45.2479921840457 );
+insert into location(id, lon, lat)
+values (18, 19.837025702145183,45.25202058846409 );
+insert into location(id, lon, lat)
+values (19,19.830292760743752,  45.26413093570861 );
+
+--rute
+-- prva
+insert into line_route (line_id, route_id)
+values (1, 1);
+insert into line_route ( line_id, route_id)
+values ( 1, 2);
+insert into line_route ( line_id, route_id)
+values ( 1, 3);
+insert into line_route (line_id, route_id)
+values (1, 4);
+insert into line_route ( line_id, route_id)
+values (1, 5);
+--druga
+insert into line_route (line_id, route_id)
+values (2, 16);
+insert into line_route ( line_id, route_id)
+values ( 2, 17);
+insert into line_route ( line_id, route_id)
+values ( 2, 18);
+insert into line_route (line_id, route_id)
+values (2, 19);
+--treca
+insert into line_route ( line_id, route_id)
+values ( 3, 6);
+insert into line_route (line_id, route_id)
+values ( 3, 7);
+insert into line_route (line_id, route_id)
+values ( 3, 8);
+insert into line_route (line_id, route_id)
+values ( 3, 9);
+insert into line_route ( line_id, route_id)
+values ( 3, 10);
+insert into line_route ( line_id, route_id)
+values (3, 12);
+insert into line_route ( line_id, route_id)
+values (3, 13);
+insert into line_route ( line_id, route_id)
+values ( 3, 14);
+insert into line_route ( line_id, route_id)
+values ( 3, 15);

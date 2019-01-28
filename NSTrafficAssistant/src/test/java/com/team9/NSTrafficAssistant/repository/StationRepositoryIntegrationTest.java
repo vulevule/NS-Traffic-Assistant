@@ -18,7 +18,7 @@ import com.team9.repository.StationRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
-public class StationRepositoryTest {
+public class StationRepositoryIntegrationTest {
 	
 	@Autowired
 	public StationRepository stationRepository;

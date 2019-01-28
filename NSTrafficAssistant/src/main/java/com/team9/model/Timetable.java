@@ -26,7 +26,7 @@ public class Timetable implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false)
+	@Column
 	private Date expirationDate; 
 	@Column(nullable = false)
 	private Date issueDate;
@@ -38,12 +38,6 @@ public class Timetable implements Serializable {
 	private boolean activate;
 	
 	public Timetable() {
-		this.issueDate = new Date();
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MONTH, 3);
-		this.expirationDate = cal.getTime();
-		this.activate = true;
-		this.items = new HashSet<TimetableItem>();
 	}
 	
 	public Timetable(Long id, Date expirationDate, Date issueDate, Set<TimetableItem> items) {
@@ -59,6 +53,18 @@ public class Timetable implements Serializable {
 		this.expirationDate = expirationDate;
 		this.issueDate = issueDate;
 		this.items = items;
+		
+	}
+	
+	
+
+	
+	
+	public Timetable(Date expirationDate, Date issueDate, boolean activate) {
+		this();
+		this.expirationDate = expirationDate;
+		this.issueDate = issueDate;
+		this.activate = activate;
 	}
 
 	public Long getId() {

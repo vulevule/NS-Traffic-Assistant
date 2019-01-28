@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PriceListInterface } from 'src/app/model/Pricelist';
 import { PriceListServiceService } from 'src/app/services/pricelist/price-list-service.service';
-import { Item } from 'src/app/model/PriceItem';
+import { ItemInterface } from 'src/app/model/PriceItem';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -11,7 +11,7 @@ import { first } from 'rxjs/operators';
 })
 export class DisplayPriceListComponent implements OnInit {
   pricelist: PriceListInterface;
-  items : Item[];
+  items : ItemInterface[];
   message : string;
 
   displayType = {
@@ -47,9 +47,5 @@ export class DisplayPriceListComponent implements OnInit {
       );
   }
 
-  reload(){
-    alert('reload');
-    this.items = this.pricelist.items;
-  }
 
 }

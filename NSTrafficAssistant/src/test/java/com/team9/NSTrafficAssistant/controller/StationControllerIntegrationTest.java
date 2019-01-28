@@ -23,6 +23,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.team9.dto.LoginDto;
+import com.team9.dto.LoginUserDto;
 import com.team9.dto.StationDTO;
 import com.team9.exceptions.StationNotFoundException;
 import com.team9.model.Station;
@@ -44,14 +45,12 @@ public class StationControllerIntegrationTest {
 
 	@Before
 	public void logIn() {
-		ResponseEntity<String> result = restTemplate.postForEntity("/user/login", new LoginDto("laralukic", "7777"),
-				String.class);
-		token = result.getBody();
+		ResponseEntity<LoginUserDto> result = restTemplate.postForEntity("/user/login", new LoginDto("laralukic", "7777"),
+				LoginUserDto.class);
+		token = result.getBody().getToken();
 	}
 
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void testGetAll() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token);
@@ -66,16 +65,39 @@ public class StationControllerIntegrationTest {
 
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-		assertEquals("Balzakova", stations[stations.length - 1].getName());
+		assertEquals("Bulevar Jase Tomica", stations[stations.length - 1].getName());
 
-		assertEquals(6, size);
+		assertEquals(7, size);
 	}
 
 	@Test
-	@Transactional
-	@Rollback(true)
-	public void testGetAll_unauthorized() {
-		// TODO
+	public void testCreate_unauthorized() {
+		HttpHeaders headers = new HttpHeaders();
+
+		StationDTO station = new StationDTO("Bulevar", TrafficType.METRO, 24.0, 48.0, null);
+		HttpEntity<StationDTO> httpEntity = new HttpEntity<StationDTO>(station, headers);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange("/station/create", HttpMethod.POST,
+				httpEntity, String.class);
+
+		
+		assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	public void testCreate_unauthorizedToken() {
+		HttpHeaders headers = new HttpHeaders();
+		String token = "xxxxxxxxxxxxx";
+		headers.add("X-Auth-Token", token);
+		
+		StationDTO station = new StationDTO("Bulevar", TrafficType.METRO, 24.0, 48.0, null);
+		HttpEntity<StationDTO> httpEntity = new HttpEntity<StationDTO>(station, headers);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange("/station/create", HttpMethod.POST,
+				httpEntity, String.class);
+
+		
+		assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
 	}
 
 	@Test
@@ -97,8 +119,6 @@ public class StationControllerIntegrationTest {
 	}
 
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void testGetAllById_found() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token);
@@ -117,8 +137,6 @@ public class StationControllerIntegrationTest {
 	}
 
 	@Test
-	@Transactional
-	@Rollback(true)
 	public void testGetAllById_notFound() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token);
@@ -133,9 +151,7 @@ public class StationControllerIntegrationTest {
 	}
 
 	@Test
-	@Transactional
-	@Rollback(true)
-	public void testCreateStation_allFine() throws StationNotFoundException {
+	public void testCreateStation_allFine() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-Auth-Token", token);
 
@@ -182,11 +198,126 @@ public class StationControllerIntegrationTest {
 				httpEntity, String.class);
 
 		assertEquals(HttpStatus.NOT_ACCEPTABLE, responseEntity.getStatusCode());
+		assertEquals(station.getType() + " station " + station.getName() + " already exists!", responseEntity.getBody());
 	}
+	
+	@Test
+	public void testCreateStation_invalidInputName() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Auth-Token", token);
 
+		StationDTO station = new StationDTO("", TrafficType.BUS, 24.0, 48.0, null);
+		HttpEntity<StationDTO> httpEntity = new HttpEntity<StationDTO>(station, headers);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange("/station/create", HttpMethod.POST,
+				httpEntity, String.class);
+
+		assertEquals(HttpStatus.NOT_ACCEPTABLE, responseEntity.getStatusCode());
+		assertEquals("Invalid input format!", responseEntity.getBody());
+	}
+	
+	@Test
+	public void testCreateStation_invalidInputCoord() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Auth-Token", token);
+
+		StationDTO station = new StationDTO("", TrafficType.BUS, 0, 0, null);
+		HttpEntity<StationDTO> httpEntity = new HttpEntity<StationDTO>(station, headers);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange("/station/create", HttpMethod.POST,
+				httpEntity, String.class);
+
+		assertEquals(HttpStatus.NOT_ACCEPTABLE, responseEntity.getStatusCode());
+		assertEquals("Invalid input format!", responseEntity.getBody());
+	}
+	
+	@Test
+	public void testUpdateStation_invalidInputName() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Auth-Token", token);
+
+		StationDTO station = new StationDTO(1L, "", TrafficType.BUS, 24.0, 48.0, null);
+		HttpEntity<StationDTO> httpEntity = new HttpEntity<StationDTO>(station, headers);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange("/station/update", HttpMethod.PUT,
+				httpEntity, String.class);
+
+		assertEquals(HttpStatus.NOT_ACCEPTABLE, responseEntity.getStatusCode());
+		assertEquals("Invalid input format!", responseEntity.getBody());
+	}
+	
+	@Test
+	public void testUpdateStation_invalidInputType() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Auth-Token", token);
+
+		StationDTO station = new StationDTO(1L, "Nova stanica", TrafficType.METRO, 24.0, 48.0, null);
+		HttpEntity<StationDTO> httpEntity = new HttpEntity<StationDTO>(station, headers);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange("/station/update", HttpMethod.PUT,
+				httpEntity, String.class);
+
+		assertEquals(HttpStatus.NOT_ACCEPTABLE, responseEntity.getStatusCode());
+		assertEquals("Invalid input format!", responseEntity.getBody());
+	}
+	
+	@Test
+	public void testUpdateStation_notFound() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Auth-Token", token);
+
+		StationDTO station = new StationDTO(10L, "Nova Stanica", TrafficType.BUS, 24.0, 48.0, null);
+		HttpEntity<StationDTO> httpEntity = new HttpEntity<StationDTO>(station, headers);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange("/station/update", HttpMethod.PUT,
+				httpEntity, String.class);
+
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+		assertEquals("Station " + station.getName() + " not found!", responseEntity.getBody());
+	}
+	
+	@Test
+	public void testUpdateStation_exists() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Auth-Token", token);
+
+		StationDTO station = new StationDTO(1L, "Zeleznicka", TrafficType.BUS, 24.0, 48.0, null);
+		HttpEntity<StationDTO> httpEntity = new HttpEntity<StationDTO>(station, headers);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange("/station/update", HttpMethod.PUT,
+				httpEntity, String.class);
+
+		assertEquals(HttpStatus.NOT_ACCEPTABLE, responseEntity.getStatusCode());
+		assertEquals(station.getType() + " station " + station.getName() + " already exists!", responseEntity.getBody());
+	}
+	
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testUpdateStation_allFine() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Auth-Token", token);
+
+		StationDTO station = new StationDTO(1L, "Bulevar", TrafficType.BUS, 19.830287933873482, 45.26408747364272, null);
+		HttpEntity<StationDTO> httpEntity = new HttpEntity<StationDTO>(station, headers);
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange("/station/update", HttpMethod.PUT,
+				httpEntity, String.class);
+
+		String message = responseEntity.getBody();
+		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+		assertEquals("Station " + station.getName() + " successfully updated", message);
+
+		ResponseEntity<StationDTO> createdEntity = restTemplate.exchange("/station/getById/" + station.getId(), HttpMethod.GET,
+				httpEntity, StationDTO.class);
+		StationDTO created = createdEntity.getBody();
+		
+		assertEquals(station.getName(), created.getName());
+		assertEquals(station.getType(), created.getType());
+		
+	}
+	
 	// @Test
-	// @Transactional
-	// @Rollback(true)
 	// public void testGetAllByLine() {
 	// HttpHeaders headers = new HttpHeaders();
 	// headers.add("X-Auth-Token", token);
