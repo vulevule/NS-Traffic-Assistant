@@ -129,6 +129,20 @@
             Passwords must match.
         </div>
       </div>
+
+      <div  *ngIf="role === 'ADMIN'" class="form-group">
+        <label for="role" class="sr-only">Repeat Password</label>
+        <input type="text" id="role" name="role" class="form-control" FormControlName="role" #role="ngModel"
+        [(ngModel)]="u.role"
+        [ngModelOptions]="{ updateOn: 'blur' }" placeholder="Role" required>
+        <div *ngIf="role.invalid && (role.dirty || role.touched)"
+          class="alert alert-danger">
+               <div *ngIf="role.errors.required">
+              Role is required!
+               </div>
+          </div>
+        
+    </div>
       
            
        

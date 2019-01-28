@@ -3,7 +3,7 @@ package com.team9.dto;
 import com.team9.model.Address;
 
 public class UpdateProfileDto {
-	public UpdateProfileDto(String username, String name, String email, String password, Address address) {
+	public UpdateProfileDto(String username, String name, String email, String password, AddressDto address) {
 		super();
 		this.username = username;
 		this.name = name;
@@ -11,11 +11,16 @@ public class UpdateProfileDto {
 		this.password = password;
 		this.address = address;
 	}
+	
+	public UpdateProfileDto() {
+		super();
+	}
+
 	private String username;
 	private String name;
 	private String email;
 	private String password;
-	private Address address;
+	private AddressDto address;
 	public String getName() {
 		return name;
 	}
@@ -37,10 +42,10 @@ public class UpdateProfileDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Address getAddress() {
+	public AddressDto getAddress() {
 		return address;
 	}
-	public void setAddress(Address address) {
+	public void setAddress(AddressDto address) {
 		this.address = address;
 	} 
 

@@ -36,3 +36,4 @@ export class StationsComponent implements OnInit {
     this.activeTab = $event.nextId;
   }
 }
+

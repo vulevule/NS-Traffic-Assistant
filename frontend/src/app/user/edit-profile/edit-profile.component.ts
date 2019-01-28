@@ -29,6 +29,8 @@ export class EditProfileComponent implements OnInit {
       }}
     this.userSer.getUser().subscribe(data=>{
       this.user=data;
+      this.user.password='';
+      this.u.repeatPassword='';
       
     },error=>{
       this.type="danger";

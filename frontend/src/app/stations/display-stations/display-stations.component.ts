@@ -34,6 +34,7 @@ export class DisplayStationsComponent implements OnInit {
   searchStations: StationDTO[];
   selectedStation: StationDTO;
   selectedLine: LineDTO;
+  
 
   search = (text$: Observable<string>) =>
     text$.pipe(
@@ -94,14 +95,21 @@ export class DisplayStationsComponent implements OnInit {
 
   map: any;
   vectorSource = new VectorSource();
-
+  loggedUser: UserDTO;
+  role : String = '';
   constructor(
     private stationService: StationServiceService,
     private lineService: LineService,
     private route: ActivatedRoute,
-    //private loggedUser: UserDTO,
+    
     private sharedService: SharedService
-  ) {}
+  ) {
+    this.loggedUser = JSON.parse(
+      localStorage.getItem('currentUser'));
+    if(this.loggedUser !== null){
+      this.role = this.loggedUser.role;
+    }
+  }
 
   async ngOnInit() {
     

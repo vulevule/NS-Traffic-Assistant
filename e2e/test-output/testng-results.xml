@@ -2,24 +2,24 @@
 <testng-results skipped="0" failed="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="13706" started-at="2019-01-28T07:21:33Z" finished-at="2019-01-28T07:21:47Z">
+  <suite name="Default suite" duration-ms="99771" started-at="2019-01-28T19:24:26Z" finished-at="2019-01-28T19:26:06Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="13706" started-at="2019-01-28T07:21:33Z" finished-at="2019-01-28T07:21:47Z">
-      <class name="team9.LoginTest">
-        <test-method status="PASS" signature="setUp()[pri:0, instance:team9.LoginTest@6f7fd0e6]" name="setUp" is-config="true" duration-ms="8252" started-at="2019-01-28T08:21:33Z" finished-at="2019-01-28T08:21:41Z">
+    <test name="Default test" duration-ms="99771" started-at="2019-01-28T19:24:26Z" finished-at="2019-01-28T19:26:06Z">
+      <class name="team9.EditUserTest">
+        <test-method status="PASS" signature="setUp()[pri:0, instance:team9.EditUserTest@523884b2]" name="setUp" is-config="true" duration-ms="64481" started-at="2019-01-28T20:24:26Z" finished-at="2019-01-28T20:25:31Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method status="PASS" signature="testLogin_success()[pri:0, instance:team9.LoginTest@6f7fd0e6]" name="testLogin_success" duration-ms="4339" started-at="2019-01-28T08:21:41Z" finished-at="2019-01-28T08:21:46Z">
+        <test-method status="PASS" signature="test_EditSuccess()[pri:0, instance:team9.EditUserTest@523884b2]" name="test_EditSuccess" duration-ms="17266" started-at="2019-01-28T20:25:31Z" finished-at="2019-01-28T20:25:48Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testLogin_success -->
-        <test-method status="PASS" signature="closeSelenium()[pri:0, instance:team9.LoginTest@6f7fd0e6]" name="closeSelenium" is-config="true" duration-ms="1100" started-at="2019-01-28T08:21:46Z" finished-at="2019-01-28T08:21:47Z">
+        </test-method> <!-- test_EditSuccess -->
+        <test-method status="PASS" signature="closeSelenium()[pri:0, instance:team9.EditUserTest@523884b2]" name="closeSelenium" is-config="true" duration-ms="17932" started-at="2019-01-28T20:25:48Z" finished-at="2019-01-28T20:26:06Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- closeSelenium -->
-      </class> <!-- team9.LoginTest -->
+      </class> <!-- team9.EditUserTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
