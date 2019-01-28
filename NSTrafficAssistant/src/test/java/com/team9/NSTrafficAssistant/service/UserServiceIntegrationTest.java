@@ -136,7 +136,7 @@ public class UserServiceIntegrationTest {
 	public void UpdateDtoToUser_ChangeName() {
 		
 		
-		UpdateProfileDto upd=new UpdateProfileDto("peraperic", "Petko Peric", "pera@gmail.com","1111", new Address(1L, "Bulevar Vojvode Stepe", "Beograd", 11000));
+		UpdateProfileDto upd=new UpdateProfileDto("peraperic", "Petko Peric", "pera@gmail.com","1111", new AddressDto("Bulevar Vojvode Stepe", "Beograd", 11000));
 		User u= userService.UpdateDtoToUser(upd);
 		assertTrue(upd.getName().equals(u.getName()));
 		
@@ -146,7 +146,7 @@ public class UserServiceIntegrationTest {
 	public void UpdateDtoToUser_ChangeEmail() {
 		
 		
-		UpdateProfileDto upd=new UpdateProfileDto("peraperic", "Petko Peric", "petko@gmail.com","1111", new Address(1L, "Bulevar Vojvode Stepe", "Beograd", 11000));
+		UpdateProfileDto upd=new UpdateProfileDto("peraperic", "Petko Peric", "petko@gmail.com","1111", new AddressDto("Bulevar Vojvode Stepe", "Beograd", 11000));
 		User u= userService.UpdateDtoToUser(upd);
 		assertTrue(upd.getName().equals(u.getName()));
 		
@@ -156,7 +156,7 @@ public class UserServiceIntegrationTest {
 	public void UpdateDtoToUser_ChangePassword() {
 		
 		
-		UpdateProfileDto upd=new UpdateProfileDto("peraperic", "Petko Peric", "petko@gmail.com","1112", new Address(1L, "Bulevar Vojvode Stepe", "Beograd", 11000));
+		UpdateProfileDto upd=new UpdateProfileDto("peraperic", "Petko Peric", "petko@gmail.com","1112", new AddressDto("Bulevar Vojvode Stepe", "Beograd", 11000));
 		User u= userService.UpdateDtoToUser(upd);
 		assertTrue(upd.getName().equals(u.getName()));
 		
@@ -167,7 +167,7 @@ public class UserServiceIntegrationTest {
 	public void UpdateDtoToUser_ChangeAddress() {
 		
 		
-		UpdateProfileDto upd=new UpdateProfileDto("pericpera", "Petko Peric", "petko@gmail.com","1112", new Address(51L,"Danila Kisa 58", "Novi Sad", 21000));
+		UpdateProfileDto upd=new UpdateProfileDto("pericpera", "Petko Peric", "petko@gmail.com","1112", new AddressDto("Danila Kisa 58", "Novi Sad", 21000));
 		User u= userService.UpdateDtoToUser(upd);
 		assertNull(addressRepository.findByStreetAndCityAndZip(upd.getAddress().getStreet(), upd.getAddress().getCity(),upd.getAddress().getZip()));
 		
@@ -209,7 +209,7 @@ public class UserServiceIntegrationTest {
 		
 		
 		Passenger p = new Passenger("Petra Peric", "11129956325632", "petraperic", "pass123", "petra@gmail.com", Role.PASSENGER,
-				new Address(2L, "Vuka Karadzica 5", "Novi Sad", 210000), false, UserTicketType.STUDENT);
+				new AddressDto("Vuka Karadzica 5", "Novi Sad", 210000), false, UserTicketType.STUDENT);
 		
 	boolean value=userService.SaveUpdated(p);
 	assertTrue(value);

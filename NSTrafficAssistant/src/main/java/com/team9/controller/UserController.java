@@ -135,8 +135,8 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/user/profileUpdate", method = RequestMethod.PUT, consumes = "application/json")
-	public ResponseEntity<User> updateProfile(@RequestBody UpdateProfileDto profileDTO) {
+	@RequestMapping(value = "/user/profileUpdate", method = RequestMethod.PUT, consumes = "application/json",produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> updateProfile(@RequestBody UpdateProfileDto profileDTO) {
 
 		User user = userService.UpdateDtoToUser(profileDTO);
 		if (user == null) {
@@ -146,7 +146,7 @@ public class UserController {
 		boolean updated = userService.SaveUpdated(user);
 
 		if (updated == true) {
-			return new ResponseEntity<User>(user, HttpStatus.OK);
+			return new ResponseEntity<String>("OK", HttpStatus.OK);
 
 		}
 
@@ -154,8 +154,8 @@ public class UserController {
 
 	}
 
-	@RequestMapping(value = "/user/profileValidated", method = RequestMethod.PUT, consumes = "application/json")
-	public ResponseEntity<User> profileValidatedByAdmin(@RequestBody ValidationDTO u, HttpServletRequest request) {
+	@RequestMapping(value = "/user/profileValidated", method = RequestMethod.PUT, consumes = "application/json",produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> profileValidatedByAdmin(@RequestBody ValidationDTO u, HttpServletRequest request) {
 
 		Passenger pas = null;
 		User user = getLoggedUser(request);
@@ -176,7 +176,7 @@ public class UserController {
 		boolean updated = userService.SaveUpdated(pas);
 
 		if (updated == true) {
-			return new ResponseEntity<User>(pas, HttpStatus.OK);
+			return new ResponseEntity<String>("OK", HttpStatus.OK);
 
 		}
 
@@ -186,7 +186,7 @@ public class UserController {
 	@RequestMapping(value = "/user/validateProfile", method = RequestMethod.POST)
 	public ResponseEntity<?> validateProfile(@RequestParam("file") MultipartFile file, HttpServletRequest request)
 			throws IOException {
-		System.out.println("Tuuu");
+		//System.out.println("Tuuu");
 
 		if (!file.isEmpty()) {
 			String path = "";

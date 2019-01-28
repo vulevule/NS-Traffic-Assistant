@@ -161,7 +161,7 @@ public class UserServiceUnitTest {
 	public void UpdateDtoToUser_ChangeName() {
 		
 		
-		UpdateProfileDto upd=new UpdateProfileDto("pericpera", "Petar Peric", "pera@gmail.com","pass", new Address(1L, "Vuka Karadzica", "Novi Sad", 21000));
+		UpdateProfileDto upd=new UpdateProfileDto("pericpera", "Petar Peric", "pera@gmail.com","pass", new AddressDto("Vuka Karadzica", "Novi Sad", 21000));
 		User u= userService.UpdateDtoToUser(upd);
 		assertTrue(upd.getName().equals(u.getName()));
 		
@@ -174,7 +174,7 @@ public class UserServiceUnitTest {
 	public void UpdateDtoToUser_ChangePassword() {
 		
 		
-		UpdateProfileDto upd=new UpdateProfileDto("pericpera", "Pera Peric", "pera@gmail.com","pass12", new Address(1L, "Vuka Karadzica", "Novi Sad", 21000));
+		UpdateProfileDto upd=new UpdateProfileDto("pericpera", "Pera Peric", "pera@gmail.com","pass12", new AddressDto("Vuka Karadzica", "Novi Sad", 21000));
 		User u= userService.UpdateDtoToUser(upd);
 		assertTrue(upd.getPassword().equals(u.getPassword()));
 		
@@ -185,7 +185,7 @@ public class UserServiceUnitTest {
 	public void UpdateDtoToUser_ChangeEmail() {
 		
 		
-		UpdateProfileDto upd=new UpdateProfileDto("pericpera", "Pera Peric", "pera123@gmail.com","pass", new Address(1L, "Vuka Karadzica", "Novi Sad", 21000));
+		UpdateProfileDto upd=new UpdateProfileDto("pericpera", "Pera Peric", "pera123@gmail.com","pass", new AddressDto("Vuka Karadzica", "Novi Sad", 21000));
 		User u= userService.UpdateDtoToUser(upd);
 		assertTrue(upd.getUsername().equals(u.getUsername()));
 		
@@ -196,7 +196,7 @@ public class UserServiceUnitTest {
 	public void UpdateDtoToUser_ChangeAddress() {
 		
 		
-		UpdateProfileDto upd=new UpdateProfileDto("pericpera", "Pera Peric", "pera@gmail.com","pass", new Address(9L, "Danila Kisa", "Novi Sad", 21000));
+		UpdateProfileDto upd=new UpdateProfileDto("pericpera", "Pera Peric", "pera@gmail.com","pass", new AddressDto("Danila Kisa", "Novi Sad", 21000));
 		User u= userService.UpdateDtoToUser(upd);
 		assertTrue(upd.getName().equals(u.getName()));
 		
@@ -208,7 +208,7 @@ public class UserServiceUnitTest {
 	public void UpdateDtoToUser_UserNotFound() {
 		
 		
-		UpdateProfileDto upd=new UpdateProfileDto("pericpera123", "Pera Peric", "pera@gmail.com","pass", new Address(9L, "Danila Kisa", "Novi Sad", 21000));
+		UpdateProfileDto upd=new UpdateProfileDto("pericpera123", "Pera Peric", "pera@gmail.com","pass", new AddressDto("Danila Kisa", "Novi Sad", 21000));
 		User u= userService.UpdateDtoToUser(upd);
 		assertNull(u);
 		
