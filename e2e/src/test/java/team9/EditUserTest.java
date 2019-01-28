@@ -62,6 +62,12 @@ public class EditUserTest {
 		
 	}
 	
+	@Test
+	public void test_EditError() {
+		
+		
+	}
+	
 	
 	
 	
