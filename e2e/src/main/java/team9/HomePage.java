@@ -77,6 +77,9 @@ public class HomePage extends LoadableComponent<HomePage> {
 	@FindBy(xpath="//ngb-alert")
 	private WebElement alert;
 	
+	@FindBy(xpath=".alert")
+	private WebElement alertZip;
+	
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
 	}
@@ -231,7 +234,9 @@ public class HomePage extends LoadableComponent<HomePage> {
 	public void ensureUserDropdown_IsVisible() {
 		(new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOf(userDropdown));
 	}
-	
+	public void ensurealertZip_IsVisible() {
+		(new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOf(alertZip));
+	}
 	public void ensureUserDropdown_IsClickable() {
 		(new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(userDropdown));
 	}
@@ -303,7 +308,10 @@ public class HomePage extends LoadableComponent<HomePage> {
 	public WebElement getLogoutItem() {
 		return logaoutItem;
 	}
-
+    
+	public WebElement getAlertZip() {
+		return alertZip;
+	}
 	public void setZipBox(String text) {
 		zipBox.clear();
 		zipBox.sendKeys(text);}

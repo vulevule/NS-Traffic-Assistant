@@ -6,4 +6,16 @@
       <class name="team9.EditUserTest"/>
     </classes>
   </test> <!-- Default test -->
+  <test name="Default test(failed)">
+    <classes>
+      <class name="team9.EditUserTest">
+        <methods>
+          <include name="closeSelenium"/>
+          <include name="test_EditSuccess"/>
+          <include name="test_EditError"/>
+          <include name="setUp"/>
+        </methods>
+      </class> <!-- team9.EditUserTest -->
+    </classes>
+  </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
