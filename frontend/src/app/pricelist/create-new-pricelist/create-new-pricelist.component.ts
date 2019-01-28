@@ -13,17 +13,17 @@ export class CreateNewPricelistComponent implements OnInit {
 
   items: ItemInterface[] = [];
 
-  pricelist : PriceListInterface;
+  pricelist: PriceListInterface;
 
-  message : string = '';
-  infoType : string;
+  message: string = '';
+  infoType: string;
 
   type: string[] = ['BUS', 'METRO', 'TRAM'];
   zone: string[] = ['FIRST', 'SECOND'];
   time: string[] = ['ANNUAL', 'MONTH', 'DAILY', 'SINGLE'];
 
-  constructor(private pricelistService : PriceListServiceService) {
-   
+  constructor(private pricelistService: PriceListServiceService) {
+
 
   }
 
@@ -49,15 +49,15 @@ export class CreateNewPricelistComponent implements OnInit {
   }
 
   save() {
-    this.pricelist = {items : this.items};
+    this.pricelist = { items: this.items };
     this.pricelistService.addPricelist(this.pricelist)
       .subscribe(
         data => {
           this.message = data as string;
           this.infoType = 'success';
-        }, 
+        },
         error => {
-          this.message =  error.error;
+          this.message = error.error;
           this.infoType = 'danger';
         }
       )

@@ -1,4 +1,4 @@
-export interface LoginUserDtoInterface{
-    token : string;
-    role : string;
+export interface LoginUserDtoInterface {
+    token: string;
+    role: string;
 }

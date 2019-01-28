@@ -1,4 +1,4 @@
-import { Component, OnInit , Input} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Time } from '@angular/common';
 import { TimetableItemInterface } from 'src/app/model/Timetable';
 
@@ -9,8 +9,8 @@ import { TimetableItemInterface } from 'src/app/model/Timetable';
 })
 export class DisplayTimetableComponent implements OnInit {
 
-  @Input()  displayItems : {mark : String, name : String, times : Time[] }[];
-  
+  @Input() displayItems: { mark: String, name: String, times: Time[] }[];
+
 
   constructor() { }
 
@@ -19,6 +19,6 @@ export class DisplayTimetableComponent implements OnInit {
   }
 
 
-  
+
 
 }

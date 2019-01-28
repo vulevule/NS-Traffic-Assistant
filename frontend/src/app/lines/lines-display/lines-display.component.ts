@@ -86,12 +86,12 @@ export class LinesDisplayComponent implements OnInit {
         term.length < 2
           ? []
           : this.stations
-              .filter(
-                s =>
-                  s.name.toLowerCase().indexOf(term.toLowerCase()) > -1 &&
-                  this.displayType[s.type.toLowerCase()]
-              )
-              .slice(0, 20)
+            .filter(
+              s =>
+                s.name.toLowerCase().indexOf(term.toLowerCase()) > -1 &&
+                this.displayType[s.type.toLowerCase()]
+            )
+            .slice(0, 20)
       )
     );
 
@@ -116,7 +116,7 @@ export class LinesDisplayComponent implements OnInit {
   constructor(
     private sharedService: SharedService,
     private lineService: LineService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loggedUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -203,7 +203,7 @@ export class LinesDisplayComponent implements OnInit {
       }
     });
 
-    vm.closer.onclick = function() {
+    vm.closer.onclick = function () {
       vm.overlay.setPosition(undefined);
       vm.closer.blur();
       return false;
@@ -270,8 +270,8 @@ export class LinesDisplayComponent implements OnInit {
           station.type === "BUS"
             ? "../../../assets/images/BUS-station.png"
             : station.type === "METRO"
-            ? "../../../assets/images/METRO-station.png"
-            : "../../../assets/images/TRAM-station.png",
+              ? "../../../assets/images/METRO-station.png"
+              : "../../../assets/images/TRAM-station.png",
         scale: 0.09
       }),
       text: new Text({
@@ -390,8 +390,8 @@ export class LinesDisplayComponent implements OnInit {
       type === "BUS"
         ? busLineStyle
         : type === "TRAM"
-        ? tramLineStyle
-        : metroLineStyle
+          ? tramLineStyle
+          : metroLineStyle
     );
     // add line to the layer
     this.vectorSource.addFeature(line);

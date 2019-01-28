@@ -29,11 +29,11 @@ export class MainPageComponent implements OnInit {
 
     this.sharedService.updateAll();
 
-    
+
     this.loggedUser = JSON.parse(
       localStorage.getItem('currentUser'));
 
-    if(this.loggedUser === null){
+    if (this.loggedUser === null) {
       //alert('user je null');
     }
     // Ubaciti proveru ako nije ulogovan (loggedUser je undefined) redirektovati na login stranicu
@@ -60,7 +60,7 @@ export class MainPageComponent implements OnInit {
 
     // }
 
-    
+
   }
 
 }

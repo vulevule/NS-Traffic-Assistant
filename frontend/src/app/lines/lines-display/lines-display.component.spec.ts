@@ -8,9 +8,9 @@ describe('LinesDisplayComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LinesDisplayComponent ]
+      declarations: [LinesDisplayComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

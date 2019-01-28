@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import {  PriceListInterface } from 'src/app/model/Pricelist';
+import { PriceListInterface } from 'src/app/model/Pricelist';
 import { Observable } from 'rxjs';
 
 
@@ -16,13 +16,13 @@ export class PriceListServiceService {
 
 
   //doabvanje cenovnika 
-  getPricelist():Observable<PriceListInterface>{
+  getPricelist(): Observable<PriceListInterface> {
     return this.http.get<PriceListInterface>(`${this.pricelistUrl}/getPricelist`);
   }
 
   //kreiranje novog rasporeda
-  addPricelist(p : PriceListInterface) : Observable<String>{
-      return this.http.post(`${this.pricelistUrl}/addPricelist`, p, {headers : this.headers, responseType : "text"});
+  addPricelist(p: PriceListInterface): Observable<String> {
+    return this.http.post(`${this.pricelistUrl}/addPricelist`, p, { headers: this.headers, responseType: "text" });
   }
 
 

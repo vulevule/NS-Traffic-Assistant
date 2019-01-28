@@ -18,44 +18,65 @@ import { of } from 'rxjs';
   template: '<p>Mock Display Ticket Component</p>'
 })
 class MockDisplayTicket {
-  @Input() role : String;
-  @Input() ticket : TicketInterface;
+  @Input() role: String;
+  @Input() ticket: TicketInterface;
 }
 
 describe('SearchFormComponent', () => {
   let component: SearchFormComponent;
   let fixture: ComponentFixture<SearchFormComponent>;
-  let ticketService : any;
-  var t : TicketInterface[] = [
-    { id: 1, trafficType: 'BUS', timeType: 'MONTH', trafficZone: 'FIRST', price: 900, userType: 'STUDENT', serialNo: 'BMMS1231555' },
-    { id: 2, trafficType: 'METRO', timeType: 'ANNUAL', trafficZone: 'SECOND', price: 1000, userType: 'REGULAR', serialNo: 'BMMS12315565' },
-    { id: 3, trafficType: 'TRAM', timeType: 'SINGLE', trafficZone: 'FIRST', price: 120, userType: 'SENIOR', serialNo: 'BMMS1231554555' },
-    { id: 4, trafficType: 'BUS', timeType: 'DAILY', trafficZone: 'SECOND', price: 100, userType: 'HANDICAP', serialNo: 'BMMS1231558565' }
+  let ticketService: any;
+  var t: TicketInterface[] = [
+    {
+      id: 1, trafficType: 'BUS', timeType: 'MONTH', trafficZone: 'FIRST', price: 900,
+      userType: 'STUDENT', serialNo: 'BMMS1231555'
+    },
+    {
+      id: 2, trafficType: 'METRO', timeType: 'ANNUAL', trafficZone: 'SECOND',
+      price: 1000, userType: 'REGULAR', serialNo: 'BMMS12315565'
+    },
+    {
+      id: 3, trafficType: 'TRAM', timeType: 'SINGLE', trafficZone: 'FIRST',
+      price: 120, userType: 'SENIOR', serialNo: 'BMMS1231554555'
+    },
+    {
+      id: 4, trafficType: 'BUS', timeType: 'DAILY', trafficZone: 'SECOND',
+      price: 100, userType: 'HANDICAP', serialNo: 'BMMS1231558565'
+    }
   ];
 
-  var t1 : TicketInterface[] = [
-    { id: 1, trafficType: 'BUS', timeType: 'MONTH', trafficZone: 'FIRST', price: 900, userType: 'STUDENT', serialNo: 'BMMS1231555' },
-    { id: 2, trafficType: 'METRO', timeType: 'ANNUAL', trafficZone: 'SECOND', price: 1000, userType: 'REGULAR', serialNo: 'BMMS12315565' }];
+  var t1: TicketInterface[] = [
+    {
+      id: 1, trafficType: 'BUS', timeType: 'MONTH', trafficZone: 'FIRST',
+      price: 900, userType: 'STUDENT', serialNo: 'BMMS1231555'
+    },
+    {
+      id: 2, trafficType: 'METRO', timeType: 'ANNUAL', trafficZone: 'SECOND',
+      price: 1000, userType: 'REGULAR', serialNo: 'BMMS12315565'
+    }];
 
 
 
   let ticketServiceMock = {
 
-    getAllTickets : jasmine.createSpy('getAllTickets')
+    getAllTickets: jasmine.createSpy('getAllTickets')
       .and.returnValue(of(t)),
-    getMyTicket : jasmine.createSpy('getMyTicket')
+    getMyTicket: jasmine.createSpy('getMyTicket')
       .and.returnValue(of(t1))
   }
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SearchFormComponent, FilterTicketByTicketTimePipe, FilterTicketByZonePipe, FilterByTrafficTypePipe, MockDisplayTicket ],
+      declarations: [SearchFormComponent, FilterTicketByTicketTimePipe, FilterTicketByZonePipe,
+        FilterByTrafficTypePipe, MockDisplayTicket],
       imports: [
         BrowserModule, FormsModule, NgbModule
       ],
-      providers : [ { provide : TicketServiceService, 
-        useValue : ticketServiceMock}]
+      providers: [{
+        provide: TicketServiceService,
+        useValue: ticketServiceMock
+      }]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -75,7 +96,7 @@ describe('SearchFormComponent', () => {
     expect(component.tickets.length).toBe(2);
   });
 
-  it('should get all ticket', ()=> {
+  it('should get all ticket', () => {
     component.role = 'INSPECTOR';
     component.getTickets();
     expect(ticketService.getAllTickets).toHaveBeenCalled();

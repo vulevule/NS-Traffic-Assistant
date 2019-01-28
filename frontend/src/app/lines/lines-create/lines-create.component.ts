@@ -69,10 +69,10 @@ export class LinesCreateComponent implements OnInit {
         term.length < 2
           ? []
           : this.lines
-              .filter(
-                s => s.name.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 20)
+            .filter(
+              s => s.name.toLowerCase().indexOf(term.toLowerCase()) > -1
+            )
+            .slice(0, 20)
       )
     );
 
@@ -81,7 +81,7 @@ export class LinesCreateComponent implements OnInit {
   constructor(
     private lineService: LineService,
     private sharedService: SharedService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.sharedService.stations.subscribe(
@@ -127,7 +127,7 @@ export class LinesCreateComponent implements OnInit {
       if (f && f.get("name") === "Station") {
         var name = f.get("label");
         var type = vm.newLine.type;
-        
+
         var station = vm.stations.find(
           (s: StationDTO) => s.name === name && s.type === type
         );
@@ -273,8 +273,8 @@ export class LinesCreateComponent implements OnInit {
           station.type === "BUS"
             ? "../../../assets/images/BUS-station.png"
             : station.type === "METRO"
-            ? "../../../assets/images/METRO-station.png"
-            : "../../../assets/images/TRAM-station.png",
+              ? "../../../assets/images/METRO-station.png"
+              : "../../../assets/images/TRAM-station.png",
         scale: 0.09
       }),
       text: new Text({
@@ -351,8 +351,8 @@ export class LinesCreateComponent implements OnInit {
       type === "BUS"
         ? busLineStyle
         : type === "TRAM"
-        ? tramLineStyle
-        : metroLineStyle
+          ? tramLineStyle
+          : metroLineStyle
     );
     // add line to the layer
     this.vectorSource.addFeature(line);
@@ -374,7 +374,7 @@ export class LinesCreateComponent implements OnInit {
       if (line.stations[i].arrival <= max) {
         alert(
           `Station ${
-            line.stations[i].stationName
+          line.stations[i].stationName
           } can not have arrival time less than stations before!`
         );
         return;

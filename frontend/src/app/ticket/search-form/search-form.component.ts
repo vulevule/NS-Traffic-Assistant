@@ -12,26 +12,26 @@ import { Observable } from 'rxjs';
 export class SearchFormComponent implements OnInit {
 
   tickets: TicketInterface[];
-  @Input() role : String;
+  @Input() role: String;
 
   //selectSNO : any ;
 
   displayType = {
-    bus : false,
-    metro : false,
-    tram : false
+    bus: false,
+    metro: false,
+    tram: false
   }
 
   displayZone = {
-    first : false,
-    second : false
+    first: false,
+    second: false
   }
 
   displayTime = {
-    annual : false, 
-    month : false, 
-    daily : false, 
-    single : false
+    annual: false,
+    month: false,
+    daily: false,
+    single: false
   }
 
   constructor(private ticketService: TicketServiceService) { }
@@ -42,22 +42,22 @@ export class SearchFormComponent implements OnInit {
     this.getTickets();
   }
 
-  getTickets(){
-    if(this.role === 'INSPECTOR'){
+  getTickets() {
+    if (this.role === 'INSPECTOR') {
       this.ticketService.getAllTickets()
-      .subscribe(data => {
-        this.tickets = data;
-      }, error => {
-        alert (error.error);
-      })
-    }else if (this.role === 'PASSENGER'){
+        .subscribe(data => {
+          this.tickets = data;
+        }, error => {
+          alert(error.error);
+        })
+    } else if (this.role === 'PASSENGER') {
       this.ticketService.getMyTicket()
-      .subscribe(data => {
-        this.tickets = data;
-      }, error => {
-        alert(error.error);
-      })
-     
+        .subscribe(data => {
+          this.tickets = data;
+        }, error => {
+          alert(error.error);
+        })
+
     }
   }
 }

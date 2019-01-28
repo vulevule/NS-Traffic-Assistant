@@ -10,7 +10,7 @@ export class User {
     role?: string;
     imagePath?: string;
     address: Address;
-    authority?:string;
-    
+    authority?: string;
+
 
 }

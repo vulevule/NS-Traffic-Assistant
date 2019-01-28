@@ -3,21 +3,21 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Observable, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { TicketServiceService } from 'src/app/services/ticket/ticket-service.service';
-import {  ReportInterface } from 'src/app/model/Report';
+import { ReportInterface } from 'src/app/model/Report';
 
-const months : {id: number, name : String}[]= [
-  {id : 1, name : 'January'},
-  {id : 2, name : 'February'},
-  {id : 3, name:  'March'},
-  {id : 4, name : 'April'},
-  {id : 5, name :  'May'},
-  {id : 6, name :  'June'},
-  {id : 7, name :  'Jule'},
-  {id : 8, name :  'August'},
-  {id : 9, name : 'September'},
-  {id : 10, name :  'October'},
-  {id : 11, name : 'November'},
-  {id : 12, name :  'December'}];
+const months: { id: number, name: String }[] = [
+  { id: 1, name: 'January' },
+  { id: 2, name: 'February' },
+  { id: 3, name: 'March' },
+  { id: 4, name: 'April' },
+  { id: 5, name: 'May' },
+  { id: 6, name: 'June' },
+  { id: 7, name: 'Jule' },
+  { id: 8, name: 'August' },
+  { id: 9, name: 'September' },
+  { id: 10, name: 'October' },
+  { id: 11, name: 'November' },
+  { id: 12, name: 'December' }];
 
 @Component({
   selector: 'app-report',
@@ -36,7 +36,7 @@ export class ReportComponent implements OnInit {
 
   message: string = '';
 
-  errorType : string = 'success'; //da bi znala kako da ispisem poruku
+  errorType: string = 'success'; //da bi znala kako da ispisem poruku
 
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -65,38 +65,38 @@ export class ReportComponent implements OnInit {
       this.report = undefined;
       this.message = "The year must be between 2000 and 2019!";
       this.errorType = 'warning';
-    }else if (this.type === 'MONTH' && this.model === undefined){
+    } else if (this.type === 'MONTH' && this.model === undefined) {
       this.report = undefined;
       this.message = "The month must be selected!"
       this.errorType = 'warning';
     }
     else {
-      var id : number;
-      if(this.type !== 'MONTH'){
+      var id: number;
+      if (this.type !== 'MONTH') {
         id = 1;
-      }else{
+      } else {
         id = this.model.id;
-        
+
       }
-      this.ticketService.getReport(id, this.year, this.type )
+      this.ticketService.getReport(id, this.year, this.type)
         .subscribe(
           data => {
             this.report = data;
-            if (this.report.money === 0){
+            if (this.report.money === 0) {
               this.message = 'There is no report for the requested period! '
               this.errorType = 'info';
-            }else{
+            } else {
               this.message = '';
               this.errorType = 'success';
             }
-          }, 
-          error =>{
-            if(error.error === ''){
+          },
+          error => {
+            if (error.error === '') {
               this.message = 'Invalid month or year';
-            }else {
+            } else {
               this.message = error.error;
             }
-           
+
             this.errorType = 'danger';
           }
         )

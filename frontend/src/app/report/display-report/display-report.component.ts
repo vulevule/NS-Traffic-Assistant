@@ -9,9 +9,9 @@ import { ReportInterface } from 'src/app/model/Report';
 })
 export class DisplayReportComponent implements OnInit {
 
-  @Input() report : ReportInterface;
+  @Input() report: ReportInterface;
 
-  total : number = 0;
+  total: number = 0;
 
   constructor() { }
 
